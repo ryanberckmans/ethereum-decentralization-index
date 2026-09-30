@@ -1,0 +1,65 @@
+{
+  "name": "ethereum-decentralization-index",
+  "version": "0.1.1",
+  "private": true,
+  "description": "Ethereum control-dependency assessments and luminous, accessible React components.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Ryan Berckmans <ryanberckmans@gmail.com>",
+  "sideEffects": [
+    "./styles.css"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/core/index.d.ts",
+      "import": "./dist/core/index.js"
+    },
+    "./react": {
+      "types": "./dist/react/index.d.ts",
+      "import": "./dist/react/index.js"
+    },
+    "./styles.css": "./styles.css",
+    "./rubric.json": "./data/rubric.json"
+  },
+  "files": [
+    "dist",
+    "data",
+    "styles.css",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "compile": "tsc -p tsconfig.json",
+    "test": "npm run compile && node --test tests/*.test.mjs",
+    "release:check": "npm test && git diff --exit-code -- dist",
+    "pack:check": "npm pack --dry-run"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "radix-ui": "^1.6.7"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    },
+    "react-dom": {
+      "optional": true
+    },
+    "radix-ui": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "typescript": "5.9.3",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "react": "19.2.6",
+    "react-dom": "19.2.6",
+    "radix-ui": "1.6.7"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ryanberckmans/ethereum-decentralization-index.git"
+  }
+}
