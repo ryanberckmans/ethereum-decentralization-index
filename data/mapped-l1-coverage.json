@@ -1,0 +1,233 @@
+{
+  "schemaVersion": 1,
+  "cycle": "2ea6e4e7",
+  "asOf": "2026-09-29",
+  "source": {
+    "url": "https://map-of-ethereum.zqnm.chatgpt.site/data/latest.json",
+    "cycle": "2ea6e4e7",
+    "builtAt": 1790650594390,
+    "observedAt": 1790643323000,
+    "snapshotSha256": "2c1afcc907376d08b7e246f93ce76995b8b88f2f1dda478efa55a7d06e975e59"
+  },
+  "denominator": "Conserved holdings located in this mapped Ethereum L1 protocol cohort. Reported TVLs are excluded; this is not the entire Ethereum application universe.",
+  "protocols": 21,
+  "mechanismsWithKnownRating": 21,
+  "completeMechanisms": 13,
+  "locatedUsd": 18732380788.035522,
+  "completeMechanismUsd": 18443803479.382504,
+  "completePositionUsd": 12487044151.075901,
+  "completeMechanismShare": 0.9845947340106744,
+  "completePositionShare": 0.6666020882434467,
+  "rows": [
+    {
+      "id": "aave-v3:ethereum",
+      "name": "Aave V3",
+      "mechanismLevel": 3,
+      "complete": true,
+      "locatedUsd": 8398028588.677265,
+      "positionCompleteUsd": 5469190967.476383,
+      "reviewedAt": "2026-09-08",
+      "reviewCadence": "monthly"
+    },
+    {
+      "id": "balancer-v2:ethereum",
+      "name": "Balancer V2",
+      "mechanismLevel": 1,
+      "complete": false,
+      "locatedUsd": 18322924.256232098,
+      "positionCompleteUsd": 0,
+      "reviewedAt": "2026-09-29",
+      "reviewCadence": "monthly"
+    },
+    {
+      "id": "balancer-v3:ethereum",
+      "name": "Balancer V3",
+      "mechanismLevel": 2,
+      "complete": false,
+      "locatedUsd": 872294.8819751728,
+      "positionCompleteUsd": 0,
+      "reviewedAt": "2026-09-29",
+      "reviewCadence": "monthly"
+    },
+    {
+      "id": "binance-staked-eth:ethereum",
+      "name": "Binance staked ETH",
+      "mechanismLevel": 9,
+      "complete": true,
+      "locatedUsd": 0,
+      "positionCompleteUsd": 0,
+      "reviewedAt": "2026-09-08",
+      "reviewCadence": "monthly"
+    },
+    {
+      "id": "coinbase-wrapped-staked-eth:ethereum",
+      "name": "Coinbase Wrapped Staked ETH",
+      "mechanismLevel": 9,
+      "complete": true,
+      "locatedUsd": 0,
+      "positionCompleteUsd": 0,
+      "reviewedAt": "2026-09-08",
+      "reviewCadence": "monthly"
+    },
+    {
+      "id": "compound-v3:ethereum",
+      "name": "Compound V3",
+      "mechanismLevel": 3,
+      "complete": true,
+      "locatedUsd": 388828527.18345684,
+      "positionCompleteUsd": 388828527.18345684,
+      "reviewedAt": "2026-09-08",
+      "reviewCadence": "monthly"
+    },
+    {
+      "id": "curve-dex:ethereum",
+      "name": "Curve",
+      "mechanismLevel": 1,
+      "complete": false,
+      "locatedUsd": 176388769.91527855,
+      "positionCompleteUsd": 0,
+      "reviewedAt": "2026-09-29",
+      "reviewCadence": "monthly"
+    },
+    {
+      "id": "eigencloud:ethereum",
+      "name": "EigenCloud",
+      "mechanismLevel": 7,
+      "complete": true,
+      "locatedUsd": 0,
+      "positionCompleteUsd": 0,
+      "reviewedAt": "2026-09-08",
+      "reviewCadence": "monthly"
+    },
+    {
+      "id": "ether.fi-stake:ethereum",
+      "name": "ether.fi Stake",
+      "mechanismLevel": 3,
+      "complete": true,
+      "locatedUsd": 0,
+      "positionCompleteUsd": 0,
+      "reviewedAt": "2026-09-08",
+      "reviewCadence": "monthly"
+    },
+    {
+      "id": "fluid-lending:ethereum",
+      "name": "Fluid Lending",
+      "mechanismLevel": 3,
+      "complete": false,
+      "locatedUsd": 92993319.59953345,
+      "positionCompleteUsd": 0,
+      "reviewedAt": "2026-09-08",
+      "reviewCadence": "monthly"
+    },
+    {
+      "id": "lido:ethereum",
+      "name": "Lido",
+      "mechanismLevel": 3,
+      "complete": false,
+      "locatedUsd": 0,
+      "positionCompleteUsd": 0,
+      "reviewedAt": "2026-09-29",
+      "reviewCadence": "monthly"
+    },
+    {
+      "id": "morpho-blue:ethereum",
+      "name": "Morpho Blue",
+      "mechanismLevel": 0,
+      "complete": true,
+      "locatedUsd": 2564337017.0422516,
+      "positionCompleteUsd": 0,
+      "reviewedAt": "2026-09-29",
+      "reviewCadence": "permanent-D0"
+    },
+    {
+      "id": "pendle-v2:ethereum",
+      "name": "Pendle V2",
+      "mechanismLevel": 2,
+      "complete": false,
+      "locatedUsd": 0,
+      "positionCompleteUsd": 0,
+      "reviewedAt": "2026-09-08",
+      "reviewCadence": "monthly"
+    },
+    {
+      "id": "robinhood-chain-bridge:ethereum",
+      "name": "Robinhood Chain Bridge",
+      "mechanismLevel": 8,
+      "complete": true,
+      "locatedUsd": 0,
+      "positionCompleteUsd": 0,
+      "reviewedAt": "2026-09-08",
+      "reviewCadence": "monthly"
+    },
+    {
+      "id": "rocket-pool:ethereum",
+      "name": "Rocket Pool",
+      "mechanismLevel": 3,
+      "complete": false,
+      "locatedUsd": 0,
+      "positionCompleteUsd": 0,
+      "reviewedAt": "2026-09-08",
+      "reviewCadence": "monthly"
+    },
+    {
+      "id": "sky-lending:ethereum",
+      "name": "Sky Lending",
+      "mechanismLevel": 3,
+      "complete": true,
+      "locatedUsd": 5680791064.665016,
+      "positionCompleteUsd": 5680791064.665016,
+      "reviewedAt": "2026-09-08",
+      "reviewCadence": "monthly"
+    },
+    {
+      "id": "spark-savings:ethereum",
+      "name": "Spark Savings",
+      "mechanismLevel": 3,
+      "complete": false,
+      "locatedUsd": 0,
+      "positionCompleteUsd": 0,
+      "reviewedAt": "2026-09-08",
+      "reviewCadence": "monthly"
+    },
+    {
+      "id": "sparklend:ethereum",
+      "name": "SparkLend",
+      "mechanismLevel": 3,
+      "complete": true,
+      "locatedUsd": 395962089.4572624,
+      "positionCompleteUsd": 395962089.4572624,
+      "reviewedAt": "2026-09-08",
+      "reviewCadence": "monthly"
+    },
+    {
+      "id": "uniswap-v2:ethereum",
+      "name": "Uniswap V2",
+      "mechanismLevel": 0,
+      "complete": true,
+      "locatedUsd": 71826108.59331796,
+      "positionCompleteUsd": 71486360.48289762,
+      "reviewedAt": "2026-09-29",
+      "reviewCadence": "permanent-D0"
+    },
+    {
+      "id": "uniswap-v3:ethereum",
+      "name": "Uniswap V3",
+      "mechanismLevel": 0,
+      "complete": true,
+      "locatedUsd": 493173156.8609265,
+      "positionCompleteUsd": 480785141.8108859,
+      "reviewedAt": "2026-09-29",
+      "reviewCadence": "permanent-D0"
+    },
+    {
+      "id": "uniswap-v4:ethereum",
+      "name": "Uniswap V4",
+      "mechanismLevel": 0,
+      "complete": true,
+      "locatedUsd": 450856926.9030023,
+      "positionCompleteUsd": 0,
+      "reviewedAt": "2026-09-29",
+      "reviewCadence": "permanent-D0"
+    }
+  ]
+}

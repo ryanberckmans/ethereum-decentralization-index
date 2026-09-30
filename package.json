@@ -1,6 +1,6 @@
 {
   "name": "ethereum-decentralization-index",
-  "version": "0.1.2",
+  "version": "0.3.0",
   "private": true,
   "description": "Ethereum control-dependency assessments and luminous, accessible React components.",
   "type": "module",
@@ -19,21 +19,42 @@
       "import": "./dist/react/index.js"
     },
     "./styles.css": "./styles.css",
-    "./rubric.json": "./data/rubric.json"
+    "./rubric.json": "./data/rubric.json",
+    "./registry": {
+      "types": "./dist/registry/index.d.ts",
+      "import": "./dist/registry/index.js"
+    },
+    "./registry.json": "./data/control-registry.json",
+    "./l1-coverage.json": "./data/mapped-l1-coverage.json",
+    "./latest.json": "./data/latest.json",
+    "./refresh-hints.json": "./data/refresh-hints.json"
   },
   "files": [
     "dist",
+    "src",
     "data",
+    "scripts",
+    "tests",
+    "tsconfig.json",
+    "package-lock.json",
     "docs/images",
+    "docs/data.md",
+    "docs/refresh.md",
     "styles.css",
     "README.md",
     "LICENSE"
   ],
   "scripts": {
-    "compile": "tsc -p tsconfig.json",
+    "data:generate": "node scripts/generate-registry.mjs",
+    "compile": "node scripts/generate-registry.mjs --bootstrap && tsc -p tsconfig.json && npm run data:generate",
     "test": "npm run compile && node --test tests/*.test.mjs",
-    "release:check": "npm test && git diff --exit-code -- dist",
-    "pack:check": "npm pack --dry-run"
+    "release:check": "npm test && npm run reviews:check -- --strict && git diff --exit-code -- dist data/latest.json data/mapped-l1-coverage.json",
+    "reviews:check": "node scripts/check-reviews.mjs",
+    "pack:check": "npm pack --dry-run",
+    "reviews:plan": "node scripts/plan-reviews.mjs",
+    "reviews:fetch": "node scripts/fetch-contract-evidence.mjs",
+    "reviews:apply": "node scripts/apply-reviews.mjs",
+    "data:size": "node scripts/measure-data.mjs"
   },
   "peerDependencies": {
     "react": "^19.0.0",

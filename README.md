@@ -2,7 +2,7 @@
 
 [![Ethereum's D0–D9 control spectrum, from maximum decentralization to issuer-controlled backing or redemption.](docs/images/decentralization-spectrum.png)](docs/images/decentralization-spectrum.png)
 
-**EDI** helps explain who can change the rules of an Ethereum app or token, and who controls your ability to withdraw. It provides a shared D0–D9 scale, a portable data model and accessible React components for wallets, explorers and other apps. It was extracted from Map of Ethereum.
+**EDI** helps explain who can change the rules of an Ethereum app or token, and who controls your ability to withdraw. It ships a shared D0–D9 scale, a canonical deployment-specific research database, a reproducible refresh pipeline and accessible React components. It was extracted from Map of Ethereum.
 
 ## The spectrum
 
@@ -33,7 +33,7 @@ import {DecentralizationBadge, DecentralizationProvider} from 'ethereum-decentra
 import 'ethereum-decentralization-index/styles.css';
 ```
 
-The root entry is data-only: no React, browser globals, networking, storage or service credentials. Raw versioned data is available at `ethereum-decentralization-index/rubric.json`. The optional `/react` binding is inside the same package, so the rubric and UI cannot drift into incompatible package versions. React consumers provide React 19, React DOM 19 and Radix UI 1.6.7 or compatible versions; these are optional peers for core-only consumers.
+The root entry is data-only: no React, browser globals, networking, storage or service credentials. Raw data is available at `/rubric.json`, `/registry.json`, `/latest.json`, `/refresh-hints.json` and `/l1-coverage.json`. The optional `/registry` binding provides identity lookup, dependency composition, freshness and due queues; it performs no network calls. The optional `/react` binding is inside the same package, so data and UI cannot drift into incompatible package versions. React consumers provide React 19, React DOM 19 and Radix UI 1.6.7 or compatible versions; these are optional peers for core-only consumers.
 
 ## Core model
 
@@ -50,7 +50,20 @@ const position = composeAssessments([token, network, app]);
 
 Use `normalizeAssessment(untrustedValue)` when loading a saved assessment. Public descriptions, composition and React bindings normalize incoming assessments too: conflicting grades preserve the highest valid restriction, malformed or incomplete input cannot become a complete D0 assessment, and unsupported grades remain unknown.
 
-D is an ordinal taxonomy of documented authority, not equal intervals, a probability of loss or a financial recommendation. D4 is not “twice” D2. Wallet custody is a separate assessment. Immutable code alone does not prove D0. The package includes the rubric and translations, **not a live oracle or automatically renewed project ratings**. Consumers supply reviewed, deployment-specific inputs.
+D is an ordinal taxonomy of documented authority, not equal intervals, a probability of loss or a financial recommendation. D4 is not “twice” D2. Wallet custody is a separate assessment. Immutable code alone does not prove D0. The bundled records are cited editorial research with explicit scope, uncertainty and real review dates. The package is not a live oracle; financial updates cannot automatically renew ratings.
+
+## Data and refresh
+
+The current registry contains 118 scoped records, including Uniswap v1–v4 cores, major L1 applications, chain controls and separately identified tokens. Verified immutable D0 is permanent for its exact mechanism. Every other assessment and unresolved position dependency is fully restudied monthly; overdue results retain a floor while losing complete status.
+
+```ts
+import {registryAssessment, reviewQueue} from 'ethereum-decentralization-index/registry';
+const core = registryAssessment('uniswap-v4', '2026-09-29'); // D0
+const position = registryAssessment('uniswap-v4', '2026-09-29', {scope: 'position'}); // D?
+const due = reviewQueue('2026-10-01');
+```
+
+Canonical JSON has one complete entity per line; the generated latest snapshot is compact JSON. The working tree includes latest data and the refresh apparatus; historical records live only in Git history. See [data, sizing and consumer migration](docs/data.md) and [fresh-checkout research and recovery](docs/refresh.md). `npm run data:size` reports exact current sizes. `npm run reviews:plan` emits due work with evidence and concrete hints; bounded collection never assigns a grade or changes a review date.
 
 ## React components
 
@@ -91,6 +104,6 @@ npm pack
 
 `npm run compile` produces ESM and declarations in `dist/`. Release commits include that output so Git consumers need no build scripts or development dependencies at install time. `npm run release:check` checks the generated output against source before publication. The data rubric and its compiled representation are checked for exact parity. Tests cover dependency composition, missing controls, cycles, bounds, dates, localization, source isolation, HTML escaping and badge affordances. Interactive browser verification remains necessary before adopting the components in a production wallet; this extraction has not been separately audited or browser-certified.
 
-EDI owns the assessment semantics, rubric, palette, translations and components. Map of Ethereum consumes these exports at a fixed Git commit and maintains its own project reviews and financial accounting.
+EDI owns the assessment semantics, canonical project reviews, refresh policy, rubric, palette, translations and components. Consumers pin these exports to a fixed Git commit. Map of Ethereum retains financial observations and capital accounting; its consumer pin and local reads must be migrated to the EDI registry before its next release.
 
 MIT; see LICENSE for the license terms and retained notices.

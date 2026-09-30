@@ -1,0 +1,194 @@
+{
+  "schemaVersion": 1,
+  "policy": {
+    "permanentD0": "Do not re-analyze proven D0 mechanisms on a schedule. Preserve the exact immutable identity; new deployments/dependencies and evidence corrections are separate work.",
+    "monthly": "Full source and authority restudy for every other review and all unresolved position dependencies. A failed attempt cannot advance reviewedAt."
+  },
+  "checklist": [
+    {
+      "id": "identity",
+      "check": "Confirm chain ID, exact deployment, version and scope; resolve proxies and factory provenance."
+    },
+    {
+      "id": "implementation",
+      "check": "Inspect source matched to runtime, all inherited/reachable authority code and implementation replacement paths."
+    },
+    {
+      "id": "authorities",
+      "check": "Trace live owner, admin, role members, councils, issuers and external controllers to their complete authority graph."
+    },
+    {
+      "id": "timing",
+      "check": "Check timelocks, bypasses, veto, emergency actions and execution paths."
+    },
+    {
+      "id": "exits",
+      "check": "Check custody, balances, freezes, pauses, issuance, withdrawals and offchain redemption controls."
+    },
+    {
+      "id": "dependencies",
+      "check": "Resolve token, chain, oracle, hook, vault, strategy, bridge and backing dependencies; preserve unknowns."
+    }
+  ],
+  "kinds": {
+    "chain": [
+      "Use the current project contract addresses and L2BEAT governance/exit sections, including council appointment, foundation/operator bypass and upgrade delay. Ethereum L1 is the D0 reference baseline."
+    ],
+    "asset": [
+      "Follow the actual token implementation and reachable controllers; never inherit an application rating by brand or ticker. Include issuer backing/redemption and bridge origin where material."
+    ],
+    "protocol": [
+      "Separate immutable core from selected hooks/oracles/vaults and upgradeable periphery. Review all reachable privileged custody/exit paths for the recorded deployment."
+    ]
+  },
+  "projects": {
+    "uniswap-v2": [
+      "Core D0 is permanent. Tokens, v4 hook addresses/permissions and new versions require their own identities; never refresh the immutable core date to renew an aggregate position."
+    ],
+    "uniswap-v3": [
+      "Core D0 is permanent. Tokens, v4 hook addresses/permissions and new versions require their own identities; never refresh the immutable core date to renew an aggregate position."
+    ],
+    "uniswap-v4": [
+      "The aggregate financial feed lacks per-position hook/oracle identity.",
+      "No blanket D0 for all v4 hooks or custom accounting.",
+      "Core D0 is permanent. Tokens, v4 hook addresses/permissions and new versions require their own identities; never refresh the immutable core date to renew an aggregate position."
+    ],
+    "aave-v3": [
+      "Proposed tier for Ethereum governance path; other deployments and newer v4/Horizon products need their own review.",
+      "A governance delay is not an assured withdrawal window when liquidity is borrowed or a market is paused."
+    ],
+    "sparklend": [
+      "Only SparkLend; Spark Liquidity Layer, savings products, and RWA allocations are distinct dependency paths."
+    ],
+    "sky": [
+      "The building tier describes governance; custodial collateral can give particular capital a higher effective tier."
+    ],
+    "lido": [
+      "Do not call Lido D1 or infer unconditional exit protection from Dual Governance. Some emergency powers are time-limited; current expiry/roles require onchain verification."
+    ],
+    "wsteth": [
+      "An immutable wrapper of controlled backing is monthly, because the complete dependency path is not permanent D0."
+    ],
+    "rocket-pool": [
+      "Do not equate permissionless validator entry with immutable pooled-asset custody."
+    ],
+    "reth": [
+      "An immutable wrapper of controlled backing is monthly, because the complete dependency path is not permanent D0."
+    ],
+    "etherfi-stake": [
+      "This is the local staking tier; restaked allocations inherit EigenLayer/AVS controls where applicable. Crosschain variants add bridge dependencies."
+    ],
+    "eeth": [
+      "Confirm current EigenLayer allocation before a final effective tier."
+    ],
+    "weeth": [
+      "An immutable wrapper of controlled backing is monthly, because the complete dependency path is not permanent D0."
+    ],
+    "eigenlayer": [
+      "AVS slashing and operator dependencies also depend on the chosen restaking position."
+    ],
+    "morpho-blue": [
+      "The aggregate financial feed lacks per-position hook/oracle identity.",
+      "Do not assign all Morpho TVL D0 merely because the core is immutable.",
+      "Core D0 is permanent. Resolve each market oracle and collateral; MetaMorpho vault curators/allocators are separate."
+    ],
+    "morpho-vaults": [
+      "Vault v1/v2 and each configuration have different controls. No brand-wide tier."
+    ],
+    "fluid": [
+      "Current deployment admin and shortest upgrade delay not fully established in this review."
+    ],
+    "curve": [
+      "Require pool contract/version instead of assigning a brand-wide D0."
+    ],
+    "usdc": [
+      "Native and bridged USDC must be distinguished; additional bridge controls compose upward."
+    ],
+    "dai": [
+      "Do not assert that DAI has USDC-style account-freeze powers. Custodial collateral is a separate dependency."
+    ],
+    "usds": [
+      "Upgradeability is not evidence that an account-freeze feature is currently enabled."
+    ],
+    "sfrxeth": [
+      "An immutable wrapper of controlled backing is monthly, because the complete dependency path is not permanent D0."
+    ],
+    "uniswap-v1": [
+      "Core D0 is permanent. Tokens, v4 hook addresses/permissions and new versions require their own identities; never refresh the immutable core date to renew an aggregate position."
+    ],
+    "usd1": [
+      "Resolve the live implementation and upgrade controller; the provider proxy hint alone does not complete the review."
+    ],
+    "rlusd": [
+      "Resolve the live implementation and upgrade controller; the provider proxy hint alone does not complete the review."
+    ],
+    "tusd": [
+      "Resolve the live implementation and upgrade controller; the provider proxy hint alone does not complete the review."
+    ],
+    "fdusd": [
+      "Resolve the live implementation and upgrade controller; the provider proxy hint alone does not complete the review."
+    ],
+    "gusd": [
+      "Resolve the live implementation and upgrade controller; the provider proxy hint alone does not complete the review."
+    ],
+    "token:aave": [
+      "Resolve the live implementation and upgrade controller; the provider proxy hint alone does not complete the review.",
+      "Live role/controller/dependency closure remains incomplete; keep the established floor."
+    ],
+    "token:lido-dao": [
+      "Live role/controller/dependency closure remains incomplete; keep the established floor."
+    ],
+    "token:curve-dao-token": [
+      "Live role/controller/dependency closure remains incomplete; keep the established floor."
+    ],
+    "token:balancer": [
+      "Current default-admin membership is zero and minter membership is one. Trace the remaining minter instead of claiming a live default-admin grant power."
+    ],
+    "token:morpho": [
+      "Resolve the live implementation and upgrade controller; the provider proxy hint alone does not complete the review.",
+      "Live role/controller/dependency closure remains incomplete; keep the established floor."
+    ],
+    "token:pendle": [
+      "Live role/controller/dependency closure remains incomplete; keep the established floor."
+    ],
+    "token:eigenlayer": [
+      "Resolve the live implementation and upgrade controller; the provider proxy hint alone does not complete the review.",
+      "Live role/controller/dependency closure remains incomplete; keep the established floor."
+    ],
+    "token:arbitrum": [
+      "Resolve the live implementation and upgrade controller; the provider proxy hint alone does not complete the review.",
+      "Live role/controller/dependency closure remains incomplete; keep the established floor."
+    ],
+    "token:optimism": [
+      "Live role/controller/dependency closure remains incomplete; keep the established floor."
+    ],
+    "token:the-graph": [
+      "Live role/controller/dependency closure remains incomplete; keep the established floor."
+    ],
+    "token:rocket-pool": [
+      "Live role/controller/dependency closure remains incomplete; keep the established floor."
+    ],
+    "token:sushi": [
+      "Live role/controller/dependency closure remains incomplete; keep the established floor."
+    ],
+    "token:havven": [
+      "Resolve the live implementation and upgrade controller; the provider proxy hint alone does not complete the review.",
+      "Live role/controller/dependency closure remains incomplete; keep the established floor."
+    ],
+    "token:golem": [
+      "Close current minter event membership and migration-agent code. A source mint function without an established live controller cannot support a positive floor or permanent D0."
+    ],
+    "token:aerodrome-finance": [
+      "Live role/controller/dependency closure remains incomplete; keep the established floor."
+    ],
+    "seaport-v1.6": [
+      "Order-specific zones, conduits and asset controls are not identified by an aggregate app label."
+    ],
+    "1inch-limit-order-v4": [
+      "Do not rate only a source mixin while omitting the deployed router authority."
+    ],
+    "aave-v4": [
+      "Identify all live Hubs and Spokes and complete their material controller/dependency paths."
+    ]
+  }
+}
