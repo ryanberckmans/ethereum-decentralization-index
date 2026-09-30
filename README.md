@@ -1,8 +1,29 @@
 # Ethereum Decentralization Index
 
-**EDI** gives Ethereum's D0–D9 control spectrum a portable data model and a luminous, accessible React interface. It was extracted from Map of Ethereum for use in wallets, explorers and other apps.
+[![Ethereum's D0–D9 control spectrum, from maximum decentralization to issuer-controlled backing or redemption.](docs/images/decentralization-spectrum.png)](docs/images/decentralization-spectrum.png)
 
-Private repository: https://github.com/ryanberckmans/ethereum-decentralization-index. The package has `private: true` to prevent accidental npm publication. Install it as a Git dependency pinned to a full 40-character release commit; repository access is required. Branches and movable tags are not release pins.
+**EDI** helps explain who can change the rules of an Ethereum app or token, and who controls your ability to withdraw. It provides a shared D0–D9 scale, a portable data model and accessible React components for wallets, explorers and other apps. It was extracted from Map of Ethereum.
+
+## The spectrum
+
+| Grade | Meaning |
+|---|---|
+| D0 | Maximum Decentralization |
+| D1 | Limited settings; custody & exits fixed |
+| D2 | External oracles, allocation or pauses |
+| D3 | Rule changes through delayed governance |
+| D4 | Independent council; emergency powers |
+| D5 | Council + foundation authority |
+| D6 | Appointed council + operator authority |
+| D7 | Administrator can replace core rules |
+| D8 | Operator also controls validation or exits |
+| D9 | Issuer controls backing or redemption |
+
+The image opens at full resolution when clicked. The [versioned rubric](data/rubric.json) defines the scope and criteria for each grade. An incomplete review stays D? or shows a known floor such as ≥ D6.
+
+## Installation
+
+Source: [ryanberckmans/ethereum-decentralization-index](https://github.com/ryanberckmans/ethereum-decentralization-index). The package keeps `private: true` to prevent accidental npm publication. Install it as a Git dependency pinned to a full 40-character release commit. Branches and movable tags are not release pins.
 
 ## Entry points
 
@@ -70,6 +91,6 @@ npm pack
 
 `npm run compile` produces ESM and declarations in `dist/`. Release commits include that output so Git consumers need no build scripts or development dependencies at install time. `npm run release:check` checks the generated output against source before publication. The data rubric and its compiled representation are checked for exact parity. Tests cover dependency composition, missing controls, cycles, bounds, dates, localization, source isolation, HTML escaping and badge affordances. Interactive browser verification remains necessary before adopting the components in a production wallet; this extraction has not been separately audited or browser-certified.
 
-The app's financial ledger, collection wallet, provider traffic, project-specific control assignments, app artwork, CROPS app scorecard and internal operating records are not part of EDI. Map of Ethereum consumes these exports at a fixed Git commit. It owns its project reviews and financial accounting; EDI owns the assessment semantics, rubric, palette, translations and components.
+EDI owns the assessment semantics, rubric, palette, translations and components. Map of Ethereum consumes these exports at a fixed Git commit and maintains its own project reviews and financial accounting.
 
 MIT; see LICENSE for the license terms and retained notices.

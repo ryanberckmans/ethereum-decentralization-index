@@ -24,6 +24,7 @@
   "files": [
     "dist",
     "data",
+    "docs/images",
     "styles.css",
     "README.md",
     "LICENSE"
