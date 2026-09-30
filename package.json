@@ -1,6 +1,6 @@
 {
   "name": "ethereum-decentralization-index",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "description": "Ethereum control-dependency assessments and luminous, accessible React components.",
   "type": "module",

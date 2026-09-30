@@ -3,72 +3,73 @@ export const locales = {
         "tiers": [
             {
                 "label": "Maximum decentralization",
-                "definition": "As decentralized as Ethereum L1 itself within the reviewed mechanism; no additional administrator can rewrite its principal or exit rules.",
-                "legend": "Maximum decentralization"
+                "definition": "Ethereum L1 is the baseline. For an app or token, no extra administrator can change the reviewed rules for holding or withdrawing your assets.",
+                "legend": "Maximum Decentralization"
             },
             {
                 "label": "Limited administration",
-                "definition": "Bounded settings can change, while the reviewed asset custody and exit mechanism remains fixed.",
+                "definition": "An administrator can change limited settings, such as fees. They cannot replace the reviewed rules for holding or withdrawing your assets.",
                 "legend": "Limited settings; custody & exits fixed"
             },
             {
                 "label": "External operation",
-                "definition": "An oracle, allocation role, pause or other external operation materially affects the position without arbitrary replacement of its core.",
+                "definition": "An outside party can supply prices, decide how assets are allocated, or pause activity. They cannot freely replace the core rules.",
                 "legend": "External oracles, allocation or pauses"
             },
             {
                 "label": "Delayed governance",
-                "definition": "Governance can change the system through a documented delay; user vetoes and exit protections are assessed explicitly.",
+                "definition": "Governance can change the rules after a required waiting period. A review checks whether you can exit or veto a change before it takes effect.",
                 "legend": "Rule changes through delayed governance"
             },
             {
                 "label": "Independent emergency council",
-                "definition": "An elected, accountable and diverse council can act immediately, alongside a delayed normal governance route.",
+                "definition": "An elected, accountable and diverse council can make emergency changes immediately. Ordinary governance changes must wait.",
                 "legend": "Independent council; emergency powers"
             },
             {
                 "label": "Council and foundation",
-                "definition": "A formally governed council shares immediate authority with a foundation, with additional foundation or fallback powers.",
+                "definition": "A governed council and a foundation share immediate control. The foundation also has its own powers or a backup route to act.",
                 "legend": "Council + foundation authority"
             },
             {
                 "label": "Council and operator",
-                "definition": "An operator shares immediate authority with an appointed council, with limited public governance or removal rights.",
+                "definition": "An operator and an appointed council share immediate control. Users have limited power to elect or remove them.",
                 "legend": "Appointed council + operator authority"
             },
             {
                 "label": "Administrator upgrade",
-                "definition": "A concentrated administrator or committee can replace core rules without a verified protective delay and independent veto.",
+                "definition": "An administrator or small committee can replace the core rules. A protective waiting period and independent veto have not been verified.",
                 "legend": "Administrator can replace core rules"
             },
             {
                 "label": "Operator-governed validation",
-                "definition": "The operator also restricts who may validate or challenge state, or can defeat ordinary inclusion or exit mechanisms.",
+                "definition": "An operator can also restrict who checks or challenges transactions, or prevent the usual transaction and withdrawal routes from working.",
                 "legend": "Operator also controls validation or exits"
             },
             {
                 "label": "Issuer-controlled backing",
-                "definition": "An issuer or custodian controls the backing, redemption or seizure of the asset. This dimension is additional to the chain it uses.",
+                "definition": "An issuer or custodian controls the assets backing a token, redemption, or seizure. Using Ethereum does not remove that control.",
                 "legend": "Issuer controls backing or redemption"
             }
         ],
         "guideTitle": "Your guide to D0–D9",
         "guideQuestion": "Who can change the rules?",
-        "guideIntro": "Imagine Ethereum as shared ground, and each app as a building on it. A D-number tells you how much extra authority sits between you and that ground.",
+        "guideIntro": "A color and D-number show who can change the rules for the object you are looking at. Cyan D0 starts with Ethereum L1; higher numbers add more control by administrators, councils or issuers.",
         "guideAction": "Open the plain-language guide",
         "explain": "Explain this rating",
         "close": "Close",
         "foundationTitle": "D0 starts at Ethereum",
-        "foundationBody": "No extra administrator can rewrite the reviewed mechanism. D1 adds bounded settings; higher levels add stronger powers over rules, validation or backing.",
+        "foundationBody": "Ethereum L1 is the baseline. D0 apps and tokens add no administrator who can change the reviewed asset or withdrawal rules. D1 allows limited settings; D2 adds outside decisions such as prices or pauses.",
         "dependencyTitle": "Follow every dependency",
-        "dependencyBody": "An asset carries the strongest authority along its chain, app and issuer path. ETH in a D5 rollup is D5. An issuer-controlled token remains D9 even on Ethereum.",
+        "dependencyBody": "Read the chain, app and issuer together. The highest D-number on that path applies: ETH on a D5 rollup is D5; an issuer-controlled token remains D9 even on Ethereum.",
         "unknownTitle": "Read the question marks",
-        "unknownBody": "D? means the review is incomplete. ≥D5 means at least D5: an unresolved dependency may add more authority. Neither means safe or unsafe.",
+        "unknownBody": "D? means a review is missing or incomplete. ≥ D5 means at least D5: a part that has not been reviewed may add more control. Neither label means safe or unsafe.",
         "judgmentTitle": "Authority, not a verdict",
         "judgmentBody": "This is an editorial guide to control, not a security score, return forecast or ranking of good and bad projects. The evidence and review date matter.",
         "spectrum": "Explore the spectrum",
         "evidence": "Evidence and limits",
-        "l1": "Open ground for everyone. Even the tallest institutions stand stronger on a shared foundation."
+        "l1": "Open ground for everyone. Even the tallest institutions stand stronger on a shared foundation.",
+        "colorMeaning": "Objects shown in this color are rated {level}."
     },
     "zh": {
         "tiers": [
@@ -139,7 +140,8 @@ export const locales = {
         "judgmentBody": "这是控制权的编辑性指南，不是安全评分、回报预测或项目优劣排名。请查看证据和评估日期。",
         "spectrum": "查看完整光谱",
         "evidence": "证据与局限",
-        "l1": "人人共享的开放地基。再高的机构，也因共同的基础而更加稳固。"
+        "l1": "人人共享的开放地基。再高的机构，也因共同的基础而更加稳固。",
+        "colorMeaning": "显示为此颜色的对象被评为 {level}。"
     },
     "es": {
         "tiers": [
@@ -210,7 +212,8 @@ export const locales = {
         "judgmentBody": "Una guía editorial del control, no una puntuación de seguridad, previsión de rentabilidad ni clasificación moral. Consulta las pruebas y su fecha.",
         "spectrum": "Explora el espectro",
         "evidence": "Pruebas y límites",
-        "l1": "Terreno abierto para todos. Incluso las instituciones más altas se sostienen mejor sobre cimientos compartidos."
+        "l1": "Terreno abierto para todos. Incluso las instituciones más altas se sostienen mejor sobre cimientos compartidos.",
+        "colorMeaning": "Los objetos de este color tienen el nivel {level}."
     },
     "ja": {
         "tiers": [
@@ -281,7 +284,8 @@ export const locales = {
         "judgmentBody": "管理権限の編集的ガイドです。安全性の点数、収益予測、善悪の順位ではありません。根拠と評価日を確認してください。",
         "spectrum": "全体を見る",
         "evidence": "根拠と限界",
-        "l1": "誰にでも開かれた大地。大きな組織も、共有の土台でいっそう強く立てます。"
+        "l1": "誰にでも開かれた大地。大きな組織も、共有の土台でいっそう強く立てます。",
+        "colorMeaning": "この色で表示される対象の評価は {level} です。"
     },
     "ko": {
         "tiers": [
@@ -352,7 +356,8 @@ export const locales = {
         "judgmentBody": "통제에 대한 편집적 안내입니다. 보안 점수, 수익 예측, 선악 순위가 아닙니다. 근거와 검토 날짜를 확인하세요.",
         "spectrum": "전체 스펙트럼 보기",
         "evidence": "근거와 한계",
-        "l1": "모두에게 열린 땅. 아무리 큰 기관도 함께 쓰는 기반 위에서 더 단단히 섭니다."
+        "l1": "모두에게 열린 땅. 아무리 큰 기관도 함께 쓰는 기반 위에서 더 단단히 섭니다.",
+        "colorMeaning": "이 색으로 표시된 대상의 등급은 {level}입니다."
     },
     "fr": {
         "tiers": [
@@ -423,7 +428,8 @@ export const locales = {
         "judgmentBody": "Un guide éditorial du contrôle, pas une note de sécurité, une prévision de rendement ou un jugement moral. Consultez les preuves et leur date.",
         "spectrum": "Explorer le spectre",
         "evidence": "Preuves et limites",
-        "l1": "Un terrain ouvert à tous. Même les plus grandes institutions tiennent mieux sur des fondations communes."
+        "l1": "Un terrain ouvert à tous. Même les plus grandes institutions tiennent mieux sur des fondations communes.",
+        "colorMeaning": "Les objets de cette couleur sont classés {level}."
     },
     "pt": {
         "tiers": [
@@ -494,7 +500,8 @@ export const locales = {
         "judgmentBody": "Guia editorial de controle, não nota de segurança, previsão de retorno ou classificação moral. Consulte as evidências e suas datas.",
         "spectrum": "Explore o espectro",
         "evidence": "Evidências e limites",
-        "l1": "Terreno aberto para todos. Até as maiores instituições ficam mais firmes sobre uma base compartilhada."
+        "l1": "Terreno aberto para todos. Até as maiores instituições ficam mais firmes sobre uma base compartilhada.",
+        "colorMeaning": "Os objetos desta cor têm nível {level}."
     },
     "de": {
         "tiers": [
@@ -565,7 +572,8 @@ export const locales = {
         "judgmentBody": "Eine redaktionelle Hilfe zu Kontrolle, keine Sicherheitsnote, Renditeprognose oder Rangliste guter und schlechter Projekte. Belege und Prüfdatum zählen.",
         "spectrum": "Spektrum erkunden",
         "evidence": "Belege und Grenzen",
-        "l1": "Offener Grund für alle. Auch die größten Institutionen stehen stärker auf einem gemeinsamen Fundament."
+        "l1": "Offener Grund für alle. Auch die größten Institutionen stehen stärker auf einem gemeinsamen Fundament.",
+        "colorMeaning": "Objekte in dieser Farbe sind mit {level} eingestuft."
     }
 };
 //# sourceMappingURL=locales.js.map

@@ -28,7 +28,7 @@ export interface BadgeProps {
     locale?: Locale;
     className?: string;
     size?: 'compact' | 'comfortable';
-    variant?: 'badge' | 'swatch';
+    variant?: 'badge' | 'swatch' | 'legend';
 }
 export declare function DecentralizationBadge(props: BadgeProps): import("react/jsx-runtime").JSX.Element;
 export interface GuideProps {

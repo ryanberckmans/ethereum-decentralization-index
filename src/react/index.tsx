@@ -26,7 +26,6 @@ export interface ProviderProps {
     /** Use a phrasing-content wrapper when embedding badges within a sentence. */
     inline?: boolean;
 }
-const HelpIcon = () => <svg width="13" height="13" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="8" stroke="currentColor"/><path d="M7.5 7a2.5 2.5 0 0 1 5 0c0 2-2.5 2-2.5 4M10 14h.01" stroke="currentColor" strokeLinecap="round"/></svg>;
 const tint = (level: unknown) => ({ '--edi-grade': levelColor(level) } as CSSProperties);
 export function DecentralizationProvider({ children, locale = 'en', theme = 'system', guide, onGuideChange, returnFocusRef, className = '', inline = false }: ProviderProps) {
     const [local, setLocal] = useState<GuideRequest | null>(null), origin = useRef<HTMLElement | null>(null), controlled = guide !== undefined, current = controlled ? guide : local;
@@ -44,7 +43,7 @@ export interface BadgeProps {
     locale?: Locale;
     className?: string;
     size?: 'compact' | 'comfortable';
-    variant?: 'badge' | 'swatch';
+    variant?: 'badge' | 'swatch' | 'legend';
 }
 export function DecentralizationBadge(props: BadgeProps) {
     const context = useContext(Context);
@@ -54,7 +53,8 @@ export function DecentralizationBadge(props: BadgeProps) {
 }
 function Badge({ value, subject = 'mechanism', name, evidence, className = '', size = 'comfortable', variant = 'badge', locale: override }: BadgeProps) {
     const context = useContext(Context)!, locale = override ?? context.locale, c = locales[locale], result = typeof value === 'object' && value !== null ? normalizeAssessment(value) : assessment(isDLevel(value) ? value : null), description = describeAssessment(result, locale, subject), level = displayedLevel(result);
-    return <Tooltip.Root><Tooltip.Trigger asChild><button type="button" className={`edi-badge ${level === 0 ? 'edi-zero' : ''} ${className}`} data-size={size} data-variant={variant} style={tint(level)} aria-label={`${description.label}: ${c.explain}`} onClick={e => context.open({ value: result, subject, name, evidence, locale }, e.currentTarget)}><span>{description.label}</span>{variant === 'swatch' && <><span className="edi-equals" aria-hidden="true">=</span><span className="edi-swatch" aria-hidden="true"/></>}<HelpIcon /></button></Tooltip.Trigger><Tooltip.Portal><Tooltip.Content className="edi-tooltip" sideOffset={8}><strong>{description.short}</strong><span>{description.definition}</span>{description.uncertainty && <span>{description.uncertainty}</span>}<em>{c.guideAction}</em><Tooltip.Arrow /></Tooltip.Content></Tooltip.Portal></Tooltip.Root>;
+    return <Tooltip.Root><Tooltip.Trigger asChild><button type="button" className={`edi-badge ${level === 0 ? 'edi-zero' : ''} ${className}`} data-size={size} data-variant={variant} style={tint(level)} aria-label={`${description.label}: ${description.short}. ${c.explain}`} aria-haspopup="dialog" onClick={e => context.open({ value: result, subject, name, evidence, locale }, e.currentTarget)}>{variant !== 'badge' && <span className="edi-swatch" aria-hidden="true"/>}<span className="edi-label">{description.label}</span>{variant === 'legend' && <span className="edi-legend-description">{description.short}</span>}</button></Tooltip.Trigger><Tooltip.Portal><Tooltip.Content className="edi-tooltip" sideOffset={8}><strong>{description.label} · {description.short}</strong><span>{c.colorMeaning.replace('{level}', description.label)} {description.definition}</span>{description.uncertainty && description.uncertainty !== description.definition && <span>{description.uncertainty}</span>}<Tooltip.Arrow /></Tooltip.Content></Tooltip.Portal></Tooltip.Root>;
+
 }
 export interface GuideProps {
     open: boolean;
@@ -85,15 +85,28 @@ export function DecentralizationLegend({ locale: override, aside, className = ''
     className?: string;
 }) {
     const context = useContext(Context), locale = override ?? context?.locale ?? 'en';
-    const list = useRef<HTMLUListElement>(null), [separators,setSeparators] = useState<number[]>([]);
-    useEffect(()=>{
-        const element=list.current;if(!element)return;
-        const measure=()=>{const rows=[...new Set(Array.from(element.children,e=>(e as HTMLElement).offsetTop+(e as HTMLElement).offsetHeight))].sort((a,b)=>a-b);const next=rows.slice(0,-1).map(y=>y+3);setSeparators(previous=>JSON.stringify(previous)===JSON.stringify(next)?previous:next);};
-        measure();const observer=new ResizeObserver(measure);observer.observe(element);return()=>observer.disconnect();
-    },[locale]);
+    const table = useRef<HTMLTableElement>(null), [columns, setColumns] = useState(3);
+    useEffect(() => {
+        const element = table.current;
+        if (!element) return;
+        // Keep each color/grade/meaning cell aligned, including translated or enlarged text.
+        const measure = () => {
+            const em = parseFloat(getComputedStyle(element).fontSize) || 14;
+            setColumns(Math.max(1, Math.min(4, Math.floor(element.clientWidth / (em * 23)))));
+        };
+        measure();
+        const observer = new ResizeObserver(measure);
+        observer.observe(element);
+        return () => observer.disconnect();
+    }, [locale]);
     if (!context)
         return <DecentralizationProvider locale={locale}><DecentralizationLegend locale={locale} aside={aside} className={className}/></DecentralizationProvider>;
-    return <div className={`edi-legend ${className}`}><div className="edi-legend-main"><ul ref={list} aria-label={locales[locale].spectrum}>{locales[locale].tiers.map((g, i) => <li key={i}><DecentralizationBadge value={i as DLevel} locale={locale} variant="swatch"/><span className="edi-equals" aria-hidden="true">=</span><span>{g.legend}</span></li>)}</ul>{separators.map(top=><i key={top} className="edi-row-divider" aria-hidden="true" style={{top}}/>)}</div>{aside && <div className="edi-legend-aside">{aside}</div>}</div>;
+    const tiers = locales[locale].tiers;
+    return <div className={`edi-legend ${className}`}><table ref={table} className="edi-legend-table" aria-label={locales[locale].spectrum}><tbody>{Array.from({ length: Math.ceil(tiers.length / columns) }, (_, row) => <tr key={row}>{Array.from({ length: columns }, (_, column) => {
+        const level = row * columns + column;
+        return <td key={column}>{level < tiers.length && <DecentralizationBadge value={level as DLevel} locale={locale} variant="legend"/>}</td>;
+    })}</tr>)}</tbody></table>{aside && <div className="edi-legend-aside">{aside}</div>}</div>;
+
 }
 export function DecentralizationSpectrum({ locale: override }: {
     locale?: Locale;

@@ -2,62 +2,63 @@ export declare const locales: {
     readonly en: {
         readonly tiers: readonly [{
             readonly label: "Maximum decentralization";
-            readonly definition: "As decentralized as Ethereum L1 itself within the reviewed mechanism; no additional administrator can rewrite its principal or exit rules.";
-            readonly legend: "Maximum decentralization";
+            readonly definition: "Ethereum L1 is the baseline. For an app or token, no extra administrator can change the reviewed rules for holding or withdrawing your assets.";
+            readonly legend: "Maximum Decentralization";
         }, {
             readonly label: "Limited administration";
-            readonly definition: "Bounded settings can change, while the reviewed asset custody and exit mechanism remains fixed.";
+            readonly definition: "An administrator can change limited settings, such as fees. They cannot replace the reviewed rules for holding or withdrawing your assets.";
             readonly legend: "Limited settings; custody & exits fixed";
         }, {
             readonly label: "External operation";
-            readonly definition: "An oracle, allocation role, pause or other external operation materially affects the position without arbitrary replacement of its core.";
+            readonly definition: "An outside party can supply prices, decide how assets are allocated, or pause activity. They cannot freely replace the core rules.";
             readonly legend: "External oracles, allocation or pauses";
         }, {
             readonly label: "Delayed governance";
-            readonly definition: "Governance can change the system through a documented delay; user vetoes and exit protections are assessed explicitly.";
+            readonly definition: "Governance can change the rules after a required waiting period. A review checks whether you can exit or veto a change before it takes effect.";
             readonly legend: "Rule changes through delayed governance";
         }, {
             readonly label: "Independent emergency council";
-            readonly definition: "An elected, accountable and diverse council can act immediately, alongside a delayed normal governance route.";
+            readonly definition: "An elected, accountable and diverse council can make emergency changes immediately. Ordinary governance changes must wait.";
             readonly legend: "Independent council; emergency powers";
         }, {
             readonly label: "Council and foundation";
-            readonly definition: "A formally governed council shares immediate authority with a foundation, with additional foundation or fallback powers.";
+            readonly definition: "A governed council and a foundation share immediate control. The foundation also has its own powers or a backup route to act.";
             readonly legend: "Council + foundation authority";
         }, {
             readonly label: "Council and operator";
-            readonly definition: "An operator shares immediate authority with an appointed council, with limited public governance or removal rights.";
+            readonly definition: "An operator and an appointed council share immediate control. Users have limited power to elect or remove them.";
             readonly legend: "Appointed council + operator authority";
         }, {
             readonly label: "Administrator upgrade";
-            readonly definition: "A concentrated administrator or committee can replace core rules without a verified protective delay and independent veto.";
+            readonly definition: "An administrator or small committee can replace the core rules. A protective waiting period and independent veto have not been verified.";
             readonly legend: "Administrator can replace core rules";
         }, {
             readonly label: "Operator-governed validation";
-            readonly definition: "The operator also restricts who may validate or challenge state, or can defeat ordinary inclusion or exit mechanisms.";
+            readonly definition: "An operator can also restrict who checks or challenges transactions, or prevent the usual transaction and withdrawal routes from working.";
             readonly legend: "Operator also controls validation or exits";
         }, {
             readonly label: "Issuer-controlled backing";
-            readonly definition: "An issuer or custodian controls the backing, redemption or seizure of the asset. This dimension is additional to the chain it uses.";
+            readonly definition: "An issuer or custodian controls the assets backing a token, redemption, or seizure. Using Ethereum does not remove that control.";
             readonly legend: "Issuer controls backing or redemption";
         }];
         readonly guideTitle: "Your guide to D0–D9";
         readonly guideQuestion: "Who can change the rules?";
-        readonly guideIntro: "Imagine Ethereum as shared ground, and each app as a building on it. A D-number tells you how much extra authority sits between you and that ground.";
+        readonly guideIntro: "A color and D-number show who can change the rules for the object you are looking at. Cyan D0 starts with Ethereum L1; higher numbers add more control by administrators, councils or issuers.";
         readonly guideAction: "Open the plain-language guide";
         readonly explain: "Explain this rating";
         readonly close: "Close";
         readonly foundationTitle: "D0 starts at Ethereum";
-        readonly foundationBody: "No extra administrator can rewrite the reviewed mechanism. D1 adds bounded settings; higher levels add stronger powers over rules, validation or backing.";
+        readonly foundationBody: "Ethereum L1 is the baseline. D0 apps and tokens add no administrator who can change the reviewed asset or withdrawal rules. D1 allows limited settings; D2 adds outside decisions such as prices or pauses.";
         readonly dependencyTitle: "Follow every dependency";
-        readonly dependencyBody: "An asset carries the strongest authority along its chain, app and issuer path. ETH in a D5 rollup is D5. An issuer-controlled token remains D9 even on Ethereum.";
+        readonly dependencyBody: "Read the chain, app and issuer together. The highest D-number on that path applies: ETH on a D5 rollup is D5; an issuer-controlled token remains D9 even on Ethereum.";
         readonly unknownTitle: "Read the question marks";
-        readonly unknownBody: "D? means the review is incomplete. ≥D5 means at least D5: an unresolved dependency may add more authority. Neither means safe or unsafe.";
+        readonly unknownBody: "D? means a review is missing or incomplete. ≥ D5 means at least D5: a part that has not been reviewed may add more control. Neither label means safe or unsafe.";
         readonly judgmentTitle: "Authority, not a verdict";
         readonly judgmentBody: "This is an editorial guide to control, not a security score, return forecast or ranking of good and bad projects. The evidence and review date matter.";
         readonly spectrum: "Explore the spectrum";
         readonly evidence: "Evidence and limits";
         readonly l1: "Open ground for everyone. Even the tallest institutions stand stronger on a shared foundation.";
+        readonly colorMeaning: "Objects shown in this color are rated {level}.";
     };
     readonly zh: {
         readonly tiers: readonly [{
@@ -118,6 +119,7 @@ export declare const locales: {
         readonly spectrum: "查看完整光谱";
         readonly evidence: "证据与局限";
         readonly l1: "人人共享的开放地基。再高的机构，也因共同的基础而更加稳固。";
+        readonly colorMeaning: "显示为此颜色的对象被评为 {level}。";
     };
     readonly es: {
         readonly tiers: readonly [{
@@ -178,6 +180,7 @@ export declare const locales: {
         readonly spectrum: "Explora el espectro";
         readonly evidence: "Pruebas y límites";
         readonly l1: "Terreno abierto para todos. Incluso las instituciones más altas se sostienen mejor sobre cimientos compartidos.";
+        readonly colorMeaning: "Los objetos de este color tienen el nivel {level}.";
     };
     readonly ja: {
         readonly tiers: readonly [{
@@ -238,6 +241,7 @@ export declare const locales: {
         readonly spectrum: "全体を見る";
         readonly evidence: "根拠と限界";
         readonly l1: "誰にでも開かれた大地。大きな組織も、共有の土台でいっそう強く立てます。";
+        readonly colorMeaning: "この色で表示される対象の評価は {level} です。";
     };
     readonly ko: {
         readonly tiers: readonly [{
@@ -298,6 +302,7 @@ export declare const locales: {
         readonly spectrum: "전체 스펙트럼 보기";
         readonly evidence: "근거와 한계";
         readonly l1: "모두에게 열린 땅. 아무리 큰 기관도 함께 쓰는 기반 위에서 더 단단히 섭니다.";
+        readonly colorMeaning: "이 색으로 표시된 대상의 등급은 {level}입니다.";
     };
     readonly fr: {
         readonly tiers: readonly [{
@@ -358,6 +363,7 @@ export declare const locales: {
         readonly spectrum: "Explorer le spectre";
         readonly evidence: "Preuves et limites";
         readonly l1: "Un terrain ouvert à tous. Même les plus grandes institutions tiennent mieux sur des fondations communes.";
+        readonly colorMeaning: "Les objets de cette couleur sont classés {level}.";
     };
     readonly pt: {
         readonly tiers: readonly [{
@@ -418,6 +424,7 @@ export declare const locales: {
         readonly spectrum: "Explore o espectro";
         readonly evidence: "Evidências e limites";
         readonly l1: "Terreno aberto para todos. Até as maiores instituições ficam mais firmes sobre uma base compartilhada.";
+        readonly colorMeaning: "Os objetos desta cor têm nível {level}.";
     };
     readonly de: {
         readonly tiers: readonly [{
@@ -478,6 +485,7 @@ export declare const locales: {
         readonly spectrum: "Spektrum erkunden";
         readonly evidence: "Belege und Grenzen";
         readonly l1: "Offener Grund für alle. Auch die größten Institutionen stehen stärker auf einem gemeinsamen Fundament.";
+        readonly colorMeaning: "Objekte in dieser Farbe sind mit {level} eingestuft.";
     };
 };
 export type Locale = keyof typeof locales;

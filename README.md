@@ -38,7 +38,7 @@ D is an ordinal taxonomy of documented authority, not equal intervals, a probabi
 | `DecentralizationProvider` | Shared guide, locale and System / Light / Dark theme; optional controlled state for host routing |
 | `DecentralizationBadge` | D label, partial/unknown state, explanatory tooltip and keyboard/touch guide trigger |
 | `DecentralizationSpectrum` | Compact interactive set of all ten grades |
-| `DecentralizationLegend` | Wrapping detailed legend with an optional first-row aside |
+| `DecentralizationLegend` | Responsive table of color, grade and meaning, with an optional first-row aside |
 | `DecentralizationGuide` | Large plain-language guide, scope and dependency explanations, selected grade and safe evidence links |
 | `DecentralizationCard` | Position-level explanation suitable for a wallet |
 | `DecentralizationPath` | A readable sequence of the reviewed control dependencies |
@@ -55,7 +55,7 @@ Standalone badges can appear inside a sentence. If placing a shared provider ins
 
 Use `subject="ethereum-l1"` for Ethereum itself to show the special shared-foundation message. Other D0 mechanisms retain their scoped administrator/exit explanation. Eight locales ship: English, Simplified Chinese, Spanish, French, German, Brazilian Portuguese, Japanese and Korean.
 
-The palette is fixed by grade: radiant cyan D0, green D1, then lime, gold and warm red. Unknown stays neutral. Color accompanies visible text and does not imply a moral or risk judgment. Styles are scoped to `edi-*`; tokens and layout can be adapted without importing the map's page shell. The compact wrapping legend preserves horizontal spacing and draws subtle dividers between measured rows. It does not impose a viewport height or sticky position on a host application. Reduced-motion preferences are respected.
+The palette is fixed by grade: radiant cyan D0, green D1, then lime, gold and warm red. Unknown stays neutral. Color accompanies visible text and does not imply a moral or risk judgment. Styles are scoped to `edi-*`; tokens and layout can be adapted without importing the map's page shell. The compact table legend aligns color, grade and meaning, preserves horizontal spacing and draws subtle row dividers. Hover or keyboard focus shows a self-contained explanation; click or tap opens the full guide. It does not impose a viewport height or sticky position on a host application. Reduced-motion preferences are respected.
 
 See `examples/WalletPosition.tsx` for a wallet integration. It uses illustrative inputs and makes their incomplete review visible.
 
