@@ -18,26 +18,26 @@ test('exact Uniswap deployments are D0 forever; brand and unresolved v4 position
  for(const id of ['uniswap-v1','uniswap-v2','uniswap-v3','uniswap-v4']){
   const entity=findReview(id);assert.equal(registryAssessment(id,'2099-01-01').effectiveLevel,0);assert.equal(reviewTiming(entity,'2099-01-01').dueAt,null);
  }
- assert.equal(registryAssessment('uniswap','2026-09-29').effectiveLevel,null);
- assert.equal(registryAssessment('uniswap-v4','2026-09-29',{scope:'position'}).status,'unreviewed');
- assert.equal(registryAssessment('token:uniswap','2026-09-29').effectiveLevel,1);
- assert.ok(reviewQueue('2026-10-01').some(t=>t.id==='uniswap-v4'&&t.scope==='position-dependencies'));
+ assert.equal(registryAssessment('uniswap',registry.lastUpdatedAt).effectiveLevel,null);
+ assert.equal(registryAssessment('uniswap-v4',registry.lastUpdatedAt,{scope:'position'}).status,'unreviewed');
+ assert.equal(registryAssessment('token:uniswap',registry.lastUpdatedAt).effectiveLevel,1);
+ assert.ok(reviewQueue('2026-11-01').some(t=>t.id==='uniswap-v4'&&t.scope==='position-dependencies'));
  assert.ok(!reviewQueue('2099-01-01').some(t=>t.id==='uniswap-v4'&&t.scope==='mechanism'));
 });
 test('monthly expiry preserves established restrictions and wrappers inherit their backing',()=>{
- const before=registryAssessment('usdc','2026-09-29'),after=registryAssessment('usdc','2026-10-01');
+ const before=registryAssessment('usdc',registry.lastUpdatedAt),after=registryAssessment('usdc','2026-11-01');
  assert.equal(before.effectiveLevel,9);assert.equal(after.effectiveLevel,null);assert.equal(after.knownFloor,9);assert.equal(after.status,'partial');
- assert.equal(findReview('usdc').reviewedAt,'2026-09-08');
- const wrapper=findReview('wsteth');assert.equal(reviewTiming(wrapper,'2026-10-01').permanent,false);assert.ok(registryAssessment('wsteth','2026-09-29').knownFloor>=3);
- assert.equal(registryAssessment('token:aerodrome-finance','2026-09-29').knownFloor,6);
- assert.equal(registryAssessment('token:optimism','2026-09-29').knownFloor,5);
- assert.equal(registryAssessment('token:arbitrum','2026-09-29').knownFloor,4);
+ assert.equal(findReview('usdc').reviewedAt,registry.lastUpdatedAt);
+ const wrapper=findReview('wsteth');assert.equal(reviewTiming(wrapper,registry.lastUpdatedAt).permanent,false);assert.ok(registryAssessment('wsteth',registry.lastUpdatedAt).knownFloor>=3);
+ assert.equal(registryAssessment('token:aerodrome-finance',registry.lastUpdatedAt).knownFloor,6);
+ assert.equal(registryAssessment('token:optimism',registry.lastUpdatedAt).knownFloor,5);
+ assert.equal(registryAssessment('token:arbitrum',registry.lastUpdatedAt).knownFloor,4);
 });
 test('calendar deadlines clamp month ends and explicit dates cannot postpone a restudy',()=>{
  assert.equal(addReviewMonth('2026-01-31'),'2026-02-28');assert.equal(addReviewMonth('2028-01-31'),'2028-02-29');
  assert.throws(()=>addReviewMonth('2026-02-31'),/ISO/);
  const db=clone(),entity=db.entities.find(e=>e.id==='usdc');entity.nextReviewAt='2027-01-01';
- assert.equal(reviewTiming(entity,'2026-09-29',db).dueAt,'2026-10-08');assert.throws(()=>validateRegistry(db),/monthly review date/);
+ assert.equal(reviewTiming(entity,registry.lastUpdatedAt,db).dueAt,'2026-11-01');assert.throws(()=>validateRegistry(db),/monthly review date/);
 });
 test('deployment lookup never matches a ticker, another chain or a similar address',()=>{
  const link=findReview('token:chainlink'),address=link.canonicalAddresses['1'];
@@ -46,7 +46,7 @@ test('deployment lookup never matches a ticker, another chain or a similar addre
  assert.equal(findReviewByAddress(1,address.slice(0,-1)+'b'),undefined);
  assert.equal(findReview('ethereum').kind,'chain');assert.equal(findReview('asset:ethereum').id,'native-eth');
  assert.equal(reviewTiming(findReview('token:1inch'),'2099-01-01').permanent,true);
- assert.equal(registryAssessment('token:golem','2026-09-29').effectiveLevel,null);
+ assert.equal(registryAssessment('token:golem',registry.lastUpdatedAt).effectiveLevel,null);
 });
 test('invalid evidence, ambiguous aliases, stronger floors and cycles cannot certify permanent D0',()=>{
  for(const mutate of [

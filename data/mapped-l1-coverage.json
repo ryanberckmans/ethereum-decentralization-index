@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "cycle": "2ea6e4e7",
-  "asOf": "2026-09-29",
+  "asOf": "2026-10-01",
   "source": {
     "url": "https://map-of-ethereum.zqnm.chatgpt.site/data/latest.json",
     "cycle": "2ea6e4e7",
@@ -26,7 +26,7 @@
       "complete": true,
       "locatedUsd": 8398028588.677265,
       "positionCompleteUsd": 5469190967.476383,
-      "reviewedAt": "2026-09-08",
+      "reviewedAt": "2026-10-01",
       "reviewCadence": "monthly"
     },
     {
@@ -36,7 +36,7 @@
       "complete": false,
       "locatedUsd": 18322924.256232098,
       "positionCompleteUsd": 0,
-      "reviewedAt": "2026-09-29",
+      "reviewedAt": "2026-10-01",
       "reviewCadence": "monthly"
     },
     {
@@ -46,7 +46,7 @@
       "complete": false,
       "locatedUsd": 872294.8819751728,
       "positionCompleteUsd": 0,
-      "reviewedAt": "2026-09-29",
+      "reviewedAt": "2026-10-01",
       "reviewCadence": "monthly"
     },
     {
@@ -56,7 +56,7 @@
       "complete": true,
       "locatedUsd": 0,
       "positionCompleteUsd": 0,
-      "reviewedAt": "2026-09-08",
+      "reviewedAt": "2026-10-01",
       "reviewCadence": "monthly"
     },
     {
@@ -66,7 +66,7 @@
       "complete": true,
       "locatedUsd": 0,
       "positionCompleteUsd": 0,
-      "reviewedAt": "2026-09-08",
+      "reviewedAt": "2026-10-01",
       "reviewCadence": "monthly"
     },
     {
@@ -76,7 +76,7 @@
       "complete": true,
       "locatedUsd": 388828527.18345684,
       "positionCompleteUsd": 388828527.18345684,
-      "reviewedAt": "2026-09-08",
+      "reviewedAt": "2026-10-01",
       "reviewCadence": "monthly"
     },
     {
@@ -86,7 +86,7 @@
       "complete": false,
       "locatedUsd": 176388769.91527855,
       "positionCompleteUsd": 0,
-      "reviewedAt": "2026-09-29",
+      "reviewedAt": "2026-10-01",
       "reviewCadence": "monthly"
     },
     {
@@ -96,7 +96,7 @@
       "complete": true,
       "locatedUsd": 0,
       "positionCompleteUsd": 0,
-      "reviewedAt": "2026-09-08",
+      "reviewedAt": "2026-10-01",
       "reviewCadence": "monthly"
     },
     {
@@ -106,7 +106,7 @@
       "complete": true,
       "locatedUsd": 0,
       "positionCompleteUsd": 0,
-      "reviewedAt": "2026-09-08",
+      "reviewedAt": "2026-10-01",
       "reviewCadence": "monthly"
     },
     {
@@ -116,7 +116,7 @@
       "complete": false,
       "locatedUsd": 92993319.59953345,
       "positionCompleteUsd": 0,
-      "reviewedAt": "2026-09-08",
+      "reviewedAt": "2026-10-01",
       "reviewCadence": "monthly"
     },
     {
@@ -126,7 +126,7 @@
       "complete": false,
       "locatedUsd": 0,
       "positionCompleteUsd": 0,
-      "reviewedAt": "2026-09-29",
+      "reviewedAt": "2026-10-01",
       "reviewCadence": "monthly"
     },
     {
@@ -146,7 +146,7 @@
       "complete": false,
       "locatedUsd": 0,
       "positionCompleteUsd": 0,
-      "reviewedAt": "2026-09-08",
+      "reviewedAt": "2026-10-01",
       "reviewCadence": "monthly"
     },
     {
@@ -156,7 +156,7 @@
       "complete": true,
       "locatedUsd": 0,
       "positionCompleteUsd": 0,
-      "reviewedAt": "2026-09-08",
+      "reviewedAt": "2026-10-01",
       "reviewCadence": "monthly"
     },
     {
@@ -166,7 +166,7 @@
       "complete": false,
       "locatedUsd": 0,
       "positionCompleteUsd": 0,
-      "reviewedAt": "2026-09-08",
+      "reviewedAt": "2026-10-01",
       "reviewCadence": "monthly"
     },
     {
@@ -176,7 +176,7 @@
       "complete": true,
       "locatedUsd": 5680791064.665016,
       "positionCompleteUsd": 5680791064.665016,
-      "reviewedAt": "2026-09-08",
+      "reviewedAt": "2026-10-01",
       "reviewCadence": "monthly"
     },
     {
@@ -186,7 +186,7 @@
       "complete": false,
       "locatedUsd": 0,
       "positionCompleteUsd": 0,
-      "reviewedAt": "2026-09-08",
+      "reviewedAt": "2026-10-01",
       "reviewCadence": "monthly"
     },
     {
@@ -196,7 +196,7 @@
       "complete": true,
       "locatedUsd": 395962089.4572624,
       "positionCompleteUsd": 395962089.4572624,
-      "reviewedAt": "2026-09-08",
+      "reviewedAt": "2026-10-01",
       "reviewCadence": "monthly"
     },
     {
