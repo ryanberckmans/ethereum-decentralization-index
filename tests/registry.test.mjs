@@ -33,6 +33,14 @@ test('monthly expiry preserves established restrictions and wrappers inherit the
  assert.equal(registryAssessment('token:optimism','2026-09-29').knownFloor,5);
  assert.equal(registryAssessment('token:arbitrum','2026-09-29').knownFloor,4);
 });
+test('repeated bundled lookups reuse derived reviews without changing any result',()=>{
+ const ids=[...registry.entities.map(e=>e.id),'unknown'];
+ for(const asOf of ['2026-09-29','2026-10-01','2027-06-01','2099-01-01']){const db=clone();
+  for(const scope of ['mechanism','position'])for(const id of ids){const fresh=registryAssessment(id,asOf,{scope,database:db});assert.deepEqual(registryAssessment(id,asOf,{scope}),fresh,`${id} ${asOf} ${scope}`);assert.deepEqual(registryAssessment(id,asOf,{scope}),fresh);}
+ }
+ const db=clone();assert.equal(registryAssessment('usdc','2026-09-29',{database:db}).effectiveLevel,9);db.entities.find(e=>e.id==='usdc').proposedTier=8;assert.equal(registryAssessment('usdc','2026-09-29',{database:db}).effectiveLevel,8);
+ for(let i=0;i<2;i++)assert.throws(()=>registryAssessment('usdc','2026-09-01'),/future/);
+});
 test('calendar deadlines clamp month ends and explicit dates cannot postpone a restudy',()=>{
  assert.equal(addReviewMonth('2026-01-31'),'2026-02-28');assert.equal(addReviewMonth('2028-01-31'),'2028-02-29');
  assert.throws(()=>addReviewMonth('2026-02-31'),/ISO/);

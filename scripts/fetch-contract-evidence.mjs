@@ -1,5 +1,6 @@
 import {readFile, mkdir, writeFile, rename} from 'node:fs/promises';
 import {resolve} from 'node:path';
+import {fileURLToPath} from 'node:url';
 import {assertReviewDate, reviewTiming, validateRegistry} from '../dist/registry/index.js';
 import {argument, readRegistry, root, sha256, today} from './registry-files.mjs';
 
@@ -63,7 +64,7 @@ export async function collectContractEvidence(targets, {asOf, requestBudget = 32
   await Promise.all(Array.from({length:Math.min(maxConcurrency,selected.length)},worker));
   return {requests: selected.length, remaining: [...unique.values()].slice(requestBudget).map(({id,chainId,address})=>({id,chainId,address})), results};
 }
-if (process.argv[1] && resolve(process.argv[1]) === new URL(import.meta.url).pathname) {
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const {database} = await readRegistry(), asOf = argument('as-of',today());
   validateRegistry(database); assertReviewDate(asOf);
   const ids = argument('ids','').split(',').filter(Boolean), all = process.argv.includes('--all');
