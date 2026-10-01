@@ -43,11 +43,16 @@ Create an explicit candidate in ignored `work/`, using the base hash from the pl
   "baseRegistrySha256": "<exact hash from the plan>",
   "asOf": "2026-10-01",
   "records": ["<complete researched entity objects, not these placeholder strings>"],
+  "positionReviews": [{
+    "id": "<permanent-D0-core-with-a-due-position-review>",
+    "positionReview": {"cadence": "monthly", "reviewedAt": "2026-10-01", "nextReviewAt": "2026-11-01", "status": "unresolved", "reason": "<current scoped finding>"},
+    "reviewChecks": ["identity", "implementation", "authorities", "timing", "exits", "dependencies"]
+  }],
   "corrections": {"<permanent-D0-id-if-needed>": "<specific evidence correction>"}
 }
 ```
 
-The six required `reviewChecks` are attestations by the researcher, not a machine proof that the work was done. Each completed replacement record needs cited evidence, the actual date, explicit scope, dependencies and a valid next date for monthly work. For an incomplete attempt on an existing non-D0 record, retain its previous `reviewedAt` and `nextReviewAt`, set `researchAttemptedAt` to the candidate date, and retain `assessment: "lower-bound"` with `tierBound: true`. The validator refuses to weaken its established floor. This records progress while leaving overdue research due. Permanent D0 changes require a named evidence correction; an incomplete attempt cannot replace it. Do not schedule reanalysis just to touch its date.
+The six required `reviewChecks` are attestations by the researcher, not a machine proof that the work was done. Each completed replacement record needs cited evidence, the actual date, explicit scope, dependencies and a valid next date for monthly work. A completed `positionReviews` item updates only the nested dependency review: the immutable core record and its permanent review date remain unchanged. For an incomplete attempt on an existing non-D0 record, retain its previous `reviewedAt` and `nextReviewAt`, set `researchAttemptedAt` to the candidate date, and retain `assessment: "lower-bound"` with `tierBound: true`. The validator refuses to weaken its established floor. This records progress while leaving overdue research due. Permanent D0 core changes require a named evidence correction; an incomplete attempt cannot replace one. Do not schedule reanalysis just to touch its date.
 
 ```sh
 npm run reviews:apply -- work/candidate.json

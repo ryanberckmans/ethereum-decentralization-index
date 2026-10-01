@@ -11,12 +11,13 @@ import {atomicWrite, readRegistry, renderRegistry, withRegistryLock, today} from
  * changes require a named evidence correction.
  */
 export function applyCandidate(database, candidate, digest) {
-  if (candidate.schemaVersion !== 1 || candidate.baseRegistrySha256 !== digest || !Array.isArray(candidate.records) || !candidate.records.length || candidate.records.length > 128) throw new Error('Invalid or stale research candidate');
+  const records = candidate.records ?? [], positionReviews = candidate.positionReviews ?? [];
+  if (candidate.schemaVersion !== 1 || candidate.baseRegistrySha256 !== digest || !Array.isArray(records) || !Array.isArray(positionReviews) || !records.length && !positionReviews.length || records.length + positionReviews.length > 128) throw new Error('Invalid or stale research candidate');
   assertReviewDate(candidate.asOf);
   if (candidate.asOf < database.lastUpdatedAt) throw new Error('Candidate date precedes current data');
   const required = ['identity','implementation','authorities','timing','exits','dependencies'];
   const entities = new Map(database.entities.map(e => [e.id,e])), touched = new Set(), incompleteIds=[];
-  for (const record of candidate.records) {
+  for (const record of records) {
     if (touched.has(record.id)) throw new Error('Duplicate candidate record');
     touched.add(record.id);
     const prior = entities.get(record.id);
@@ -28,6 +29,14 @@ export function applyCandidate(database, candidate, digest) {
     if (!complete) incompleteIds.push(record.id);
     if (prior && reviewTiming(prior, candidate.asOf, database).permanent && !isDeepStrictEqual(prior,record) && !candidate.corrections?.[record.id]?.trim()) throw new Error(`Permanent D0 requires an explicit evidence correction: ${record.id}`);
     entities.set(record.id,record);
+  }
+  for (const position of positionReviews) {
+    if (!position || typeof position.id !== 'string' || touched.has(position.id)) throw new Error('Duplicate candidate record');
+    touched.add(position.id);
+    const prior = entities.get(position.id), review = position.positionReview;
+    if (!prior?.positionReview || !review || review.reviewedAt !== candidate.asOf || !required.every(check => position.reviewChecks?.includes(check))) throw new Error(`Full position research attestation missing: ${position.id}`);
+    if (!prior.evidenceUrls?.length) throw new Error(`Position research evidence missing: ${position.id}`);
+    entities.set(position.id,{...prior,positionReview:review});
   }
   const next = {...database, lastUpdatedAt: candidate.asOf, entities: [...entities.values()]};
   validateRegistry(next);
@@ -46,6 +55,7 @@ if (process.argv[1] && resolve(process.argv[1]) === new URL(import.meta.url).pat
     const next = applyCandidate(current.database, candidate, current.digest);
     if ((await readRegistry()).digest !== current.digest) throw new Error('Concurrent registry edit; rebase the research candidate');
     await atomicWrite('data/control-registry.json', renderRegistry(next));
-    console.log(JSON.stringify({accepted:candidate.records.length,completedReviews:candidate.records.filter(r=>r.reviewedAt===candidate.asOf&&['identity','implementation','authorities','timing','exits','dependencies'].every(check=>r.reviewChecks?.includes(check))).length,asOf: next.lastUpdatedAt}));
+    const records=candidate.records??[], positionReviews=candidate.positionReviews??[];
+    console.log(JSON.stringify({accepted:records.length,completedReviews:records.filter(r=>r.reviewedAt===candidate.asOf&&['identity','implementation','authorities','timing','exits','dependencies'].every(check=>r.reviewChecks?.includes(check))).length,acceptedPositionReviews:positionReviews.length,asOf: next.lastUpdatedAt}));
   });
 }
