@@ -95,14 +95,13 @@ export function reviewQueue(asOf, database = registry) {
     }
     return freeze(tasks.sort((a, b) => a.dueAt.localeCompare(b.dueAt) || a.id.localeCompare(b.id) || a.scope.localeCompare(b.scope)));
 }
-/**
- * @cc [label:research] no-synthetic-review-renewal
- * Expired non-D0 research remains incomplete with its established control floor
- * and original review date. Financial updates cannot renew a research assessment.
- */
-export function registryAssessment(id, asOf, options = {}) {
-    const database = options.database ?? registry;
-    isoDate(asOf);
+// The bundled registry is deep-frozen, so its derived reviews depend only on the date. Deriving every
+// entity's timing and permanence for each lookup was most of a lookup's cost.
+const bundledReviews = new Map();
+function controlReviews(asOf, database) {
+    const cached = database === registry ? bundledReviews.get(asOf) : undefined;
+    if (cached)
+        return cached;
     const reviews = database.entities.map(entity => {
         const timing = reviewTiming(entity, asOf, database);
         // proposedTier is an editorial floor for incomplete records; preserve stronger known controls.
@@ -111,6 +110,22 @@ export function registryAssessment(id, asOf, options = {}) {
             complete: entity.assessment === 'assessed' && entity.tierBound !== true && !timing.overdue,
             dependencies: entity.dependencies, reviewedAt: entity.reviewedAt, evidence: entity.evidenceUrls };
     });
+    if (database === registry) {
+        if (bundledReviews.size >= 16)
+            bundledReviews.clear();
+        bundledReviews.set(asOf, freeze(reviews));
+    }
+    return reviews;
+}
+/**
+ * @cc [label:research] no-synthetic-review-renewal
+ * Expired non-D0 research remains incomplete with its established control floor
+ * and original review date. Financial updates cannot renew a research assessment.
+ */
+export function registryAssessment(id, asOf, options = {}) {
+    const database = options.database ?? registry;
+    isoDate(asOf);
+    const reviews = controlReviews(asOf, database);
     const entity = findReview(id, database);
     const result = assessControlGraph(entity?.id ?? id, reviews);
     const positionOverdue = entity?.positionReview && reviewQueue(asOf, { ...database, entities: [entity] }).some(task => task.scope === 'position-dependencies');

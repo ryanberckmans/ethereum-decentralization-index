@@ -1,5 +1,6 @@
 import {readFile} from 'node:fs/promises';
 import {resolve} from 'node:path';
+import {fileURLToPath} from 'node:url';
 import {isDeepStrictEqual} from 'node:util';
 import {assertReviewDate, registryAssessment, reviewTiming, validateRegistry} from '../dist/registry/index.js';
 import {atomicWrite, readRegistry, renderRegistry, withRegistryLock, today} from './registry-files.mjs';
@@ -43,7 +44,7 @@ export function applyCandidate(database, candidate, digest) {
   for (const id of incompleteIds) if ((registryAssessment(id,candidate.asOf,{database:next}).knownFloor??0) < (registryAssessment(id,candidate.asOf,{database}).knownFloor??0)) throw new Error(`Incomplete attempt weakens the dependency floor: ${id}`);
   return next;
 }
-if (process.argv[1] && resolve(process.argv[1]) === new URL(import.meta.url).pathname) {
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const file = process.argv[2];
   if (!file || file.startsWith('--')) throw new Error('Usage: npm run reviews:apply -- candidate.json');
   const candidateText = await readFile(file,'utf8');
