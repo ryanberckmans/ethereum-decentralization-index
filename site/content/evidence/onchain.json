@@ -21,6 +21,30 @@
    "hash": "0xc6daf95895eb36f8855a8f2da96dde89f43090e9c2fcd8adf05eea87469ff598",
    "timestamp": "2026-09-30T23:59:59Z",
    "note": "Last Base block before 2026-10-01T00:00:00Z: state as of 1 October 2026"
+  },
+  "1:25877808": {
+   "hash": "0x4864a01970e7b4d48b1c125324c0ec238219905adf7dddb97e3cb7a15fbeccaa",
+   "timestamp": "2026-08-31T20:59:59Z"
+  },
+  "1:12369621": {
+   "hash": "0xf1156cb7e1a2acaa348c66fdc45b02f2547024ded63350a96a46ed12c62b4ff4",
+   "timestamp": "2021-05-04T19:27:00Z"
+  },
+  "8453:50715727": {
+   "hash": "0x9a66afdb301d95758da1ff107c42beb72f41aaaf4f08d4d4480318edc5f96571",
+   "timestamp": "2026-09-01T00:00:01Z"
+  },
+  "1:8426430": {
+   "hash": "0x9f6dbccf44a04d3f6f20d9a5008f9727c013343f6ee84cf629480bc16d71a28e",
+   "timestamp": "2019-08-26T14:36:20Z"
+  },
+  "1:15921958": {
+   "hash": "0x80a1bd09e6b1b88f5982bfb69786696e74bff27952e371be19ee057ba87ab284",
+   "timestamp": "2022-11-08T01:14:47Z"
+  },
+  "1:6082465": {
+   "hash": "0xb2f6986457f5a24ff088a0beb5567c8c1fe2da02687c78e743507ee7c982b977",
+   "timestamp": "2018-08-03T19:28:24Z"
   }
  },
  "reads": [
@@ -352,6 +376,1037 @@
     "blacklistedEvents": 68,
     "unBlacklistedEvents": 2,
     "logsFingerprintSha256": "5d76acc17c4178b4b143bb7fff6275461cc14a48603bf4da56420b680d93c5c4"
+   }
+  },
+  {
+   "id": "uniswap-v2-factory-first-code-block",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "code.firstBlock",
+    "address": "0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f"
+   },
+   "note": "Uniswap v2 factory (UniswapV2Factory).",
+   "result": {
+    "block": 10000835,
+    "timestamp": "2020-05-04T16:34:02Z"
+   }
+  },
+  {
+   "id": "uniswap-v3-factory-first-code-block",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "code.firstBlock",
+    "address": "0x1f98431c8ad98523631ae4a59f267346ea31f984"
+   },
+   "note": "Uniswap v3 factory (UniswapV3Factory).",
+   "result": {
+    "block": 12369621,
+    "timestamp": "2021-05-04T19:27:00Z"
+   }
+  },
+  {
+   "id": "uniswap-v4-poolmanager-first-code-block",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "code.firstBlock",
+    "address": "0x000000000004444c5dc75cb358380d2e3de08a90"
+   },
+   "note": "Uniswap v4 PoolManager.",
+   "result": {
+    "block": 21688329,
+    "timestamp": "2025-01-23T16:16:47Z"
+   }
+  },
+  {
+   "id": "morpho-blue-first-code-block",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "code.firstBlock",
+    "address": "0xbbbbbbbbbb9cc5e90e3b3af64bdaf62c37eeffcb"
+   },
+   "note": "Morpho Blue core contract on Ethereum.",
+   "result": {
+    "block": 18883124,
+    "timestamp": "2023-12-28T09:09:23Z"
+   }
+  },
+  {
+   "id": "morpho-blue-base-first-code-block",
+   "chainId": 8453,
+   "block": 52011726,
+   "read": {
+    "kind": "code.firstBlock",
+    "address": "0xbbbbbbbbbb9cc5e90e3b3af64bdaf62c37eeffcb"
+   },
+   "note": "Morpho Blue core contract on Base, a separate deployment at the same address.",
+   "result": {
+    "block": 13977148,
+    "timestamp": "2024-05-03T13:40:43Z"
+   }
+  },
+  {
+   "id": "seaport16-first-code-block",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "code.firstBlock",
+    "address": "0x0000000000000068f116a894984e2db1123eb395"
+   },
+   "note": "Seaport 1.6.",
+   "result": {
+    "block": 19442152,
+    "timestamp": "2024-03-15T18:32:59Z"
+   }
+  },
+  {
+   "id": "usdc-first-code-block",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "code.firstBlock",
+    "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"
+   },
+   "note": "USDC (FiatToken proxy) on Ethereum.",
+   "result": {
+    "block": 6082465,
+    "timestamp": "2018-08-03T19:28:24Z"
+   }
+  },
+  {
+   "id": "paxg-first-code-block",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "code.firstBlock",
+    "address": "0x45804880de22913dafe09f4980848ece6ecbaf78"
+   },
+   "note": "PAXG (proxy) on Ethereum.",
+   "result": {
+    "block": 8426430,
+    "timestamp": "2019-08-26T14:36:20Z"
+   }
+  },
+  {
+   "id": "pyusd-first-code-block",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "code.firstBlock",
+    "address": "0x6c3ea9036406852006290770bedfcaba0e23a0e8"
+   },
+   "note": "PYUSD (proxy) on Ethereum.",
+   "result": {
+    "block": 15921958,
+    "timestamp": "2022-11-08T01:14:47Z"
+   }
+  },
+  {
+   "id": "buidl-first-code-block",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "code.firstBlock",
+    "address": "0x7712c34205737192402172409a8f7ccef8aa2aec"
+   },
+   "note": "BUIDL token on Ethereum.",
+   "result": {
+    "block": 19343293,
+    "timestamp": "2024-03-01T22:24:11Z"
+   }
+  },
+  {
+   "id": "buidl-i-first-code-block",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "code.firstBlock",
+    "address": "0x6a9da2d710bb9b700acde7cb81f10f1ff8c89041"
+   },
+   "note": "BUIDL I Class token on Ethereum.",
+   "result": {
+    "block": 21423175,
+    "timestamp": "2024-12-17T15:32:59Z"
+   }
+  },
+  {
+   "id": "base-portal-first-code-block",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "code.firstBlock",
+    "address": "0x49048044d57e1c92a77f79988d21fa8faf74e97e"
+   },
+   "note": "Base's OptimismPortal (proxy) on Ethereum.",
+   "result": {
+    "block": 17482143,
+    "timestamp": "2023-06-15T01:51:35Z"
+   }
+  },
+  {
+   "id": "uniswap-v2-pairs-2026-10-01",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "call",
+    "to": "0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f",
+    "signature": "allPairsLength()",
+    "data": "0x574f2ba3",
+    "returns": "uint256"
+   },
+   "note": "Pairs created by the Uniswap v2 factory.",
+   "result": {
+    "raw": "0x000000000000000000000000000000000000000000000000000000000007fc8c",
+    "value": "523404"
+   }
+  },
+  {
+   "id": "uniswap-v2-fee-to-2026-10-01",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "call",
+    "to": "0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f",
+    "signature": "feeTo()",
+    "data": "0x017e7e58",
+    "returns": "address"
+   },
+   "note": "Recipient of the v2 protocol fee; a nonzero address means the fee is on for every v2 pair.",
+   "result": {
+    "raw": "0x000000000000000000000000f38521f130fccf29db1961597bc5d2b60f995f85",
+    "value": "0xf38521f130fccf29db1961597bc5d2b60f995f85"
+   }
+  },
+  {
+   "id": "uniswap-v2-fee-to-setter-2026-10-01",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "call",
+    "to": "0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f",
+    "signature": "feeToSetter()",
+    "data": "0x094b7415",
+    "returns": "address"
+   },
+   "note": "The only address that can change feeTo.",
+   "result": {
+    "raw": "0x0000000000000000000000001a9c8182c09f50c8318d769245bea52c32be35bc",
+    "value": "0x1a9c8182c09f50c8318d769245bea52c32be35bc"
+   }
+  },
+  {
+   "id": "uniswap-v3-factory-owner-2026-10-01",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "call",
+    "to": "0x1f98431c8ad98523631ae4a59f267346ea31f984",
+    "signature": "owner()",
+    "data": "0x8da5cb5b",
+    "returns": "address"
+   },
+   "note": "Owner of the v3 factory, which can set protocol fees on v3 pools.",
+   "result": {
+    "raw": "0x000000000000000000000000f2371551fe3937db7c750f4dfabe5c2fffdcbf5a",
+    "value": "0xf2371551fe3937db7c750f4dfabe5c2fffdcbf5a"
+   }
+  },
+  {
+   "id": "uniswap-v4-owner-2026-10-01",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "call",
+    "to": "0x000000000004444c5dc75cb358380d2e3de08a90",
+    "signature": "owner()",
+    "data": "0x8da5cb5b",
+    "returns": "address"
+   },
+   "note": "Owner of the v4 PoolManager, which can appoint the protocol fee controller.",
+   "result": {
+    "raw": "0x0000000000000000000000001a9c8182c09f50c8318d769245bea52c32be35bc",
+    "value": "0x1a9c8182c09f50c8318d769245bea52c32be35bc"
+   }
+  },
+  {
+   "id": "uniswap-v4-protocol-fee-controller-2026-10-01",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "call",
+    "to": "0x000000000004444c5dc75cb358380d2e3de08a90",
+    "signature": "protocolFeeController()",
+    "data": "0xf02de3b2",
+    "returns": "address"
+   },
+   "note": "Contract that can set protocol fees on v4 pools.",
+   "result": {
+    "raw": "0x00000000000000000000000089a5d5bf00a27d55c02951e49078a5c5771051db",
+    "value": "0x89a5d5bf00a27d55c02951e49078a5c5771051db"
+   }
+  },
+  {
+   "id": "uniswap-v3-fee-adapter-owner-2026-10-01",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "call",
+    "to": "0xf2371551fe3937db7c750f4dfabe5c2fffdcbf5a",
+    "signature": "owner()",
+    "data": "0x8da5cb5b",
+    "returns": "address"
+   },
+   "note": "Owner of the V3OpenFeeAdapter, the contract that owns the v3 factory.",
+   "result": {
+    "raw": "0x0000000000000000000000001a9c8182c09f50c8318d769245bea52c32be35bc",
+    "value": "0x1a9c8182c09f50c8318d769245bea52c32be35bc"
+   }
+  },
+  {
+   "id": "uniswap-v4-fee-adapter-owner-2026-10-01",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "call",
+    "to": "0x89a5d5bf00a27d55c02951e49078a5c5771051db",
+    "signature": "owner()",
+    "data": "0x8da5cb5b",
+    "returns": "address"
+   },
+   "note": "Owner of the V4FeeAdapter, the v4 PoolManager's protocol fee controller.",
+   "result": {
+    "raw": "0x0000000000000000000000001a9c8182c09f50c8318d769245bea52c32be35bc",
+    "value": "0x1a9c8182c09f50c8318d769245bea52c32be35bc"
+   }
+  },
+  {
+   "id": "morpho-blue-owner-2026-10-01",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "call",
+    "to": "0xbbbbbbbbbb9cc5e90e3b3af64bdaf62c37eeffcb",
+    "signature": "owner()",
+    "data": "0x8da5cb5b",
+    "returns": "address"
+   },
+   "note": "Owner of Morpho Blue on Ethereum: it can enable new interest rate models and LLTVs, and set fees and the fee recipient.",
+   "result": {
+    "raw": "0x000000000000000000000000cba28b38103307ec8da98377fff9816c164f9afa",
+    "value": "0xcba28b38103307ec8da98377fff9816c164f9afa"
+   }
+  },
+  {
+   "id": "morpho-blue-fee-recipient-2026-10-01",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "call",
+    "to": "0xbbbbbbbbbb9cc5e90e3b3af64bdaf62c37eeffcb",
+    "signature": "feeRecipient()",
+    "data": "0x46904840",
+    "returns": "address"
+   },
+   "note": "Recipient of Morpho Blue protocol fees on Ethereum.",
+   "result": {
+    "raw": "0x0000000000000000000000000000000000000000000000000000000000000000",
+    "value": "0x0000000000000000000000000000000000000000"
+   }
+  },
+  {
+   "id": "uniswap-v2-swaps-2026-09",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "uniswap.pairSwaps",
+    "version": 2,
+    "factory": "0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f",
+    "swapTopic": "0xd78ad95fa46c994b6551d0da85fc275fe613ce37657fb8d5e3d130840159d822",
+    "fromBlock": 25878705,
+    "toBlock": 26093737
+   },
+   "note": "Swap events in September 2026 (UTC) from pairs that the Uniswap v2 factory created. Forks emit the same event; their pairs are counted separately as other contracts."
+  },
+  {
+   "id": "uniswap-v3-swaps-2026-09",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "uniswap.pairSwaps",
+    "version": 3,
+    "factory": "0x1f98431c8ad98523631ae4a59f267346ea31f984",
+    "swapTopic": "0xc42079f94a6350d7e6235f29174924f928cc2ac818eb64fed8004e115fbcca67",
+    "fromBlock": 25878705,
+    "toBlock": 26093737
+   },
+   "note": "Swap events in September 2026 (UTC) from pools that the Uniswap v3 factory created. Forks emit the same event; their pools are counted separately as other contracts.",
+   "result": {
+    "events": 4121099,
+    "pools": 11876,
+    "otherEvents": 138311,
+    "otherContracts": 425,
+    "logsFingerprintSha256": "fdf171f6d1bf1a95e6fe561fe02f25af35e0c62df99723faa698c2a1234dea5a"
+   }
+  },
+  {
+   "id": "uniswap-v3-pools-2026-10-01",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "logs.count",
+    "address": "0x1f98431c8ad98523631ae4a59f267346ea31f984",
+    "topics": [
+     "0x783cca1c0412dd0d695e784568c96da2e9c22ff989357a2e8b1d9b2b4e6b7118"
+    ],
+    "fromBlock": 12369621,
+    "toBlock": 26093737,
+    "window": 1000000
+   },
+   "note": "PoolCreated events of the Uniswap v3 factory from its deployment to 1 October 2026: pools created.",
+   "result": {
+    "events": 73307,
+    "logsFingerprintSha256": "a683f0a34d582121a66bafd7dd59f5c4b2e2185ae82cffb7c5c20870dc6dca93"
+   }
+  },
+  {
+   "id": "uniswap-v4-swaps-2026-09",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "uniswap.v4Swaps",
+    "address": "0x000000000004444c5dc75cb358380d2e3de08a90",
+    "deployBlock": 21688329,
+    "fromBlock": 25878705,
+    "toBlock": 26093737,
+    "initializeWindow": 100000,
+    "swapWindow": 400,
+    "hooks": {
+     "permissionedHooks": "0x499a724ab630549f14c995ec41a8e04fa3fd28c0"
+    }
+   },
+   "note": "Pools initialized in the Uniswap v4 PoolManager up to 1 October 2026, and its Swap events in September 2026 (UTC), split by whether the pool has a hook. permissionedHooks is Uniswap's shared hook for Permissioned Pools.",
+   "result": {
+    "poolsInitialized": 148737,
+    "poolsWithHooks": 36138,
+    "swapEvents": 3731479,
+    "swapEventsWithoutHooks": 2743172,
+    "swapEventsWithHooks": 988307,
+    "swapEventsNativeEth": 1764358,
+    "poolsSwapped": 16146,
+    "hookedPoolsSwapped": 4661,
+    "hooksSwapped": 1210,
+    "named": {
+     "permissionedHooks": {
+      "pools": 1,
+      "poolsSwapped": 1,
+      "swapEvents": 2
+     }
+    },
+    "initializeFingerprintSha256": "c702606a49ffb995923991ce451bc1f049832b1016ce059d4493255e6f65cb34",
+    "swapFingerprintSha256": "d44f47833f1a7e3770de60de37e6c2ac48b71f576d6aa526a78412e978b6ebbc"
+   }
+  },
+  {
+   "id": "morpho-blue-usdc-2026-10-01",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "morpho.loanToken",
+    "address": "0xbbbbbbbbbb9cc5e90e3b3af64bdaf62c37eeffcb",
+    "deployBlock": 18883124,
+    "loanToken": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+    "loanDecimals": 6,
+    "fromBlock": 25878705,
+    "window": 100000
+   },
+   "note": "Morpho Blue markets on Ethereum that lend USDC: their supplied and borrowed totals at 1 October 2026, and USDC borrowed from them in September 2026 (UTC). The totals are sums of market records, not USDC lent: they include markets whose recorded borrows equal their recorded supply, where recorded debt keeps accruing interest (see morpho-eth-paxg-usdc-2026-10-01 and morpho-eth-sdeusd-usdc-2026-10-01).",
+   "result": {
+    "marketsCreated": 1800,
+    "loanTokenMarkets": 711,
+    "loanTokenMarketsWithBorrows": 435,
+    "totalSupplyAssets": "16145565995.423325",
+    "totalBorrowAssets": "16033605528.970441",
+    "createMarketFingerprintSha256": "1387c97ef25ae28e8e7359d90241af952edd45d87d9de1c256156a2d79536755",
+    "borrowEvents": 5458,
+    "borrowed": "590550524.665216",
+    "borrowFingerprintSha256": "178d0af1aefc999e48c550c3d3a3bf1716fb041c283eec0c2087d87de998edde"
+   }
+  },
+  {
+   "id": "morpho-blue-weth-2026-10-01",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "morpho.loanToken",
+    "address": "0xbbbbbbbbbb9cc5e90e3b3af64bdaf62c37eeffcb",
+    "deployBlock": 18883124,
+    "loanToken": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+    "loanDecimals": 18,
+    "fromBlock": 25878705,
+    "window": 100000
+   },
+   "note": "Morpho Blue markets on Ethereum that lend WETH: their supplied and borrowed totals at 1 October 2026, and WETH borrowed from them in September 2026 (UTC). The totals are sums of market records, not WETH lent.",
+   "result": {
+    "marketsCreated": 1800,
+    "loanTokenMarkets": 97,
+    "loanTokenMarketsWithBorrows": 66,
+    "totalSupplyAssets": "51230.986335949031727079",
+    "totalBorrowAssets": "46180.464732630637706875",
+    "createMarketFingerprintSha256": "1387c97ef25ae28e8e7359d90241af952edd45d87d9de1c256156a2d79536755",
+    "borrowEvents": 429,
+    "borrowed": "57540.145561385896932435",
+    "borrowFingerprintSha256": "c4f57fa8c822484df6c112fe8926fa4b7962c7e3191637c64a8e0034f5076c1f"
+   }
+  },
+  {
+   "id": "morpho-base-cbbtc-usdc-2026-10-01",
+   "chainId": 8453,
+   "block": 52011726,
+   "read": {
+    "kind": "morpho.market",
+    "address": "0xbbbbbbbbbb9cc5e90e3b3af64bdaf62c37eeffcb",
+    "marketId": "0x9103c3b4e834476c9a62ea009ba2c884ee42e94e6e314a26f04d312434191836",
+    "loanDecimals": 6
+   },
+   "note": "The Morpho Blue cbBTC/USDC market on Base that Morpho links to Coinbase's bitcoin-backed loans.",
+   "result": {
+    "loanToken": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+    "collateralToken": "0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf",
+    "oracle": "0x663becd10dae6c4a3dcd89f1d76c1174199639b9",
+    "irm": "0x46415998764c29ab2a25cbea6254146d50d22687",
+    "lltv": "0.86",
+    "totalSupplyAssets": "1667677923.093709",
+    "totalBorrowAssets": "1502020352.477389",
+    "lastUpdate": "2026-09-30T23:59:39Z",
+    "fee": "0"
+   }
+  },
+  {
+   "id": "morpho-base-cbbtc-usdc-borrows-2026-09",
+   "chainId": 8453,
+   "block": 52011726,
+   "read": {
+    "kind": "morpho.marketBorrows",
+    "address": "0xbbbbbbbbbb9cc5e90e3b3af64bdaf62c37eeffcb",
+    "marketId": "0x9103c3b4e834476c9a62ea009ba2c884ee42e94e6e314a26f04d312434191836",
+    "loanDecimals": 6,
+    "fromBlock": 50715727,
+    "toBlock": 52011726,
+    "window": 1000
+   },
+   "note": "Borrow events in that Base market in September 2026 (UTC): Base blocks 50,715,727 to 52,011,726.",
+   "result": {
+    "borrowEvents": 45973,
+    "borrowed": "177191246.452042",
+    "logsFingerprintSha256": "442f57b0fc86001cee5b80dc24bca35f800ca8717e4fa9fac53eb2c2ceb10ea3"
+   }
+  },
+  {
+   "id": "buidl-total-supply-2026-10-01",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "erc20.totalSupply",
+    "token": "0x7712c34205737192402172409a8f7ccef8aa2aec"
+   },
+   "note": "BUIDL tokens on Ethereum.",
+   "result": {
+    "raw": "203389187177549",
+    "decimals": 6,
+    "value": "203389187.177549"
+   }
+  },
+  {
+   "id": "buidl-total-supply-2026-09-01",
+   "chainId": 1,
+   "block": 25878704,
+   "read": {
+    "kind": "erc20.totalSupply",
+    "token": "0x7712c34205737192402172409a8f7ccef8aa2aec"
+   },
+   "note": "BUIDL tokens on Ethereum.",
+   "result": {
+    "raw": "211864943860349",
+    "decimals": 6,
+    "value": "211864943.860349"
+   }
+  },
+  {
+   "id": "buidl-transfers-2026-09",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "erc20.transfers",
+    "token": "0x7712c34205737192402172409a8f7ccef8aa2aec",
+    "decimals": 6,
+    "fromBlock": 25878705,
+    "toBlock": 26093737,
+    "window": 100000
+   },
+   "note": "BUIDL Transfer events in September 2026 (UTC): issued, burned and moved between holders.",
+   "result": {
+    "transferEvents": 33,
+    "transferred": "18407441.186307",
+    "mintEvents": 694,
+    "minted": "9665773.660011",
+    "burnEvents": 11,
+    "burned": "18141530.342811",
+    "logsFingerprintSha256": "7bec420a0986b923e616ea1ceed8f6c187479ef54f511bf683a245f676a0236e"
+   }
+  },
+  {
+   "id": "buidl-i-total-supply-2026-10-01",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "erc20.totalSupply",
+    "token": "0x6a9da2d710bb9b700acde7cb81f10f1ff8c89041"
+   },
+   "note": "BUIDL I Class tokens on Ethereum.",
+   "result": {
+    "raw": "239844535090100",
+    "decimals": 6,
+    "value": "239844535.0901"
+   }
+  },
+  {
+   "id": "buidl-i-total-supply-2026-09-01",
+   "chainId": 1,
+   "block": 25878704,
+   "read": {
+    "kind": "erc20.totalSupply",
+    "token": "0x6a9da2d710bb9b700acde7cb81f10f1ff8c89041"
+   },
+   "note": "BUIDL I Class tokens on Ethereum.",
+   "result": {
+    "raw": "801395176980100",
+    "decimals": 6,
+    "value": "801395176.9801"
+   }
+  },
+  {
+   "id": "buidl-i-transfers-2026-09",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "erc20.transfers",
+    "token": "0x6a9da2d710bb9b700acde7cb81f10f1ff8c89041",
+    "decimals": 6,
+    "fromBlock": 25878705,
+    "toBlock": 26093737,
+    "window": 100000
+   },
+   "note": "BUIDL I Class Transfer events in September 2026 (UTC): issued, burned and moved between holders.",
+   "result": {
+    "transferEvents": 18,
+    "transferred": "547990000",
+    "mintEvents": 79,
+    "minted": "1443364.710011",
+    "burnEvents": 16,
+    "burned": "562994006.600011",
+    "logsFingerprintSha256": "4f21907cf809ca14d6d9cebe9eb5886bdf83691029705234080065669a1f42ab"
+   }
+  },
+  {
+   "id": "paxg-total-supply-2026-10-01",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "erc20.totalSupply",
+    "token": "0x45804880de22913dafe09f4980848ece6ecbaf78"
+   },
+   "result": {
+    "raw": "432505835239000000000000",
+    "decimals": 18,
+    "value": "432505.835239"
+   }
+  },
+  {
+   "id": "paxg-total-supply-2026-09-01",
+   "chainId": 1,
+   "block": 25878704,
+   "read": {
+    "kind": "erc20.totalSupply",
+    "token": "0x45804880de22913dafe09f4980848ece6ecbaf78"
+   },
+   "result": {
+    "raw": "428830056219000000000000",
+    "decimals": 18,
+    "value": "428830.056219"
+   }
+  },
+  {
+   "id": "paxg-total-supply-2026-08-31-report",
+   "chainId": 1,
+   "block": 25877808,
+   "read": {
+    "kind": "erc20.totalSupply",
+    "token": "0x45804880de22913dafe09f4980848ece6ecbaf78"
+   },
+   "note": "At the time of Paxos's PAXG Redemption Assets Report: 5:00 PM Eastern on 31 August 2026, the last block before 21:00 UTC.",
+   "result": {
+    "raw": "428830056219000000000000",
+    "decimals": 18,
+    "value": "428830.056219"
+   }
+  },
+  {
+   "id": "paxg-transfers-2026-09",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "erc20.transfers",
+    "token": "0x45804880de22913dafe09f4980848ece6ecbaf78",
+    "decimals": 18,
+    "fromBlock": 25878705,
+    "toBlock": 26093737,
+    "window": 20000
+   },
+   "note": "PAXG Transfer events in September 2026 (UTC).",
+   "result": {
+    "transferEvents": 131559,
+    "transferred": "322023.29826031859576645",
+    "mintEvents": 48,
+    "minted": "4082.610334",
+    "burnEvents": 164,
+    "burned": "406.831314",
+    "logsFingerprintSha256": "2b0012d11c660754b0d5e89168630a4bc14967460773af7b2f84d3c1038cfcc0"
+   }
+  },
+  {
+   "id": "paxg-frozen-2026-10-01",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "token.frozen",
+    "token": "0x45804880de22913dafe09f4980848ece6ecbaf78",
+    "fromBlock": 8426430,
+    "frozenTopic": "0x90811a8edd3b3c17eeaefffc17f639cc69145d41a359c9843994dc2538203690",
+    "unfrozenTopic": "0xc3776b472ebf54114339eec9e4dc924e7ce307a97f5c1ee72b6d474e6e5e8b7c",
+    "wipedTopic": "0xfc5960f1c5a5d2b60f031bf534af053b1bf7d9881989afaeb8b1d164db23aede",
+    "check": "0xe5839836",
+    "window": 1000000
+   },
+   "note": "AddressFrozen, AddressUnfrozen and FrozenAddressWiped events of PAXG since deployment; isFrozen(address) at 1 October 2026 for every address ever frozen.",
+   "result": {
+    "frozenEvents": 291,
+    "unfrozenEvents": 0,
+    "wipedEvents": 10,
+    "addressesEverFrozen": 291,
+    "frozenAtBlock": 291,
+    "logsFingerprintSha256": "8c7fbb8de8220fafa844eabf2898463026c5a1c2e86c8d3f9b966b2cd7de8972"
+   }
+  },
+  {
+   "id": "pyusd-total-supply-2026-10-01",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "erc20.totalSupply",
+    "token": "0x6c3ea9036406852006290770bedfcaba0e23a0e8"
+   },
+   "result": {
+    "raw": "1686931301760225",
+    "decimals": 6,
+    "value": "1686931301.760225"
+   }
+  },
+  {
+   "id": "pyusd-total-supply-2026-09-01",
+   "chainId": 1,
+   "block": 25878704,
+   "read": {
+    "kind": "erc20.totalSupply",
+    "token": "0x6c3ea9036406852006290770bedfcaba0e23a0e8"
+   },
+   "result": {
+    "raw": "1828528201321894",
+    "decimals": 6,
+    "value": "1828528201.321894"
+   }
+  },
+  {
+   "id": "pyusd-total-supply-2026-08-31-report",
+   "chainId": 1,
+   "block": 25877808,
+   "read": {
+    "kind": "erc20.totalSupply",
+    "token": "0x6c3ea9036406852006290770bedfcaba0e23a0e8"
+   },
+   "note": "At the time of Paxos's PYUSD Redemption Assets Report: 5:00 PM Eastern on 31 August 2026, the last block before 21:00 UTC.",
+   "result": {
+    "raw": "1840077337277328",
+    "decimals": 6,
+    "value": "1840077337.277328"
+   }
+  },
+  {
+   "id": "pyusd-transfers-2026-09",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "erc20.transfers",
+    "token": "0x6c3ea9036406852006290770bedfcaba0e23a0e8",
+    "decimals": 6,
+    "fromBlock": 25878705,
+    "toBlock": 26093737,
+    "window": 10000
+   },
+   "note": "PYUSD Transfer events in September 2026 (UTC).",
+   "result": {
+    "transferEvents": 319318,
+    "transferred": "12061986134.017603",
+    "mintEvents": 1643,
+    "minted": "1016347609.092287",
+    "burnEvents": 1205,
+    "burned": "1157944508.653956",
+    "logsFingerprintSha256": "491bd375a9810ebc09a85a48722df5ba48e73063d05b65bcdcec61332cf3f893"
+   }
+  },
+  {
+   "id": "pyusd-frozen-2026-10-01",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "token.frozen",
+    "token": "0x6c3ea9036406852006290770bedfcaba0e23a0e8",
+    "fromBlock": 15921958,
+    "frozenTopic": "0x90811a8edd3b3c17eeaefffc17f639cc69145d41a359c9843994dc2538203690",
+    "unfrozenTopic": "0xc3776b472ebf54114339eec9e4dc924e7ce307a97f5c1ee72b6d474e6e5e8b7c",
+    "wipedTopic": "0xfc5960f1c5a5d2b60f031bf534af053b1bf7d9881989afaeb8b1d164db23aede",
+    "check": "0xe5839836",
+    "window": 1000000
+   },
+   "note": "AddressFrozen, AddressUnfrozen and FrozenAddressWiped events of PYUSD since deployment; isFrozen(address) at 1 October 2026 for every address ever frozen.",
+   "result": {
+    "frozenEvents": 158,
+    "unfrozenEvents": 1,
+    "wipedEvents": 2,
+    "addressesEverFrozen": 158,
+    "frozenAtBlock": 157,
+    "logsFingerprintSha256": "f83c71f8b20303195f1e0761564c1f57019e380e2ce6059dec9090e35cac39e1"
+   }
+  },
+  {
+   "id": "usdc-blocklisted-2026-10-01",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "token.frozen",
+    "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+    "fromBlock": 6082465,
+    "frozenTopic": "0xffa4e6181777692565cf28528fc88fd1516ea86b56da075235fa575af6a4b855",
+    "unfrozenTopic": "0x117e3210bb9aa7d9baff172026820255c6f6c30ba8999d1c2fd88e2848137c4e",
+    "check": "0xfe575a87",
+    "window": 1000000
+   },
+   "note": "Blacklisted and UnBlacklisted events of USDC since deployment; isBlacklisted(address) at 1 October 2026 for every address ever blocklisted.",
+   "result": {
+    "frozenEvents": 900,
+    "unfrozenEvents": 226,
+    "wipedEvents": 0,
+    "addressesEverFrozen": 846,
+    "frozenAtBlock": 650,
+    "logsFingerprintSha256": "8d483cce18b0430b00f52a9ddb218dc3b7e86430541d97ba1d1a7fed490cad05"
+   }
+  },
+  {
+   "id": "base-portal-eth-2026-10-01",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "eth.balance",
+    "address": "0x49048044d57e1c92a77f79988d21fa8faf74e97e"
+   },
+   "note": "ETH held by Base's OptimismPortal on Ethereum: ETH deposited into Base through it and not yet withdrawn.",
+   "result": {
+    "raw": "770315019433636976949828",
+    "decimals": 18,
+    "value": "770315.019433636976949828"
+   }
+  },
+  {
+   "id": "base-deposits-2026-09",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "logs.count",
+    "address": "0x49048044d57e1c92a77f79988d21fa8faf74e97e",
+    "topics": [
+     "0xb3813568d9991fc951961fcb4c784893574240a28925604d09fc577c55bb7c32"
+    ],
+    "fromBlock": 25878705,
+    "toBlock": 26093737,
+    "window": 50000
+   },
+   "note": "TransactionDeposited events of Base's OptimismPortal in September 2026 (UTC): transactions sent from Ethereum into Base.",
+   "result": {
+    "events": 14879,
+    "logsFingerprintSha256": "13eeb700b0486176694470e1c74b49c5af5ba63e8f6acafabb4cf54a0ac4fd93"
+   }
+  },
+  {
+   "id": "base-withdrawals-finalized-2026-09",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "logs.count",
+    "address": "0x49048044d57e1c92a77f79988d21fa8faf74e97e",
+    "topics": [
+     "0xdb5c7652857aa163daadd670e116628fb42e869d8ac4251ef8971d9e5727df1b"
+    ],
+    "fromBlock": 25878705,
+    "toBlock": 26093737,
+    "window": 50000
+   },
+   "note": "WithdrawalFinalized events of Base's OptimismPortal in September 2026 (UTC): withdrawals from Base completed on Ethereum.",
+   "result": {
+    "events": 1432,
+    "logsFingerprintSha256": "5894c59536dbfc4a584c5461a75a25b8fef69ebd0e6f8993448db5cfadb27af2"
+   }
+  },
+  {
+   "id": "base-dispute-games-2026-09",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "logs.count",
+    "address": "0x43edb88c4b80fdd2adff2412a7bebf9df42cb40e",
+    "topics": [
+     "0x5b565efe82411da98814f356d0e7bcb8f0219b8d970307c5afb4a6903a8b2e35"
+    ],
+    "fromBlock": 25878705,
+    "toBlock": 26093737,
+    "window": 300000
+   },
+   "note": "DisputeGameCreated events of Base's DisputeGameFactory on Ethereum in September 2026 (UTC): proposals of Base's state.",
+   "result": {
+    "events": 2160,
+    "logsFingerprintSha256": "1ea230a0380b093435c5f9d2fe848498703e94513d5d70e27c3061ea52fef981"
+   }
+  },
+  {
+   "id": "ethereum-blocks-2026-09",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "blocks.summary",
+    "fromBlock": 25878705,
+    "toBlock": 26093737
+   },
+   "note": "Every Ethereum block in September 2026 (UTC): transactions, gas used, base fee burned and blob fee burned.",
+   "result": {
+    "blocks": 215033,
+    "transactions": 56880856,
+    "gasUsed": "6522419274588",
+    "baseFeeBurned": "1881.239371109765173344",
+    "blocksWithBlobs": 183813,
+    "blobGasUsed": "162243018752",
+    "blobFeeBurned": "2.82976754839584768"
+   }
+  },
+  {
+   "id": "morpho-eth-cbbtc-usdc-2026-10-01",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "morpho.market",
+    "address": "0xbbbbbbbbbb9cc5e90e3b3af64bdaf62c37eeffcb",
+    "marketId": "0x64d65c9a2d91c36d56fbc42d69e979335320169b3df63bf92789e2c8883fcc64",
+    "loanDecimals": 6
+   },
+   "note": "The Morpho Blue cbBTC/USDC market on Ethereum (LLTV 86%): the USDC market with the most USDC borrowed in September 2026.",
+   "result": {
+    "loanToken": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+    "collateralToken": "0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf",
+    "oracle": "0xa6d6950c9f177f1de7f7757fb33539e3ec60182a",
+    "irm": "0x870ac11d48b15db9a138cf899d20f13f79ba00bc",
+    "lltv": "0.86",
+    "totalSupplyAssets": "338326918.169229",
+    "totalBorrowAssets": "305077117.460114",
+    "lastUpdate": "2026-09-30T23:58:59Z",
+    "fee": "0"
+   }
+  },
+  {
+   "id": "morpho-eth-paxg-usdc-2026-10-01",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "morpho.market",
+    "address": "0xbbbbbbbbbb9cc5e90e3b3af64bdaf62c37eeffcb",
+    "marketId": "0x8eaf7b29f02ba8d8c1d7aeb587403dcb16e2e943e4e2f5f94b0963c2386406c9",
+    "loanDecimals": 6
+   },
+   "note": "A Morpho Blue PAXG/USDC market on Ethereum (LLTV 91.5%) whose recorded borrows equal its recorded supply.",
+   "result": {
+    "loanToken": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+    "collateralToken": "0x45804880de22913dafe09f4980848ece6ecbaf78",
+    "oracle": "0xdd1778f71a4a1c6a0efebd8ae9f8848634ce1101",
+    "irm": "0x870ac11d48b15db9a138cf899d20f13f79ba00bc",
+    "lltv": "0.915",
+    "totalSupplyAssets": "8242668726.125807",
+    "totalBorrowAssets": "8242668726.125807",
+    "lastUpdate": "2026-09-14T12:04:23Z",
+    "fee": "0"
+   }
+  },
+  {
+   "id": "morpho-eth-sdeusd-usdc-2026-10-01",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "morpho.market",
+    "address": "0xbbbbbbbbbb9cc5e90e3b3af64bdaf62c37eeffcb",
+    "marketId": "0x0f9563442d64ab3bd3bcb27058db0b0d4046a4c46f0acd811dacae9551d2b129",
+    "loanDecimals": 6
+   },
+   "note": "A Morpho Blue sdeUSD/USDC market on Ethereum (LLTV 91.5%) whose recorded borrows equal its recorded supply.",
+   "result": {
+    "loanToken": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+    "collateralToken": "0x5c5b196abe0d54485975d1ec29617d42d9198326",
+    "oracle": "0x65f9f6d537c2d628d1c2663896436817440edb72",
+    "irm": "0x870ac11d48b15db9a138cf899d20f13f79ba00bc",
+    "lltv": "0.915",
+    "totalSupplyAssets": "6440491787.68227",
+    "totalBorrowAssets": "6440491787.68227",
+    "lastUpdate": "2026-09-22T03:29:35Z",
+    "fee": "0"
+   }
+  },
+  {
+   "id": "paxg-held-by-morpho-blue-2026-10-01",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "erc20.balanceOf",
+    "token": "0x45804880de22913dafe09f4980848ece6ecbaf78",
+    "holder": "0xbbbbbbbbbb9cc5e90e3b3af64bdaf62c37eeffcb"
+   },
+   "note": "PAXG held by the Morpho Blue contract across all of its markets.",
+   "result": {
+    "raw": "86164406520955049002",
+    "decimals": 18,
+    "value": "86.164406520955049002"
+   }
+  },
+  {
+   "id": "sdeusd-held-by-morpho-blue-2026-10-01",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "erc20.balanceOf",
+    "token": "0x5c5b196abe0d54485975d1ec29617d42d9198326",
+    "holder": "0xbbbbbbbbbb9cc5e90e3b3af64bdaf62c37eeffcb"
+   },
+   "note": "sdeUSD held by the Morpho Blue contract across all of its markets.",
+   "result": {
+    "raw": "8944788405981167225560721",
+    "decimals": 18,
+    "value": "8944788.405981167225560721"
    }
   }
  ]

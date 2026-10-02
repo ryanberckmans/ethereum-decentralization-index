@@ -30,6 +30,51 @@
   description: A crypto platform and Visa card program partner; the partner in Visa's first USDC settlement pilot in 2021.
   officialUrl: https://crypto.com
 
+- id: org:coinbase
+  kind: organization
+  name: Coinbase
+  description: >-
+    The US exchange company that develops Base, issues cbBTC and offers its customers USDC loans against crypto through
+    Morpho on Base.
+  officialUrl: https://www.coinbase.com
+
+- id: org:paxos
+  kind: organization
+  name: Paxos
+  description: >-
+    Paxos Trust Company, the issuer of PAXG and of PayPal USD (PYUSD). It holds their reserves, mints and redeems them,
+    and can freeze and wipe balances.
+  officialUrl: https://www.paxos.com
+  aliases: [Paxos Trust Company]
+
+- id: org:paypal
+  kind: organization
+  name: PayPal
+  description: The payments company behind PayPal USD (PYUSD), a dollar token that Paxos issues and PayPal offers to its customers.
+  officialUrl: https://www.paypal.com
+
+- id: org:blackrock
+  kind: organization
+  name: BlackRock
+  description: The asset manager whose BlackRock USD Institutional Digital Liquidity Fund (BUIDL) issues its shares as tokens.
+  officialUrl: https://www.blackrock.com
+
+- id: org:securitize
+  kind: organization
+  name: Securitize
+  description: >-
+    The tokenization platform and transfer agent for BUIDL. It records share ownership on chain, approves the investors
+    who may hold the tokens and arranges trading for them.
+  officialUrl: https://securitize.io
+
+- id: org:uniswap-labs
+  kind: organization
+  name: Uniswap Labs
+  description: >-
+    The company that developed the Uniswap protocol versions, runs Uniswap interfaces and published the Permissioned
+    Pools hook for Uniswap v4.
+  officialUrl: https://uniswap.org
+
 # Products -------------------------------------------------------------------
 
 - id: product:opensea-marketplace
@@ -44,6 +89,31 @@
   name: Visa stablecoin settlement
   description: Visa's program that lets card issuers and acquirers settle their Visa obligations in stablecoins such as USDC over supported blockchains.
   officialUrl: https://corporate.visa.com/en/sites/visa-perspectives/newsroom/visa-launches-stablecoin-settlement-in-the-united-states.html
+
+- id: product:coinbase-crypto-backed-loans
+  kind: product
+  name: Coinbase crypto-backed loans
+  description: >-
+    Coinbase's loans of USDC against its customers' bitcoin and other crypto. The variable-rate loans run on Morpho Blue
+    markets on Base.
+  aliases: [Coinbase bitcoin-backed loans, Coinbase loans]
+
+- id: product:uniswapx
+  kind: product
+  name: UniswapX
+  description: >-
+    A Uniswap Labs trading system in which outside market makers fill orders that settle on chain. BUIDL trades through
+    its request-for-quote framework with whitelisted market makers.
+  officialUrl: https://uniswap.org
+
+- id: product:uniswap-permissioned-pools
+  kind: product
+  name: Uniswap Permissioned Pools
+  description: >-
+    A Uniswap v4 hook standard for pools that only approved wallets can trade in or add liquidity to. The asset's issuer
+    keeps the allowlist; the shared hook and factory are deployed by Uniswap.
+  officialUrl: https://blog.uniswap.org/introducing-permissioned-pools-on-uniswap-v4
+  aliases: [Permissioned Pools, PermissionedHooks]
 
 # Deployments ----------------------------------------------------------------
 
@@ -66,6 +136,38 @@
   relatedEdiId: weth9
   aliases: [WETH on Base, Base WETH]
 
+- id: deployment:morpho-blue-base
+  kind: deployment
+  name: Morpho Blue on Base
+  description: >-
+    The Morpho Blue lending contract on Base, at the same address as on Ethereum. A separate deployment on a separate
+    network: EDI's Morpho markets record covers only the Ethereum contract.
+  chainId: 8453
+  address: "0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb"
+  relatedEdiId: morpho-blue
+  aliases: [Morpho on Base]
+
+- id: deployment:cbbtc-base
+  kind: deployment
+  name: cbBTC on Base
+  description: >-
+    Coinbase's cbBTC token contract on Base, the collateral in the Morpho market behind Coinbase's bitcoin-backed loans.
+    EDI's cbBTC record covers the Ethereum contract.
+  chainId: 8453
+  address: "0xcbB7C0000aB88B473b1f5aFd9ef808440eed33Bf"
+  relatedEdiId: cbbtc
+
+- id: deployment:buidl-i-ethereum
+  kind: deployment
+  name: BUIDL I Class on Ethereum
+  description: >-
+    The I Class of BlackRock's BUIDL fund, a separate token contract on Ethereum with the symbol BUIDL-I. The
+    directory's BUIDL figures cover the BUIDL contract only.
+  chainId: 1
+  address: "0x6a9DA2D710BB9B700acde7Cb81F10F1fF8C89041"
+  relatedEdiId: buidl
+  aliases: [BUIDL-I]
+
 # Networks -------------------------------------------------------------------
 
 - id: network:solana
@@ -82,3 +184,9 @@
   name: US dollar
   description: The United States dollar. Dollar tokens such as USDC promise redemption in it through their issuer.
   aliases: [USD, dollar]
+
+- id: ref:gold
+  kind: reference
+  name: Gold
+  description: Physical gold. Gold tokens such as PAXG are claims on bars held in custody by their issuer.
+  aliases: [XAU, physical gold]

@@ -4,8 +4,9 @@
 # one comparisonGroup with the same unit and time basis, and never summed.
 #
 # Onchain observations are reproduced from evidence/onchain.json (see README.md):
-# stocks are read at the first block of the date in UTC; flows cover whole UTC
-# days, here September 2026.
+# a stock dated D is the state at 00:00 UTC on D, after the last block before
+# it; a flow covers every block whose timestamp falls in its UTC days, here
+# September 2026.
 
 # Wrapped ETH -------------------------------------------------------------------
 
@@ -491,3 +492,1108 @@
   measure: rate
   ratePeriod: year
   comparisonGroup: visa-stablecoin-settlement-run-rate
+
+# ETH and Ethereum -------------------------------------------------------------
+
+- id: native-eth-base-fee-burned-2026-09
+  subjectId: native-eth
+  metric: ETH burned as base fees
+  metricDefinition: >-
+    The sum over every block of its base fee per gas times the gas it used: the part of transaction fees that the
+    protocol destroys. Tips to validators and blob fees are not included.
+  value: "1881.239371109765173344"
+  unit: ETH
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  scope: Every block on Ethereum mainnet, blocks 25,878,705 to 26,093,737.
+  sourceClaimIds: [onchain-ethereum-blocks-2026-09, ethereum-org-base-fee-burned]
+  measure: flow
+
+- id: native-eth-blob-fee-burned-2026-09
+  subjectId: native-eth
+  metric: ETH burned as blob fees
+  metricDefinition: >-
+    The sum over every block of its blob base fee times the blob gas it used: fees for the data blobs that rollups post
+    to Ethereum, which the protocol also burns.
+  value: "2.82976754839584768"
+  unit: ETH
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  scope: Every block on Ethereum mainnet, blocks 25,878,705 to 26,093,737.
+  sourceClaimIds: [onchain-ethereum-blocks-2026-09, eip-4844-blob-fee-burned]
+  measure: flow
+
+- id: ethereum-transactions-2026-09
+  subjectId: ethereum
+  metric: Transactions
+  metricDefinition: Transactions included in Ethereum mainnet blocks, each one paid for in ETH.
+  value: "56880856"
+  unit: transactions
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  scope: >-
+    Every block on Ethereum mainnet, blocks 25,878,705 to 26,093,737. Transactions on rollups and other networks are not
+    included.
+  sourceClaimIds: [onchain-ethereum-blocks-2026-09, ethereum-org-ether-fees-only]
+  measure: count
+
+- id: ethereum-blob-blocks-2026-09
+  subjectId: ethereum
+  metric: Blocks carrying blobs
+  metricDefinition: >-
+    Blocks with blob gas used above zero: blocks that carried data blobs, which rollups post to Ethereum.
+  value: "183813"
+  unit: blocks
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  scope: All 215,033 blocks on Ethereum mainnet, blocks 25,878,705 to 26,093,737.
+  sourceClaimIds: [onchain-ethereum-blocks-2026-09]
+  measure: count
+
+# Uniswap -------------------------------------------------------------------------
+
+- id: uniswap-v2-pools-2026-10-01
+  subjectId: uniswap-v2
+  metric: Pools created
+  metricDefinition: >-
+    Pairs created by the Uniswap v2 factory since it was deployed, as its allPairsLength() reports. Anyone can create a
+    pair, so this counts markets created, not markets in use.
+  value: "523404"
+  unit: pools
+  asOf: 2026-10-01
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f"}
+  scope: >-
+    The Uniswap v2 factory on Ethereum mainnet at 00:00 UTC, after block 26,093,737. Forks and other networks are not
+    included.
+  sourceClaimIds: [onchain-uniswap-cores-2026-10-01, uniswap-v2-deployments]
+  measure: count
+  comparisonGroup: uniswap-pools-created-ethereum-2026-10-01
+
+- id: uniswap-v3-pools-2026-10-01
+  subjectId: uniswap-v3
+  metric: Pools created
+  metricDefinition: >-
+    PoolCreated events emitted by the Uniswap v3 factory since it was deployed. Anyone can create a pool, so this counts
+    markets created, not markets in use.
+  value: "73307"
+  unit: pools
+  asOf: 2026-10-01
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x1F98431c8aD98523631AE4a59f267346ea31F984"}
+  scope: >-
+    The Uniswap v3 factory on Ethereum mainnet at 00:00 UTC, after block 26,093,737. Forks and other networks are not
+    included.
+  sourceClaimIds: [onchain-uniswap-cores-2026-10-01, uniswap-v3-deployments]
+  measure: count
+  comparisonGroup: uniswap-pools-created-ethereum-2026-10-01
+
+- id: uniswap-v4-pools-2026-10-01
+  subjectId: uniswap-v4
+  metric: Pools created
+  metricDefinition: >-
+    Initialize events emitted by the Uniswap v4 PoolManager since it was deployed, one for each pool. Anyone can create
+    a pool, so this counts markets created, not markets in use.
+  value: "148737"
+  unit: pools
+  asOf: 2026-10-01
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x000000000004444c5dc75cB358380D2e3dE08A90"}
+  scope: >-
+    The Uniswap v4 PoolManager on Ethereum mainnet at 00:00 UTC, after block 26,093,737. Other networks are not
+    included.
+  sourceClaimIds: [onchain-uniswap-cores-2026-10-01, uniswap-v4-deployments]
+  measure: count
+  comparisonGroup: uniswap-pools-created-ethereum-2026-10-01
+
+- id: uniswap-v4-hooked-pools-2026-10-01
+  subjectId: uniswap-v4
+  metric: Pools created with a hook
+  metricDefinition: >-
+    Pools initialized in the Uniswap v4 PoolManager whose pool key names a hook contract. A hook is set when the pool is
+    created and cannot be changed.
+  value: "36138"
+  unit: pools
+  asOf: 2026-10-01
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x000000000004444c5dc75cB358380D2e3dE08A90"}
+  scope: >-
+    The Uniswap v4 PoolManager on Ethereum mainnet at 00:00 UTC, after block 26,093,737.
+  sourceClaimIds: [onchain-uniswap-cores-2026-10-01, uniswap-v4-hooks-docs]
+  measure: count
+
+- id: uniswap-v4-swaps-2026-09
+  subjectId: uniswap-v4
+  metric: Swap events
+  metricDefinition: >-
+    Swap events emitted by the Uniswap v4 PoolManager, one for each pool a swap passes through. A trade routed through
+    several pools emits several, so events are not trades or traders.
+  value: "3731479"
+  unit: swap events
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x000000000004444c5dc75cB358380D2e3dE08A90"}
+  scope: Every v4 pool on Ethereum mainnet, blocks 25,878,705 to 26,093,737, through any interface.
+  sourceClaimIds: [onchain-uniswap-v4-swaps-2026-09]
+  measure: count
+  comparisonGroup: uniswap-swap-events-ethereum-2026-09
+
+- id: uniswap-v4-hooked-swaps-2026-09
+  subjectId: uniswap-v4
+  metric: Swap events in pools with a hook
+  metricDefinition: Swap events emitted by the Uniswap v4 PoolManager for pools whose pool key names a hook contract.
+  value: "988307"
+  unit: swap events
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x000000000004444c5dc75cB358380D2e3dE08A90"}
+  scope: Every v4 pool with a hook on Ethereum mainnet, blocks 25,878,705 to 26,093,737.
+  sourceClaimIds: [onchain-uniswap-v4-swaps-2026-09]
+  measure: count
+
+- id: uniswap-v4-hooks-used-2026-09
+  subjectId: uniswap-v4
+  metric: Hooks with swaps
+  metricDefinition: Distinct hook contracts named by v4 pools that recorded at least one Swap event.
+  value: "1210"
+  unit: hooks
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x000000000004444c5dc75cB358380D2e3dE08A90"}
+  scope: The Uniswap v4 PoolManager on Ethereum mainnet, blocks 25,878,705 to 26,093,737.
+  sourceClaimIds: [onchain-uniswap-v4-swaps-2026-09]
+  measure: count
+
+- id: uniswap-v4-native-eth-swaps-2026-09
+  subjectId: uniswap-v4
+  metric: Swap events in native ETH pools
+  metricDefinition: >-
+    Swap events emitted by the Uniswap v4 PoolManager for pools that pair native ETH directly, without wrapping it.
+  value: "1764358"
+  unit: swap events
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x000000000004444c5dc75cB358380D2e3dE08A90"}
+  scope: Every v4 pool with native ETH as one side on Ethereum mainnet, blocks 25,878,705 to 26,093,737.
+  sourceClaimIds: [onchain-uniswap-v4-swaps-2026-09]
+  measure: count
+
+- id: permissioned-pools-swaps-2026-09
+  subjectId: product:uniswap-permissioned-pools
+  metric: Swap events in permissioned pools
+  metricDefinition: >-
+    Swap events emitted by the Uniswap v4 PoolManager for pools that use Uniswap's shared PermissionedHooks contract.
+  value: "2"
+  unit: swap events
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x000000000004444c5dc75cB358380D2e3dE08A90"}
+    - {chainId: 1, address: "0x499a724Ab630549f14C995EC41a8E04fA3fd28c0"}
+  scope: >-
+    Pools using PermissionedHooks on Ethereum mainnet, blocks 25,878,705 to 26,093,737. Pools using an issuer-deployed
+    copy of the hook are not included.
+  sourceClaimIds: [onchain-uniswap-v4-swaps-2026-09, uniswap-permissioned-pools-addresses]
+  measure: count
+
+- id: permissioned-pools-2026-10-01
+  subjectId: product:uniswap-permissioned-pools
+  metric: Permissioned pools created
+  metricDefinition: >-
+    Pools initialized in the Uniswap v4 PoolManager that name Uniswap's shared PermissionedHooks contract as their hook.
+  value: "1"
+  unit: pools
+  asOf: 2026-10-01
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x000000000004444c5dc75cB358380D2e3dE08A90"}
+    - {chainId: 1, address: "0x499a724Ab630549f14C995EC41a8E04fA3fd28c0"}
+  scope: >-
+    The Uniswap v4 PoolManager on Ethereum mainnet at 00:00 UTC, after block 26,093,737.
+  sourceClaimIds: [onchain-uniswap-v4-swaps-2026-09, uniswap-permissioned-pools-addresses]
+  measure: count
+
+- id: uniswap-v3-swaps-2026-09
+  subjectId: uniswap-v3
+  metric: Swap events
+  metricDefinition: >-
+    Swap events emitted by pools that the Uniswap v3 factory created, one for each pool a swap passes through. A trade
+    routed through several pools emits several, so events are not trades or traders.
+  value: "4121099"
+  unit: swap events
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x1F98431c8aD98523631AE4a59f267346ea31F984"}
+  scope: >-
+    Every pool of the Uniswap v3 factory on Ethereum mainnet, blocks 25,878,705 to 26,093,737, through any interface.
+    Forks that emit the same event are not counted.
+  sourceClaimIds: [onchain-uniswap-v3-swaps-2026-09]
+  measure: count
+  comparisonGroup: uniswap-swap-events-ethereum-2026-09
+
+- id: uniswap-v3-pools-swapped-2026-09
+  subjectId: uniswap-v3
+  metric: Pools with swaps
+  metricDefinition: Pools created by the Uniswap v3 factory that emitted at least one Swap event.
+  value: "11876"
+  unit: pools
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x1F98431c8aD98523631AE4a59f267346ea31F984"}
+  scope: Every pool of the Uniswap v3 factory on Ethereum mainnet, blocks 25,878,705 to 26,093,737.
+  sourceClaimIds: [onchain-uniswap-v3-swaps-2026-09]
+  measure: count
+  comparisonGroup: uniswap-pools-swapped-ethereum-2026-09
+
+- id: uniswap-v4-pools-swapped-2026-09
+  subjectId: uniswap-v4
+  metric: Pools with swaps
+  metricDefinition: Pools in the Uniswap v4 PoolManager that emitted at least one Swap event.
+  value: "16146"
+  unit: pools
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x000000000004444c5dc75cB358380D2e3dE08A90"}
+  scope: Every v4 pool on Ethereum mainnet, blocks 25,878,705 to 26,093,737.
+  sourceClaimIds: [onchain-uniswap-v4-swaps-2026-09]
+  measure: count
+  comparisonGroup: uniswap-pools-swapped-ethereum-2026-09
+
+- id: v2-flash-swaps-2020
+  subjectId: uniswap-v2
+  metric: Flash-swap volume, reported
+  metricDefinition: >-
+    Cumulative value of Uniswap v2 flash swaps from the launch of v2 to the end of 2020, as Uniswap Labs reported it,
+    without a stated method.
+  value: "4800000000"
+  comparator: about
+  unit: USD
+  interval: {start: 2020-05-18, end: 2020-12-31}
+  chainIds: [1]
+  scope: >-
+    Uniswap v2 from its launch on Ethereum mainnet on 18 May 2020 to 31 December 2020. The post names no chain; the
+    directory found no Uniswap deployment outside Ethereum before July 2021.
+  sourceClaimIds: [uniswap-2020-flash-swaps-volume, uniswap-v2-launch]
+  measure: flow
+
+- id: v2-oracle-integrations-2020
+  subjectId: uniswap-v2
+  metric: Protocols using the price oracle, reported
+  metricDefinition: >-
+    Protocols that had integrated Uniswap's time-weighted average price oracle, introduced with v2, as Uniswap Labs
+    counted them, without a stated method.
+  value: "50"
+  comparator: more-than
+  unit: protocols
+  asOf: 2020-12-31
+  chainIds: [1]
+  scope: >-
+    Integrations reported by Uniswap Labs at the end of 2020. The post names no chain; the directory found no Uniswap
+    deployment outside Ethereum before July 2021.
+  sourceClaimIds: [uniswap-2020-oracle-integrations]
+  measure: count
+
+# Morpho --------------------------------------------------------------------------
+
+- id: morpho-blue-usdc-borrowed-2026-09
+  subjectId: morpho-blue
+  metric: USDC borrowed
+  metricDefinition: >-
+    The sum of assets in Borrow events from Morpho Blue markets that lend USDC: new loans paid out to borrowers.
+    Repayments are not netted, and a refinanced loan counts again.
+  value: "590550524.665216"
+  unit: USDC
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb"}
+    - {chainId: 1, address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"}
+  scope: >-
+    Every USDC-lending market of the Morpho Blue contract on Ethereum mainnet, blocks 25,878,705 to 26,093,737. Morpho
+    on Base is a separate deployment.
+  sourceClaimIds: [onchain-morpho-blue-ethereum-2026-10-01]
+  measure: flow
+
+- id: morpho-blue-usdc-borrow-events-2026-09
+  subjectId: morpho-blue
+  metric: USDC loans opened
+  metricDefinition: >-
+    Borrow events from Morpho Blue markets that lend USDC. One event per borrow call, so events are not borrowers.
+  value: "5458"
+  unit: Borrow events
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb"}
+  scope: Every USDC-lending market of the Morpho Blue contract on Ethereum mainnet, blocks 25,878,705 to 26,093,737.
+  sourceClaimIds: [onchain-morpho-blue-ethereum-2026-10-01]
+  measure: count
+
+- id: morpho-blue-markets-2026-10-01
+  subjectId: morpho-blue
+  metric: Markets created
+  metricDefinition: >-
+    CreateMarket events of the Morpho Blue contract since it was deployed. Anyone can create a market, so this counts
+    markets created, not markets in use.
+  value: "1800"
+  unit: markets
+  asOf: 2026-10-01
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb"}
+  scope: >-
+    The Morpho Blue contract on Ethereum mainnet at 00:00 UTC, after block 26,093,737.
+  sourceClaimIds: [onchain-morpho-blue-ethereum-2026-10-01, morpho-docs-permissionless-markets]
+  measure: count
+
+- id: morpho-blue-usdc-markets-2026-10-01
+  subjectId: morpho-blue
+  metric: Markets lending USDC
+  metricDefinition: Morpho Blue markets whose loan asset is USDC.
+  value: "711"
+  unit: markets
+  asOf: 2026-10-01
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb"}
+    - {chainId: 1, address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"}
+  scope: >-
+    The Morpho Blue contract on Ethereum mainnet at 00:00 UTC, after block 26,093,737.
+  sourceClaimIds: [onchain-morpho-blue-ethereum-2026-10-01]
+  measure: count
+
+- id: morpho-blue-usdc-markets-with-borrows-2026-10-01
+  subjectId: morpho-blue
+  metric: USDC markets with recorded borrows
+  metricDefinition: Morpho Blue markets lending USDC whose stored borrow total is above zero.
+  value: "435"
+  unit: markets
+  asOf: 2026-10-01
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb"}
+    - {chainId: 1, address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"}
+  scope: >-
+    The Morpho Blue contract on Ethereum mainnet at 00:00 UTC, after block 26,093,737.
+  sourceClaimIds: [onchain-morpho-blue-ethereum-2026-10-01]
+  measure: count
+
+- id: morpho-blue-weth-borrowed-2026-09
+  subjectId: morpho-blue
+  metric: WETH borrowed
+  metricDefinition: >-
+    The sum of assets in Borrow events from Morpho Blue markets that lend WETH: new loans paid out to borrowers.
+    Repayments are not netted.
+  value: "57540.145561385896932435"
+  unit: WETH
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb"}
+    - {chainId: 1, address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"}
+  scope: Every WETH-lending market of the Morpho Blue contract on Ethereum mainnet, blocks 25,878,705 to 26,093,737.
+  sourceClaimIds: [onchain-morpho-blue-weth-2026-09]
+  measure: flow
+
+- id: morpho-eth-cbbtc-usdc-borrowed-2026-10-01
+  subjectId: morpho-blue
+  metric: Borrowed in the cbBTC/USDC market
+  metricDefinition: >-
+    The market's stored borrow total: USDC owed by borrowers, with interest accrued up to the market's last update.
+  value: "305077117.460114"
+  unit: USDC
+  asOf: 2026-10-01
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb"}
+  scope: >-
+    One Morpho Blue market on Ethereum mainnet, cbBTC collateral and USDC loans at an 86% LLTV, at 00:00 UTC on 1
+    October 2026, after block 26,093,737. Last updated 30 September 2026.
+  sourceClaimIds: [onchain-morpho-ethereum-markets-2026-10-01]
+  measure: stock
+
+- id: morpho-eth-cbbtc-usdc-supplied-2026-10-01
+  subjectId: morpho-blue
+  metric: Supplied to the cbBTC/USDC market
+  metricDefinition: >-
+    The market's stored supply total: USDC deposited by lenders plus interest credited, up to the market's last update.
+  value: "338326918.169229"
+  unit: USDC
+  asOf: 2026-10-01
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb"}
+  scope: >-
+    One Morpho Blue market on Ethereum mainnet, cbBTC collateral and USDC loans at an 86% LLTV, at 00:00 UTC on 1
+    October 2026, after block 26,093,737.
+  sourceClaimIds: [onchain-morpho-ethereum-markets-2026-10-01]
+  measure: stock
+
+- id: morpho-eth-paxg-usdc-borrowed-2026-10-01
+  subjectId: morpho-blue
+  metric: Recorded borrows, PAXG/USDC market
+  metricDefinition: >-
+    The market's stored borrow total, with interest accrued up to its last update. Its stored supply total was the same
+    amount, so no supplied USDC was free to withdraw. A stored total is the market's own accounting, not evidence that
+    this much was lent against collateral of equal value.
+  value: "8242668726.125807"
+  unit: USDC
+  asOf: 2026-10-01
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb"}
+  scope: >-
+    One Morpho Blue market on Ethereum mainnet, PAXG collateral and USDC loans at a 91.5% LLTV, at 00:00 UTC on 1
+    October 2026, after block 26,093,737. Last updated 14 September 2026.
+  sourceClaimIds: [onchain-morpho-ethereum-markets-2026-10-01]
+  measure: stock
+
+- id: morpho-eth-sdeusd-usdc-borrowed-2026-10-01
+  subjectId: morpho-blue
+  metric: Recorded borrows, sdeUSD/USDC market
+  metricDefinition: >-
+    The market's stored borrow total, with interest accrued up to its last update. Its stored supply total was the same
+    amount, so no supplied USDC was free to withdraw. A stored total is the market's own accounting, not evidence that
+    this much was lent against collateral of equal value.
+  value: "6440491787.68227"
+  unit: USDC
+  asOf: 2026-10-01
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb"}
+  scope: >-
+    One Morpho Blue market on Ethereum mainnet, sdeUSD collateral and USDC loans at a 91.5% LLTV, at 00:00 UTC on 1
+    October 2026, after block 26,093,737. Last updated 22 September 2026.
+  sourceClaimIds: [onchain-morpho-ethereum-markets-2026-10-01]
+  measure: stock
+
+- id: morpho-blue-paxg-held-2026-10-01
+  subjectId: morpho-blue
+  metric: PAXG held by Morpho Blue
+  metricDefinition: >-
+    The PAXG balance of the Morpho Blue contract: PAXG posted as collateral plus any supplied and not lent out, across
+    all of its markets.
+  value: "86.164406520955049002"
+  unit: PAXG
+  asOf: 2026-10-01
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb"}
+    - {chainId: 1, address: "0x45804880De22913dAFE09f4980848ECE6EcbAf78"}
+  scope: The Morpho Blue contract on Ethereum mainnet at 00:00 UTC, after block 26,093,737.
+  sourceClaimIds: [onchain-morpho-ethereum-markets-2026-10-01]
+  measure: stock
+
+- id: morpho-blue-sdeusd-held-2026-10-01
+  subjectId: morpho-blue
+  metric: sdeUSD held by Morpho Blue
+  metricDefinition: >-
+    The sdeUSD balance of the Morpho Blue contract: sdeUSD posted as collateral plus any supplied and not lent out,
+    across all of its markets.
+  value: "8944788.405981167225560721"
+  unit: sdeUSD
+  asOf: 2026-10-01
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb"}
+    - {chainId: 1, address: "0x5C5b196aBE0d54485975D1Ec29617D42D9198326"}
+  scope: The Morpho Blue contract on Ethereum mainnet at 00:00 UTC, after block 26,093,737.
+  sourceClaimIds: [onchain-morpho-ethereum-markets-2026-10-01]
+  measure: stock
+
+- id: morpho-base-cbbtc-usdc-borrowed-2026-10-01
+  subjectId: deployment:morpho-blue-base
+  metric: Borrowed in the Base cbBTC/USDC market
+  metricDefinition: >-
+    The market's stored borrow total: USDC owed by borrowers, with interest accrued up to the market's last update.
+  value: "1502020352.477389"
+  unit: USDC
+  asOf: 2026-10-01
+  chainIds: [8453]
+  deploymentAddresses:
+    - {chainId: 8453, address: "0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb"}
+    - {chainId: 8453, address: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"}
+  scope: >-
+    The Morpho Blue market on Base that lends USDC against cbBTC at an 86% LLTV, at 00:00 UTC on 1 October 2026, after
+    Base block 52,011,726. Not an Ethereum figure.
+  sourceClaimIds: [onchain-morpho-base-coinbase-market-2026-10-01]
+  measure: stock
+
+- id: morpho-base-cbbtc-usdc-borrowed-2026-09
+  subjectId: deployment:morpho-blue-base
+  metric: USDC borrowed in the Base cbBTC/USDC market
+  metricDefinition: >-
+    The sum of assets in Borrow events from that market: new loans paid out to borrowers, before repayments.
+  value: "177191246.452042"
+  unit: USDC
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [8453]
+  deploymentAddresses:
+    - {chainId: 8453, address: "0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb"}
+    - {chainId: 8453, address: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"}
+  scope: >-
+    The Morpho Blue market on Base that lends USDC against cbBTC, Base blocks 50,715,727 to 52,011,726. Not an Ethereum
+    figure.
+  sourceClaimIds: [onchain-morpho-base-coinbase-market-2026-10-01]
+  measure: flow
+
+- id: morpho-base-cbbtc-usdc-borrow-events-2026-09
+  subjectId: deployment:morpho-blue-base
+  metric: Loans opened in the Base cbBTC/USDC market
+  metricDefinition: Borrow events from that market. One event per borrow call, so events are not borrowers.
+  value: "45973"
+  unit: Borrow events
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [8453]
+  deploymentAddresses:
+    - {chainId: 8453, address: "0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb"}
+  scope: The Morpho Blue market on Base that lends USDC against cbBTC, Base blocks 50,715,727 to 52,011,726.
+  sourceClaimIds: [onchain-morpho-base-coinbase-market-2026-10-01]
+  measure: count
+
+- id: coinbase-active-loans-2026-09-22
+  subjectId: product:coinbase-crypto-backed-loans
+  metric: Active variable-rate loans
+  metricDefinition: >-
+    Loans outstanding in Coinbase's Morpho-powered variable-rate crypto-backed loans, as Morpho reported them. Morpho
+    gives no method.
+  value: "1400000000"
+  comparator: more-than
+  unit: USD
+  asOf: 2026-09-22
+  chainIds: [8453]
+  scope: Coinbase's variable-rate loans across its collateral markets on Morpho on Base. Not an Ethereum figure.
+  sourceClaimIds: [morpho-coinbase-active-loans-2026-09]
+  measure: stock
+
+- id: morpho-blue-deposits-2024-08-01
+  subjectId: morpho-blue
+  metric: Total deposits, reported
+  metricDefinition: >-
+    Assets supplied to Morpho Blue on Ethereum, as Morpho reported them about six months after launch. A stock of
+    deposits, not loans outstanding.
+  value: "1700000000"
+  comparator: more-than
+  unit: USD
+  asOf: 2024-08-01
+  chainIds: [1]
+  scope: Morpho Blue on Ethereum, as reported by Morpho on 1 August 2024. The Base deployment is reported separately.
+  sourceClaimIds: [morpho-deposits-2024]
+  measure: stock
+
+- id: morpho-base-deposits-2024-08-01
+  subjectId: deployment:morpho-blue-base
+  metric: Total deposits, reported
+  metricDefinition: >-
+    Assets supplied to Morpho Blue on Base less than a month after its deployment, as Morpho reported them.
+  value: "120000000"
+  comparator: about
+  unit: USD
+  asOf: 2024-08-01
+  chainIds: [8453]
+  scope: Morpho Blue on Base, as reported by Morpho on 1 August 2024. Not an Ethereum figure.
+  sourceClaimIds: [morpho-deposits-2024]
+  measure: stock
+
+# Fund shares, gold and PayPal USD ------------------------------------------------
+
+- id: buidl-supply-2026-10-01
+  subjectId: buidl
+  metric: BUIDL tokens outstanding
+  metricDefinition: The BUIDL token contract's totalSupply(). Each token is a share of BlackRock's BUIDL fund.
+  value: "203389187.177549"
+  unit: BUIDL
+  asOf: 2026-10-01
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x7712c34205737192402172409a8F7ccef8aA2AEc"}
+  scope: >-
+    The BUIDL contract on Ethereum mainnet at 00:00 UTC, after block 26,093,737. The I Class contract on Ethereum and
+    the share classes on other networks are not included.
+  sourceClaimIds: [onchain-buidl-2026-09, buidl-token-addresses]
+  measure: stock
+
+- id: buidl-supply-2026-09-01
+  subjectId: buidl
+  metric: BUIDL tokens outstanding
+  metricDefinition: The BUIDL token contract's totalSupply(). Each token is a share of BlackRock's BUIDL fund.
+  value: "211864943.860349"
+  unit: BUIDL
+  asOf: 2026-09-01
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x7712c34205737192402172409a8F7ccef8aA2AEc"}
+  scope: >-
+    The BUIDL contract on Ethereum mainnet at 00:00 UTC, after block 25,878,704.
+  sourceClaimIds: [onchain-buidl-2026-09]
+  measure: stock
+
+- id: buidl-minted-2026-09
+  subjectId: buidl
+  metric: BUIDL tokens issued
+  metricDefinition: >-
+    Transfer events from the zero address in the BUIDL contract: new shares issued, including dividends paid as tokens.
+  value: "9665773.660011"
+  unit: BUIDL
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x7712c34205737192402172409a8F7ccef8aA2AEc"}
+  scope: The BUIDL contract on Ethereum mainnet, blocks 25,878,705 to 26,093,737.
+  sourceClaimIds: [onchain-buidl-2026-09, buidl-design-2024]
+  measure: flow
+
+- id: buidl-burned-2026-09
+  subjectId: buidl
+  metric: BUIDL tokens burned
+  metricDefinition: >-
+    Transfer events to the zero address in the BUIDL contract: shares redeemed or otherwise removed.
+  value: "18141530.342811"
+  unit: BUIDL
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x7712c34205737192402172409a8F7ccef8aA2AEc"}
+  scope: The BUIDL contract on Ethereum mainnet, blocks 25,878,705 to 26,093,737.
+  sourceClaimIds: [onchain-buidl-2026-09]
+  measure: flow
+
+- id: buidl-holder-transfers-2026-09
+  subjectId: buidl
+  metric: Transfers between BUIDL holders
+  metricDefinition: Transfer events in the BUIDL contract that neither issue nor burn tokens.
+  value: "33"
+  unit: transfers
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x7712c34205737192402172409a8F7ccef8aA2AEc"}
+  scope: The BUIDL contract on Ethereum mainnet, blocks 25,878,705 to 26,093,737.
+  sourceClaimIds: [onchain-buidl-2026-09]
+  measure: count
+
+- id: buidl-holder-transfer-volume-2026-09
+  subjectId: buidl
+  metric: BUIDL moved between holders
+  metricDefinition: The sum of tokens in Transfer events that neither issue nor burn tokens.
+  value: "18407441.186307"
+  unit: BUIDL
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x7712c34205737192402172409a8F7ccef8aA2AEc"}
+  scope: The BUIDL contract on Ethereum mainnet, blocks 25,878,705 to 26,093,737.
+  sourceClaimIds: [onchain-buidl-2026-09]
+  measure: flow
+
+- id: buidl-i-supply-2026-10-01
+  subjectId: deployment:buidl-i-ethereum
+  metric: BUIDL-I tokens outstanding
+  metricDefinition: The BUIDL I Class token contract's totalSupply().
+  value: "239844535.0901"
+  unit: BUIDL-I
+  asOf: 2026-10-01
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x6a9DA2D710BB9B700acde7Cb81F10F1fF8C89041"}
+  scope: >-
+    The BUIDL I Class contract on Ethereum mainnet at 00:00 UTC, after block 26,093,737.
+  sourceClaimIds: [onchain-buidl-i-2026-09, buidl-token-addresses]
+  measure: stock
+
+- id: buidl-i-supply-2026-09-01
+  subjectId: deployment:buidl-i-ethereum
+  metric: BUIDL-I tokens outstanding
+  metricDefinition: The BUIDL I Class token contract's totalSupply().
+  value: "801395176.9801"
+  unit: BUIDL-I
+  asOf: 2026-09-01
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x6a9DA2D710BB9B700acde7Cb81F10F1fF8C89041"}
+  scope: >-
+    The BUIDL I Class contract on Ethereum mainnet at 00:00 UTC, after block 25,878,704.
+  sourceClaimIds: [onchain-buidl-i-2026-09]
+  measure: stock
+
+- id: buidl-i-burned-2026-09
+  subjectId: deployment:buidl-i-ethereum
+  metric: BUIDL-I tokens burned
+  metricDefinition: Transfer events to the zero address in the BUIDL I Class contract.
+  value: "562994006.600011"
+  unit: BUIDL-I
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x6a9DA2D710BB9B700acde7Cb81F10F1fF8C89041"}
+  scope: The BUIDL I Class contract on Ethereum mainnet, blocks 25,878,705 to 26,093,737.
+  sourceClaimIds: [onchain-buidl-i-2026-09]
+  measure: flow
+
+- id: paxg-supply-ethereum-2026-10-01
+  subjectId: paxg
+  metric: PAXG supply on Ethereum
+  metricDefinition: The PAXG contract's totalSupply() on Ethereum. One token is one fine troy ounce of gold.
+  value: "432505.835239"
+  unit: PAXG
+  asOf: 2026-10-01
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x45804880De22913dAFE09f4980848ECE6EcbAf78"}
+  scope: >-
+    The PAXG contract on Ethereum mainnet at 00:00 UTC, after block 26,093,737. PAXG on Solana and other networks is not
+    included.
+  sourceClaimIds: [onchain-paxg-2026-09, paxg-addresses, paxg-definition]
+  measure: stock
+
+- id: paxg-supply-ethereum-2026-09-01
+  subjectId: paxg
+  metric: PAXG supply on Ethereum
+  metricDefinition: The PAXG contract's totalSupply() on Ethereum. One token is one fine troy ounce of gold.
+  value: "428830.056219"
+  unit: PAXG
+  asOf: 2026-09-01
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x45804880De22913dAFE09f4980848ECE6EcbAf78"}
+  scope: >-
+    The PAXG contract on Ethereum mainnet at 00:00 UTC, after block 25,878,704.
+  sourceClaimIds: [onchain-paxg-2026-09]
+  measure: stock
+
+- id: paxg-minted-2026-09
+  subjectId: paxg
+  metric: PAXG issued on Ethereum
+  metricDefinition: >-
+    Transfer events from the zero address in the PAXG contract: tokens issued by Paxos, including tokens moved in from
+    other networks.
+  value: "4082.610334"
+  unit: PAXG
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x45804880De22913dAFE09f4980848ECE6EcbAf78"}
+  scope: The PAXG contract on Ethereum mainnet, blocks 25,878,705 to 26,093,737.
+  sourceClaimIds: [onchain-paxg-2026-09]
+  measure: flow
+
+- id: paxg-burned-2026-09
+  subjectId: paxg
+  metric: PAXG burned on Ethereum
+  metricDefinition: >-
+    Transfer events to the zero address in the PAXG contract: tokens redeemed or moved out to other networks.
+  value: "406.831314"
+  unit: PAXG
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x45804880De22913dAFE09f4980848ECE6EcbAf78"}
+  scope: The PAXG contract on Ethereum mainnet, blocks 25,878,705 to 26,093,737.
+  sourceClaimIds: [onchain-paxg-2026-09]
+  measure: flow
+
+- id: paxg-transfers-2026-09
+  subjectId: paxg
+  metric: PAXG transfers
+  metricDefinition: >-
+    Transfer events in the PAXG contract that neither issue nor burn tokens. One payment can emit more than one event,
+    so events are not payments or people.
+  value: "131559"
+  unit: transfers
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x45804880De22913dAFE09f4980848ECE6EcbAf78"}
+  scope: The PAXG contract on Ethereum mainnet, blocks 25,878,705 to 26,093,737.
+  sourceClaimIds: [onchain-paxg-2026-09]
+  measure: count
+
+- id: paxg-reported-ethereum-2026-08-31
+  subjectId: paxg
+  metric: PAXG natively minted on Ethereum, reported
+  metricDefinition: >-
+    Paxos's count of PAXG natively minted on Ethereum and redeemable, rounded to whole tokens in its Redemption Assets
+    Report.
+  value: "428830"
+  comparator: about
+  unit: PAXG
+  asOf: 2026-08-31
+  chainIds: [1]
+  scope: >-
+    PAXG on Ethereum at 5:00 PM Eastern on 31 August 2026, as reported by Paxos and examined by KPMG.
+  sourceClaimIds: [paxg-report-2026-08]
+  measure: stock
+
+- id: paxg-frozen-addresses-2026-10-01
+  subjectId: paxg
+  metric: Addresses frozen by the issuer
+  metricDefinition: >-
+    Addresses that PAXG reported as frozen through isFrozen(), checked for every address it has ever frozen.
+  value: "291"
+  unit: addresses
+  asOf: 2026-10-01
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x45804880De22913dAFE09f4980848ECE6EcbAf78"}
+  scope: >-
+    The PAXG contract on Ethereum mainnet at 00:00 UTC, after block 26,093,737.
+  sourceClaimIds: [onchain-issuer-freezes-2026-10-01, paxos-token-roles]
+  measure: count
+  comparisonGroup: issuer-frozen-addresses-ethereum-2026-10-01
+
+- id: paxg-wiped-balances-2026-10-01
+  subjectId: paxg
+  metric: Frozen balances wiped
+  metricDefinition: >-
+    FrozenAddressWiped events in the PAXG contract since it was deployed: frozen balances that Paxos destroyed.
+  value: "10"
+  unit: times
+  asOf: 2026-10-01
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x45804880De22913dAFE09f4980848ECE6EcbAf78"}
+  scope: >-
+    The PAXG contract on Ethereum mainnet at 00:00 UTC, after block 26,093,737.
+  sourceClaimIds: [onchain-issuer-freezes-2026-10-01, paxos-token-roles]
+  measure: count
+  comparisonGroup: issuer-wiped-balances-ethereum-2026-10-01
+
+- id: pyusd-supply-ethereum-2026-10-01
+  subjectId: pyusd
+  metric: PYUSD supply on Ethereum
+  metricDefinition: The PYUSD contract's totalSupply() on Ethereum.
+  value: "1686931301.760225"
+  unit: PYUSD
+  asOf: 2026-10-01
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x6c3ea9036406852006290770BEdFcAbA0e23A0e8"}
+  scope: >-
+    The PYUSD contract on Ethereum mainnet at 00:00 UTC, after block 26,093,737. PYUSD on other networks is not
+    included.
+  sourceClaimIds: [onchain-pyusd-2026-09, pyusd-addresses]
+  measure: stock
+
+- id: pyusd-supply-ethereum-2026-09-01
+  subjectId: pyusd
+  metric: PYUSD supply on Ethereum
+  metricDefinition: The PYUSD contract's totalSupply() on Ethereum.
+  value: "1828528201.321894"
+  unit: PYUSD
+  asOf: 2026-09-01
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x6c3ea9036406852006290770BEdFcAbA0e23A0e8"}
+  scope: >-
+    The PYUSD contract on Ethereum mainnet at 00:00 UTC, after block 25,878,704.
+  sourceClaimIds: [onchain-pyusd-2026-09]
+  measure: stock
+
+- id: pyusd-minted-2026-09
+  subjectId: pyusd
+  metric: PYUSD issued on Ethereum
+  metricDefinition: >-
+    Transfer events from the zero address in the PYUSD contract: tokens issued by Paxos, including tokens moved in from
+    other networks.
+  value: "1016347609.092287"
+  unit: PYUSD
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x6c3ea9036406852006290770BEdFcAbA0e23A0e8"}
+  scope: The PYUSD contract on Ethereum mainnet, blocks 25,878,705 to 26,093,737.
+  sourceClaimIds: [onchain-pyusd-2026-09, pyusd-layerzero-2025]
+  measure: flow
+
+- id: pyusd-burned-2026-09
+  subjectId: pyusd
+  metric: PYUSD burned on Ethereum
+  metricDefinition: >-
+    Transfer events to the zero address in the PYUSD contract: tokens redeemed or moved out to other networks.
+  value: "1157944508.653956"
+  unit: PYUSD
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x6c3ea9036406852006290770BEdFcAbA0e23A0e8"}
+  scope: The PYUSD contract on Ethereum mainnet, blocks 25,878,705 to 26,093,737.
+  sourceClaimIds: [onchain-pyusd-2026-09, pyusd-layerzero-2025]
+  measure: flow
+
+- id: pyusd-transfers-2026-09
+  subjectId: pyusd
+  metric: PYUSD transfers
+  metricDefinition: >-
+    Transfer events in the PYUSD contract that neither issue nor burn tokens. One payment can emit more than one event,
+    so events are not payments or people.
+  value: "319318"
+  unit: transfers
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x6c3ea9036406852006290770BEdFcAbA0e23A0e8"}
+  scope: The PYUSD contract on Ethereum mainnet, blocks 25,878,705 to 26,093,737.
+  sourceClaimIds: [onchain-pyusd-2026-09]
+  measure: count
+
+- id: pyusd-transfer-volume-2026-09
+  subjectId: pyusd
+  metric: PYUSD moved between holders
+  metricDefinition: >-
+    The sum of tokens in Transfer events that neither issue nor burn tokens. Gross: the same tokens moving twice count
+    twice.
+  value: "12061986134.017603"
+  unit: PYUSD
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x6c3ea9036406852006290770BEdFcAbA0e23A0e8"}
+  scope: The PYUSD contract on Ethereum mainnet, blocks 25,878,705 to 26,093,737.
+  sourceClaimIds: [onchain-pyusd-2026-09]
+  measure: flow
+
+- id: pyusd-reported-ethereum-2026-08-31
+  subjectId: pyusd
+  metric: PYUSD natively minted on Ethereum, reported
+  metricDefinition: >-
+    Paxos's count of PYUSD natively minted on Ethereum, rounded to whole tokens in its Redemption Assets Report.
+  value: "1840077337"
+  comparator: about
+  unit: PYUSD
+  asOf: 2026-08-31
+  chainIds: [1]
+  scope: >-
+    PYUSD on Ethereum at 5:00 PM Eastern on 31 August 2026, as reported by Paxos and examined by KPMG.
+  sourceClaimIds: [pyusd-report-2026-08]
+  measure: stock
+
+- id: pyusd-frozen-addresses-2026-10-01
+  subjectId: pyusd
+  metric: Addresses frozen by the issuer
+  metricDefinition: >-
+    Addresses that PYUSD reported as frozen through isFrozen(), checked for every address it has ever frozen.
+  value: "157"
+  unit: addresses
+  asOf: 2026-10-01
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x6c3ea9036406852006290770BEdFcAbA0e23A0e8"}
+  scope: >-
+    The PYUSD contract on Ethereum mainnet at 00:00 UTC, after block 26,093,737.
+  sourceClaimIds: [onchain-issuer-freezes-2026-10-01, paxos-token-roles]
+  measure: count
+  comparisonGroup: issuer-frozen-addresses-ethereum-2026-10-01
+
+- id: pyusd-wiped-balances-2026-10-01
+  subjectId: pyusd
+  metric: Frozen balances wiped
+  metricDefinition: >-
+    FrozenAddressWiped events in the PYUSD contract since it was deployed: frozen balances that Paxos destroyed.
+  value: "2"
+  unit: times
+  asOf: 2026-10-01
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x6c3ea9036406852006290770BEdFcAbA0e23A0e8"}
+  scope: >-
+    The PYUSD contract on Ethereum mainnet at 00:00 UTC, after block 26,093,737.
+  sourceClaimIds: [onchain-issuer-freezes-2026-10-01, paxos-token-roles]
+  measure: count
+  comparisonGroup: issuer-wiped-balances-ethereum-2026-10-01
+
+- id: usdc-blocked-addresses-2026-10-01
+  subjectId: usdc
+  metric: Addresses blocked by the issuer
+  metricDefinition: >-
+    Addresses that USDC reported as blocklisted through isBlacklisted(), checked for every address it has ever
+    blocklisted.
+  value: "650"
+  unit: addresses
+  asOf: 2026-10-01
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"}
+  scope: >-
+    The USDC contract on Ethereum mainnet at 00:00 UTC, after block 26,093,737.
+  sourceClaimIds: [onchain-issuer-freezes-2026-10-01, circle-usdc-blocklisting]
+  measure: count
+  comparisonGroup: issuer-frozen-addresses-ethereum-2026-10-01
+
+# Base ----------------------------------------------------------------------------
+
+- id: base-deposits-2026-09
+  subjectId: base
+  metric: Transactions sent from Ethereum into Base
+  metricDefinition: >-
+    TransactionDeposited events of Base's OptimismPortal on Ethereum: transactions submitted on Ethereum for inclusion
+    in Base, with or without value. Transactions sent directly on Base are not included.
+  value: "14879"
+  unit: deposits
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x49048044D57e1C92A77f79988d21Fa8fAF74E97e"}
+  scope: Base's OptimismPortal on Ethereum mainnet, blocks 25,878,705 to 26,093,737.
+  sourceClaimIds: [onchain-base-2026-09, base-contracts-docs]
+  measure: count
+
+- id: base-withdrawals-2026-09
+  subjectId: base-canonical-bridge
+  metric: Withdrawals from Base finalized
+  metricDefinition: >-
+    WithdrawalFinalized events of Base's OptimismPortal on Ethereum: withdrawals from Base completed on Ethereum after
+    their waiting period.
+  value: "1432"
+  unit: withdrawals
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x49048044D57e1C92A77f79988d21Fa8fAF74E97e"}
+  scope: Base's OptimismPortal on Ethereum mainnet, blocks 25,878,705 to 26,093,737.
+  sourceClaimIds: [onchain-base-2026-09, base-withdrawals-docs]
+  measure: count
+
+- id: base-state-proposals-2026-09
+  subjectId: base
+  metric: State proposals posted to Ethereum
+  metricDefinition: >-
+    DisputeGameCreated events of Base's DisputeGameFactory on Ethereum. Each game proposes a state of Base that
+    withdrawals can later be proven against, and that anyone can challenge.
+  value: "2160"
+  unit: proposals
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x43edB88C4B80fDD2AdFF2412A7BebF9dF42cB40e"}
+  scope: Base's DisputeGameFactory on Ethereum mainnet, blocks 25,878,705 to 26,093,737.
+  sourceClaimIds: [onchain-base-2026-09, base-protocol-overview, base-contracts-docs]
+  measure: count
+
+- id: base-portal-eth-2026-10-01
+  subjectId: base-canonical-bridge
+  metric: ETH held by Base's bridge
+  metricDefinition: >-
+    The ETH balance of Base's OptimismPortal on Ethereum: ETH deposited into Base and not yet withdrawn. It backs ETH on
+    Base, so it is not additional to it.
+  value: "770315.019433636976949828"
+  unit: ETH
+  asOf: 2026-10-01
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x49048044D57e1C92A77f79988d21Fa8fAF74E97e"}
+  scope: >-
+    Base's OptimismPortal on Ethereum mainnet at 00:00 UTC, after block 26,093,737. Tokens held by Base's other bridge
+    contracts are not included.
+  sourceClaimIds: [onchain-base-2026-09, base-contracts-docs]
+  measure: stock
