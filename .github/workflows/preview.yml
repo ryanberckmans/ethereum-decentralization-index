@@ -1,0 +1,67 @@
+# Gives the directory website a preview link for every pull request that
+# changes it, and keeps a preview of main up to date, with
+# ryanberckmans/pr-preview (Cloudflare Worker Previews). This deploys nothing
+# to production: previews go to a Worker that holds only previews, and a pull
+# request's preview is deleted when it closes. Each pull request's comment links
+# its own preview and main's.
+#
+# Nothing is uploaded until the repository has the secrets CLOUDFLARE_API_TOKEN
+# and CLOUDFLARE_ACCOUNT_ID, for a Cloudflare account used only for previews
+# (see pr-preview's README); until then the comment says what is missing. Run
+# this workflow from the Actions tab to refresh main's preview by hand.
+name: Preview
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+    paths:
+      - site/**
+      - data/**
+      - dist/**
+      - package.json
+      - .github/workflows/preview.yml
+  push:
+    branches: [main]
+    paths:
+      - site/**
+      - data/**
+      - dist/**
+      - package.json
+      - .github/workflows/preview.yml
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: preview-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  preview:
+    name: Preview
+    uses: ryanberckmans/pr-preview/.github/workflows/preview.yml@6b02dda3d8f0e305770ad67092a377eca13ad248
+    permissions:
+      contents: read
+      pull-requests: write
+    with:
+      worker-name: edi-directory-preview
+      working-directory: site
+      install-command: npm ci --no-audit --no-fund
+      # The upload needs a Wrangler config, which is written here rather than kept
+      # in the site, so the site stays host-neutral. Today the site builds to one
+      # Worker that renders pages (dist/server, with its generated config) and
+      # serves dist/client as assets. Once it builds to plain static files in
+      # dist/, the second branch takes over and the first can go; static
+      # previews also ask search engines not to index them.
+      build-command: |
+        npm run build
+        if [ -f dist/server/wrangler.json ]; then
+          jq '.main = "dist/server/" + .main | .assets.directory = "dist/server/" + .assets.directory' dist/server/wrangler.json > preview.wrangler.json
+        else
+          printf '\n/*\n  X-Robots-Tag: noindex\n' >> dist/_headers
+          jq -n '{compatibility_date: "2026-09-01", assets: {directory: "dist", not_found_handling: "404-page"}}' > preview.wrangler.json
+        fi
+      wrangler-config: preview.wrangler.json
+    secrets:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
