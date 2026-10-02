@@ -175,7 +175,7 @@ export function createCatalog(bundle: EditionBundle): Catalog {
       const object = objectById.get(candidate);
       if (object) return {kind: 'redirect', slug: object.slug};
     }
-    return {kind: 'missing'};
+    return caseInsensitive(slug, resolveObject);
   }
 
   function resolveStory(slug: string): Resolved<StoryRecord> {
@@ -185,7 +185,22 @@ export function createCatalog(bundle: EditionBundle): Catalog {
     if (redirected && storyById.has(redirected)) return {kind: 'redirect', slug: storyById.get(redirected)!.slug};
     const byId = storyById.get(slug);
     if (byId) return {kind: 'redirect', slug: byId.slug};
-    return {kind: 'missing'};
+    return caseInsensitive(slug, resolveStory);
+  }
+
+  /** Slugs and IDs are lower case and unencoded; a capital or an encoded colon redirects instead of failing. */
+  function caseInsensitive<T>(slug: string, resolve: (slug: string) => Resolved<T & {slug: string}>): Resolved<T & {slug: string}> {
+    let decoded = slug;
+    try {
+      decoded = decodeURIComponent(slug);
+    } catch {
+      // Malformed escapes are simply not found.
+    }
+    const lower = decoded.toLowerCase();
+    if (lower === slug) return {kind: 'missing'};
+    const resolved = resolve(lower);
+    if (resolved.kind === 'found') return {kind: 'redirect', slug: resolved.value.slug};
+    return resolved;
   }
 
   const relationshipIndex = new Map<string, Relationship[]>();
