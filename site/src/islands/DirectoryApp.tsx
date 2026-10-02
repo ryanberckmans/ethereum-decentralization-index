@@ -30,6 +30,7 @@ import {
   toggled,
   type DirectoryQuery,
   type QueryParam,
+  type QueryValidators,
   type Sort,
 } from '../model/query.ts';
 import {prepareIndex, type PreparedIndex} from '../model/search.ts';
@@ -69,6 +70,39 @@ function changedBetween(changeDates: readonly string[], from: string, to: string
   return changeDates.some(date => date > from && date <= to);
 }
 
+/** Query fields set by the form's controls, besides the search text. */
+const FORM_FIELDS = ['role', 'kind', 'network', 'grade', 'atleast', 'review', 'story', 'sort'] as const;
+
+/**
+ * The query with what the reader changed in the form before the island
+ * hydrated, or null if nothing changed. A control has changed when it no
+ * longer shows what the server rendered.
+ */
+function changedBeforeHydration(form: HTMLFormElement, query: DirectoryQuery, validators: QueryValidators): DirectoryQuery | null {
+  const changed = new Set<string>();
+  for (const element of Array.from(form.elements)) {
+    if (element instanceof HTMLSelectElement) {
+      const rendered = Math.max(0, Array.from(element.options).findIndex(option => option.defaultSelected));
+      if (element.selectedIndex !== rendered) changed.add(element.name);
+    } else if (element instanceof HTMLInputElement) {
+      if (element.type === 'checkbox' ? element.checked !== element.defaultChecked : element.value !== element.defaultValue) changed.add(element.name);
+    }
+  }
+  if (!changed.size) return null;
+  const params = new URLSearchParams();
+  new FormData(form).forEach((value, key) => params.append(key, String(value)));
+  const fromForm = parseDirectoryQuery(params, validators).query;
+  const next: DirectoryQuery = {...query, page: 1};
+  const take = <K extends (typeof FORM_FIELDS)[number]>(key: K) => {
+    next[key] = fromForm[key];
+  };
+  for (const key of FORM_FIELDS) if (changed.has(key)) take(key);
+  // The text as typed, as onQueryInput keeps it, so a space just typed stays.
+  const text = form.elements.namedItem('q');
+  if (changed.has('q') && text instanceof HTMLInputElement) next.q = text.value.trim() ? text.value.slice(0, LIMITS.query) : '';
+  return next;
+}
+
 export default function DirectoryApp(props: DirectoryAppProps) {
   const {locale, m} = props;
   const home = `/${locale}/`;
@@ -98,6 +132,13 @@ export default function DirectoryApp(props: DirectoryAppProps) {
     const search = serializeDirectoryQuery(value);
     return `${home}${search ? `?${search}` : ''}`;
   }, [home]);
+  const validators = useMemo<QueryValidators>(
+    () => ({
+      network: id => props.networks.some(network => network.id === id),
+      object: id => !indexRef.current || indexRef.current.raw.entries.some(entry => entry.id === id),
+    }),
+    [props.networks],
+  );
 
   // ---------------------------------------------------------------- index
 
@@ -198,10 +239,6 @@ export default function DirectoryApp(props: DirectoryAppProps) {
   }, [query, urlFor]);
 
   useEffect(() => {
-    const validators = {
-      network: (id: string) => props.networks.some(network => network.id === id),
-      object: (id: string) => !indexRef.current || indexRef.current.raw.entries.some(entry => entry.id === id),
-    };
     const onPop = () => {
       if (sheetRef.current) {
         // Back closes the filter sheet and keeps what was chosen in it.
@@ -224,7 +261,17 @@ export default function DirectoryApp(props: DirectoryAppProps) {
     };
     window.addEventListener('popstate', onPop);
     return () => window.removeEventListener('popstate', onPop);
-  }, [props.networks, urlFor]);
+  }, [validators, urlFor]);
+
+  // Text typed, boxes ticked or options chosen while the page's scripts were
+  // still loading stay on screen, but React hydrates without reading them and
+  // its next render would undo them. Apply them as if they were made now.
+  useEffect(() => {
+    const next = formRef.current ? changedBeforeHydration(formRef.current, queryRef.current, validators) : null;
+    if (!next) return;
+    typing.current = next.q !== queryRef.current.q;
+    update(next, 'push');
+  }, []);
 
   // Back from an object page returns focus to the row that was opened.
   useEffect(() => {
