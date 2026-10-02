@@ -13,7 +13,18 @@ name: Preview
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened, closed]
+    types: [opened, synchronize, reopened]
+    paths:
+      - site/**
+      - data/**
+      - dist/**
+      - package.json
+      - .github/workflows/preview.yml
+  # Deletes the preview when the pull request closes. pull_request_target, because
+  # GitHub runs no pull_request workflow for a pull request with merge conflicts;
+  # pr-preview only deletes the preview on it and runs no pull request code.
+  pull_request_target:
+    types: [closed]
     paths:
       - site/**
       - data/**
@@ -39,7 +50,7 @@ concurrency:
 jobs:
   preview:
     name: Preview
-    uses: ryanberckmans/pr-preview/.github/workflows/preview.yml@6b02dda3d8f0e305770ad67092a377eca13ad248
+    uses: ryanberckmans/pr-preview/.github/workflows/preview.yml@ab89a22eb0cca6488619397575f73b9b0dcf4d1a
     permissions:
       contents: read
       pull-requests: write

@@ -11,7 +11,7 @@
 name: Delete closed branch
 
 on:
-  pull_request_target:
+  pull_request_target: # zizmor: ignore[dangerous-triggers] the job runs no pull request code
     types: [closed]
 
 permissions: {}
