@@ -85,7 +85,7 @@ const ld = jsonLd ? JSON.stringify(jsonLd).replace(/</g, '\\u003c') : undefined;
     <meta property="og:image:alt" content={`${PRODUCT.name}: ${m.meta.tagline}`} />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="alternate" type="application/json" href={EXPORTS.directoryJson} title={m.data.directoryJson} />
+    <link rel="alternate" type="application/json" href={EXPORTS.directoryJson} title={m.data.items.directory[0]} />
     <script is:inline set:html={__THEME_INIT__} />
     <Font cssVariable="--font-schibsted" preload={[{subset: 'latin', weight: '400 900', style: 'normal'}]} />
     <Font cssVariable="--font-newsreader" preload={[{subset: 'latin', weight: '200 800', style: 'normal'}]} />

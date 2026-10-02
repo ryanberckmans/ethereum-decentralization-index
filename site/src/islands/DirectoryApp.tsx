@@ -12,7 +12,7 @@
  * phone filter sheet closes on Back without losing what was chosen. Nothing
  * here performs a financial action or contacts a third party.
  */
-import {useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent, type FormEvent, type KeyboardEvent, type MouseEvent, type ReactNode} from 'react';
+import {useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent, type SubmitEvent, type KeyboardEvent, type MouseEvent, type ReactNode} from 'react';
 import {LIMITS, type Locale} from '../config.ts';
 import type {Role} from '../content/vocab.ts';
 import {fmt, formatDate, plural} from '../i18n/format.ts';
@@ -301,7 +301,7 @@ export default function DirectoryApp(props: DirectoryAppProps) {
     typing.current = true;
     update({...queryRef.current, q: value.trim() ? value : '', page: 1}, mode);
   };
-  const onSubmit = (event: FormEvent) => {
+  const onSubmit = (event: SubmitEvent<HTMLFormElement>) => {
     if (!index && indexFailed) return; // Let the browser submit the form.
     event.preventDefault();
     typing.current = false;
