@@ -1,0 +1,131 @@
+---
+/**
+ * The directory: search, filters and populated results in the first
+ * viewport, with the two editorial entrances inside the working layout.
+ */
+import Base from '../../layouts/Base.astro';
+import DirectoryApp from '../../islands/DirectoryApp.tsx';
+import {ResultsBody} from '../../components/ResultsBody.tsx';
+import {GradeBadge} from '../../components/Grade.tsx';
+import {isLocale, LIMITS, PRODUCT} from '../../config.ts';
+import {messages} from '../../i18n/index.ts';
+import {fmt, formatCount} from '../../i18n/format.ts';
+import {catalog, evaluationDateFor} from '../../server/site.ts';
+import {bodyContext, CHAIN_NAMES, directoryMessages, indexFor, preparedFor} from '../../server/directory.ts';
+import {parseDirectoryQuery, serializeDirectoryQuery} from '../../model/query.ts';
+import {runDirectory} from '../../model/directory.ts';
+import {paths} from '../../model/urls.ts';
+import {datedView} from '../../model/views.ts';
+
+const {locale} = Astro.params;
+if (!isLocale(locale)) return Astro.rewrite('/404');
+
+const m = messages(locale);
+const date = evaluationDateFor();
+const index = indexFor(locale);
+const {query, invalid} = parseDirectoryQuery(Astro.url.searchParams, {
+  network: id => index.networks.some(network => network.id === id),
+  object: id => catalog.object(id) !== undefined,
+});
+const canonicalSearch = serializeDirectoryQuery(query);
+const result = runDirectory(preparedFor(locale), query, date, locale);
+if (!invalid.length && (Astro.url.search.slice(1) !== canonicalSearch || result.page !== query.page)) {
+  const search = serializeDirectoryQuery({...query, page: result.page});
+  return Astro.redirect(`${paths.home(locale)}${search ? `?${search}` : ''}`, 302);
+}
+
+const dm = directoryMessages(locale);
+const ctx = bodyContext(locale, query, dm);
+
+// The two editorial entrances, each a real example from the edition.
+const d0 = catalog.collections.get('d0-in-use');
+const global = catalog.collections.get('global-economy');
+const entranceStory = (storyId?: string) => (storyId ? catalog.story(storyId) : undefined);
+const d0Story = entranceStory(d0?.entrance.storyId);
+const globalStory = entranceStory(global?.entrance.storyId);
+const d0Count = catalog.objects.filter(object => {
+  const state = catalog.rawOn(object.id, date).mechanism;
+  return state.status === 'assessed' && state.effectiveLevel === 0;
+}).length;
+const d0Badge = datedView('weth9', catalog.rawOn('weth9', date), locale).mechanism;
+
+const showRoles = index.roleCoverage >= 0.5;
+const compareNames = Object.fromEntries(query.compare.map(id => [id, catalog.object(id)?.name ?? id]));
+const title = query.q ? `${query.q} · ${PRODUCT.name}` : m.meta.homeTitle;
+const description = fmt(m.meta.description, {count: formatCount(catalog.objects.length, locale)});
+const origin = Astro.url.origin;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: PRODUCT.name,
+  url: `${origin}${paths.home(locale)}`,
+  inLanguage: locale,
+  potentialAction: {'@type': 'SearchAction', target: `${origin}${paths.home(locale)}?q={search_term_string}`, 'query-input': 'required name=search_term_string'},
+};
+---
+
+<Base
+  locale={locale}
+  title={title}
+  description={description}
+  path={paths.home(locale)}
+  query={canonicalSearch || undefined}
+  current="directory"
+  noindex={canonicalSearch.length > 0}
+  jsonLd={canonicalSearch ? undefined : jsonLd}
+  evaluationDate={date}
+>
+  <div class="shell">
+    <h1 class="home-title">{m.directory.heading}</h1>
+    <DirectoryApp
+      client:load
+      locale={locale}
+      m={dm}
+      query={query}
+      invalid={invalid}
+      serverDate={date}
+      changeDates={[...catalog.changeDates]}
+      summary={{total: result.total, page: result.page, pages: result.pages, sort: result.sort, facets: result.facets}}
+      networks={index.networks.map(({id, name}) => ({id, name}))}
+      roles={index.roles}
+      showRoles={showRoles}
+      chainNames={CHAIN_NAMES}
+      compareNames={compareNames}
+      indexUrl={paths.index(locale, catalog.edition.id)}
+    >
+      <div slot="entrances" class="entrances">
+        <article class="entrance">
+          <span class="entrance-art" aria-hidden="true"><GradeBadge grade={d0Badge} m={m} /></span>
+          <p class="entrance-kicker"><a class="entrance-collection" href={paths.collection(locale, 'd0-in-use')}>{d0?.title ?? m.collections['d0-in-use']}</a></p>
+          {
+            d0Story ? (
+              <>
+                <h2 class="entrance-title"><a href={paths.story(locale, d0Story.slug)}>{d0Story.data.title}</a></h2>
+                <p class="entrance-line">{d0?.entrance.line ?? d0Story.data.dek}</p>
+              </>
+            ) : (
+              <h2 class="entrance-title"><a href={paths.collection(locale, 'd0-in-use')}>{fmt(m.collections.d0Count, {count: d0Count})}</a></h2>
+            )
+          }
+        </article>
+        <article class="entrance">
+          <span class="entrance-art entrance-spectrum" aria-hidden="true">
+            {[0, 2, 4, 6, 9].map(level => <span class={`bar g${level}`}></span>)}
+          </span>
+          <p class="entrance-kicker"><a class="entrance-collection" href={paths.collection(locale, 'global-economy')}>{global?.title ?? m.collections['global-economy']}</a></p>
+          {
+            globalStory ? (
+              <>
+                <h2 class="entrance-title"><a href={paths.story(locale, globalStory.slug)}>{globalStory.data.title}</a></h2>
+                <p class="entrance-line">{global?.entrance.line ?? globalStory.data.dek}</p>
+              </>
+            ) : (
+              <h2 class="entrance-title"><a href={paths.collection(locale, 'global-economy')}>{m.collections.noStories}</a></h2>
+            )
+          }
+        </article>
+      </div>
+      <ResultsBody result={result} ctx={ctx} />
+    </DirectoryApp>
+  </div>
+</Base>

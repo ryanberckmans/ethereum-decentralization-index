@@ -33,6 +33,8 @@ export const en = {
   },
   edition: {
     label: 'Edition',
+    assessments: 'Assessments',
+    observations: 'Observations',
     registry: 'EDI registry {date}',
     evaluated: 'Assessments evaluated {date} (UTC)',
     commit: 'Repository commit',
@@ -77,6 +79,7 @@ export const en = {
     partial: 'Partial',
     unknown: 'Unknown',
     permanent: 'Permanent D0: no age expiry',
+    permanentShort: 'Permanent D0',
     due: 'Next review due {date}',
     overdue: 'Review overdue since {date}',
     reviewed: 'Reviewed {date}',
@@ -94,6 +97,7 @@ export const en = {
   },
   directory: {
     title: 'Directory',
+    heading: 'Ethereum’s economic objects, and who can change their rules',
     searchLabel: 'Search the directory',
     searchPlaceholder: 'Names, tickers, addresses, tasks',
     searchButton: 'Search',
@@ -179,6 +183,7 @@ export const en = {
     storiesHeading: 'Stories',
     objectsHeading: 'Objects in this collection',
     noStories: 'No stories in this collection yet.',
+    d0Count: '{count} complete D0 mechanisms in this edition',
   },
   profile: {
     basicNotice: 'Basic record. No editorial profile yet: the description below is EDI’s own scope and finding.',
