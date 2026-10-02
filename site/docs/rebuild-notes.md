@@ -68,3 +68,7 @@ together and what it guarantees.
   overlays yet.
 - **Field performance:** budgets are verified in the lab (Playwright, 390px
   phone). LCP and INP need field data after launch.
+- **Rebuilds on review dates:** pages switch to later EDI results in the
+  browser, but readers without scripts, crawlers and the exports keep the
+  build date's until the next build. Once a host is chosen, its deploy should
+  also run on each of the edition's `changeDates` ([hosting](hosting.md)).

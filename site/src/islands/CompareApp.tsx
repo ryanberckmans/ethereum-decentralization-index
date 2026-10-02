@@ -15,6 +15,8 @@ import {compareObservations, parseCompareParams, type CompareData} from '../mode
 import {findObject} from '../model/routing.ts';
 import {paths} from '../model/urls.ts';
 import {segmentAt, type DirectoryIndex} from '../model/view-types.ts';
+import {Fallback} from './fallback.tsx';
+import {useReturnPlace} from './use-return-place.ts';
 import {useUtcDate} from './use-utc-date.ts';
 
 export type CompareAppMessages = CompareMessages;
@@ -43,6 +45,14 @@ function asksToCompare(params: URLSearchParams): boolean {
 }
 
 export default function CompareApp(props: CompareAppProps) {
+  return (
+    <Fallback built={props.children}>
+      <Compare {...props} />
+    </Fallback>
+  );
+}
+
+function Compare(props: CompareAppProps) {
   const {locale, m} = props;
   const home = paths.compare(locale);
   /** The address's query string; null until the island has read it, so its first render matches the built page. */
@@ -89,9 +99,10 @@ export default function CompareApp(props: CompareAppProps) {
     return parseCompareParams(params, value => findObject(value, loaded.index.entries)?.id, LIMITS.compare);
   }, [params, loaded, wanted]);
 
-  // One canonical address per comparison, so a refresh or a shared link shows the same thing.
+  // One canonical address per comparison, so a refresh or a shared link shows the same thing. An
+  // address with names that are not records, or too many, keeps them, so a refresh still explains them.
   useEffect(() => {
-    if (!parsed) return;
+    if (!parsed || parsed.unknown.length || parsed.truncated) return;
     const canonical = `${home}${parsed.canonical ? `?${parsed.canonical}` : ''}`;
     if (`${location.pathname}${location.search}` !== canonical) history.replaceState(history.state, '', canonical);
   }, [parsed, home]);
@@ -138,7 +149,10 @@ export default function CompareApp(props: CompareAppProps) {
 
   /** Follows a compare address in place, as a page load would: a new history entry, the top of the page, focus at the start of the content. */
   const go = (url: URL) => {
-    history.pushState(history.state, '', `${url.pathname}${url.search}`);
+    const next = `${url.pathname}${url.search}`;
+    // The address already shown adds no entry, or Back would seem to do nothing.
+    if (next === `${location.pathname}${location.search}`) history.replaceState(history.state, '', next);
+    else history.pushState(history.state, '', next);
     setSearch(url.search);
     window.scrollTo({top: 0});
     document.getElementById('main')?.focus({preventScroll: true});
@@ -164,6 +178,9 @@ export default function CompareApp(props: CompareAppProps) {
     url.search = query.toString();
     go(url);
   };
+
+  // Back to a page loaded afresh returns to the same place in the comparison once it is drawn.
+  useReturnPlace(search !== null && (!wanted || comparison !== null || failed));
 
   let body: ReactNode;
   if (!wanted) body = props.children;

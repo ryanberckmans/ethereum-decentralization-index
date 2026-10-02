@@ -104,12 +104,24 @@ for (const select of themeSelects) {
   });
 }
 
-document.addEventListener('click', event => {
-  const link = (event.target as Element).closest<HTMLAnchorElement>('a[data-lang]');
-  if (!link) return;
-  // The same search, filters, comparison or section in the other language.
+/**
+ * Points a language link at the same search, filters, comparison or section
+ * in the other language. It runs before the link is used in any way: a
+ * click, a middle click, the context menu (open in a new tab, copy the
+ * link) or keyboard focus.
+ */
+function followAddress(event: Event): HTMLAnchorElement | null {
+  const link = event.target instanceof Element ? event.target.closest<HTMLAnchorElement>('a[data-lang]') : null;
+  if (!link) return null;
   link.search = location.search;
   link.hash = location.hash;
+  return link;
+}
+for (const type of ['pointerdown', 'focusin', 'contextmenu']) document.addEventListener(type, followAddress);
+
+document.addEventListener('click', event => {
+  const link = followAddress(event);
+  if (!link) return;
   try {
     // Remembered in this browser only, to choose the language when someone opens the bare site root.
     localStorage.setItem('edi-lang', link.dataset.lang ?? '');

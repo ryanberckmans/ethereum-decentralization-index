@@ -129,7 +129,7 @@ export function resolveMissing(pathname: string, reader: Locale, known: KnownPag
       return story ? {locale, path: paths.story(locale, story.slug)} : {locale};
     }
     case 'collections': {
-      const id = COLLECTION_BY_SLUG[slug] ?? (COLLECTION_IDS as readonly string[]).find(value => value === slug);
+      const id = (Object.hasOwn(COLLECTION_BY_SLUG, slug) ? COLLECTION_BY_SLUG[slug] : undefined) ?? (COLLECTION_IDS as readonly string[]).find(value => value === slug);
       return id ? {locale, path: paths.collection(locale, id as CollectionId)} : {locale};
     }
     default:
