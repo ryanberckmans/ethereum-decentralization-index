@@ -48,19 +48,13 @@ jobs:
       working-directory: site
       install-command: npm ci --no-audit --no-fund
       # The upload needs a Wrangler config, which is written here rather than kept
-      # in the site, so the site stays host-neutral. Today the site builds to one
-      # Worker that renders pages (dist/server, with its generated config) and
-      # serves dist/client as assets. Once it builds to plain static files in
-      # dist/, the second branch takes over and the first can go; static
-      # previews also ask search engines not to index them.
+      # in the site, so the site stays host-neutral. Previews serve the plain
+      # static build in dist/ with the site's 404 page, and ask search engines
+      # not to index them.
       build-command: |
         npm run build
-        if [ -f dist/server/wrangler.json ]; then
-          jq '.main = "dist/server/" + .main | .assets.directory = "dist/server/" + .assets.directory' dist/server/wrangler.json > preview.wrangler.json
-        else
-          printf '\n/*\n  X-Robots-Tag: noindex\n' >> dist/_headers
-          jq -n '{compatibility_date: "2026-09-01", assets: {directory: "dist", not_found_handling: "404-page"}}' > preview.wrangler.json
-        fi
+        printf '\n/*\n  X-Robots-Tag: noindex\n' >> dist/_headers
+        jq -n '{compatibility_date: "2026-09-01", assets: {directory: "dist", not_found_handling: "404-page"}}' > preview.wrangler.json
       wrangler-config: preview.wrangler.json
     secrets:
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
