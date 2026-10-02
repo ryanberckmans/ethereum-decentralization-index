@@ -1,0 +1,137 @@
+/**
+ * The directory, profiles and comparison as a reader uses them: search,
+ * filters, links that restore state, keyboard use and the no-script path.
+ */
+import {expect, test, type Page} from '@playwright/test';
+
+const rows = (page: Page) => page.locator('li.row[data-id]');
+const ids = async (page: Page) => rows(page).evaluateAll(items => items.map(item => (item as HTMLElement).dataset.id));
+
+test('Search Uniswap: separate versions, the token and the unversioned identity, which is not D0', async ({page}) => {
+  await page.goto('/en/');
+  await page.locator('#directory-q').fill('uniswap');
+  await expect(page).toHaveURL(/[?&]q=uniswap/);
+  await expect(rows(page).first()).toBeVisible();
+  const found = await ids(page);
+  for (const id of ['uniswap-v1', 'uniswap-v2', 'uniswap-v3', 'uniswap-v4', 'token:uniswap', 'uniswap']) expect(found).toContain(id);
+  await expect(page.locator('li.row[data-id="uniswap"] .row-grade .grade').first()).toHaveAttribute('data-grade', 'D?');
+  await expect(page.locator('li.row[data-id="uniswap-v4"] .row-grade .grade').first()).toHaveAttribute('data-grade', 'D0');
+});
+
+test('the server renders the same results without scripts', async ({browser}) => {
+  const context = await browser.newContext({javaScriptEnabled: false});
+  const page = await context.newPage();
+  await page.goto('/en/?q=uniswap&kind=protocol');
+  const found = await ids(page);
+  expect(found).toContain('uniswap-v4');
+  expect(found).not.toContain('token:uniswap');
+  await expect(page.locator('input[name="kind"][value="protocol"]')).toBeChecked();
+  await context.close();
+});
+
+test('Browse, open, Back, refresh and new tab restore the query, filters and selection', async ({page, context}) => {
+  await page.goto('/en/');
+  await page.locator('#directory-q').fill('dollar');
+  await page.locator('input[name="kind"][value="asset"]').check();
+  await page.locator('li.row[data-id="usdc"] .compare-toggle').click();
+  await expect(page).toHaveURL(/q=dollar/);
+  await expect(page).toHaveURL(/kind=asset/);
+  await expect(page).toHaveURL(/compare=usdc/);
+  const url = page.url();
+
+  await page.locator('li.row[data-id="usdc"] a').first().click();
+  await expect(page).toHaveURL(/\/en\/objects\/usdc$/);
+  await page.goBack();
+  await expect(page.locator('#directory-q')).toHaveValue('dollar');
+  await expect(page.locator('input[name="kind"][value="asset"]')).toBeChecked();
+  await expect(page.locator('li.row[data-id="usdc"] .compare-toggle')).toHaveAttribute('aria-pressed', 'true');
+
+  await page.reload();
+  await expect(page.locator('#directory-q')).toHaveValue('dollar');
+  await expect(page.locator('input[name="kind"][value="asset"]')).toBeChecked();
+
+  const tab = await context.newPage();
+  await tab.goto(url);
+  await expect(tab.locator('#directory-q')).toHaveValue('dollar');
+  expect(await ids(tab)).toEqual(await ids(page));
+});
+
+test('the directory works from the keyboard', async ({page}) => {
+  await page.goto('/en/');
+  await page.keyboard.press('Tab');
+  await expect(page.locator(':focus')).toHaveText(/skip to content/i);
+  await page.keyboard.press('Enter');
+  await page.locator('#directory-q').focus();
+  await page.keyboard.type('weth');
+  await page.keyboard.press('Enter');
+  await expect(page).toHaveURL(/q=weth/);
+  await expect(rows(page).first()).toHaveAttribute('data-id', 'weth9');
+});
+
+test('an unrecognized link setting is reported, and the rest still applies', async ({page}) => {
+  await page.goto('/en/?kind=bank&grade=d0');
+  await expect(page.getByText(/were not recognized and were ignored/)).toBeVisible();
+  await expect(page.locator('input[name="grade"][value="d0"]')).toBeChecked();
+});
+
+test('Open Uniswap v4: D0 for the core, D? for positions', async ({page}) => {
+  await page.goto('/en/objects/uniswap-v4');
+  await expect(page.locator('h1')).toHaveText('Uniswap v4');
+  await expect(page.locator('.grade[data-grade]').filter({hasText: 'Mechanism'}).first()).toHaveAttribute('data-grade', 'D0');
+  await expect(page.locator('.grade[data-grade]').filter({hasText: 'Position'}).first()).toHaveAttribute('data-grade', 'D?');
+});
+
+test('Open WETH: the exact L1 deployment and a permanent D0', async ({page}) => {
+  await page.goto('/en/objects/weth9');
+  await expect(page.getByText('0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2').first()).toBeVisible();
+  await expect(page.getByText('Permanent D0').first()).toBeVisible();
+});
+
+test('raw EDI IDs and capitalized slugs redirect to the profile', async ({page}) => {
+  await page.goto('/en/objects/token:uniswap');
+  await expect(page).toHaveURL(/\/en\/objects\/token--uniswap$/);
+  await page.goto('/en/objects/token%3Auniswap');
+  await expect(page).toHaveURL(/\/en\/objects\/token--uniswap$/);
+  await page.goto('/en/objects/WETH9');
+  await expect(page).toHaveURL(/\/en\/objects\/weth9$/);
+});
+
+test('EDI’s guide opens from a grade, closes with Escape and returns focus', async ({page}) => {
+  const errors: string[] = [];
+  page.on('console', message => message.type() === 'error' && errors.push(message.text()));
+  await page.goto('/en/objects/weth9');
+  const explain = page.locator('button[data-guide]').first();
+  await explain.click();
+  const dialog = page.getByRole('dialog');
+  await expect(dialog).toBeVisible();
+  await expect(dialog).toContainText('Who can change the rules?');
+  await page.keyboard.press('Escape');
+  await expect(dialog).toBeHidden();
+  await expect(explain).toBeFocused();
+  expect(errors).toEqual([]);
+});
+
+test('Compare USDC and a D0 core: both legible, no overall score', async ({page}) => {
+  await page.goto('/en/compare?ids=usdc,weth9');
+  await expect(page.locator('h1')).toHaveText('Compare');
+  const body = page.locator('.compare-body');
+  await expect(body).toContainText('USDC');
+  await expect(body).toContainText('WETH');
+  await expect(body.locator('.grade[data-grade="D9"]').first()).toBeVisible();
+  await expect(body.locator('.grade[data-grade="D0"]').first()).toBeVisible();
+  await expect(page.getByText(/There is no overall score/)).toBeVisible();
+});
+
+test('compare links are canonical, and unknown names are reported rather than guessed', async ({page}) => {
+  await page.goto('/en/compare?ids=weth9,usdc,Circle');
+  await expect(page.getByText(/Not EDI records, so left out: Circle/)).toBeVisible();
+  await page.goto('/en/compare?ids=weth9&ids=usdc');
+  await expect(page).toHaveURL(/\/en\/compare\?ids=weth9,usdc$/);
+});
+
+test('a missing page offers close matches and a search', async ({page}) => {
+  const response = await page.goto('/en/objects/uniswap-v9');
+  expect(response?.status()).toBe(404);
+  await expect(page.locator('h1')).toContainText('Not in the directory');
+  await expect(page.locator('main a[href^="/en/objects/uniswap"]').first()).toBeVisible();
+});
