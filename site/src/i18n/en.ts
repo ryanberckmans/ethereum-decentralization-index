@@ -572,6 +572,7 @@ export const en = {
     notFound: 'Not in the directory',
     notFoundBody: 'There is no page at this address. The object may have a different name, or the link may be mistyped.',
     backToDirectory: 'Search the directory',
+    suggestions: 'Close matches',
     serverError: 'Something went wrong',
     serverErrorBody: 'The page could not be built. Try again shortly.',
     localeUnavailable: 'This page is not yet available in this language.',

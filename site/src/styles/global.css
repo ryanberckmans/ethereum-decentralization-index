@@ -3894,10 +3894,23 @@ html:not(.js) .js-only {
 /* -------------------------------------------------------------- misc */
 
 .error-page {
-  padding: 56px 0;
   display: grid;
   gap: 16px;
-  max-width: 40rem;
+  max-width: 44rem;
+  padding-block: 56px;
+}
+
+.error-page h2 {
+  margin: 8px 0 4px;
+  font: 650 0.8125rem/1.3 var(--sans);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.error-page .link-list .muted {
+  margin-left: 6px;
+  font-size: 0.875rem;
 }
 
 .lang-note {
