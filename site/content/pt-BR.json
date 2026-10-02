@@ -1,0 +1,529 @@
+{
+  "profiles": [
+    {
+      "id": "native-eth",
+      "role": "money",
+      "title": "ETH",
+      "summary": "O ativo nativo do Ethereum: liquidação, taxas e segurança da rede.",
+      "enables": "ETH paga a execução e protege o Ethereum por staking. Aplicações podem usá-lo sem empresa emissora prometendo resgate.",
+      "boundary": "D0 descreve ETH nativo na base do Ethereum. Custódia, staking, crédito e representações em pontes acrescentam dependências.",
+      "storyIds": [
+        "weth-shared-infrastructure"
+      ],
+      "tags": [
+        "ether",
+        "native asset",
+        "gas"
+      ]
+    },
+    {
+      "id": "weth9",
+      "role": "infrastructure",
+      "title": "WETH",
+      "summary": "Um wrapper fixo que dá ao ETH uma interface comum de token.",
+      "enables": "WETH9 permite usar ETH com saldos, transferências e aprovações ERC-20. A OpenSea documenta ofertas WETH e seu exemplo Seaport identifica o contrato canônico.",
+      "boundary": "A avaliação cobre apenas o WETH9 registrado no Ethereum. Tokens homônimos em outras redes, aprovações e aplicações precisam de revisão própria.",
+      "storyIds": [
+        "weth-shared-infrastructure"
+      ],
+      "tags": [
+        "wrapped ether",
+        "ERC-20",
+        "offers"
+      ]
+    },
+    {
+      "id": "uniswap-v2",
+      "role": "exchange",
+      "title": "Uniswap v2",
+      "summary": "Um mecanismo de troca imutável que outros programas podem integrar.",
+      "enables": "Flash swaps recebem ativos e quitam obrigações numa transação. A Uniswap relatou US$ 4,8 bilhões desde o lançamento em maio de 2020 até seu balanço anual.",
+      "boundary": "D0 pertence ao núcleo revisado. Essa atividade histórica não avalia cada token, wrapper ou posição participante.",
+      "storyIds": [
+        "uniswap-cores"
+      ],
+      "tags": [
+        "swaps",
+        "AMM",
+        "flash swaps"
+      ]
+    },
+    {
+      "id": "uniswap-v3",
+      "role": "exchange",
+      "title": "Uniswap v3",
+      "summary": "Um núcleo de troca fixo com liquidez concentrada.",
+      "enables": "Provedores podem concentrar capital em faixas de preço escolhidas. O núcleo oferece infraestrutura compartilhada a aplicações e interfaces.",
+      "boundary": "A imutabilidade não remove poderes do emissor, exposição de mercado ou controles de gestores externos. Uma posição gerenciada não herda D0.",
+      "storyIds": [
+        "uniswap-cores"
+      ],
+      "tags": [
+        "swaps",
+        "AMM",
+        "concentrated liquidity"
+      ]
+    },
+    {
+      "id": "uniswap-v4",
+      "role": "exchange",
+      "title": "Uniswap v4",
+      "summary": "Um núcleo imutável com lógica específica por pool.",
+      "enables": "Hooks ampliam o PoolManager comum. Permissioned Pools documenta controles de acesso do emissor sobre infraestrutura aberta.",
+      "boundary": "D0 cobre o PoolManager registrado no Ethereum. Hooks, tokens e dependências de posições continuam não resolvidos sem revisão específica.",
+      "storyIds": [
+        "open-cores-controlled-markets",
+        "uniswap-cores"
+      ],
+      "tags": [
+        "PoolManager",
+        "hooks",
+        "permissioned pools"
+      ],
+      "global": true
+    },
+    {
+      "id": "morpho-blue",
+      "role": "lending",
+      "title": "Morpho Blue",
+      "summary": "Um núcleo de crédito reutilizável com adoção documentada.",
+      "enables": "A Morpho relatou mais de US$ 1,7 bilhão depositado no Ethereum seis meses após o lançamento em 2024. A Coinbase mostra outra via de distribuição.",
+      "boundary": "O EDI cobre o núcleo exato no Ethereum L1. Oráculos, garantias, vaults e a implantação na Base não recebem D0 completo por associação.",
+      "storyIds": [
+        "morpho-distribution"
+      ],
+      "tags": [
+        "borrow",
+        "lend",
+        "Coinbase",
+        "oracles"
+      ],
+      "global": true
+    },
+    {
+      "id": "seaport-v1.6",
+      "role": "settlement",
+      "title": "Seaport 1.6",
+      "summary": "Liquidação compartilhada para mercados de propriedade digital.",
+      "enables": "A OpenSea identifica Seaport 1.6 para novas ordens. O mecanismo conecta ofertas, contrapartidas e liquidação, incluindo fluxos com WETH.",
+      "boundary": "D0 pertence ao mecanismo exato. Zonas, conduits, NFTs e outros ativos mantêm suas dependências.",
+      "storyIds": [
+        "weth-shared-infrastructure"
+      ],
+      "tags": [
+        "NFT",
+        "OpenSea",
+        "digital property"
+      ]
+    },
+    {
+      "id": "usdc",
+      "role": "money",
+      "title": "USDC",
+      "summary": "Dólares de um emissor em liquidação programável.",
+      "enables": "O piloto de 2021 da Visa demonstrou liquidação em USDC no Ethereum. Instituições continuam responsáveis pela emissão e pelo resgate.",
+      "boundary": "O emissor e o lastro fazem parte do ativo. D9 descreve controle sobre lastro, resgate ou apreensão, que o Ethereum não remove.",
+      "storyIds": [
+        "dollars-on-ethereum",
+        "morpho-distribution"
+      ],
+      "tags": [
+        "Circle",
+        "dollars",
+        "stablecoin",
+        "Visa",
+        "payments"
+      ],
+      "global": true
+    },
+    {
+      "id": "buidl",
+      "role": "assets",
+      "title": "BUIDL",
+      "summary": "Cotas institucionais ligadas à liquidação e liquidez onchain.",
+      "enables": "A BlackRock lançou BUIDL no Ethereum em 2024. A Securitize anunciou negociação UniswapX para investidores elegíveis e contrapartes aprovadas em 2026.",
+      "boundary": "Propriedade, lastro, transferências e resgate mantêm controles institucionais. O anúncio não comprova pool v4 ou atividade medida independentemente.",
+      "storyIds": [
+        "fund-shares-liquidity"
+      ],
+      "tags": [
+        "BlackRock",
+        "Securitize",
+        "treasuries",
+        "UniswapX"
+      ],
+      "global": true
+    },
+    {
+      "id": "paxg",
+      "role": "assets",
+      "title": "PAX Gold",
+      "summary": "Um direito sobre ouro que conecta ativo físico a tokens.",
+      "enables": "A utilidade de PAXG depende da ligação entre token e lastro em ouro. O perfil não inventa saldos atuais nem marcos de adoção.",
+      "boundary": "Custódia, lastro e resgate dependem do emissor. D9 descreve poderes, não o valor do ouro ou a qualidade do custodiante.",
+      "storyIds": [],
+      "tags": [
+        "Paxos",
+        "gold",
+        "commodity"
+      ],
+      "global": true
+    },
+    {
+      "id": "pyusd",
+      "role": "money",
+      "title": "PayPal USD",
+      "summary": "Tokens de dólar ligados a uma conhecida rede de pagamentos.",
+      "enables": "PYUSD exemplifica dinheiro de um emissor em sistemas onchain. A atividade do Ethereum deve ser separada de outras redes.",
+      "boundary": "Permanecem os controles do emissor sobre lastro e resgate. Não afirmamos volume de pagamentos ou clientes específicos do Ethereum.",
+      "storyIds": [],
+      "tags": [
+        "PayPal",
+        "Paxos",
+        "dollars",
+        "payments"
+      ],
+      "global": true
+    },
+    {
+      "id": "base",
+      "role": "network",
+      "title": "Base",
+      "summary": "Uma rede que liquida no Ethereum e amplia distribuição.",
+      "enables": "A Coinbase relatou mais de 2,17 bilhões de USDC em originações acumuladas via Morpho na Base até 14 de abril de 2026.",
+      "boundary": "O registro de outubro documenta autoridade do operador e do conselho. A avaliação da rede é distinta de emissores, mercados, oráculos e custódia.",
+      "storyIds": [
+        "morpho-distribution"
+      ],
+      "tags": [
+        "Coinbase",
+        "rollup",
+        "L2"
+      ],
+      "global": true
+    }
+  ],
+  "stories": [
+    {
+      "id": "uniswap-cores",
+      "title": "A troca se torna reutilizável",
+      "subtitle": "Um mecanismo D0 vira infraestrutura quando outros programas podem usá-lo.",
+      "collection": [
+        "d0"
+      ],
+      "objectIds": [
+        "uniswap-v2",
+        "uniswap-v3",
+        "uniswap-v4"
+      ],
+      "claimIds": [
+        "uniswap-2020"
+      ],
+      "observationIds": [
+        "v2-flash-2020"
+      ],
+      "state": "reported-adoption",
+      "sections": [
+        {
+          "heading": "Um registro concreto de uso",
+          "body": "A Uniswap relatou em 2020 US$ 4,8 bilhões de volume de flash swaps v2 desde maio. É um dado histórico do próprio projeto, não um saldo atual nem todo o volume Uniswap."
+        },
+        {
+          "heading": "Infraestrutura disponível",
+          "body": "Um flash swap usa ativos e quita sua obrigação numa transação atômica. É uma peça reutilizável de troca. D0 descreve a autoridade do núcleo, sem provar que a descentralização causou adoção."
+        },
+        {
+          "heading": "Siga o objeto exato",
+          "body": "v2, v3 e v4 são mecanismos distintos. UNI, uma interface e uma posição gerenciada também são objetos diferentes. O nome facilita busca, mas não cria avaliação compartilhada."
+        }
+      ],
+      "connection": [
+        {
+          "from": "Aplicações",
+          "relation": "integram",
+          "to": "Núcleo Uniswap"
+        },
+        {
+          "from": "Núcleo Uniswap",
+          "relation": "liquida no",
+          "to": "Ethereum"
+        }
+      ],
+      "relationshipIds": [
+        "v2-applications",
+        "v2-ethereum"
+      ]
+    },
+    {
+      "id": "morpho-distribution",
+      "title": "Um núcleo de crédito encontra novas portas",
+      "subtitle": "Um marco no Ethereum e distribuição na Base, com escopos distintos.",
+      "collection": [
+        "d0",
+        "global-economy"
+      ],
+      "objectIds": [
+        "morpho-blue",
+        "base",
+        "usdc"
+      ],
+      "claimIds": [
+        "morpho-2024",
+        "coinbase-2026"
+      ],
+      "observationIds": [
+        "morpho-deposits-2024",
+        "coinbase-originations-2026"
+      ],
+      "state": "reported-adoption",
+      "sections": [
+        {
+          "heading": "Um marco no Ethereum",
+          "body": "Em agosto de 2024, a Morpho relatou mais de US$ 1,7 bilhão depositado seis meses após o lançamento no Ethereum. Esse estoque datado documenta uso do Morpho Blue L1."
+        },
+        {
+          "heading": "Uma via de distribuição",
+          "body": "A Coinbase incorporou empréstimos Morpho na Base. Relatou mais de 2,17 bilhões de USDC em originações acumuladas até 14 de abril de 2026. Não são dívida pendente nem podem ser somadas aos depósitos anteriores."
+        },
+        {
+          "heading": "Fronteiras distintas",
+          "body": "D0 cobre o núcleo exato do Ethereum, não a Base por associação. O registro de outubro documenta autoridade adicional na Base; USDC mantém o emissor, e mercados suas garantias, oráculos e custódia."
+        }
+      ],
+      "connection": [
+        {
+          "from": "Empréstimos Coinbase",
+          "relation": "dão acesso a",
+          "to": "Morpho na Base"
+        },
+        {
+          "from": "Base",
+          "relation": "liquida no",
+          "to": "Ethereum"
+        }
+      ],
+      "relationshipIds": [
+        "coinbase-morpho-base",
+        "base-ethereum"
+      ]
+    },
+    {
+      "id": "weth-shared-infrastructure",
+      "title": "A utilidade discreta de WETH",
+      "subtitle": "Um wrapper fixo conecta ETH a aplicações baseadas em tokens.",
+      "collection": [
+        "d0"
+      ],
+      "objectIds": [
+        "weth9",
+        "native-eth",
+        "seaport-v1.6"
+      ],
+      "claimIds": [
+        "opensea-offers",
+        "opensea-seaport"
+      ],
+      "observationIds": [],
+      "state": "capability",
+      "sections": [
+        {
+          "heading": "Uma pequena interface útil",
+          "body": "WETH9 envolve ETH numa interface ERC-20. Oferece saldos, aprovações e transferências comuns, com saída fixa para ETH. O contrato revisado não acrescenta proprietário privilegiado."
+        },
+        {
+          "heading": "Uma conexão documentada",
+          "body": "A OpenSea documenta ofertas WETH e identifica Seaport 1.6 para novas ordens. Seu exemplo usa WETH canônico no Ethereum. É uma integração documentada, sem volume medido independentemente."
+        },
+        {
+          "heading": "Compor sem confundir",
+          "body": "Cada mecanismo tem revisão própria. Uma ordem também envolve ativos, aprovações e possíveis zonas ou conduits. A posição completa exige escopo próprio."
+        }
+      ],
+      "connection": [
+        {
+          "from": "ETH",
+          "relation": "é envolvido por",
+          "to": "WETH9"
+        },
+        {
+          "from": "Ofertas WETH",
+          "relation": "liquidam via",
+          "to": "Seaport"
+        }
+      ],
+      "relationshipIds": [
+        "eth-weth9",
+        "weth-offers-seaport"
+      ]
+    },
+    {
+      "id": "dollars-on-ethereum",
+      "title": "Dólares e liquidação compartilhada",
+      "subtitle": "Um piloto mostra o que ativos controlados por emissores acrescentam.",
+      "collection": [
+        "global-economy"
+      ],
+      "objectIds": [
+        "usdc",
+        "ethereum"
+      ],
+      "claimIds": [
+        "visa-2021",
+        "visa-2026"
+      ],
+      "observationIds": [],
+      "state": "pilot",
+      "sections": [
+        {
+          "heading": "Uma conexão histórica",
+          "body": "Em março de 2021, a Visa documentou liquidação USDC no Ethereum com a Crypto.com. Conectou um token de dólar a uma rede estabelecida; não transferiu toda a liquidação Visa para o Ethereum."
+        },
+        {
+          "heading": "A instituição permanece no ativo",
+          "body": "O token pode usar infraestrutura programável enquanto o emissor mantém lastro e resgate. A categoria D9 torna esses poderes visíveis, compatíveis com uma contribuição útil."
+        },
+        {
+          "heading": "Atribuir o crescimento corretamente",
+          "body": "O anúncio Visa de abril de 2026 cobre nove redes. Seu ritmo anualizado multichain não é exclusivo do Ethereum. Preservamos o piloto definido sem inventar um total de crescimento do Ethereum."
+        }
+      ],
+      "connection": [
+        {
+          "from": "USDC do emissor",
+          "relation": "é usado no",
+          "to": "Piloto Visa"
+        },
+        {
+          "from": "Piloto de 2021",
+          "relation": "liquidou no",
+          "to": "Ethereum"
+        }
+      ],
+      "relationshipIds": [
+        "usdc-visa",
+        "visa-ethereum"
+      ]
+    },
+    {
+      "id": "fund-shares-liquidity",
+      "title": "Fundos ganham outra conexão",
+      "subtitle": "BUIDL conecta direitos institucionais a mercados onchain.",
+      "collection": [
+        "global-economy"
+      ],
+      "objectIds": [
+        "buidl",
+        "ethereum"
+      ],
+      "claimIds": [
+        "buidl-launch",
+        "buidl-uniswapx"
+      ],
+      "observationIds": [],
+      "state": "announced",
+      "sections": [
+        {
+          "heading": "O ativo e suas responsabilidades",
+          "body": "A BlackRock lançou BUIDL no Ethereum em 2024. Exposição econômica e estrutura legal são distintas da interface do token. Emissor, custodiante e elegibilidade continuam relevantes."
+        },
+        {
+          "heading": "Outra rota de liquidez",
+          "body": "Securitize e Uniswap Labs anunciaram integração UniswapX em fevereiro de 2026: cotações para investidores pré-qualificados, contrapartes aprovadas e liquidação atômica. Não é evidência independente de volume."
+        },
+        {
+          "heading": "Infraestrutura aberta, acesso específico",
+          "body": "Conectar ativos institucionais e mercados programáveis é útil. D9 descreve autoridade sobre lastro e resgate. UniswapX é diferente de v4; o anúncio não comprova um pool BUIDL v4."
+        }
+      ],
+      "connection": [
+        {
+          "from": "Investidor elegível",
+          "relation": "solicita cotação no",
+          "to": "UniswapX"
+        },
+        {
+          "from": "Contraparte aprovada",
+          "relation": "negocia",
+          "to": "Cotas BUIDL"
+        }
+      ],
+      "relationshipIds": [
+        "investor-uniswapx",
+        "counterparty-buidl"
+      ]
+    },
+    {
+      "id": "open-cores-controlled-markets",
+      "title": "Um núcleo aberto, regras distintas",
+      "subtitle": "Permissioned Pools mostra acessos diferentes numa base comum.",
+      "collection": [
+        "d0",
+        "global-economy"
+      ],
+      "objectIds": [
+        "uniswap-v4"
+      ],
+      "claimIds": [
+        "permissioned-pools"
+      ],
+      "observationIds": [],
+      "state": "capability",
+      "sections": [
+        {
+          "heading": "O ponto de extensão",
+          "body": "Uniswap v4 separa PoolManager da lógica de hooks. A documentação de julho de 2026 descreve verificações de acesso para negociar ou fornecer liquidez."
+        },
+        {
+          "heading": "Uma combinação produtiva",
+          "body": "Um emissor pode usar infraestrutura aberta e conservar requisitos de acesso. Conectar ativos e participantes diversos é útil; D elevado não exige prometer D0 futuro."
+        },
+        {
+          "heading": "Ilustração do mecanismo",
+          "body": "D0 pertence ao PoolManager exato revisado. A história descreve capacidades; não identifica pool ativo, mede adoção ou avalia hook. É preciso seguir rede, tokens e controles reais."
+        }
+      ],
+      "connection": [
+        {
+          "from": "Regras do emissor",
+          "relation": "implementadas por",
+          "to": "Hook do pool"
+        },
+        {
+          "from": "Hook",
+          "relation": "estende",
+          "to": "Núcleo Uniswap v4"
+        }
+      ],
+      "relationshipIds": [
+        "access-rules-hook",
+        "hook-v4"
+      ]
+    }
+  ],
+  "methodology": [
+    {
+      "title": "O que D mede",
+      "body": "O EDI mede autoridade adicional em relação ao Ethereum L1. D0 implica ausência de administrador adicional capaz de reescrever regras revisadas de principal ou saída. São categorias ordinais, não probabilidades ou notas de mérito econômico."
+    },
+    {
+      "title": "Mecanismos exatos, posições separadas",
+      "body": "Marca, token, implantação e posição têm identidades distintas. Aplica-se a restrição mais forte do caminho relevante. Dependências não resolvidas impedem avaliação completa e preservam o piso conhecido. Relações editoriais não alteram o grafo EDI."
+    },
+    {
+      "title": "Três relógios independentes",
+      "body": "A revisão determina validade da pesquisa. Observações e revisão editorial têm datas próprias. Pesquisa não permanente vence mensalmente segundo o EDI; D0 permanente não expira por idade. Atualizar finanças não renova pesquisa."
+    },
+    {
+      "title": "O que as histórias demonstram",
+      "body": "Distinguimos capacidade, anúncio, piloto e adoção relatada. Dados históricos continuam históricos. Depósitos, originações e volume não são somados nem permitem inferir entradas líquidas de capital ou valor para ETH."
+    },
+    {
+      "title": "Cobertura e correções",
+      "body": "Inclui 118 registros, 12 perfis e seis histórias. Registros básicos não inventam adoção. Corrija avaliações no repositório EDI; para alterações editoriais identifique afirmação, fonte e objeto. Fontes originais mantêm seu idioma."
+    }
+  ],
+  "collectionDescriptions": {
+    "d0": "Mecanismos úteis sem administrador adicional sobre suas regras revisadas. Objetos exatos e evidências do que as pessoas constroem com eles.",
+    "global-economy": "Dólares, fundos, ativos físicos e distribuição participam do Ethereum com responsabilidades e controles visíveis."
+  }
+}
