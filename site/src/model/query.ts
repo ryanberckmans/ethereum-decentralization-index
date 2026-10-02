@@ -58,9 +58,14 @@ export interface QueryValidators {
   object(id: string): boolean;
 }
 
+/** The order used when none is chosen: best match with a query, the editor's order without. */
+export function defaultSort(query: Pick<DirectoryQuery, 'q'>): Sort {
+  return query.q ? 'relevance' : 'editorial';
+}
+
 export function effectiveSort(query: Pick<DirectoryQuery, 'q' | 'sort'>): Sort {
   if (query.sort && !(query.sort === 'relevance' && !query.q)) return query.sort;
-  return query.q ? 'relevance' : 'editorial';
+  return defaultSort(query);
 }
 
 /** Whether any filter (not the query, sort or page) is set. */
@@ -189,7 +194,7 @@ export function serializeDirectoryQuery(query: DirectoryQuery): string {
   add('review', REVIEW_FILTERS.filter(review => query.review.includes(review)));
   if (query.story) add('story', ['1']);
   const sort = effectiveSort(query);
-  if (sort !== (query.q ? 'relevance' : 'editorial')) add('sort', [sort]);
+  if (sort !== defaultSort(query)) add('sort', [sort]);
   if (query.page > 1) add('page', [String(query.page)]);
   add('compare', query.compare);
   return parts.join('&');

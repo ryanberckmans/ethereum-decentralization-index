@@ -35,6 +35,13 @@ describe('directory URL state', () => {
     assert.equal(serializeDirectoryQuery(parse('q=usdc&sort=relevance').query), 'q=usdc');
   });
 
+  test('the empty sort the form sends for the default order means best match for a search', () => {
+    const {query, invalid} = parse('q=usdc&atleast=&sort=');
+    assert.deepEqual(invalid, []);
+    assert.equal(query.sort, null);
+    assert.equal(serializeDirectoryQuery(query), 'q=usdc');
+  });
+
   test('unknown values are reported, never guessed, and the rest still applies', () => {
     const {query, invalid} = parse('kind=bank&grade=d10&atleast=d0&page=999&sort=hot&compare=not-a-record&network=solana&role=wrapper');
     assert.deepEqual(invalid, ['kind', 'network', 'grade', 'atleast', 'sort', 'page', 'compare']);

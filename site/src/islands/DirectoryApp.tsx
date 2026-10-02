@@ -19,6 +19,7 @@ import {andList, fmt, formatDate, plural} from '../i18n/format.ts';
 import type {Messages} from '../i18n/en.ts';
 import {runDirectory, type DirectoryResult, type Facets} from '../model/directory.ts';
 import {
+  defaultSort,
   effectiveSort,
   EMPTY_QUERY,
   filterCount,
@@ -660,9 +661,16 @@ export default function DirectoryApp(props: DirectoryAppProps) {
               <label htmlFor="directory-sort" className="sort-label">
                 {m.directory.sort}
               </label>
-              <select id="directory-sort" className="sort-select" name="sort" value={sort} onChange={event => setField({sort: event.target.value as Sort, page: 1})}>
+              {/* The default order submits no value, so a search sent without scripts is sorted by best match. */}
+              <select
+                id="directory-sort"
+                className="sort-select"
+                name="sort"
+                value={sort === defaultSort(query) ? '' : sort}
+                onChange={event => setField({sort: (event.target.value || null) as Sort | null, page: 1})}
+              >
                 {SORTS.filter(value => value !== 'relevance' || query.q).map(value => (
-                  <option key={value} value={value}>
+                  <option key={value} value={value === defaultSort(query) ? '' : value}>
                     {sortLabel(value, m)}
                   </option>
                 ))}

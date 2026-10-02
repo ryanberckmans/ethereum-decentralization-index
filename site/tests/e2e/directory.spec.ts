@@ -49,6 +49,26 @@ test('the server renders the same results without scripts', async ({browser}) =>
   await context.close();
 });
 
+test('choosing the default order again takes it out of the link', async ({page}) => {
+  await page.goto('/en/?q=dollar&sort=name');
+  await expect(page.locator('#directory-sort')).toHaveValue('name');
+  await page.locator('#directory-sort').selectOption('');
+  await expect(page).toHaveURL(/\/en\/\?q=dollar$/);
+});
+
+test('a search sent without scripts is sorted by best match', async ({browser}) => {
+  const context = await browser.newContext({javaScriptEnabled: false});
+  const page = await context.newPage();
+  await page.goto('/en/?q=dollar');
+  const bestMatch = await ids(page);
+  await page.goto('/en/');
+  await page.locator('#directory-q').fill('dollar');
+  await page.locator('#directory-q').press('Enter');
+  await expect(page).toHaveURL(/\/en\/\?q=dollar$/);
+  expect(await ids(page)).toEqual(bestMatch);
+  await context.close();
+});
+
 test('Browse, open, Back, refresh and new tab restore the query, filters and selection', async ({page, context}) => {
   await page.goto('/en/');
   await page.locator('#directory-q').fill('dollar');
