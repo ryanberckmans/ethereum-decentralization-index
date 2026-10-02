@@ -1,18 +1,26 @@
-# Checks the directory website in site/: installs its pinned dependencies,
-# runs its integration tests, type-checks and builds it, then smoke-tests the
-# built Worker. It runs only when site/ or this workflow changes, and it
-# deploys nothing.
+# Checks the directory website in site/: its editorial content, types and unit
+# tests, the production build, and browser tests against the built Worker
+# (search and saved state, review dates, accessibility in both themes, phone
+# budgets, security headers, and all eight languages on phone widths).
+# It runs when the site, the EDI package it reads, or this workflow changes,
+# and it deploys nothing; see site-deploy.yml.
 name: Site
 
 on:
   pull_request:
     paths:
       - site/**
+      - data/**
+      - dist/**
+      - package.json
       - .github/workflows/site.yml
   push:
     branches: [main]
     paths:
       - site/**
+      - data/**
+      - dist/**
+      - package.json
       - .github/workflows/site.yml
   workflow_dispatch:
 
@@ -24,16 +32,14 @@ concurrency:
 
 jobs:
   verify:
-    name: Check and build the site
+    name: Check, build and test the site
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 25
     permissions:
       contents: read
     defaults:
       run:
         working-directory: site
-    env:
-      COREPACK_ENABLE_DOWNLOAD_PROMPT: "0"
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -42,15 +48,17 @@ jobs:
         with:
           node-version: 22
           package-manager-cache: false
-      - name: Enable the pnpm version pinned in site/package.json
-        run: corepack enable && pnpm --version
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-      - name: Run the integration tests
-        run: pnpm check
+        run: npm ci --no-audit --no-fund
+      - name: Check the editorial content
+        run: npm run content:check
       - name: Type-check
-        run: pnpm exec tsc --noEmit
+        run: npm run typecheck
+      - name: Run the unit tests
+        run: npm test
       - name: Build
-        run: pnpm build
-      - name: Smoke-test the built Worker
-        run: node tests/http-smoke.mjs
+        run: npm run build
+      - name: Install the test browser
+        run: npx playwright install --with-deps chromium
+      - name: Run the browser tests against the built Worker
+        run: npm run test:e2e
