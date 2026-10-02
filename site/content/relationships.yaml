@@ -8,7 +8,7 @@
 # None of these is a control dependency. EDI's own dependency edges come from the
 # registry and are drawn separately; nothing here changes an assessment.
 
-# WETH, Seaport and OpenSea ------------------------------------------------------
+# WETH, Seaport and OpenSea ----------------------------------------------------
 
 - id: opensea-marketplace-seaport16
   from: product:opensea-marketplace
@@ -38,7 +38,7 @@
   chainIds: [1]
   note: Seaport 1.6 settles offers paid in WETH
 
-# USDC ---------------------------------------------------------------------------
+# USDC -------------------------------------------------------------------------
 
 - id: circle-issues-usdc
   from: org:circle
@@ -80,7 +80,7 @@
   sourceClaimIds: [circle-usdc-addresses, onchain-usdc-2026-10-01]
   chainIds: [8453]
 
-# Visa stablecoin settlement ---------------------------------------------------------
+# Visa stablecoin settlement ---------------------------------------------------
 
 - id: visa-settlement-usdc
   from: product:visa-stablecoin-settlement
@@ -122,3 +122,192 @@
   state: reported-adoption
   sourceClaimIds: [visa-usdc-pilot-2021, visa-usdc-ethereum-settlement-2023]
   note: Settles its Visa card program obligations in USDC
+
+# Uniswap ----------------------------------------------------------------------
+
+- id: permissioned-pools-uniswap-v4
+  from: product:uniswap-permissioned-pools
+  to: uniswap-v4
+  type: integrates-with
+  state: reproduced-observation
+  sourceClaimIds: [uniswap-permissioned-pools-architecture, uniswap-permissioned-pools-live, onchain-permissioned-pool-2026-10-01]
+  chainIds: [1]
+  validFrom: 2026-08-24
+  note: A shared v4 hook that checks an issuer's allowlist before each swap and new position
+
+# Morpho and Coinbase ----------------------------------------------------------
+
+- id: coinbase-loans-morpho-base
+  from: product:coinbase-crypto-backed-loans
+  to: deployment:morpho-blue-base
+  type: interface-to
+  state: live
+  sourceClaimIds: [coinbase-bitcoin-loans-launch, morpho-coinbase-abstraction, morpho-coinbase-cbbtc-market]
+  chainIds: [8453]
+  validFrom: 2025-01-16
+  note: Coinbase app loans of USDC against crypto, run in Morpho markets on Base
+
+- id: cbbtc-base-morpho-base
+  from: deployment:cbbtc-base
+  to: deployment:morpho-blue-base
+  type: collateral-for
+  state: reproduced-observation
+  sourceClaimIds: [onchain-morpho-base-coinbase-market-2026-10-01, morpho-coinbase-cbbtc-market]
+  chainIds: [8453]
+  note: Collateral in the cbBTC/USDC market behind Coinbase's bitcoin-backed loans
+
+- id: morpho-blue-base-base
+  from: deployment:morpho-blue-base
+  to: base
+  type: settles-on
+  state: reproduced-observation
+  sourceClaimIds: [morpho-docs-addresses, onchain-morpho-governance-2026-10-01]
+  chainIds: [8453]
+
+- id: cbbtc-morpho-blue
+  from: cbbtc
+  to: morpho-blue
+  type: collateral-for
+  state: reproduced-observation
+  sourceClaimIds: [onchain-morpho-ethereum-markets-2026-10-01]
+  chainIds: [1]
+  note: Collateral in the cbBTC/USDC market on Ethereum
+
+- id: paxg-morpho-blue
+  from: paxg
+  to: morpho-blue
+  type: collateral-for
+  state: reproduced-observation
+  sourceClaimIds: [onchain-morpho-ethereum-markets-2026-10-01, onchain-morpho-paxg-collateral-2026-10-01]
+  chainIds: [1]
+  note: The Morpho Blue contract held a small PAXG balance as collateral; recorded market totals are not collateral
+
+# Paxos and PayPal -------------------------------------------------------------
+
+- id: paxos-issues-paxg
+  from: org:paxos
+  to: paxg
+  type: issues
+  state: live
+  sourceClaimIds: [paxg-definition, paxg-addresses]
+  chainIds: [1]
+
+- id: paxg-gold
+  from: paxg
+  to: ref:gold
+  type: economic-reference
+  state: live
+  sourceClaimIds: [paxg-definition, paxg-redemption]
+  note: One token per fine troy ounce of a London Good Delivery gold bar
+
+- id: paxg-ethereum
+  from: paxg
+  to: ethereum
+  type: settles-on
+  state: reproduced-observation
+  sourceClaimIds: [paxg-addresses, onchain-paxg-2026-09]
+  chainIds: [1]
+
+- id: paxos-issues-pyusd
+  from: org:paxos
+  to: pyusd
+  type: issues
+  state: live
+  sourceClaimIds: [pyusd-launch-2023, pyusd-addresses]
+  chainIds: [1]
+
+- id: paypal-pyusd
+  from: org:paypal
+  to: pyusd
+  type: integrates-with
+  state: live
+  sourceClaimIds: [pyusd-paypal-uses-2023]
+  validFrom: 2023-08-07
+  note: PayPal customers can buy, send, spend and withdraw PYUSD to their own wallets
+
+- id: pyusd-us-dollar
+  from: pyusd
+  to: ref:us-dollar
+  type: economic-reference
+  state: live
+  sourceClaimIds: [pyusd-launch-2023]
+  note: Paxos redeems PYUSD one for one for US dollars
+
+- id: pyusd-ethereum
+  from: pyusd
+  to: ethereum
+  type: settles-on
+  state: reproduced-observation
+  sourceClaimIds: [pyusd-addresses, onchain-pyusd-2026-09]
+  chainIds: [1]
+
+# BUIDL ------------------------------------------------------------------------
+
+- id: blackrock-issues-buidl
+  from: org:blackrock
+  to: buidl
+  type: issues
+  state: live
+  sourceClaimIds: [buidl-launch-2024, buidl-token-addresses]
+  chainIds: [1]
+
+- id: securitize-buidl
+  from: org:securitize
+  to: buidl
+  type: interface-to
+  state: live
+  sourceClaimIds: [buidl-launch-2024, buidl-service-providers]
+  note: Qualified investors subscribe through Securitize Markets; Securitize is the transfer agent
+
+- id: buidl-ethereum
+  from: buidl
+  to: ethereum
+  type: settles-on
+  state: reproduced-observation
+  sourceClaimIds: [buidl-token-addresses, onchain-buidl-2026-09]
+  chainIds: [1]
+
+- id: buidl-i-ethereum
+  from: deployment:buidl-i-ethereum
+  to: ethereum
+  type: settles-on
+  state: reproduced-observation
+  sourceClaimIds: [buidl-token-addresses, onchain-buidl-i-2026-09]
+  chainIds: [1]
+
+- id: uniswapx-buidl
+  from: product:uniswapx
+  to: buidl
+  type: integrates-with
+  state: announced
+  sourceClaimIds: [buidl-uniswapx-2026, onchain-buidl-holder-transfers-2026-09]
+  validFrom: 2026-02-11
+  note: Quote-based trading with whitelisted market makers; no network named, and none seen on Ethereum in September 2026
+
+- id: buidl-crypto-com
+  from: buidl
+  to: org:crypto-com
+  type: collateral-for
+  state: announced
+  sourceClaimIds: [buidl-collateral-exchanges-2025]
+  validFrom: 2025-06-18
+  note: Accepted as collateral on the Crypto.com exchange; no network or share class named
+
+# Base -------------------------------------------------------------------------
+
+- id: base-ethereum
+  from: base
+  to: ethereum
+  type: settles-on
+  state: reproduced-observation
+  sourceClaimIds: [base-protocol-overview, onchain-base-2026-09]
+  chainIds: [1, 8453]
+  note: Posts its transaction data and state proposals to Ethereum
+
+- id: weth-base-base
+  from: deployment:weth-base
+  to: base
+  type: settles-on
+  state: live
+  sourceClaimIds: [base-weth9-address]
+  chainIds: [8453]

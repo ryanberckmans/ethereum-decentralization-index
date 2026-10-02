@@ -58,7 +58,14 @@ observationIds:
   - buidl-holder-transfer-receivers-2026-09
   - permissioned-pools-2026-10-01
   - permissioned-pools-swaps-2026-09
-relationshipIds: []
+relationshipIds:
+  - blackrock-issues-buidl
+  - securitize-buidl
+  - buidl-ethereum
+  - buidl-i-ethereum
+  - uniswapx-buidl
+  - buidl-crypto-com
+  - permissioned-pools-uniswap-v4
 reviewedAt: 2026-10-02
 ---
 

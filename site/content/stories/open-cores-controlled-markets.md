@@ -49,7 +49,10 @@ observationIds:
   - uniswap-v4-hooked-pools-2026-10-01
   - permissioned-pools-2026-10-01
   - permissioned-pools-swaps-2026-09
-relationshipIds: []
+relationshipIds:
+  - permissioned-pools-uniswap-v4
+  - circle-issues-usdc
+  - usdc-ethereum
 reviewedAt: 2026-10-02
 ---
 

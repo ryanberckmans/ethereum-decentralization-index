@@ -13,7 +13,7 @@
   entrance:
     storyId: weth-shared-infrastructure
     line: A contract from 2017 with no owner still turns ETH into the token behind nearly every NFT offer filled on Seaport 1.6.
-  storyIds: [weth-shared-infrastructure]
+  storyIds: [weth-shared-infrastructure, uniswap-cores-in-use, open-cores-controlled-markets]
 
 - id: global-economy
   title: The global economy on Ethereum
@@ -28,5 +28,5 @@
   entrance:
     storyId: dollars-on-ethereum
     line: Circle minted 22.7 billion USDC on Ethereum in September 2026, and Visa takes card settlement in it.
-  storyIds: [dollars-on-ethereum]
-  objectIds: [usdc]
+  storyIds: [dollars-on-ethereum, fund-shares-onchain-liquidity, morpho-and-distribution]
+  objectIds: [usdc, pyusd, buidl, paxg, cbbtc, morpho-blue, base]
