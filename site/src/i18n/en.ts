@@ -583,6 +583,47 @@ export const en = {
     source: 'EDI on GitHub',
     agents: 'For agents',
   },
+  /**
+   * Search vocabulary. Records are written in English, so each idea lists
+   * the words a reader might type in this language; a search for one of
+   * them also finds the English words listed here. Words are separated by
+   * spaces. Chinese, Japanese and Korean words have at least two characters.
+   */
+  searchTerms: {
+    lend: 'lend lending lender loan loans borrow borrowing credit',
+    dollar: 'dollar dollars usd',
+    stablecoin: 'stablecoin stablecoins stable',
+    exchange: 'exchange swap swaps trade trading amm dex',
+    liquidity: 'liquidity pool pools',
+    stake: 'staking stake staked validator validators',
+    restake: 'restaking restake restaked',
+    wrap: 'wrap wrapped wrapper',
+    bitcoin: 'bitcoin btc',
+    gold: 'gold commodity commodities',
+    fund: 'fund funds shares treasury treasuries',
+    settle: 'settlement settle settles',
+    pay: 'payment payments pay stream streaming',
+    yield: 'yield interest savings',
+    collateral: 'collateral',
+    oracle: 'oracle oracles price',
+    bridge: 'bridge bridged bridging',
+    vault: 'vault vaults',
+    governance: 'governance vote voting dao',
+    upgrade: 'upgrade upgrades upgradeable proxy',
+    pause: 'pause paused freeze blocklist blacklist',
+    custody: 'custody custodian custodial reserve reserves',
+    issue: 'issuer issuance mint minting',
+    redeem: 'redeem redemption withdrawal withdraw exit',
+    immutable: 'immutable',
+    admin: 'admin owner multisig council',
+    rollup: 'rollup rollups layer',
+    network: 'network chain mainnet',
+    nft: 'nft nfts marketplace',
+    token: 'token tokens',
+    ethereum: 'ethereum ether eth',
+  },
+  /** Words a search ignores unless they are all the reader typed. */
+  searchStopWords: 'a an and the of to for in on with by from at as or',
   common: {
     external: 'external link',
     none: 'None',

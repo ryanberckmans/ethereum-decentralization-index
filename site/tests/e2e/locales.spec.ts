@@ -80,3 +80,15 @@ test('every page names its language alternates', async ({page}) => {
   expect(alternates.sort()).toEqual([...LOCALES, 'x-default'].sort());
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', /\/fr\/objects\/weth9$/);
 });
+
+test('searching in Spanish or Japanese finds the English records for the same task', async ({page}) => {
+  for (const [path, query] of [
+    ['/es/', 'prestar dólares'],
+    ['/ja/', 'ドルを貸す'],
+  ] as const) {
+    await page.goto(path);
+    await page.locator('#directory-q').fill(query);
+    await expect(page.locator('li.row[data-id="usdc"]')).toBeVisible();
+    await expect(page.locator('li.row[data-id="morpho-blue"]')).toBeVisible();
+  }
+});
