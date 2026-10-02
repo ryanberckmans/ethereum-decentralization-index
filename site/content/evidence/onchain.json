@@ -1,0 +1,295 @@
+{
+ "about": "Onchain reads behind the directory's reproduced observations. Each read names its chain, its pinned block and the result recorded on retrieval. Re-run with onchain.mjs against any archive node; see README.md.",
+ "retrievedAt": "2026-10-02",
+ "blocks": {
+  "1:26093738": {
+   "hash": "0x41ebfe304393a8d19fb0b8273a5fa88573cc9a1962a6b8645d139a1d4f860edb",
+   "timestamp": "2026-10-01T00:00:11Z",
+   "note": "First Ethereum block at or after 2026-10-01T00:00:00Z"
+  },
+  "1:25878705": {
+   "hash": "0x662c360bd4fc0e07275631eab7827ad22cc804c5282fd7190686f8325150bf66",
+   "timestamp": "2026-09-01T00:00:11Z",
+   "note": "First Ethereum block at or after 2026-09-01T00:00:00Z"
+  },
+  "8453:52011727": {
+   "hash": "0x49b2a60155e2a2ecfc96dcbe9f446c32696fa9b98b40a10141f584a5db53b742",
+   "timestamp": "2026-10-01T00:00:01Z",
+   "note": "First Base block at or after 2026-10-01T00:00:00Z"
+  }
+ },
+ "reads": [
+  {
+   "id": "weth9-total-supply-2026-10-01",
+   "chainId": 1,
+   "block": 26093738,
+   "read": {
+    "kind": "erc20.totalSupply",
+    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+   },
+   "note": "WETH9's totalSupply() returns the contract's own ETH balance.",
+   "result": {
+    "raw": "2043287354335834139572865",
+    "decimals": 18,
+    "value": "2043287.354335834139572865"
+   }
+  },
+  {
+   "id": "weth9-eth-balance-2026-10-01",
+   "chainId": 1,
+   "block": 26093738,
+   "read": {
+    "kind": "eth.balance",
+    "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+   },
+   "result": {
+    "raw": "2043287354335834139572865",
+    "decimals": 18,
+    "value": "2043287.354335834139572865"
+   }
+  },
+  {
+   "id": "weth9-first-code-block",
+   "chainId": 1,
+   "block": 26093738,
+   "read": {
+    "kind": "code.firstBlock",
+    "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+   },
+   "result": {
+    "block": 4719568,
+    "timestamp": "2017-12-12T11:17:35Z"
+   }
+  },
+  {
+   "id": "weth9-held-by-morpho-blue-2026-10-01",
+   "chainId": 1,
+   "block": 26093738,
+   "read": {
+    "kind": "erc20.balanceOf",
+    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+    "holder": "0xbbbbbbbbbb9cc5e90e3b3af64bdaf62c37eeffcb"
+   },
+   "result": {
+    "raw": "11710535277367334849177",
+    "decimals": 18,
+    "value": "11710.535277367334849177"
+   }
+  },
+  {
+   "id": "weth9-held-by-uniswap-v4-2026-10-01",
+   "chainId": 1,
+   "block": 26093738,
+   "read": {
+    "kind": "erc20.balanceOf",
+    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+    "holder": "0x000000000004444c5dc75cb358380d2e3de08a90"
+   },
+   "result": {
+    "raw": "1199138763604872448663",
+    "decimals": 18,
+    "value": "1199.138763604872448663"
+   }
+  },
+  {
+   "id": "eth-held-by-uniswap-v4-2026-10-01",
+   "chainId": 1,
+   "block": 26093738,
+   "read": {
+    "kind": "eth.balance",
+    "address": "0x000000000004444c5dc75cb358380d2e3de08a90"
+   },
+   "result": {
+    "raw": "45812471755964899333322",
+    "decimals": 18,
+    "value": "45812.471755964899333322"
+   }
+  },
+  {
+   "id": "seaport16-fills-2026-09",
+   "chainId": 1,
+   "block": 26093738,
+   "read": {
+    "kind": "seaport.orderFulfilled",
+    "address": "0x0000000000000068f116a894984e2db1123eb395",
+    "fromBlock": 25878705,
+    "toBlock": 26093737,
+    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+    "tokenDecimals": 18,
+    "zone": "0x000056f7000000ece9003ca63978907a00ffd100"
+   },
+   "note": "All OrderFulfilled events from the Seaport 1.6 contract in September 2026 (UTC), with WETH9 as the token of interest and OpenSea's Seaport 1.6 signed zone as the zone of interest.",
+   "result": {
+    "events": 402200,
+    "erc20OfferForNftEvents": 146151,
+    "tokenOfferEvents": 146067,
+    "tokenOfferForNftEvents": 146032,
+    "tokenAnyEvents": 166577,
+    "nativeConsiderationEvents": 234448,
+    "tokenOfferAmountRaw": "7484610423806862986600",
+    "tokenOfferAmount": "7484.6104238068629866",
+    "zoneEvents": 230063,
+    "zoneTokenOfferEvents": 145629,
+    "zoneTokenOfferAmountRaw": "7113041600000000000000",
+    "zoneTokenOfferAmount": "7113.0416",
+    "logsFingerprintSha256": "1fde318cb579a4eed9674d1cab303cf89a676b23069d2dabb60bd6c6f332ea3f"
+   }
+  },
+  {
+   "id": "usdc-total-supply-ethereum-2026-10-01",
+   "chainId": 1,
+   "block": 26093738,
+   "read": {
+    "kind": "erc20.totalSupply",
+    "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"
+   },
+   "result": {
+    "raw": "49295701138130357",
+    "decimals": 6,
+    "value": "49295701138.130357"
+   }
+  },
+  {
+   "id": "usdc-total-supply-base-2026-10-01",
+   "chainId": 8453,
+   "block": 52011727,
+   "read": {
+    "kind": "erc20.totalSupply",
+    "token": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913"
+   },
+   "note": "Circle's native USDC on Base, a separate deployment from Ethereum's.",
+   "result": {
+    "raw": "4319085272006935",
+    "decimals": 6,
+    "value": "4319085272.006935"
+   }
+  },
+  {
+   "id": "opensea-conduit-owner-2026-10-01",
+   "chainId": 1,
+   "block": 26093738,
+   "read": {
+    "kind": "call",
+    "to": "0x00000000f9490004c11cef243f5400493c00ad63",
+    "signature": "ownerOf(address)",
+    "data": "0x14afd79e0000000000000000000000001e0049783f008a0085193e00003d00cd54003c71",
+    "returns": "address"
+   },
+   "note": "Owner of the OpenSea Conduit (OPENSEA_CONDUIT_ADDRESS in OpenSea's SDK), per Seaport's ConduitController.",
+   "result": {
+    "raw": "0x0000000000000000000000000000000000d132a69d773c838080dc4fa478388f",
+    "value": "0x0000000000d132a69d773c838080dc4fa478388f"
+   }
+  },
+  {
+   "id": "opensea-conduit-channels-2026-10-01",
+   "chainId": 1,
+   "block": 26093738,
+   "read": {
+    "kind": "call",
+    "to": "0x00000000f9490004c11cef243f5400493c00ad63",
+    "signature": "getChannels(address)",
+    "data": "0x8b9e028b0000000000000000000000001e0049783f008a0085193e00003d00cd54003c71",
+    "returns": "address[]"
+   },
+   "note": "Contracts allowed to move tokens that holders approved to the OpenSea Conduit.",
+   "result": {
+    "raw": "0x0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000300000000000000000000000000000000000000adc04c56bf30ac9d3c0aaf14dc0000000000000000000000000000000000c2d145a2526bd8c716263bfebe1a720000000000000000000000000000000000000068f116a894984e2db1123eb395",
+    "value": [
+     "0x00000000000000adc04c56bf30ac9d3c0aaf14dc",
+     "0x0000000000c2d145a2526bd8c716263bfebe1a72",
+     "0x0000000000000068f116a894984e2db1123eb395"
+    ]
+   }
+  },
+  {
+   "id": "conduit-captain-owner-2026-10-01",
+   "chainId": 1,
+   "block": 26093738,
+   "read": {
+    "kind": "call",
+    "to": "0x0000000000d132a69d773c838080dc4fa478388f",
+    "signature": "owner()",
+    "data": "0x8da5cb5b",
+    "returns": "address"
+   },
+   "note": "Owner of the ConduitCaptain contract; only it can open or close channels on conduits the captain owns.",
+   "result": {
+    "raw": "0x000000000000000000000000c669b5f25f03be2ac0323037cb57f49eb543657a",
+    "value": "0xc669b5f25f03be2ac0323037cb57f49eb543657a"
+   }
+  },
+  {
+   "id": "conduit-captain-owner-threshold-2026-10-01",
+   "chainId": 1,
+   "block": 26093738,
+   "read": {
+    "kind": "call",
+    "to": "0xc669b5f25f03be2ac0323037cb57f49eb543657a",
+    "signature": "getThreshold()",
+    "data": "0xe75235b8",
+    "returns": "uint256"
+   },
+   "note": "Signatures that Safe needs to act.",
+   "result": {
+    "raw": "0x0000000000000000000000000000000000000000000000000000000000000005",
+    "value": "5"
+   }
+  },
+  {
+   "id": "conduit-captain-owner-signers-2026-10-01",
+   "chainId": 1,
+   "block": 26093738,
+   "read": {
+    "kind": "call",
+    "to": "0xc669b5f25f03be2ac0323037cb57f49eb543657a",
+    "signature": "getOwners()",
+    "data": "0xa0e67e2b",
+    "returns": "address[]"
+   },
+   "note": "Signers of that Safe.",
+   "result": {
+    "raw": "0x000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000070000000000000000000000001049f38c6ef26b195cdaf54337e8079eea9376f100000000000000000000000059f4ec41bfdca22b4c0f1fd4b4ced52f79c3d09f000000000000000000000000435949f7363093620bb0d3900180c22273f076ab000000000000000000000000e80a65eb7a3018deda407e621ef5fb5b416678ca000000000000000000000000b20f88febd0adc79c58982c9cc88938de81fe451000000000000000000000000bf81d02f3ee59e79af3d9337a186f65c9fae39f300000000000000000000000030809f074db2fb7cfdf68b1d25cfac7c96b5fb6c",
+    "value": [
+     "0x1049f38c6ef26b195cdaf54337e8079eea9376f1",
+     "0x59f4ec41bfdca22b4c0f1fd4b4ced52f79c3d09f",
+     "0x435949f7363093620bb0d3900180c22273f076ab",
+     "0xe80a65eb7a3018deda407e621ef5fb5b416678ca",
+     "0xb20f88febd0adc79c58982c9cc88938de81fe451",
+     "0xbf81d02f3ee59e79af3d9337a186f65c9fae39f3",
+     "0x30809f074db2fb7cfdf68b1d25cfac7c96b5fb6c"
+    ]
+   }
+  },
+  {
+   "id": "usdc-held-by-morpho-blue-2026-10-01",
+   "chainId": 1,
+   "block": 26093738,
+   "read": {
+    "kind": "erc20.balanceOf",
+    "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+    "holder": "0xbbbbbbbbbb9cc5e90e3b3af64bdaf62c37eeffcb"
+   },
+   "result": {
+    "raw": "112033376303624",
+    "decimals": 6,
+    "value": "112033376.303624"
+   }
+  },
+  {
+   "id": "usdc-held-by-uniswap-v4-2026-10-01",
+   "chainId": 1,
+   "block": 26093738,
+   "read": {
+    "kind": "erc20.balanceOf",
+    "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+    "holder": "0x000000000004444c5dc75cb358380d2e3de08a90"
+   },
+   "result": {
+    "raw": "55608414894505",
+    "decimals": 6,
+    "value": "55608414.894505"
+   }
+  }
+ ]
+}
