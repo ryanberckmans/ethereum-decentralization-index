@@ -95,7 +95,7 @@ See `examples/WalletPosition.tsx` for a wallet integration. It uses illustrative
 
 ## Directory site
 
-[`site/`](site) holds the directory website built on this index. It is a separate project with its own package, lockfile and checks, run from `site/` as [its README](site/README.md) describes, and it is not part of the npm package. The [Site workflow](.github/workflows/site.yml) checks it whenever `site/` changes.
+[`site/`](site) holds the directory website built on this index. It is a separate project with its own package, lockfile and checks, run from `site/` as [its README](site/README.md) describes, and it is not part of the npm package. The [Site workflow](.github/workflows/site.yml) checks it whenever `site/` or the index data it reads changes, and the [Deploy site workflow](.github/workflows/site-deploy.yml) publishes it to Cloudflare Workers once the repository has Cloudflare credentials.
 
 ## Develop and package
 
