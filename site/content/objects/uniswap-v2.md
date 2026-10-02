@@ -22,7 +22,7 @@ officialLinks:
   - label: Uniswap v2 launch post (Uniswap Labs)
     url: https://blog.uniswap.org/launch-uniswap-v2
     checkedAt: 2026-10-02
-featuredObservationId: uniswap-v2-pools-2026-10-01
+featuredObservationId: uniswap-v2-swaps-2026-09
 editorialReviewedAt: 2026-10-02
 ---
 
@@ -47,6 +47,11 @@ The first year showed both features in use. Uniswap Labs reported at the end of 
 {{obs:v2-oracle-integrations-2020}}, Compound and Augur v2 among them, had integrated the price oracle
 {{claim:uniswap-2020-oracle-integrations}}. Both are Uniswap Labs' own figures, published without a method or a chain;
 the directory found no Uniswap deployment outside Ethereum at the time.
+
+Six years on, the core is still in use. In September 2026 the pairs of the v2 factory recorded
+{{obs:uniswap-v2-swaps-2026-09}}, spread over {{obs:uniswap-v2-pools-swapped-2026-09}} with at least one swap
+{{claim:onchain-uniswap-v2-swaps-2026-09}}. A swap event is one step through one pair. A trade routed through several
+pairs emits several, so events are not trades or traders. Forks of the code that emit the same event are not counted.
 
 ## Control in context
 

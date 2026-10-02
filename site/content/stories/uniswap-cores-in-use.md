@@ -6,7 +6,8 @@ dek: >-
   run on Ethereum, and even the 2018 original carried thousands of swaps in September 2026.
 thesis: >-
   Exchange cores that no one can change keep working after their successors arrive: Uniswap's v1 core from 2018 still
-  recorded thousands of swaps on Ethereum in September 2026, while the v3 and v4 cores each recorded millions.
+  recorded thousands of swaps on Ethereum in September 2026, while the v2, v3 and v4 cores each recorded more than a
+  million.
 objectIds: [uniswap-v1, uniswap-v2, uniswap-v3, uniswap-v4, token:uniswap]
 contextualSubjectIds: [org:uniswap-labs]
 collections: [d0-in-use]
@@ -14,8 +15,8 @@ outcome:
   mechanism: liquidity-access
   state: reproduced-observation
   statement: >-
-    In September 2026 Uniswap's cores on Ethereum recorded 13,763 swap events in 187 v1 exchanges, 4,121,099 in 11,876
-    v3 pools and 3,731,479 in 16,146 v4 pools.
+    In September 2026 Uniswap's cores on Ethereum recorded 13,763 swap events in 187 v1 exchanges, 1,615,715 in 26,390
+    v2 pairs, 4,121,099 in 11,876 v3 pools and 3,731,479 in 16,146 v4 pools.
 ethereumContribution: >-
   Ethereum keeps each version's contracts running at their original addresses, so a new design arrives next to the old
   ones instead of replacing them. Liquidity providers and traders choose the version that suits them, and none of them
@@ -39,6 +40,7 @@ claimIds:
   - uniswap-2020-flash-swaps-volume
   - uniswap-2020-oracle-integrations
   - onchain-uniswap-v1-swaps-2026-09
+  - onchain-uniswap-v2-swaps-2026-09
   - onchain-uniswap-v3-swaps-2026-09
   - onchain-uniswap-v4-swaps-2026-09
   - uniswap-v2-flash-swaps-arbitrage
@@ -57,6 +59,8 @@ observationIds:
   - v2-oracle-integrations-2020
   - uniswap-v1-pools-swapped-2026-09
   - uniswap-v1-swaps-2026-09
+  - uniswap-v2-pools-swapped-2026-09
+  - uniswap-v2-swaps-2026-09
   - uniswap-v3-pools-swapped-2026-09
   - uniswap-v3-swaps-2026-09
   - uniswap-v4-pools-swapped-2026-09
@@ -101,13 +105,14 @@ Uniswap Labs' account of 2020 put flash-swap volume since May at {{obs:v2-flash-
 them, using v2's price oracle {{claim:uniswap-2020-oracle-integrations}}. Both are Uniswap Labs' own figures, published
 without a method.
 
-The cores are still in use years later, the oldest included. In September 2026,
-{{obs:uniswap-v1-pools-swapped-2026-09}} of v1's exchanges recorded {{obs:uniswap-v1-swaps-2026-09}}
-{{claim:onchain-uniswap-v1-swaps-2026-09}}. In v3, {{obs:uniswap-v3-pools-swapped-2026-09}} recorded
-{{obs:uniswap-v3-swaps-2026-09}} {{claim:onchain-uniswap-v3-swaps-2026-09}}, and in v4,
-{{obs:uniswap-v4-pools-swapped-2026-09}} recorded {{obs:uniswap-v4-swaps-2026-09}}
-{{claim:onchain-uniswap-v4-swaps-2026-09}}. A swap event is one step through one pool, so a trade routed through several
-pools counts several times, and events are not traders. Each version's count stands alone.
+The cores are still in use years later, the oldest included. In September 2026 v1 recorded
+{{obs:uniswap-v1-swaps-2026-09}} in {{obs:uniswap-v1-pools-swapped-2026-09}} {{claim:onchain-uniswap-v1-swaps-2026-09}},
+v2 {{obs:uniswap-v2-swaps-2026-09}} in {{obs:uniswap-v2-pools-swapped-2026-09}}
+{{claim:onchain-uniswap-v2-swaps-2026-09}}, v3 {{obs:uniswap-v3-swaps-2026-09}} in
+{{obs:uniswap-v3-pools-swapped-2026-09}} {{claim:onchain-uniswap-v3-swaps-2026-09}} and v4
+{{obs:uniswap-v4-swaps-2026-09}} in {{obs:uniswap-v4-pools-swapped-2026-09}} {{claim:onchain-uniswap-v4-swaps-2026-09}}.
+A swap event is one step through one pool, so a trade routed through several pools counts several times, and events
+are not traders. Each version's count stands alone.
 
 ## What becomes possible
 
