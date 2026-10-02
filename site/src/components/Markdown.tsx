@@ -10,7 +10,11 @@ export interface TokenContext {
   render(token: TokenRef): ReactNode;
 }
 
-/** Punctuation that must not wrap away from the badge or citation before it. */
+/**
+ * Punctuation that must not wrap away from the badge or citation before it.
+ * A figure ends in text, which never wraps away from punctuation, so it is
+ * left out: glued, its value and date could not wrap apart on a phone.
+ */
 const GLUE = /^[.,;:!?…)\]’”]+/;
 
 export function Inlines({nodes, ctx}: {nodes: readonly Inline[]; ctx: TokenContext}) {
@@ -23,7 +27,7 @@ export function Inlines({nodes, ctx}: {nodes: readonly Inline[]; ctx: TokenConte
       items.push(<Fragment key={index}>{node.v.trimEnd()}</Fragment>);
       continue;
     }
-    if (node.t === 'token' && next?.t === 'text') {
+    if (node.t === 'token' && node.kind !== 'obs' && next?.t === 'text') {
       const glue = GLUE.exec(next.v)?.[0];
       if (glue) {
         items.push(

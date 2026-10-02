@@ -1255,6 +1255,7 @@ html:not(.js) .workspace {
   display: flex;
   align-items: center;
   gap: 8px;
+  min-width: 0;
 }
 
 .sort-label {
@@ -1265,6 +1266,7 @@ html:not(.js) .workspace {
 
 .sort-select {
   min-height: 44px;
+  min-width: 0;
   max-width: 13rem;
   padding: 0 8px;
   border: 1px solid var(--rule-strong);
@@ -2187,6 +2189,12 @@ html:not(.js) .workspace {
   color: var(--muted);
 }
 
+/* Locators and titles can hold long unbroken text, such as addresses. */
+.source-meta > * {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
 .source-qual {
   font-size: 0.875rem;
   color: var(--warn-ink);
@@ -2409,6 +2417,7 @@ html:not(.js) .workspace {
 
 .obs-when {
   color: var(--ink-2);
+  white-space: nowrap;
 }
 
 .obs-subject {
@@ -3017,6 +3026,7 @@ html:not(.js) .workspace {
 
 .compare-tools {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 18px;
   padding: 4px 0 22px;
 }
