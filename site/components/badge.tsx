@@ -1,0 +1,3 @@
+import {levelLabel,levelColor,displayedLevel,type Assessment} from '@/vendor/edi/dist/core/index.js';
+import type {UI} from '@/lib/schema';
+export function Badge({assessment:a,t,large=false}:{assessment:Assessment;t:UI;large?:boolean}){return <span className={'edi-badge'+(large?' large':'')} style={{'--grade-color':levelColor(displayedLevel(a))} as React.CSSProperties} aria-label={(a.status==='assessed'?t.complete:a.status==='partial'?t.partial:t.unknown)+' '+levelLabel(a)}>{levelLabel(a)}{a.status!=='assessed'&&<span className="badge-status">{a.status==='partial'?t.partial:t.unknown}</span>}</span>}
