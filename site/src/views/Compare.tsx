@@ -9,7 +9,7 @@
 import type {ReactNode} from 'react';
 import {LIMITS} from '../config.ts';
 import type {Observation} from '../content/schema.ts';
-import {fmt, formatDate} from '../i18n/format.ts';
+import {fmt, formatDate, plural} from '../i18n/format.ts';
 import {Dated} from '../components/Dated.tsx';
 import {GradeBadge, ReviewNote, completenessLong} from '../components/Grade.tsx';
 import {CloseIcon} from '../components/Icons.tsx';
@@ -43,7 +43,7 @@ export const SUGGESTIONS: readonly (readonly string[])[] = [
 
 function reasonText(reason: Reason, env: PageEnv): string {
   const r = env.m.compare.reasons;
-  return reason.kind === 'dates' ? fmt(r.dates, {days: reason.days}) : r[reason.kind];
+  return reason.kind === 'dates' ? plural(reason.days, env.locale, r.dates) : r[reason.kind];
 }
 
 function ObservationLine({observation, env, metric = true}: {observation: Observation; env: PageEnv; metric?: boolean}) {
@@ -101,7 +101,7 @@ export function ComparePage({objects, unknown, truncated, view, env}: {objects: 
     {
       key: 'network',
       label: m.compare.fields.network,
-      cell: object => (object.networks.length ? object.networks.map(id => catalog.nameOf(id)).join(', ') : <None>{m.directory.networkUnrecorded}</None>),
+      cell: object => (object.networks.length ? object.networks.map(id => catalog.nameOf(id)).join(m.common.listSeparator) : <None>{m.directory.networkUnrecorded}</None>),
     },
     {
       key: 'mechanism',
@@ -185,7 +185,7 @@ export function ComparePage({objects, unknown, truncated, view, env}: {objects: 
         key: `group-${group.group}`,
         label: group.metric ?? m.compare.groupLabel,
         editorial: group.metric !== undefined,
-        note: group.comparable ? m.compare.comparable : fmt(m.compare.notComparable, {reasons: group.reasons.map(reason => reasonText(reason, env)).join('; ')}),
+        note: group.comparable ? m.compare.comparable : fmt(m.compare.notComparable, {reasons: group.reasons.map(reason => reasonText(reason, env)).join(m.compare.reasonSeparator)}),
         cell: (_object, column) => {
           const cell = group.cells[column];
           if (!cell.length) return <None>{m.compare.noObservations}</None>;
@@ -256,7 +256,7 @@ export function ComparePage({objects, unknown, truncated, view, env}: {objects: 
 
       {unknown.length ? (
         <p className="notice notice-warn" role="status">
-          {fmt(m.compare.unknownIds, {ids: unknown.join(', ')})}
+          {fmt(m.compare.unknownIds, {ids: unknown.join(m.common.listSeparator)})}
         </p>
       ) : null}
       {truncated ? (

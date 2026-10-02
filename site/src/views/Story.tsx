@@ -3,7 +3,7 @@
  * contributes, the control boundary, then the five sections, the connections
  * as a diagram and a list, the observations and the numbered sources.
  */
-import {fmt, formatDate} from '../i18n/format.ts';
+import {fmt, formatDate, plural} from '../i18n/format.ts';
 import {paths} from '../model/urls.ts';
 import {Blocks} from '../components/Markdown.tsx';
 import {ReviewNote} from '../components/Grade.tsx';
@@ -50,7 +50,7 @@ export function StoryPage({model, env}: {model: StoryModel; env: PageEnv}) {
         </p>
         <p className="story-meta">
           <span>{fmt(m.story.reviewed, {date: formatDate(data.reviewedAt, locale, 'long')})}</span>
-          <a href="#sources">{fmt(m.story.sourcesCount, {count: citations.size})}</a>
+          <a href="#sources">{plural(citations.size, locale, m.story.sourcesCount)}</a>
         </p>
       </header>
 

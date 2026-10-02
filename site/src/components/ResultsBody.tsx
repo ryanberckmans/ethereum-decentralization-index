@@ -78,6 +78,8 @@ export function Pager({result, ctx}: {result: Pick<DirectoryResult, 'page' | 'pa
 
 export function ResultsBody({result, ctx}: {result: DirectoryResult; ctx: BodyContext}) {
   const {m} = ctx;
+  /** Story titles and subject descriptions are English editorial text. */
+  const english = ctx.locale === 'en' ? undefined : 'en';
   return (
     <>
       {result.stories.length || result.subjects.length ? (
@@ -88,10 +90,12 @@ export function ResultsBody({result, ctx}: {result: DirectoryResult; ctx: BodyCo
               <ul className="mini-list">
                 {result.stories.map(({item, match}) => (
                   <li key={item.id}>
-                    <p className="mini-title">
+                    <p className="mini-title" lang={english}>
                       <a href={ctx.storyHref(item.slug)}>{item.title}</a>
                     </p>
-                    <p className="mini-line">{match.snippet && match.snippet.field !== 'title' ? <Highlighted snippet={match.snippet} /> : item.dek}</p>
+                    <p className="mini-line" lang={english}>
+                      {match.snippet && match.snippet.field !== 'title' ? <Highlighted snippet={match.snippet} /> : item.dek}
+                    </p>
                   </li>
                 ))}
               </ul>
@@ -107,9 +111,11 @@ export function ResultsBody({result, ctx}: {result: DirectoryResult; ctx: BodyCo
                       {item.name} <span className="not-assessed">{m.subjects.notAssessed}</span>
                     </p>
                     <p className="mini-line">
-                      {m.subjects[item.kind]}: {item.description}
-                      {item.outsideEthereum ? ` ${m.subjects.outsideEthereum}.` : ''}
+                      {m.subjects[item.kind]}
+                      {m.common.labelSeparator}
+                      <span lang={english}>{item.description}</span>
                     </p>
+                    {item.outsideEthereum ? <p className="mini-line obs-warn">{m.subjects.outsideEthereum}</p> : null}
                     {item.relatedId ? (
                       <p className="mini-line">{fmt(m.subjects.relatedRecord, {name: ctx.objectName(item.relatedId)})}</p>
                     ) : null}

@@ -5,7 +5,7 @@
  * featured objects at every D level. Neither certifies safety or success.
  */
 import type {CollectionId} from '../content/vocab.ts';
-import {fmt, formatDate} from '../i18n/format.ts';
+import {fmt, formatDate, plural} from '../i18n/format.ts';
 import {Dated} from '../components/Dated.tsx';
 import {GradeBadge, ReviewNote} from '../components/Grade.tsx';
 import {KINDS, type Kind} from '../model/view-types.ts';
@@ -52,7 +52,7 @@ function D0Listing({env}: {env: PageEnv}) {
           return (
             <>
               <p className="section-note">
-                {fmt(m.collections.d0ListedNote, {date: formatDate(on, locale)})} {fmt(m.collections.d0Count, {count: ids.length})}.
+                {fmt(m.collections.d0ListedNote, {date: formatDate(on, locale)})} {plural(ids.length, locale, m.collections.d0ListedCount)}
               </p>
               {KINDS.map(kind =>
                 byKind.get(kind)!.length ? (

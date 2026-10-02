@@ -13,6 +13,7 @@ import {Dated} from '../components/Dated.tsx';
 import {GradeBadge} from '../components/Grade.tsx';
 import {ExternalIcon} from '../components/Icons.tsx';
 import type {TokenContext} from '../components/Markdown.tsx';
+import {Template} from '../components/Template.tsx';
 import {paths} from '../model/urls.ts';
 import {chainName, datedTimeline, observationView} from '../model/views.ts';
 import type {DatedView, Segment} from '../model/view-types.ts';
@@ -30,6 +31,11 @@ export interface PageEnv {
 /** Editorial text is written in English; pages in other languages mark it as such. */
 export function contentLang(env: PageEnv): string | undefined {
   return env.locale === 'en' ? undefined : 'en';
+}
+
+/** Marks interface text that sits inside English editorial text with the page language. */
+function uiLang(env: PageEnv): string | undefined {
+  return env.locale === 'en' ? undefined : env.locale;
 }
 
 /** EDI's localized results for one record from the evaluation date on. */
@@ -70,17 +76,21 @@ export function SubjectInline({id, env}: {id: string; env: PageEnv}) {
   const subject = catalog.subjects.get(id);
   if (!subject) return <>{id}</>;
   return (
-    <span className="subject-tag" title={`${subject.description} ${env.m.subjects.notAssessed}.`}>
+    <span className="subject-tag" title={`${env.m.subjects.notAssessed}${env.m.common.labelSeparator}${subject.description}`}>
       {subject.name}
     </span>
   );
 }
 
-export function Cite({ids, citations, env}: {ids: readonly string[]; citations: Citations; env: PageEnv}) {
+/**
+ * Numbered links to the page's sources. In running text a citation is an
+ * inline target; elsewhere (`standalone`) each number gets a 24-pixel target.
+ */
+export function Cite({ids, citations, env, standalone = false}: {ids: readonly string[]; citations: Citations; env: PageEnv; standalone?: boolean}) {
   const numbers = [...new Set(ids.map(id => citations.number(id)).filter((n): n is number => n !== undefined))].sort((a, b) => a - b);
   if (!numbers.length) return null;
   return (
-    <sup className="cite">
+    <sup className={standalone ? 'cite cite-standalone' : 'cite'}>
       {numbers.map(n => (
         <a key={n} href={`#source-${n}`} aria-label={fmt(env.m.sources.sourceN, {n})}>
           [{n}]
@@ -103,24 +113,33 @@ export function EvidenceTag({state, env}: {state: EvidenceState; env: PageEnv}) 
  * link to their full entry, which carries the unit, scope and source.
  */
 export function tokenContext(env: PageEnv, citations: Citations, listed: ReadonlySet<string> = new Set()): TokenContext {
+  const lang = uiLang(env);
   return {
     render(token): ReactNode {
       switch (token.kind) {
         case 'object':
           return <ObjectLink id={token.id} env={env} />;
         case 'grade':
-          return <DatedGrade id={token.id} env={env} scope={token.scope} size="sm" />;
+          return (
+            <span lang={lang}>
+              <DatedGrade id={token.id} env={env} scope={token.scope} size="sm" />
+            </span>
+          );
         case 'subject':
           return <SubjectInline id={token.id} env={env} />;
         case 'claim':
-          return <Cite ids={[token.id]} citations={citations} env={env} />;
+          return (
+            <span lang={lang}>
+              <Cite ids={[token.id]} citations={citations} env={env} />
+            </span>
+          );
         case 'obs': {
           const observation = catalog.observations.get(token.id);
           if (!observation) return null;
           const view = observationView(observation, env.locale, env.m);
           const value = <strong className="obs-inline">{view.value}</strong>;
           return (
-            <>
+            <span lang={lang}>
               {listed.has(token.id) ? (
                 <a className="obs-link" href={`#obs-${token.id}`} title={view.exact}>
                   {value}
@@ -129,7 +148,7 @@ export function tokenContext(env: PageEnv, citations: Citations, listed: Readonl
                 value
               )}{' '}
               <span className="obs-when">({view.when})</span>
-            </>
+            </span>
           );
         }
       }
@@ -164,8 +183,8 @@ export function SubjectRef({id, env, badge = true}: {id: string; env: PageEnv; b
   );
 }
 
-function chainList(chainIds: readonly number[] | undefined): string | undefined {
-  return chainIds?.length ? chainIds.map(chainName).join(', ') : undefined;
+function chainList(chainIds: readonly number[] | undefined, m: Messages): string | undefined {
+  return chainIds?.length ? chainIds.map(chainName).join(m.common.listSeparator) : undefined;
 }
 
 export function ObservationItem({
@@ -180,6 +199,7 @@ export function ObservationItem({
   showSubject: boolean;
 }) {
   const {m} = env;
+  const lang = contentLang(env);
   const view = observationView(observation, env.locale, m);
   const derivation = observation.derivation;
   return (
@@ -191,7 +211,7 @@ export function ObservationItem({
             <span aria-hidden="true"> · </span>
           </>
         ) : null}
-        {view.metric}
+        <span lang={lang}>{view.metric}</span>
       </p>
       <p className="obs-value" title={view.exact}>
         {view.value}
@@ -203,15 +223,21 @@ export function ObservationItem({
         {view.multichain ? null : <span>{view.chains}</span>}
         <span>
           {m.observation.source}
-          <Cite ids={observation.sourceClaimIds} citations={citations} env={env} />
+          <Cite ids={observation.sourceClaimIds} citations={citations} env={env} standalone />
         </span>
       </p>
       {view.multichain ? <p className="obs-warn">{m.observation.multichain}</p> : null}
-      <p className="obs-scope">{view.scope}</p>
+      <p className="obs-scope" lang={lang}>
+        {view.scope}
+      </p>
       <details className="obs-more">
         <summary>{m.observation.definition}</summary>
-        <p>{view.definition}</p>
-        {derivation ? <p>{fmt(m.observation.derived, {method: derivation.method})}</p> : null}
+        <p lang={lang}>{view.definition}</p>
+        {derivation ? (
+          <p>
+            <Template text={m.observation.derived} values={{method: <span lang={lang}>{derivation.method}</span>}} />
+          </p>
+        ) : null}
       </details>
     </li>
   );
@@ -219,7 +245,7 @@ export function ObservationItem({
 
 export function ObservationList({observations, env, citations, showSubject}: {observations: readonly Observation[]; env: PageEnv; citations: Citations; showSubject: (o: Observation) => boolean}) {
   return (
-    <ol className="obs-list" lang={contentLang(env)}>
+    <ol className="obs-list">
       {observations.map(observation => (
         <ObservationItem key={observation.id} observation={observation} env={env} citations={citations} showSubject={showSubject(observation)} />
       ))}
@@ -249,7 +275,7 @@ export function RelationshipList({
     <ul className="relations">
       {relationships.map(relationship => {
         const other = perspective === relationship.from ? relationship.to : relationship.from;
-        const chains = chainList(relationship.chainIds);
+        const chains = chainList(relationship.chainIds, m);
         return (
           <li className="relation" key={relationship.id}>
             <p className="relation-line">
@@ -267,7 +293,7 @@ export function RelationshipList({
               {chains ? <span>{chains}</span> : null}
               {relationship.validFrom ? <span>{fmt(m.relationshipMeta.since, {date: formatDate(relationship.validFrom, env.locale)})}</span> : null}
               {relationship.validTo ? <span>{fmt(m.relationshipMeta.until, {date: formatDate(relationship.validTo, env.locale)})}</span> : null}
-              <Cite ids={relationship.sourceClaimIds} citations={citations} env={env} />
+              <Cite ids={relationship.sourceClaimIds} citations={citations} env={env} standalone />
             </p>
           </li>
         );
@@ -279,8 +305,9 @@ export function RelationshipList({
 /** Every source the page cites, numbered as cited. */
 export function SourcesList({citations, env}: {citations: Citations; env: PageEnv}) {
   const {m, locale} = env;
+  const lang = contentLang(env);
   return (
-    <ol className="sources" lang={contentLang(env)}>
+    <ol className="sources">
       {citations.ids.map((id, index) => {
         const claim = catalog.claims.get(id);
         if (!claim) return null;
@@ -291,25 +318,36 @@ export function SourcesList({citations, env}: {citations: Citations; env: PageEn
               {n}
             </span>
             <p className="source-statement">
-              <span className="sr-only">{fmt(m.sources.sourceN, {n})}: </span>
-              {claim.statement}
+              <span className="sr-only">
+                {fmt(m.sources.sourceN, {n})}
+                {m.common.labelSeparator}
+              </span>
+              <span lang={lang}>{claim.statement}</span>
             </p>
             <p className="source-meta">
               <EvidenceTag state={claim.state} env={env} />
               <a href={claim.sourceUrl} rel="noopener noreferrer" className="source-link">
-                {claim.title ?? claim.publisher}
+                <span lang={lang}>{claim.title ?? claim.publisher}</span>
                 <ExternalIcon />
                 <span className="sr-only"> ({m.common.external})</span>
               </a>
-              {claim.title ? <span>{claim.publisher}</span> : null}
+              {claim.title ? <span lang={lang}>{claim.publisher}</span> : null}
             </p>
             <p className="source-meta">
               {claim.sourcePublishedAt ? <span>{fmt(m.sources.published, {date: formatDate(claim.sourcePublishedAt, locale)})}</span> : null}
               {claim.observedAt ? <span>{fmt(m.sources.observed, {date: formatDate(claim.observedAt, locale)})}</span> : null}
               <span>{fmt(m.sources.retrieved, {date: formatDate(claim.retrievedAt, locale)})}</span>
-              {claim.locator ? <span>{fmt(m.sources.locator, {text: claim.locator})}</span> : null}
+              {claim.locator ? (
+                <span>
+                  <Template text={m.sources.locator} values={{text: <span lang={lang}>{claim.locator}</span>}} />
+                </span>
+              ) : null}
             </p>
-            {claim.qualification ? <p className="source-qual">{claim.qualification}</p> : null}
+            {claim.qualification ? (
+              <p className="source-qual" lang={lang}>
+                {claim.qualification}
+              </p>
+            ) : null}
           </li>
         );
       })}

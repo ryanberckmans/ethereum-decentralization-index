@@ -82,7 +82,7 @@ const ld = jsonLd ? JSON.stringify(jsonLd).replace(/</g, '\\u003c') : undefined;
     <meta property="og:image" content={socialImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content={`${PRODUCT.name}: ${m.meta.tagline}`} />
+    <meta property="og:image:alt" content={`${PRODUCT.name}${m.common.labelSeparator}${m.meta.tagline}`} />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="alternate" type="application/json" href={EXPORTS.directoryJson} title={m.data.items.directory[0]} />
@@ -163,7 +163,7 @@ const ld = jsonLd ? JSON.stringify(jsonLd).replace(/</g, '\\u003c') : undefined;
             <li><a href={paths.changes(locale)}>{m.nav.changes}</a></li>
             <li><a href={paths.data(locale)}>{m.nav.data}</a></li>
             <li><a href="/agents.md">{m.footer.agents}</a></li>
-            <li><a href={PRODUCT.repository} rel="noopener">{m.footer.source}</a></li>
+            <li><a href={PRODUCT.repository} rel="noopener noreferrer">{m.footer.source}</a></li>
           </ul>
         </div>
         <dl class="edition" aria-label={m.edition.label}>
@@ -182,7 +182,7 @@ const ld = jsonLd ? JSON.stringify(jsonLd).replace(/</g, '\\u003c') : undefined;
           <div>
             <dt>{m.edition.commit}</dt>
             <dd>
-              {commitUrl ? <a href={commitUrl} rel="noopener"><code>{shortCommit}</code></a> : <code>{shortCommit}</code>}
+              {commitUrl ? <a href={commitUrl} rel="noopener noreferrer"><code>{shortCommit}</code></a> : <code>{shortCommit}</code>}
               {edition.ediCommitDirty ? <span class="muted"> ({m.edition.commitDirty})</span> : null}
             </dd>
           </div>
