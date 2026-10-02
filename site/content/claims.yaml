@@ -1465,6 +1465,21 @@
     Each event is one swap in one exchange; a swap between two tokens passes through two exchanges and emits one of
     each. Events are not trades or traders.
 
+- id: onchain-uniswap-v2-swaps-2026-09
+  statement: >-
+    In September 2026 (Ethereum blocks 25,878,705 to 26,093,737), 26,390 pairs created by the Uniswap v2 factory
+    emitted 1,615,715 Swap events. Another 494,673 events with the same signature came from 2,996 contracts the factory
+    did not create, such as forks, and are not counted.
+  sourceUrl: https://github.com/ryanberckmans/ethereum-decentralization-index/blob/main/site/content/evidence/onchain.json
+  publisher: Ethereum mainnet, read by the directory
+  title: Onchain reads at pinned blocks
+  observedAt: 2026-09-30
+  retrievedAt: 2026-10-02
+  state: reproduced-observation
+  subjects: [uniswap-v2]
+  locator: read uniswap-v2-swaps-2026-09
+  qualification: A Swap event is one pool step; a routed trade through several pools emits several. Events are not trades or traders.
+
 - id: onchain-uniswap-v3-swaps-2026-09
   statement: >-
     In September 2026 (Ethereum blocks 25,878,705 to 26,093,737), 11,876 pools created by the Uniswap v3 factory
