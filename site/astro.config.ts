@@ -1,5 +1,6 @@
 import {createHash} from 'node:crypto';
 import {readFileSync} from 'node:fs';
+import {fileURLToPath} from 'node:url';
 import {defineConfig, fontProviders} from 'astro/config';
 import react from '@astrojs/react';
 import cloudflare from '@astrojs/cloudflare';
@@ -61,6 +62,8 @@ export default defineConfig({
   adapter: cloudflare({imageService: 'passthrough'}),
   integrations: [react()],
   build: {inlineStylesheets: 'never'},
+  // Markdown is rendered by src/content/markdown.ts; Astro's highlighter would need inline styles.
+  markdown: {syntaxHighlight: false},
   security: {
     checkOrigin: true,
     csp: {
@@ -76,6 +79,8 @@ export default defineConfig({
         "manifest-src 'self'",
         "worker-src 'none'",
         "frame-src 'none'",
+        // Pages are rendered on request, so the policy is a header and this directive applies.
+        "frame-ancestors 'none'",
       ],
       scriptDirective: {resources: ["'self'"], hashes: [themeInitHash]},
       styleDirective: {resources: ["'self'"]},
@@ -111,7 +116,11 @@ export default defineConfig({
   ],
   vite: {
     plugins: [editionPlugin()],
-    resolve: {dedupe: ['react', 'react-dom', 'radix-ui']},
+    resolve: {
+      dedupe: ['react', 'react-dom', 'radix-ui'],
+      // Dialog scroll locking without <style> elements, which the CSP blocks.
+      alias: {'react-style-singleton': fileURLToPath(new URL('./src/client/style-singleton.ts', import.meta.url))},
+    },
     define: {__THEME_INIT__: JSON.stringify(themeInit)},
   },
 });
