@@ -24,27 +24,33 @@
   },
   "1:25877808": {
    "hash": "0x4864a01970e7b4d48b1c125324c0ec238219905adf7dddb97e3cb7a15fbeccaa",
-   "timestamp": "2026-08-31T20:59:59Z"
+   "timestamp": "2026-08-31T20:59:59Z",
+   "note": "Last Ethereum block before 2026-08-31T21:00:00Z, 5:00 PM Eastern on 31 August 2026: the time of Paxos's monthly reports"
   },
   "1:12369621": {
    "hash": "0xf1156cb7e1a2acaa348c66fdc45b02f2547024ded63350a96a46ed12c62b4ff4",
-   "timestamp": "2021-05-04T19:27:00Z"
+   "timestamp": "2021-05-04T19:27:00Z",
+   "note": "Block in which the Uniswap v3 factory was deployed"
   },
   "8453:50715727": {
    "hash": "0x9a66afdb301d95758da1ff107c42beb72f41aaaf4f08d4d4480318edc5f96571",
-   "timestamp": "2026-09-01T00:00:01Z"
+   "timestamp": "2026-09-01T00:00:01Z",
+   "note": "First Base block of September 2026 (UTC)"
   },
   "1:8426430": {
    "hash": "0x9f6dbccf44a04d3f6f20d9a5008f9727c013343f6ee84cf629480bc16d71a28e",
-   "timestamp": "2019-08-26T14:36:20Z"
+   "timestamp": "2019-08-26T14:36:20Z",
+   "note": "Block in which the PAXG token contract was deployed"
   },
   "1:15921958": {
    "hash": "0x80a1bd09e6b1b88f5982bfb69786696e74bff27952e371be19ee057ba87ab284",
-   "timestamp": "2022-11-08T01:14:47Z"
+   "timestamp": "2022-11-08T01:14:47Z",
+   "note": "Block in which the PYUSD token contract was deployed"
   },
   "1:6082465": {
    "hash": "0xb2f6986457f5a24ff088a0beb5567c8c1fe2da02687c78e743507ee7c982b977",
-   "timestamp": "2018-08-03T19:28:24Z"
+   "timestamp": "2018-08-03T19:28:24Z",
+   "note": "Block in which the USDC token contract was deployed"
   }
  },
  "reads": [
@@ -1508,6 +1514,27 @@
     "raw": "8944788405981167225560721",
     "decimals": 18,
     "value": "8944788.405981167225560721"
+   }
+  },
+  {
+   "id": "morpho-blue-paxg-lent-2026-10-01",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "morpho.loanToken",
+    "address": "0xbbbbbbbbbb9cc5e90e3b3af64bdaf62c37eeffcb",
+    "deployBlock": 18883124,
+    "loanToken": "0x45804880de22913dafe09f4980848ece6ecbaf78",
+    "loanDecimals": 18
+   },
+   "note": "Morpho Blue markets on Ethereum that lend PAXG, with their supplied and borrowed totals at 1 October 2026. Any PAXG the contract holds beyond what these markets have supplied and not lent out is collateral.",
+   "result": {
+    "marketsCreated": 1800,
+    "loanTokenMarkets": 1,
+    "loanTokenMarketsWithBorrows": 0,
+    "totalSupplyAssets": "0.0019",
+    "totalBorrowAssets": "0",
+    "createMarketFingerprintSha256": "1387c97ef25ae28e8e7359d90241af952edd45d87d9de1c256156a2d79536755"
    }
   },
   {

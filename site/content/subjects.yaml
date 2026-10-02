@@ -102,9 +102,10 @@
   kind: product
   name: UniswapX
   description: >-
-    A Uniswap Labs trading system in which outside market makers fill orders that settle on chain. BUIDL trades through
-    its request-for-quote framework with whitelisted market makers.
-  officialUrl: https://uniswap.org
+    An open-source, auction-based swapping protocol from Uniswap Labs, in which outside market makers compete to fill
+    orders that settle on chain. Uniswap Labs and Securitize announced BUIDL trading through it with whitelisted market
+    makers.
+  officialUrl: https://developers.uniswap.org/docs/liquidity/uniswapx/overview
 
 - id: product:uniswap-permissioned-pools
   kind: product
