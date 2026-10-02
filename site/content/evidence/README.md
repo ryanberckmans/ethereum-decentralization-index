@@ -20,9 +20,11 @@ or `LOG_RPC_URL_1` to a node that allows it, for example `LOG_RPC_URL_1=https://
 
 ## How reads are pinned
 
-Stocks are read at the first block at or after 00:00:00 UTC on their date, so "1 October 2026" means Ethereum block
-26,093,738 and Base block 52,011,727. Flows cover whole UTC days: September 2026 is Ethereum blocks 25,878,705 to
-26,093,737 inclusive. The `blocks` map records each pinned block's hash and timestamp.
+A stock dated D is the state at 00:00 UTC on D: it is read at the last block before midnight, so "1 October 2026" means
+the state after Ethereum block 26,093,737 or Base block 52,011,726. A flow covers every block whose timestamp falls in
+its period: September 2026 is Ethereum blocks 25,878,705 to 26,093,737 inclusive. The two reconcile exactly: USDC's
+supply on 1 October minus its supply on 1 September equals September's mints minus its burns. The `blocks` map records
+the hash and timestamp of every block a read depends on.
 
 | Kind | What it reads |
 | --- | --- |
@@ -32,6 +34,7 @@ Stocks are read at the first block at or after 00:00:00 UTC on their date, so "1
 | `code.firstBlock` | The first block at which the address has code, by binary search |
 | `call` | One `eth_call`; `signature` names the function, `returns` how the result is decoded |
 | `seaport.orderFulfilled` | Every Seaport `OrderFulfilled` event in a block range, with counts for one token and one zone |
+| `fiattoken.events` | Every `Mint`, `Burn`, `Blacklisted` and `UnBlacklisted` event of a FiatToken contract such as USDC, with mints and burns split into named groups of minters |
 
 Results are exact: integers as decimal strings and token amounts with every digit. A Seaport read also records
 `logsFingerprintSha256`, the SHA-256 of every matched log written as `block:logIndex:txHash` lines in chain order, so a
@@ -51,6 +54,6 @@ reproduction can show it read exactly the same events.
 
 ## Adding a read
 
-Add an entry to `reads` with an `id`, `chainId`, `block` (the pinned block, or the block after a flow's range) and a
+Add an entry to `reads` with an `id`, `chainId`, `block` (the block read, or the last block of a range) and a
 `read`, then record it with `--only <id> --write`, which also pins any new block by hash. Cite the read from a claim in
 `../claims.yaml`. Never use `--write` to replace a recorded result that no longer matches; investigate the mismatch.
