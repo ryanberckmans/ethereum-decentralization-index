@@ -1,0 +1,6 @@
+# Example only.
+- id: org:uniswap-labs
+  kind: organization
+  name: Uniswap Labs
+  description: The company that developed the Uniswap protocol and operates an interface to it.
+  officialUrl: https://uniswap.org

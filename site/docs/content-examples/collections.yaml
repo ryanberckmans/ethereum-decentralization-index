@@ -1,0 +1,9 @@
+# Example only.
+- id: d0-in-use
+  title: D0 in use
+  dek: Mechanisms with no additional administrator over their reviewed rules, and what people build with them.
+  intro: >-
+    Every complete D0 mechanism in the current EDI edition is listed here, with stories about how they are used.
+    Listing is not a certification of safety or success.
+  entrance: {storyId: example-story, line: Uniswap v2 made exchange a reusable building block.}
+  storyIds: [example-story]
