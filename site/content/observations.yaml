@@ -21,7 +21,7 @@
   chainIds: [1]
   deploymentAddresses:
     - {chainId: 1, address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"}
-  scope: WETH9 on Ethereum mainnet at block 26,093,738 (00:00:11 UTC). WETH contracts on other chains are not included.
+  scope: WETH9 on Ethereum mainnet at 00:00 UTC, after block 26,093,737. WETH contracts on other chains are not included.
   sourceClaimIds: [onchain-weth9-2026-10-01, zellic-weth-verification]
   measure: stock
 
@@ -89,7 +89,7 @@
   chainIds: [1]
   deploymentAddresses:
     - {chainId: 1, address: "0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb"}
-  scope: The Morpho Blue contract on Ethereum mainnet at block 26,093,738. Morpho deployments on other chains are separate.
+  scope: The Morpho Blue contract on Ethereum mainnet at 00:00 UTC, after block 26,093,737. Morpho on other chains is separate.
   sourceClaimIds: [onchain-core-balances-2026-10-01]
   measure: stock
   comparisonGroup: weth9-held-by-cores-2026-10-01
@@ -104,7 +104,7 @@
   chainIds: [1]
   deploymentAddresses:
     - {chainId: 1, address: "0x000000000004444c5dc75cB358380D2e3dE08A90"}
-  scope: The canonical v4 PoolManager on Ethereum mainnet at block 26,093,738.
+  scope: The canonical v4 PoolManager on Ethereum mainnet at 00:00 UTC, after block 26,093,737.
   sourceClaimIds: [onchain-core-balances-2026-10-01]
   measure: stock
   comparisonGroup: weth9-held-by-cores-2026-10-01
@@ -121,7 +121,7 @@
   chainIds: [1]
   deploymentAddresses:
     - {chainId: 1, address: "0x000000000004444c5dc75cB358380D2e3dE08A90"}
-  scope: The canonical v4 PoolManager on Ethereum mainnet at block 26,093,738.
+  scope: The canonical v4 PoolManager on Ethereum mainnet at 00:00 UTC, after block 26,093,737.
   sourceClaimIds: [onchain-core-balances-2026-10-01]
   measure: stock
 
@@ -237,7 +237,7 @@
   chainIds: [1]
   deploymentAddresses:
     - {chainId: 1, address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"}
-  scope: USDC on Ethereum mainnet at block 26,093,738 (00:00:11 UTC). Includes USDC held by contracts and bridges.
+  scope: USDC on Ethereum mainnet at 00:00 UTC, after block 26,093,737. Includes USDC held by contracts and bridges.
   sourceClaimIds: [onchain-usdc-2026-10-01]
   measure: stock
   comparisonGroup: usdc-supply-by-chain-2026-10-01
@@ -252,7 +252,7 @@
   chainIds: [8453]
   deploymentAddresses:
     - {chainId: 8453, address: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"}
-  scope: Circle's USDC contract on Base at block 52,011,727 (00:00:01 UTC). A separate deployment from USDC on Ethereum.
+  scope: Circle's USDC contract on Base at 00:00 UTC, after block 52,011,726. A separate deployment from USDC on Ethereum.
   sourceClaimIds: [onchain-usdc-2026-10-01]
   measure: stock
   comparisonGroup: usdc-supply-by-chain-2026-10-01
@@ -269,7 +269,7 @@
   chainIds: [1]
   deploymentAddresses:
     - {chainId: 1, address: "0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb"}
-  scope: The Morpho Blue contract on Ethereum mainnet at block 26,093,738. Part of USDC's supply on Ethereum, not additional to it.
+  scope: The Morpho Blue contract on Ethereum mainnet at 00:00 UTC, after block 26,093,737. Part of USDC's supply on Ethereum, not additional to it.
   sourceClaimIds: [onchain-usdc-in-cores-2026-10-01]
   measure: stock
   comparisonGroup: usdc-held-by-cores-2026-10-01
@@ -284,10 +284,140 @@
   chainIds: [1]
   deploymentAddresses:
     - {chainId: 1, address: "0x000000000004444c5dc75cB358380D2e3dE08A90"}
-  scope: The canonical v4 PoolManager on Ethereum mainnet at block 26,093,738. Part of USDC's supply on Ethereum, not additional to it.
+  scope: The canonical v4 PoolManager on Ethereum mainnet at 00:00 UTC, after block 26,093,737. Part of USDC's supply on Ethereum, not additional to it.
   sourceClaimIds: [onchain-usdc-in-cores-2026-10-01]
   measure: stock
   comparisonGroup: usdc-held-by-cores-2026-10-01
+
+- id: usdc-supply-ethereum-2026-09-01
+  subjectId: usdc
+  metric: USDC supply on Ethereum
+  metricDefinition: The totalSupply() of the USDC contract on Ethereum mainnet, in USDC.
+  value: "50516268512.473003"
+  unit: USDC
+  asOf: 2026-09-01
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"}
+  scope: USDC on Ethereum mainnet at 00:00 UTC, after block 25,878,704. Includes USDC held by contracts and bridges.
+  sourceClaimIds: [onchain-usdc-mint-burn-2026-09]
+  measure: stock
+
+- id: usdc-minted-ethereum-2026-09
+  subjectId: usdc
+  metric: USDC minted on Ethereum
+  metricDefinition: >-
+    The sum of Mint events of the USDC contract on Ethereum: every unit created, whether issued by Circle's minters or
+    arriving from another chain.
+  value: "22747161584.52023"
+  unit: USDC
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"}
+  scope: USDC on Ethereum mainnet, blocks 25,878,705 to 26,093,737. Not net new money.
+  sourceClaimIds: [onchain-usdc-mint-burn-2026-09]
+  measure: flow
+  comparisonGroup: usdc-mint-burn-ethereum-2026-09
+
+- id: usdc-burned-ethereum-2026-09
+  subjectId: usdc
+  metric: USDC burned on Ethereum
+  metricDefinition: >-
+    The sum of Burn events of the USDC contract on Ethereum: every unit destroyed, whether redeemed through Circle's
+    minters or leaving for another chain.
+  value: "23967728958.862876"
+  unit: USDC
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"}
+  scope: USDC on Ethereum mainnet, blocks 25,878,705 to 26,093,737.
+  sourceClaimIds: [onchain-usdc-mint-burn-2026-09]
+  measure: flow
+  comparisonGroup: usdc-mint-burn-ethereum-2026-09
+
+- id: usdc-minted-crosschain-ethereum-2026-09
+  subjectId: usdc
+  metric: USDC minted on arrival from other chains
+  metricDefinition: >-
+    Mints on Ethereum by Circle's cross-chain contracts, CCTP's TokenMinter and TokenMinterV2 and Gateway's
+    GatewayMinter: USDC burned on another chain and recreated on Ethereum.
+  value: "6350590654.954893"
+  unit: USDC
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"}
+  scope: USDC on Ethereum mainnet, blocks 25,878,705 to 26,093,737. Part of all USDC minted on Ethereum in the month.
+  sourceClaimIds: [onchain-usdc-crosschain-2026-09, circle-cctp-addresses, circle-gateway-addresses]
+  measure: flow
+  comparisonGroup: usdc-mint-burn-ethereum-2026-09
+
+- id: usdc-burned-crosschain-ethereum-2026-09
+  subjectId: usdc
+  metric: USDC burned on departure to other chains
+  metricDefinition: >-
+    Burns on Ethereum by Circle's cross-chain contracts, CCTP's TokenMinter and TokenMinterV2 and Gateway's
+    GatewayWallet: USDC destroyed on Ethereum to be recreated on another chain.
+  value: "5820123472.229164"
+  unit: USDC
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"}
+  scope: USDC on Ethereum mainnet, blocks 25,878,705 to 26,093,737. Part of all USDC burned on Ethereum in the month.
+  sourceClaimIds: [onchain-usdc-crosschain-2026-09, circle-cctp-addresses, circle-gateway-addresses]
+  measure: flow
+  comparisonGroup: usdc-mint-burn-ethereum-2026-09
+
+- id: usdc-minted-by-circle-minters-ethereum-2026-09
+  subjectId: usdc
+  metric: USDC minted outside cross-chain contracts
+  metricDefinition: >-
+    Mints on Ethereum by every minter other than Circle's cross-chain contracts. Only minters that Circle authorizes can
+    mint. It counts issuance and every other mint by those minters, so it is not by itself new money.
+  value: "16396570929.565337"
+  unit: USDC
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"}
+  scope: USDC on Ethereum mainnet, blocks 25,878,705 to 26,093,737. Part of all USDC minted on Ethereum in the month.
+  sourceClaimIds: [onchain-usdc-crosschain-2026-09, circle-fiattoken-design]
+  measure: flow
+  comparisonGroup: usdc-mint-burn-ethereum-2026-09
+
+- id: usdc-burned-by-circle-minters-ethereum-2026-09
+  subjectId: usdc
+  metric: USDC burned outside cross-chain contracts
+  metricDefinition: >-
+    Burns on Ethereum by every minter other than Circle's cross-chain contracts; only minters can burn. It counts
+    redemptions and every other burn by those minters.
+  value: "18147605486.633712"
+  unit: USDC
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"}
+  scope: USDC on Ethereum mainnet, blocks 25,878,705 to 26,093,737. Part of all USDC burned on Ethereum in the month.
+  sourceClaimIds: [onchain-usdc-crosschain-2026-09, circle-fiattoken-design]
+  measure: flow
+  comparisonGroup: usdc-mint-burn-ethereum-2026-09
+
+- id: usdc-blocklistings-ethereum-2026-09
+  subjectId: usdc
+  metric: Addresses added to the USDC blocklist
+  metricDefinition: Blacklisted events emitted by the USDC contract on Ethereum, each recording one address added to Circle's blocklist.
+  value: "68"
+  unit: blocklisting events
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"}
+  scope: USDC on Ethereum mainnet, blocks 25,878,705 to 26,093,737. Two addresses were removed from the list in the same month.
+  sourceClaimIds: [onchain-usdc-blocklist-2026-09]
+  measure: count
 
 - id: usdc-circulation-2026-09-24
   subjectId: org:circle
