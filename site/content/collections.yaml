@@ -1,6 +1,6 @@
 # The two collections. d0-in-use lists every complete D0 mechanism from the
 # current EDI edition by itself; storyIds are the curated stories, in order.
-# global-economy is defined once its first story is published.
+# global-economy features objects across every D level (objectIds).
 
 - id: d0-in-use
   title: D0 in use
@@ -14,3 +14,19 @@
     storyId: weth-shared-infrastructure
     line: A contract from 2017 with no owner still turns ETH into the token behind nearly every NFT offer filled on Seaport 1.6.
   storyIds: [weth-shared-infrastructure]
+
+- id: global-economy
+  title: The global economy on Ethereum
+  dek: How dollars, funds, gold, payments and lending reach Ethereum, and what control comes with them.
+  intro: >-
+    These stories follow economic activity from outside Ethereum onto it: dollars issued by a company, fund shares,
+    gold claims, payments and loans offered through other products. The objects involved sit at every D level, and each
+    story names the authority that comes with them. Each also says which way the activity reaches Ethereum, whether
+    through distribution, settlement, asset mobility, collateral, liquidity or coordination, and how strong the
+    evidence is. Figures keep their own scope. A total across chains is never shown as Ethereum activity, and no grand
+    total of "the economy on Ethereum" is calculated.
+  entrance:
+    storyId: dollars-on-ethereum
+    line: Circle minted 22.7 billion USDC on Ethereum in September 2026, and Visa takes card settlement in it.
+  storyIds: [dollars-on-ethereum]
+  objectIds: [usdc]

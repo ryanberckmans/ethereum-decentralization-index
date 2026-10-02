@@ -91,7 +91,7 @@
 
 - id: onchain-weth9-2026-10-01
   statement: >-
-    At Ethereum block 26,093,738 (1 October 2026, 00:00:11 UTC) the WETH9 contract held 2,043,287.354 ETH, which is
+    At 00:00 UTC on 1 October 2026 (after Ethereum block 26,093,737) the WETH9 contract held 2,043,287.354 ETH, which is
     also what its totalSupply() returned. Its code first appears at block 4,719,568 (12 December 2017).
   sourceUrl: https://github.com/ryanberckmans/ethereum-decentralization-index/blob/main/site/content/evidence/onchain.json
   publisher: Ethereum mainnet, read by the directory
@@ -104,7 +104,7 @@
 
 - id: onchain-core-balances-2026-10-01
   statement: >-
-    At Ethereum block 26,093,738 (1 October 2026) the Morpho Blue contract held 11,710.535 WETH, and the Uniswap v4
+    At 00:00 UTC on 1 October 2026 (after Ethereum block 26,093,737) the Morpho Blue contract held 11,710.535 WETH, and the Uniswap v4
     PoolManager held 1,199.139 WETH and 45,812.472 native ETH.
   sourceUrl: https://github.com/ryanberckmans/ethereum-decentralization-index/blob/main/site/content/evidence/onchain.json
   publisher: Ethereum mainnet, read by the directory
@@ -136,7 +136,7 @@
 
 - id: onchain-opensea-conduit-2026-10-01
   statement: >-
-    At Ethereum block 26,093,738 (1 October 2026) Seaport's ConduitController reported that the OpenSea Conduit is
+    At 00:00 UTC on 1 October 2026 (after Ethereum block 26,093,737) Seaport's ConduitController reported that the OpenSea Conduit is
     owned by a ConduitCaptain contract and lets three contracts move tokens approved to it: Seaport 1.6, Seaport 1.5
     and Seaport's TransferHelper. The ConduitCaptain's owner was a Safe multisig that needs 5 of its 7 signers to act.
   sourceUrl: https://github.com/ryanberckmans/ethereum-decentralization-index/blob/main/site/content/evidence/onchain.json
@@ -370,8 +370,8 @@
 
 - id: onchain-usdc-2026-10-01
   statement: >-
-    At Ethereum block 26,093,738 (1 October 2026) the USDC contract on Ethereum reported a total supply of
-    49,295,701,138.13 USDC. At Base block 52,011,727 (1 October 2026) Circle's USDC contract on Base reported
+    At 00:00 UTC on 1 October 2026 the USDC contract on Ethereum reported a total supply of 49,295,701,138.13 USDC
+    (after block 26,093,737), and Circle's USDC contract on Base reported
     4,319,085,272.01 USDC.
   sourceUrl: https://github.com/ryanberckmans/ethereum-decentralization-index/blob/main/site/content/evidence/onchain.json
   publisher: Ethereum and Base, read by the directory
@@ -385,7 +385,7 @@
 
 - id: onchain-usdc-in-cores-2026-10-01
   statement: >-
-    At Ethereum block 26,093,738 (1 October 2026) the Morpho Blue contract held 112,033,376.30 USDC and the Uniswap v4
+    At 00:00 UTC on 1 October 2026 (after Ethereum block 26,093,737) the Morpho Blue contract held 112,033,376.30 USDC and the Uniswap v4
     PoolManager held 55,608,414.89 USDC.
   sourceUrl: https://github.com/ryanberckmans/ethereum-decentralization-index/blob/main/site/content/evidence/onchain.json
   publisher: Ethereum mainnet, read by the directory
@@ -397,12 +397,95 @@
   locator: reads usdc-held-by-morpho-blue-2026-10-01 and usdc-held-by-uniswap-v4-2026-10-01
   qualification: Contract balances. A lending contract's balance is what is supplied and not lent out, not total deposits.
 
+- id: onchain-usdc-mint-burn-2026-09
+  statement: >-
+    In September 2026 the USDC contract on Ethereum recorded 113,055 mints totalling 22,747,161,584.52 USDC and 81,136
+    burns totalling 23,967,728,958.86 USDC. The difference matches, to the last unit, the fall in total supply from
+    50,516,268,512.47 USDC on 1 September to 49,295,701,138.13 USDC on 1 October.
+  sourceUrl: https://github.com/ryanberckmans/ethereum-decentralization-index/blob/main/site/content/evidence/onchain.json
+  publisher: Ethereum mainnet, read by the directory
+  title: Onchain reads at pinned blocks
+  observedAt: 2026-09-30
+  retrievedAt: 2026-10-02
+  state: reproduced-observation
+  subjects: [usdc, org:circle]
+  locator: reads usdc-issuer-events-ethereum-2026-09, usdc-total-supply-ethereum-2026-09-01 and usdc-total-supply-ethereum-2026-10-01
+  qualification: Mints and burns are not new money or redemptions by themselves; they include USDC moved between chains.
+
+- id: onchain-usdc-crosschain-2026-09
+  statement: >-
+    Of those September 2026 mints and burns, Circle's cross-chain contracts on Ethereum (CCTP and Gateway) minted
+    6,350,590,654.95 USDC arriving from other chains and burned 5,820,123,472.23 USDC leaving for them. Circle's other
+    minters minted 16,396,570,929.57 USDC and burned 18,147,605,486.63 USDC.
+  sourceUrl: https://github.com/ryanberckmans/ethereum-decentralization-index/blob/main/site/content/evidence/onchain.json
+  publisher: Ethereum mainnet, read by the directory
+  title: Onchain reads at pinned blocks
+  observedAt: 2026-09-30
+  retrievedAt: 2026-10-02
+  state: reproduced-observation
+  subjects: [usdc, org:circle]
+  locator: read usdc-issuer-events-ethereum-2026-09, groups crossChain and other
+  qualification: The other minters' figures are not split further, and neither they nor the cross-chain figures are by themselves new money or redemptions.
+
+- id: onchain-usdc-blocklist-2026-09
+  statement: >-
+    In September 2026 the USDC contract on Ethereum emitted 68 Blacklisted events, each adding an address to the
+    blocklist, and 2 UnBlacklisted events.
+  sourceUrl: https://github.com/ryanberckmans/ethereum-decentralization-index/blob/main/site/content/evidence/onchain.json
+  publisher: Ethereum mainnet, read by the directory
+  title: Onchain reads at pinned blocks
+  observedAt: 2026-09-30
+  retrievedAt: 2026-10-02
+  state: reproduced-observation
+  subjects: [usdc, org:circle]
+  locator: read usdc-issuer-events-ethereum-2026-09, blacklistedEvents and unBlacklistedEvents
+  qualification: Events, not distinct addresses; an address blocked twice counts twice.
+
+- id: circle-cctp-overview
+  statement: >-
+    Circle describes its Cross-Chain Transfer Protocol (CCTP) as a permissionless onchain utility that moves USDC between
+    blockchains by burning it on the source chain and minting it on the destination, without bridge liquidity pools.
+  sourceUrl: https://developers.circle.com/cctp
+  publisher: Circle
+  title: Cross-Chain Transfer Protocol
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [usdc, org:circle]
+  locator: '"CCTP natively transfers USDC across blockchains using burn-and-mint"'
+
+- id: circle-cctp-addresses
+  statement: >-
+    Circle's CCTP documentation lists TokenMinterV2 on Ethereum at 0xfd78EE919681417d192449715b2594ab58f5D002 and, for
+    CCTP V1, TokenMinter on Ethereum at 0xc4922d64a24675E16e1586e3e3Aa56C06fABe907.
+  sourceUrl: https://developers.circle.com/cctp/references/contract-addresses
+  publisher: Circle
+  title: CCTP contract addresses
+  retrievedAt: 2026-10-02
+  state: capability
+  subjects: [usdc, org:circle]
+  locator: 'TokenMinterV2, row "Ethereum"; the V1 address is at developers.circle.com/cctp/v1/evm-smart-contracts, "TokenMinter: Mainnet"'
+
+- id: circle-gateway-addresses
+  statement: >-
+    Circle's Gateway documentation describes a unified USDC balance: USDC deposited into Gateway Wallet contracts on one
+    chain can be minted on another. It lists GatewayWallet on Ethereum at 0x77777777Dcc4d5A8B6E418Fd04D8997ef11000eE
+    and GatewayMinter at 0x2222222d7164433c4C09B0b0D809a9b52C04C205.
+  sourceUrl: https://developers.circle.com/gateway/references/contract-addresses
+  publisher: Circle
+  title: Gateway contract addresses
+  retrievedAt: 2026-10-02
+  state: capability
+  subjects: [usdc, org:circle]
+  locator: 'Mainnet contract addresses, GatewayWallet and GatewayMinter, row "Ethereum"'
+
 # Visa settlement -------------------------------------------------------------------
 
 - id: visa-usdc-pilot-2021
   statement: >-
-    In March 2021 Visa announced that it had settled a transaction in USDC over Ethereum, in a pilot that let Crypto.com
-    send USDC to Visa to settle a portion of its obligations for the Crypto.com Visa card program.
+    In March 2021 Visa announced that it had settled a transaction in USDC over Ethereum, in a pilot run with Anchorage,
+    its digital currency settlement partner, that let Crypto.com send USDC to Visa to settle a portion of its
+    obligations for the Crypto.com Visa card program. Visa's standard process required partners to settle in a
+    traditional fiat currency.
   sourceUrl: https://usa.visa.com/about-visa/newsroom/press-releases.releaseId.17821.html
   publisher: Visa
   title: Visa Becomes First Major Payments Network to Settle Transactions in USD Coin (USDC)
@@ -442,6 +525,20 @@
   subjects: [product:visa-stablecoin-settlement, org:visa, usdc, network:solana]
   locator: '"which have started settling with Visa in USDC over the Solana blockchain"'
   qualification: The run rate covers all of Visa's stablecoin settlement across chains; it is not an Ethereum figure.
+
+- id: visa-usdc-settlement-benefits
+  statement: >-
+    Visa says USDC settlement gives card issuers faster funds movement over blockchains, seven-day availability and
+    resilience across weekends and holidays, without any change to the cardholder's experience.
+  sourceUrl: https://corporate.visa.com/en/sites/visa-perspectives/newsroom/visa-launches-stablecoin-settlement-in-the-united-states.html
+  publisher: Visa
+  title: Visa Launches Stablecoin Settlement in the United States
+  sourcePublishedAt: 2025-12-16
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [product:visa-stablecoin-settlement, usdc]
+  locator: '"settle seven days a week instead of the traditional five-business day window"'
+  qualification: Visa's description of its USDC settlement program in general; the US launch it announces runs over Solana.
 
 - id: visa-nine-chains-2026
   statement: >-
