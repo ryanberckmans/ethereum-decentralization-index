@@ -101,10 +101,18 @@ export default function DirectoryApp(props: DirectoryAppProps) {
 
   // ---------------------------------------------------------------- index
 
+  /**
+   * @cc [label:security] bounded-external-work
+   * The directory's only network request after page load: the active
+   * locale's compact index, from the same origin, fetched once per page,
+   * shared by concurrent callers, abandoned after 15 seconds and rejected
+   * unless it has the expected version. There are no third-party calls on
+   * the visitor path (the CSP's connect-src is 'self').
+   */
   const ensureIndex = useCallback((): Promise<void> => {
     if (indexRef.current) return Promise.resolve();
     if (loading.current) return loading.current;
-    loading.current = fetch(props.indexUrl, {credentials: 'same-origin'})
+    loading.current = fetch(props.indexUrl, {credentials: 'same-origin', signal: AbortSignal.timeout(15_000)})
       .then(response => {
         if (!response.ok) throw new Error(`Index request failed: ${response.status}`);
         return response.json() as Promise<DirectoryIndex>;

@@ -4,6 +4,13 @@
  * AND their unit, kind of quantity, time basis, chain scope and rate period
  * all match. Otherwise each number is shown on its own with the reasons.
  * Nothing is summed, averaged or scored.
+ *
+ * @cc [label:product] metric-comparability-and-accounting
+ * Observations are only placed side by side when an editor grouped them and
+ * their unit, stock or flow measure, time basis, chain scope and rate period
+ * match. A multichain total is never shown as an Ethereum figure. The site
+ * never sums, averages, ranks or computes growth from observations, and
+ * grades are never combined into a score.
  */
 import type {Observation} from '../content/schema.ts';
 import {daysBetween} from './dates.ts';
