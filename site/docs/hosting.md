@@ -17,12 +17,14 @@ output is `site/dist/`.
   the links in exports and agent files are absolute. Without it they are
   relative to whichever host serves the files, social cards have no image,
   and no sitemaps are built (they must be absolute).
-- The build evaluates EDI for its own UTC date. Pages stay right without a
-  rebuild: they carry every later EDI result and switch to it in the browser
-  on the day it applies. The exports and agent files state the date they
-  were evaluated for and list later results under `scheduled`. Rebuild when
-  EDI or the content changes, and after a review date passes if the exports
-  should be evaluated for a later date.
+- The build evaluates EDI for its own UTC date. Pages carry every later EDI
+  result and switch to it in the browser on the day it applies, so readers
+  with scripts see the right result without a rebuild. Readers without
+  scripts, and crawlers that read the HTML, see the build date's results,
+  and the exports and agent files state the date they were evaluated for
+  and list later results under `scheduled`. Rebuild when EDI or the content
+  changes, and on each date in `changeDates` (in `/data/v1/edition.json`)
+  for those readers and files to move on too.
 
 ## What the host must do
 
@@ -41,9 +43,9 @@ output is `site/dist/`.
 
 The bare root `/` picks the reader's language in the browser (a choice made
 on the site, then the browser's languages) and lists the languages without
-scripts. A host that can redirect by `Accept-Language` may send `/` to
-`/<locale>/` itself with the same rules (`src/model/routing.ts`), as a 302
-with `Vary: Accept-Language`.
+scripts. Leave `/` to that page rather than redirecting it by
+`Accept-Language`: a host cannot see the language a reader chose on the
+site, which only the browser keeps, and would override it.
 
 ## Headers worth adding
 
@@ -54,6 +56,8 @@ headers should add these:
 | Header | On | Why |
 | --- | --- | --- |
 | `Content-Security-Policy: frame-ancestors 'none'` and `X-Frame-Options: DENY` | HTML | Browsers ignore `frame-ancestors` in a `<meta>` policy; this keeps other sites from framing the pages |
+| `Cross-Origin-Opener-Policy: same-origin` | HTML | Pages opened from other sites cannot reach back into these pages' windows |
+| `Permissions-Policy: accelerometer=(), browsing-topics=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()` | HTML | The pages use none of these features, so nothing can ask for them |
 | `X-Content-Type-Options: nosniff` | everything | Files are used only as their declared type |
 | `Strict-Transport-Security: max-age=31536000` | everything, over HTTPS | Browsers keep to HTTPS |
 | `Access-Control-Allow-Origin: *` | `/data/` | Other sites' scripts can read the exports |

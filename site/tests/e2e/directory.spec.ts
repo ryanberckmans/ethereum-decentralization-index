@@ -38,6 +38,38 @@ test('what a reader types, ticks or chooses while scripts load is kept', async (
   await expect(page.locator('input[name="kind"][value="protocol"]')).toBeChecked();
 });
 
+test('a box ticked while scripts load adds to the filters the link already had', async ({page}) => {
+  let release = () => {};
+  const held = new Promise<void>(resolve => (release = resolve));
+  await page.route(/\/_astro\/.+\.js$/, async route => {
+    await held;
+    await route.continue();
+  });
+  await page.goto('/en/?kind=protocol', {waitUntil: 'commit'});
+  // The built page shows no filters, so the link's own box is not ticked yet.
+  await page.locator('input[name="kind"][value="asset"]').check();
+  release();
+  await expect(page).toHaveURL(/\?kind=asset,protocol$/);
+  await expect(page.locator('input[name="kind"][value="protocol"]')).toBeChecked();
+  await expect(page.locator('input[name="kind"][value="asset"]')).toBeChecked();
+});
+
+test('record names that are also JavaScript built-ins break nothing', async ({page}) => {
+  const errors: string[] = [];
+  page.on('pageerror', error => errors.push(error.message));
+  for (const name of ['constructor', '__proto__', 'toString']) {
+    await page.goto(`/en/?compare=${name}`);
+    await page.locator('#directory-q').fill('uniswap');
+    await expect(page.locator('li.row[data-id="uniswap-v4"]')).toBeVisible();
+    await expect(page.locator('li.row[data-id="usdc"]')).toHaveCount(0);
+  }
+  const response = await page.goto('/en/collections/constructor/');
+  expect(response?.status()).toBe(404);
+  await expect(page).toHaveURL(/\/en\/collections\/constructor\/$/);
+  await expect(page.locator('h1')).toContainText('Not in the directory');
+  expect(errors).toEqual([]);
+});
+
 test('without scripts the directory lists every record, and says search needs them', async ({browser}) => {
   const context = await browser.newContext({javaScriptEnabled: false});
   const page = await context.newPage();
@@ -180,6 +212,10 @@ test('Compare USDC and a D0 core: both legible, no overall score', async ({page}
 
 test('compare links are canonical, and unknown names are reported rather than guessed', async ({page}) => {
   await page.goto('/en/compare/?ids=weth9,usdc,Circle');
+  await expect(page.getByText(/Not EDI records, so left out: Circle/)).toBeVisible();
+  // The link keeps what it asked for, so a reload still says what was left out.
+  await expect(page).toHaveURL(/\?ids=weth9,usdc,Circle$/);
+  await page.reload();
   await expect(page.getByText(/Not EDI records, so left out: Circle/)).toBeVisible();
   await page.goto('/en/compare/?ids=weth9&ids=usdc');
   await expect(page).toHaveURL(/\/en\/compare\/\?ids=weth9,usdc$/);

@@ -41,6 +41,8 @@ import {paths} from '../model/urls.ts';
 import {D_LEVELS, KINDS, type DirectoryIndex, type DLevel} from '../model/view-types.ts';
 import {CloseIcon, FilterIcon, SearchIcon} from '../components/Icons.tsx';
 import {ResultsBody, type BodyContext, type ResultsMessages} from '../components/ResultsBody.tsx';
+import {Fallback} from './fallback.tsx';
+import {useReturnPlace} from './use-return-place.ts';
 import {useUtcDate} from './use-utc-date.ts';
 
 export type DirectoryAppMessages = ResultsMessages & Pick<Messages, 'edition'>;
@@ -73,33 +75,52 @@ function changedBetween(changeDates: readonly string[], from: string, to: string
   return changeDates.some(date => date > from && date <= to);
 }
 
-/** Query fields set by the form's controls, besides the search text. */
-const FORM_FIELDS = ['role', 'kind', 'network', 'grade', 'atleast', 'review', 'story', 'sort'] as const;
+/** Query fields set by one control each, besides the search text. */
+const FORM_FIELDS = ['atleast', 'story', 'sort'] as const;
+/** Filters whose boxes each add or remove one value. */
+const TOGGLED_FIELDS = ['role', 'kind', 'network', 'grade', 'review'] as const;
 
 /**
  * The query with what the reader changed in the form before the island
  * hydrated, or null if nothing changed. A control has changed when it no
- * longer shows what the built page rendered.
+ * longer shows what the built page rendered. The built page shows no
+ * filters, so a box ticked then adds its value to the address's own.
  */
 function changedBeforeHydration(form: HTMLFormElement, query: DirectoryQuery, validators: QueryValidators): DirectoryQuery | null {
   const changed = new Set<string>();
+  const boxes: HTMLInputElement[] = [];
   for (const element of Array.from(form.elements)) {
     if (element instanceof HTMLSelectElement) {
       const rendered = Math.max(0, Array.from(element.options).findIndex(option => option.defaultSelected));
       if (element.selectedIndex !== rendered) changed.add(element.name);
     } else if (element instanceof HTMLInputElement) {
-      if (element.type === 'checkbox' ? element.checked !== element.defaultChecked : element.value !== element.defaultValue) changed.add(element.name);
+      const box = element.type === 'checkbox';
+      if (box ? element.checked !== element.defaultChecked : element.value !== element.defaultValue) {
+        changed.add(element.name);
+        if (box) boxes.push(element);
+      }
     }
   }
   if (!changed.size) return null;
+  const parse = (params: URLSearchParams) => parseDirectoryQuery(params, validators).query;
   const params = new URLSearchParams();
   new FormData(form).forEach((value, key) => params.append(key, String(value)));
-  const fromForm = parseDirectoryQuery(params, validators).query;
+  const fromForm = parse(params);
   const next: DirectoryQuery = {...query, page: 1};
   const take = <K extends (typeof FORM_FIELDS)[number]>(key: K) => {
     next[key] = fromForm[key];
   };
   for (const key of FORM_FIELDS) if (changed.has(key)) take(key);
+  const toggle = <K extends (typeof TOGGLED_FIELDS)[number]>(key: K, box: HTMLInputElement) => {
+    const [value] = parse(new URLSearchParams([[key, box.value]]))[key] as readonly unknown[];
+    const list = next[key] as readonly unknown[];
+    if (value === undefined) return;
+    next[key] = (box.checked ? (list.includes(value) ? list : [...list, value]) : list.filter(item => item !== value)) as DirectoryQuery[K];
+  };
+  for (const box of boxes) {
+    const key = TOGGLED_FIELDS.find(name => name === box.name);
+    if (key) toggle(key, box);
+  }
   // The text as typed, as onQueryInput keeps it, so a space just typed stays.
   const text = form.elements.namedItem('q');
   if (changed.has('q') && text instanceof HTMLInputElement) next.q = text.value.trim() ? text.value.slice(0, LIMITS.query) : '';
@@ -107,6 +128,14 @@ function changedBeforeHydration(form: HTMLFormElement, query: DirectoryQuery, va
 }
 
 export default function DirectoryApp(props: DirectoryAppProps) {
+  return (
+    <Fallback built={<div className="directory">{props.children}</div>}>
+      <Directory {...props} />
+    </Fallback>
+  );
+}
+
+function Directory(props: DirectoryAppProps) {
   const {locale, m} = props;
   const home = paths.home(locale);
   const [query, setQuery] = useState<DirectoryQuery>(EMPTY_QUERY);
@@ -253,6 +282,8 @@ export default function DirectoryApp(props: DirectoryAppProps) {
         toggleRef.current?.focus();
         return;
       }
+      // An address write still waiting for typing to pause would overwrite the entry Back just opened.
+      window.clearTimeout(replaceTimer.current);
       const {query: next, invalid: unknown} = parseDirectoryQuery(new URLSearchParams(location.search), validators);
       if (sameQuery(next, queryRef.current)) return;
       typing.current = false;
@@ -300,26 +331,29 @@ export default function DirectoryApp(props: DirectoryAppProps) {
     }
   }, [live, query]);
 
-  // Back from an object page returns focus to the row that was opened.
+  /** Back from an object page returns focus to the row that was opened. */
+  const focusReturnRow = useCallback(() => {
+    try {
+      const saved = JSON.parse(sessionStorage.getItem(RETURN_KEY) ?? 'null') as {path: string; id: string} | null;
+      if (!saved || saved.path !== `${location.pathname}${location.search}`) return;
+      const row = [...document.querySelectorAll<HTMLElement>('.row[data-id]')].find(element => element.dataset.id === saved.id);
+      row?.querySelector<HTMLAnchorElement>('.row-name a')?.focus({preventScroll: true});
+    } catch {
+      // Storage can be unavailable; restoring focus is a convenience.
+    }
+  }, []);
+
+  // A page the browser kept whole still shows its rows and its place.
   useEffect(() => {
-    const restore = () => {
-      try {
-        const saved = JSON.parse(sessionStorage.getItem(RETURN_KEY) ?? 'null') as {path: string; id: string} | null;
-        if (!saved || saved.path !== `${location.pathname}${location.search}`) return;
-        const row = [...document.querySelectorAll<HTMLElement>('.row[data-id]')].find(element => element.dataset.id === saved.id);
-        row?.querySelector<HTMLAnchorElement>('.row-name a')?.focus({preventScroll: true});
-      } catch {
-        // Storage can be unavailable; restoring focus is a convenience.
-      }
-    };
-    const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined;
-    if (navigation?.type === 'back_forward') restore();
     const onShow = (event: PageTransitionEvent) => {
-      if (event.persisted) restore();
+      if (event.persisted) focusReturnRow();
     };
     window.addEventListener('pageshow', onShow);
     return () => window.removeEventListener('pageshow', onShow);
-  }, []);
+  }, [focusReturnRow]);
+
+  // A page loaded afresh gets its place and focus back once its results are drawn.
+  useReturnPlace(mounted && (!taken || live !== null || indexFailed), focusReturnRow);
 
   // A polite, debounced announcement of the result count for screen readers.
   useEffect(() => {
@@ -402,14 +436,28 @@ export default function DirectoryApp(props: DirectoryAppProps) {
     event?.preventDefault();
     setField({role: [], kind: [], network: [], grade: [], atleast: null, review: [], story: false});
   };
+  /** The record whose compare button had focus when its row was redrawn. */
+  const refocusCompare = useRef<string | null>(null);
   const toggleCompare = async (id: string) => {
     await ensureIndex();
-    const current = queryRef.current.compare;
-    const next = current.includes(id) ? current.filter(item => item !== id) : current.length < LIMITS.compare ? [...current, id] : current;
     historyMode.current = 'replace';
-    setQuery({...queryRef.current, compare: next});
+    // From the latest query, so two toggles made while the index loads both count.
+    setQuery(current => {
+      const list = current.compare;
+      const compare = list.includes(id) ? list.filter(item => item !== id) : list.length < LIMITS.compare ? [...list, id] : list;
+      return {...current, compare};
+    });
     setTaken(true);
+    refocusCompare.current = id;
   };
+  // The first toggle replaces the built rows with computed ones, which would drop focus to the page.
+  useEffect(() => {
+    const id = refocusCompare.current;
+    if (!id || !live) return;
+    refocusCompare.current = null;
+    if (document.activeElement && document.activeElement !== document.body) return;
+    [...document.querySelectorAll<HTMLElement>('[data-compare]')].find(element => element.dataset.compare === id)?.focus({preventScroll: true});
+  });
   const clearCompare = () => {
     historyMode.current = 'replace';
     setQuery({...queryRef.current, compare: []});
@@ -451,7 +499,7 @@ export default function DirectoryApp(props: DirectoryAppProps) {
   // ---------------------------------------------------------------- render
 
   const networkNames = useMemo(() => Object.fromEntries(props.networks.map(network => [network.id, network.name])), [props.networks]);
-  const names = useMemo<Record<string, string>>(() => (index ? Object.fromEntries(index.raw.entries.map(entry => [entry.id, entry.name])) : {}), [index]);
+  const names = useMemo(() => new Map(index ? index.raw.entries.map(entry => [entry.id, entry.name] as const) : []), [index]);
   const ctx: BodyContext = {
     locale,
     m,
@@ -461,7 +509,7 @@ export default function DirectoryApp(props: DirectoryAppProps) {
     storyHref: slug => paths.story(locale, slug),
     pageHref: page => urlFor({...query, page}),
     clearHref: urlFor({...EMPTY_QUERY, compare: query.compare}),
-    objectName: id => names[id] ?? id,
+    objectName: id => names.get(id) ?? id,
     compare: query.compare,
     compareMax: LIMITS.compare,
   };
@@ -479,7 +527,10 @@ export default function DirectoryApp(props: DirectoryAppProps) {
         href={urlFor(next)}
         onClick={event => {
           event.preventDefault();
+          const item = event.currentTarget.closest('li');
+          const neighbour = (item?.nextElementSibling ?? item?.previousElementSibling)?.querySelector<HTMLElement>('a, button');
           update(next, 'push');
+          (neighbour ?? document.getElementById('results-title'))?.focus({preventScroll: true});
         }}
       >
         {label} <CloseIcon width={14} height={14} />
@@ -744,7 +795,7 @@ export default function DirectoryApp(props: DirectoryAppProps) {
                 <strong>{fmt(m.directory.compareTray, {count: query.compare.length, max: LIMITS.compare})}</strong>
                 {m.common.labelSeparator}
                 {andList(
-                  query.compare.map(id => names[id] ?? id),
+                  query.compare.map(id => names.get(id) ?? id),
                   locale,
                 )}
               </p>

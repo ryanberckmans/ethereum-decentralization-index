@@ -94,6 +94,14 @@ test('a language switch keeps the search', async ({page}) => {
   await expect(page.locator('#directory-q')).toHaveValue('usdc');
 });
 
+test('a language link carries the search before it is clicked, for new tabs and copied links', async ({page}) => {
+  await page.goto('/en/?q=usdc');
+  await expect(page.locator('#directory-q')).toHaveValue('usdc');
+  await page.locator('.menu-lang > summary').click();
+  await page.locator('.menu-lang a[data-lang="fr"]').focus();
+  await expect(page.locator('.menu-lang a[data-lang="fr"]')).toHaveAttribute('href', /\/fr\/\?q=usdc$/);
+});
+
 test('without scripts the bare root lists every language', async ({browser}) => {
   const context = await browser.newContext({javaScriptEnabled: false});
   const page = await context.newPage();
