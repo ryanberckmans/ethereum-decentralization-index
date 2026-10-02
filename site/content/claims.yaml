@@ -1,0 +1,460 @@
+# Source claims: what one source supports, stated narrowly, with its evidence
+# state. `locator` quotes or names the passage. `retrievedAt` is when an editor
+# read the source; `sourcePublishedAt` and `observedAt` come from the source.
+#
+# Onchain claims (state reproduced-observation) cite evidence/onchain.json,
+# which records each read's chain, pinned block and result. Re-run them with
+# evidence/onchain.mjs against any archive node.
+
+# Wrapped ETH -------------------------------------------------------------------
+
+- id: ethereum-org-why-weth
+  statement: >-
+    ethereum.org explains that ETH predates the ERC-20 token standard, so applications built for ERC-20 tokens cannot use
+    native ETH directly. The WETH contract accepts any amount of ETH and mints the same amount of WETH, and redeems WETH
+    for the same amount of ETH.
+  sourceUrl: https://ethereum.org/wrapped-eth/
+  publisher: ethereum.org
+  title: What is Wrapped Ether (WETH)
+  retrievedAt: 2026-10-02
+  state: capability
+  subjects: [weth9, native-eth]
+  locator: '"Since ETH predates the ERC-20 standard, ETH doesn''t conform to this specification."'
+
+- id: ethereum-org-weth-variants
+  statement: >-
+    ethereum.org warns that besides the canonical WETH contract on Ethereum there are other WETH variants, including
+    versions on other blockchains, which may behave differently or have different security properties. It lists
+    separate WETH addresses for Arbitrum and Optimism.
+  sourceUrl: https://ethereum.org/wrapped-eth/
+  publisher: ethereum.org
+  title: What is Wrapped Ether (WETH)
+  retrievedAt: 2026-10-02
+  state: capability
+  subjects: [weth9]
+  locator: 'FAQ, "Why am I seeing different WETH tokens?"'
+
+- id: sourcify-weth9-source
+  statement: >-
+    Sourcify holds a verified source match for the WETH9 contract at 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2 on
+    Ethereum, deployed in block 4,719,568. Its deposit function credits the sender's balance, withdraw returns ETH, and
+    totalSupply returns the contract's own ETH balance. The source defines no owner, administrator or pause function.
+  sourceUrl: https://repo.sourcify.dev/1/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2
+  publisher: Sourcify
+  title: WETH9 verified source on Ethereum Mainnet
+  retrievedAt: 2026-10-02
+  state: capability
+  subjects: [weth9, native-eth]
+  locator: 'WETH9.sol, function totalSupply(): "return this.balance;"'
+
+- id: base-weth9-address
+  statement: >-
+    Base's documentation lists WETH9 on Base Mainnet at 0x4200000000000000000000000000000000000006, a different address
+    on a different network from WETH9 on Ethereum.
+  sourceUrl: https://docs.base.org/specifications/reference/base-contracts
+  publisher: Base
+  title: Base contracts
+  retrievedAt: 2026-10-02
+  state: capability
+  subjects: [deployment:weth-base, weth9, base]
+  locator: 'L2 Contract Addresses, Base Mainnet: "WETH9 | 0x4200000000000000000000000000000000000006"'
+
+- id: zellic-weth-verification
+  statement: >-
+    Zellic formally verified two properties of WETH9 with the Z3 theorem prover: a depositor can always withdraw their
+    ETH whatever other users do, and totalSupply is always at least the number of WETH tokens in existence. It can be
+    higher because ETH sent by SELFDESTRUCT or as a block reward raises the balance without minting WETH.
+  sourceUrl: https://www.zellic.io/blog/formal-verification-weth/
+  publisher: Zellic
+  title: Formally Verifying the World's Most Popular Smart Contract
+  sourcePublishedAt: 2022-11-18
+  retrievedAt: 2026-10-02
+  state: capability
+  subjects: [weth9]
+  locator: Conclusion
+  qualification: A formal model of the contract's own rules, not an audit of every application that uses WETH.
+
+- id: zellic-weth-usage-2022
+  statement: >-
+    Zellic counted WETH9 in over 125 million Ethereum transactions by November 2022, which it put at over 7% of all
+    Ethereum transactions to that date.
+  sourceUrl: https://www.zellic.io/blog/formal-verification-weth/
+  publisher: Zellic
+  title: Formally Verifying the World's Most Popular Smart Contract
+  sourcePublishedAt: 2022-11-18
+  observedAt: 2022-11-18
+  retrievedAt: 2026-10-02
+  state: reported-adoption
+  subjects: [weth9]
+  locator: 'Background: "WETH has been involved in over 125 million transactions"'
+  qualification: A third-party count from 2022, not reproduced here. Transactions are not people or trades.
+
+- id: onchain-weth9-2026-10-01
+  statement: >-
+    At Ethereum block 26,093,738 (1 October 2026, 00:00:11 UTC) the WETH9 contract held 2,043,287.354 ETH, which is
+    also what its totalSupply() returned. Its code first appears at block 4,719,568 (12 December 2017).
+  sourceUrl: https://github.com/ryanberckmans/ethereum-decentralization-index/blob/main/site/content/evidence/onchain.json
+  publisher: Ethereum mainnet, read by the directory
+  title: Onchain reads at pinned blocks
+  observedAt: 2026-10-01
+  retrievedAt: 2026-10-02
+  state: reproduced-observation
+  subjects: [weth9, native-eth]
+  locator: reads weth9-total-supply-2026-10-01, weth9-eth-balance-2026-10-01 and weth9-first-code-block
+
+- id: onchain-core-balances-2026-10-01
+  statement: >-
+    At Ethereum block 26,093,738 (1 October 2026) the Morpho Blue contract held 11,710.535 WETH, and the Uniswap v4
+    PoolManager held 1,199.139 WETH and 45,812.472 native ETH.
+  sourceUrl: https://github.com/ryanberckmans/ethereum-decentralization-index/blob/main/site/content/evidence/onchain.json
+  publisher: Ethereum mainnet, read by the directory
+  title: Onchain reads at pinned blocks
+  observedAt: 2026-10-01
+  retrievedAt: 2026-10-02
+  state: reproduced-observation
+  subjects: [weth9, native-eth, morpho-blue, uniswap-v4]
+  locator: reads weth9-held-by-morpho-blue-2026-10-01, weth9-held-by-uniswap-v4-2026-10-01 and eth-held-by-uniswap-v4-2026-10-01
+  qualification: Contract balances, not deposits or liquidity attributable to particular users or markets.
+
+- id: onchain-seaport16-2026-09
+  statement: >-
+    In September 2026 (Ethereum blocks 25,878,705 to 26,093,737) the Seaport 1.6 contract emitted 402,200 OrderFulfilled
+    events. In 146,067 of them the order's maker spent WETH9, 7,484.610 WETH in total; 146,032 of those bought an
+    ERC-721 or ERC-1155 item, out of 146,151 fills in which any ERC-20 token was offered for one, and 145,629 named
+    OpenSea's signed zone. Of all 402,200 fills, 230,063 named that zone.
+  sourceUrl: https://github.com/ryanberckmans/ethereum-decentralization-index/blob/main/site/content/evidence/onchain.json
+  publisher: Ethereum mainnet, read by the directory
+  title: Onchain reads at pinned blocks
+  observedAt: 2026-09-30
+  retrievedAt: 2026-10-02
+  state: reproduced-observation
+  subjects: [seaport-v1.6, weth9, product:opensea-marketplace]
+  locator: read seaport16-fills-2026-09
+  qualification: >-
+    Counts order fills on the contract from every interface. A matched trade emits one event per order, so fills are
+    not trades, buyers or people.
+
+- id: onchain-opensea-conduit-2026-10-01
+  statement: >-
+    At Ethereum block 26,093,738 (1 October 2026) Seaport's ConduitController reported that the OpenSea Conduit is
+    owned by a ConduitCaptain contract and lets three contracts move tokens approved to it: Seaport 1.6, Seaport 1.5
+    and Seaport's TransferHelper. The ConduitCaptain's owner was a Safe multisig that needs 5 of its 7 signers to act.
+  sourceUrl: https://github.com/ryanberckmans/ethereum-decentralization-index/blob/main/site/content/evidence/onchain.json
+  publisher: Ethereum mainnet, read by the directory
+  title: Onchain reads at pinned blocks
+  observedAt: 2026-10-01
+  retrievedAt: 2026-10-02
+  state: reproduced-observation
+  subjects: [product:opensea-marketplace, seaport-v1.6]
+  locator: reads opensea-conduit-owner-2026-10-01 to conduit-captain-owner-signers-2026-10-01
+  qualification: No fetched source names the people behind the Safe; that OpenSea controls it is an inference from its role.
+
+# OpenSea and Seaport ---------------------------------------------------------------
+
+- id: opensea-weth-offers
+  statement: OpenSea's developer documentation states that offers on OpenSea require WETH, and its SDK provides helpers to wrap ETH into WETH and unwrap it.
+  sourceUrl: https://docs.opensea.io/docs/collection-offers-and-advanced-trading
+  publisher: OpenSea
+  title: Collection offers and advanced trading
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [weth9, product:opensea-marketplace]
+  locator: '"Offers on OpenSea require WETH (Wrapped ETH)."'
+
+- id: opensea-seaport-1-6-orders
+  statement: >-
+    OpenSea's developer documentation states that new OpenSea orders use Seaport 1.6 at
+    0x0000000000000068F116a894984e2DB1123eB395, while older orders may remain on Seaport 1.5.
+  sourceUrl: https://docs.opensea.io/docs/collection-offers-and-advanced-trading
+  publisher: OpenSea
+  title: Collection offers and advanced trading
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [seaport-v1.6, product:opensea-marketplace]
+  locator: '"New OpenSea orders use Seaport 1.6"'
+
+- id: opensea-collection-offers
+  statement: >-
+    OpenSea documents collection offers that apply to any NFT in a collection and are filled by the first holder who
+    accepts. Collection offers use the Seaport protocol.
+  sourceUrl: https://docs.opensea.io/docs/collection-offers-and-advanced-trading
+  publisher: OpenSea
+  title: Collection offers and advanced trading
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [product:opensea-marketplace, seaport-v1.6]
+  locator: '"A collection offer applies to any NFT in a collection. The first holder to accept it fulfills the order."'
+
+- id: opensea-offer-leverage
+  statement: >-
+    OpenSea lets the total of a buyer's outstanding WETH offers reach 1,000 times their WETH balance, for both item and
+    collection offers: with 1 WETH, a buyer can bid up to 1,000 WETH across open offers.
+  sourceUrl: https://docs.opensea.io/docs/offer-leverage
+  publisher: OpenSea
+  title: Offer leverage
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [product:opensea-marketplace, weth9]
+  locator: '"With 1 WETH balance, you can bid up to 1000 WETH."'
+
+- id: opensea-offchain-cancellation
+  statement: >-
+    OpenSea documents that cancelling an order off-chain stops OpenSea from issuing new fulfillment signatures for it
+    and relies on OpenSea's order book, while an on-chain cancellation is permanent and costs gas.
+  sourceUrl: https://docs.opensea.io/docs/collection-offers-and-advanced-trading
+  publisher: OpenSea
+  title: Collection offers and advanced trading
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [product:opensea-marketplace, seaport-v1.6]
+  locator: 'Canceling orders: "Off-chain (gas-free) cancellation"'
+
+- id: opensea-signed-zone-1-6
+  statement: >-
+    OpenSea's changelog of 25 March 2024 announced its move to Seaport 1.6 and told developers that orders using the
+    OpenSea Signed Zone must use the zone at 0x000056f7000000ece9003ca63978907a00ffd100 for Seaport 1.6. OpenSea's SDK
+    lists the same address as its signed zone.
+  sourceUrl: https://docs.opensea.io/changelog/seaport-v1-6
+  publisher: OpenSea
+  title: Now Accepting Seaport v1.6 Orders
+  sourcePublishedAt: 2024-03-25
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [product:opensea-marketplace, seaport-v1.6]
+  locator: '"for v1.6 you will have to use the updated zone at 0x000056f7000000ece9003ca63978907a00ffd100"'
+
+- id: opensea-signed-zone-source
+  statement: >-
+    The verified source of the zone at 0x000056F7000000EcE9003ca63978907a00FFD100 is a SignedZone contract that requires
+    each order it guards to be signed by a signer its controller has approved, under Seaport improvement proposal SIP-7.
+  sourceUrl: https://eth.blockscout.com/address/0x000056F7000000EcE9003ca63978907a00FFD100?tab=contract
+  publisher: Blockscout
+  title: SignedZone verified contract on Ethereum
+  retrievedAt: 2026-10-02
+  state: capability
+  subjects: [product:opensea-marketplace, seaport-v1.6]
+  locator: '"SignedZone is an implementation of SIP-7 that requires orders to be signed by an approved signer."'
+
+- id: opensea-sdk-conduit
+  statement: >-
+    OpenSea's SDK names 0x1e0049783f008a0085193e00003d00cd54003c71 as the OpenSea Conduit and describes a conduit as the
+    address that pulls tokens on Seaport's behalf, which a buyer approves for an ERC-20-priced purchase.
+  sourceUrl: https://github.com/ProjectOpenSea/opensea-js/blob/main/src/constants.ts
+  publisher: OpenSea
+  title: opensea-js constants
+  retrievedAt: 2026-10-02
+  state: capability
+  subjects: [product:opensea-marketplace, seaport-v1.6]
+  locator: OPENSEA_CONDUIT_ADDRESS and the comment above CONDUIT_CONTROLLER_ADDRESS
+
+- id: conduit-captain-source
+  statement: >-
+    The verified ConduitCaptain source lets only its owner open or close channels on the conduits it owns, and warns
+    that a malicious or vulnerable channel can transfer any ERC-20, ERC-721 or ERC-1155 token whose holder approved the
+    conduit.
+  sourceUrl: https://eth.blockscout.com/address/0x0000000000d132a69d773c838080dc4fa478388f?tab=contract
+  publisher: Blockscout
+  title: ConduitCaptain verified contract on Ethereum
+  retrievedAt: 2026-10-02
+  state: capability
+  subjects: [product:opensea-marketplace, seaport-v1.6]
+  locator: 'updateChannel: "Extreme care must be taken when updating channels"'
+
+- id: opensea-seaport-weth-example
+  statement: >-
+    OpenSea's Seaport overview illustrates a 1 WETH offer whose offer item points to the WETH contract at
+    0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2, the same address EDI records for WETH9. Seaport then makes sure both
+    sides receive the items they expect.
+  sourceUrl: https://docs.opensea.io/docs/seaport
+  publisher: OpenSea
+  title: Seaport
+  retrievedAt: 2026-10-02
+  state: capability
+  subjects: [weth9, seaport-v1.6]
+  locator: 'How does it work? "Offer Example"'
+
+# USDC ---------------------------------------------------------------------------
+
+- id: circle-usdc-terms
+  statement: >-
+    Circle's USDC Terms state that USDC is issued by Circle Internet Financial, LLC, that it is fully backed by
+    US dollar-denominated assets held in segregated accounts, and that Circle commits to redeem 1 USDC for 1 US dollar,
+    subject to the Terms, applicable law and any fees.
+  sourceUrl: https://www.circle.com/legal/usdc-terms
+  publisher: Circle
+  title: USDC Terms
+  sourcePublishedAt: 2025-12-12
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [usdc, org:circle, ref:us-dollar]
+  locator: '"USDC is a digital token issued by Circle Internet Financial, LLC"'
+  qualification: These Terms apply to holders outside the European Economic Area.
+
+- id: circle-usdc-redemption-access
+  statement: >-
+    Under Circle's USDC Terms, only holders with a Circle Mint account in good standing can redeem USDC directly with
+    Circle; anyone who receives USDC acquires that right only if they are eligible for and register such an account.
+  sourceUrl: https://www.circle.com/legal/usdc-terms
+  publisher: Circle
+  title: USDC Terms
+  sourcePublishedAt: 2025-12-12
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [usdc, org:circle]
+  locator: '"Only Users Type A can redeem USDC directly with Circle."'
+
+- id: circle-usdc-blocklisting
+  statement: >-
+    Circle's USDC Terms reserve Circle's right to block the transfer of USDC to and from an address on chain under its
+    blocklisting policy and, for addresses Circle custodies, to freeze the associated USDC.
+  sourceUrl: https://www.circle.com/legal/usdc-terms
+  publisher: Circle
+  title: USDC Terms
+  sourcePublishedAt: 2025-12-12
+  retrievedAt: 2026-10-02
+  state: capability
+  subjects: [usdc, org:circle]
+  locator: 'Blocklisting: "Circle reserves the right to block the transfer of USDC to and from an address on chain"'
+
+- id: circle-usdc-open-integration
+  statement: >-
+    Circle's USDC Risk Factors state that USDC runs on the Ethereum blockchain using open source software, so third
+    parties can support USDC on their platforms without authorization or approval from Circle or anyone else.
+  sourceUrl: https://www.circle.com/legal/usdc-risk-factors
+  publisher: Circle
+  title: USDC Risk Factors
+  sourcePublishedAt: 2023-10-27
+  retrievedAt: 2026-10-02
+  state: capability
+  subjects: [usdc, ethereum]
+  locator: '"third parties can elect to support USDC on their platforms without any authorization or approval by Circle or anyone else"'
+
+- id: circle-fiattoken-design
+  statement: >-
+    Circle's FiatToken design document describes the contract behind USDC: Circle controls the addresses of all roles,
+    which can mint and burn, pause all transfers, block individual addresses and upgrade the contract's logic through
+    its proxy.
+  sourceUrl: https://github.com/circlefin/stablecoin-evm/blob/master/doc/tokendesign.md
+  publisher: Circle
+  title: Circle's FiatToken Design
+  retrievedAt: 2026-10-02
+  state: capability
+  subjects: [usdc, org:circle]
+  locator: '"Circle will control the address of all roles."'
+
+- id: circle-usdc-addresses
+  statement: >-
+    Circle's developer documentation lists USDC at 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48 on Ethereum and at
+    0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913 on Base, as separate contracts.
+  sourceUrl: https://developers.circle.com/stablecoins/usdc-contract-addresses
+  publisher: Circle
+  title: USDC contract addresses
+  retrievedAt: 2026-10-02
+  state: capability
+  subjects: [usdc, deployment:usdc-base]
+  locator: Mainnet table, rows "Ethereum" and "Base"
+
+- id: circle-transparency-2026-09
+  statement: >-
+    Circle's transparency page reported 75.24 billion USDC in circulation as of 24 September 2026, with 341.74 billion
+    USDC issued and 340.51 billion redeemed over the preceding 365 days.
+  sourceUrl: https://www.circle.com/transparency
+  publisher: Circle
+  title: Transparency & Stability
+  observedAt: 2026-09-24
+  retrievedAt: 2026-10-02
+  state: reported-adoption
+  subjects: [org:circle, usdc]
+  locator: 'Reserves composition, "As of Sep 24, 2026": Balances and 365 Day Change'
+  qualification: Totals across every chain where Circle issues USDC; the page does not split them by chain.
+
+- id: onchain-usdc-2026-10-01
+  statement: >-
+    At Ethereum block 26,093,738 (1 October 2026) the USDC contract on Ethereum reported a total supply of
+    49,295,701,138.13 USDC. At Base block 52,011,727 (1 October 2026) Circle's USDC contract on Base reported
+    4,319,085,272.01 USDC.
+  sourceUrl: https://github.com/ryanberckmans/ethereum-decentralization-index/blob/main/site/content/evidence/onchain.json
+  publisher: Ethereum and Base, read by the directory
+  title: Onchain reads at pinned blocks
+  observedAt: 2026-10-01
+  retrievedAt: 2026-10-02
+  state: reproduced-observation
+  subjects: [usdc, deployment:usdc-base]
+  locator: reads usdc-total-supply-ethereum-2026-10-01 and usdc-total-supply-base-2026-10-01
+  qualification: Token supply on each chain, not dollars held by people or payments made.
+
+- id: onchain-usdc-in-cores-2026-10-01
+  statement: >-
+    At Ethereum block 26,093,738 (1 October 2026) the Morpho Blue contract held 112,033,376.30 USDC and the Uniswap v4
+    PoolManager held 55,608,414.89 USDC.
+  sourceUrl: https://github.com/ryanberckmans/ethereum-decentralization-index/blob/main/site/content/evidence/onchain.json
+  publisher: Ethereum mainnet, read by the directory
+  title: Onchain reads at pinned blocks
+  observedAt: 2026-10-01
+  retrievedAt: 2026-10-02
+  state: reproduced-observation
+  subjects: [usdc, morpho-blue, uniswap-v4]
+  locator: reads usdc-held-by-morpho-blue-2026-10-01 and usdc-held-by-uniswap-v4-2026-10-01
+  qualification: Contract balances. A lending contract's balance is what is supplied and not lent out, not total deposits.
+
+# Visa settlement -------------------------------------------------------------------
+
+- id: visa-usdc-pilot-2021
+  statement: >-
+    In March 2021 Visa announced that it had settled a transaction in USDC over Ethereum, in a pilot that let Crypto.com
+    send USDC to Visa to settle a portion of its obligations for the Crypto.com Visa card program.
+  sourceUrl: https://usa.visa.com/about-visa/newsroom/press-releases.releaseId.17821.html
+  publisher: Visa
+  title: Visa Becomes First Major Payments Network to Settle Transactions in USD Coin (USDC)
+  sourcePublishedAt: 2021-03-29
+  retrievedAt: 2026-10-02
+  state: pilot
+  subjects: [usdc, ethereum, org:visa, org:crypto-com]
+  locator: '"to settle a transaction with Visa over Ethereum"'
+
+- id: visa-usdc-ethereum-settlement-2023
+  statement: >-
+    In September 2023 Visa reported that Crypto.com uses USDC to fulfil its settlement obligations on its Visa card
+    program in Australia. Settling cross-border purchases had required a days-long currency conversion and international
+    wires; Crypto.com can now send USDC over Ethereum directly to a Visa treasury-managed Circle account instead.
+  sourceUrl: https://usa.visa.com/about-visa/newsroom/press-releases.releaseId.19881.html
+  publisher: Visa
+  title: Visa Expands Stablecoin Settlement Capabilities to Merchant Acquirers
+  sourcePublishedAt: 2023-09-05
+  retrievedAt: 2026-10-02
+  state: reported-adoption
+  subjects: [usdc, ethereum, org:visa, org:crypto-com, product:visa-stablecoin-settlement]
+  locator: '"Crypto.com now uses USDC to fulfill its settlement obligations on the Visa card in Australia"'
+  qualification: The same release adds Solana for other partners; it gives no amount for the Ethereum route.
+
+- id: visa-us-settlement-2025
+  statement: >-
+    In December 2025 Visa launched USDC settlement for US issuers and acquirers. Its first banking participants settle
+    over Solana. Visa reported that its monthly stablecoin settlement volume passed a 3.5 billion dollar annualized run
+    rate as of 30 November 2025.
+  sourceUrl: https://corporate.visa.com/en/sites/visa-perspectives/newsroom/visa-launches-stablecoin-settlement-in-the-united-states.html
+  publisher: Visa
+  title: Visa Launches Stablecoin Settlement in the United States
+  sourcePublishedAt: 2025-12-16
+  observedAt: 2025-11-30
+  retrievedAt: 2026-10-02
+  state: reported-adoption
+  subjects: [product:visa-stablecoin-settlement, org:visa, usdc, network:solana]
+  locator: '"which have started settling with Visa in USDC over the Solana blockchain"'
+  qualification: The run rate covers all of Visa's stablecoin settlement across chains; it is not an Ethereum figure.
+
+- id: visa-nine-chains-2026
+  statement: >-
+    In April 2026 Visa reported that its stablecoin settlement pilot supports nine blockchains, adding Arc, Base,
+    Canton, Polygon and Tempo to Avalanche, Ethereum, Solana and Stellar, and had reached a 7 billion dollar annualized
+    settlement run rate.
+  sourceUrl: https://investor.visa.com/news/news-details/2026/Visa-Accelerates-Stablecoin-Momentum-Adding-Five-Blockchains-for-Settlement/
+  publisher: Visa
+  title: 'Visa Accelerates Stablecoin Momentum: Adding Five Blockchains for Settlement'
+  sourcePublishedAt: 2026-04-29
+  observedAt: 2026-04-29
+  retrievedAt: 2026-10-02
+  state: reported-adoption
+  subjects: [product:visa-stablecoin-settlement, org:visa, ethereum, base]
+  locator: '"has reached a $7 billion annualized stablecoin settlement run rate"'
+  qualification: Run rate across nine blockchains and all supported stablecoins. Visa gives no Ethereum-only figure.

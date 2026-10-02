@@ -1,0 +1,363 @@
+# Dated numbers. Stocks need asOf, flows need an interval, rates need a
+# ratePeriod. A value is an exact decimal string; a number a source does not
+# give is left out, never written as zero. Observations are compared only within
+# one comparisonGroup with the same unit and time basis, and never summed.
+#
+# Onchain observations are reproduced from evidence/onchain.json (see README.md):
+# stocks are read at the first block of the date in UTC; flows cover whole UTC
+# days, here September 2026.
+
+# Wrapped ETH -------------------------------------------------------------------
+
+- id: weth9-eth-held-2026-10-01
+  subjectId: weth9
+  metric: ETH held by WETH9
+  metricDefinition: >-
+    The canonical WETH9 contract's ETH balance, which is what its totalSupply() reports. It can slightly exceed the
+    WETH held in accounts, because ETH can reach the contract without a deposit.
+  value: "2043287.354335834139572865"
+  unit: ETH
+  asOf: 2026-10-01
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"}
+  scope: WETH9 on Ethereum mainnet at block 26,093,738 (00:00:11 UTC). WETH contracts on other chains are not included.
+  sourceClaimIds: [onchain-weth9-2026-10-01, zellic-weth-verification]
+  measure: stock
+
+- id: weth9-seaport16-offer-fills-2026-09
+  subjectId: weth9
+  metric: Seaport 1.6 fills paid from WETH offers
+  metricDefinition: >-
+    OrderFulfilled events from the Seaport 1.6 contract in which the order's maker spent WETH9, as when a WETH offer is
+    accepted. One event per order filled; a matched trade emits one event for each of its orders.
+  value: "146067"
+  unit: order fills
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x0000000000000068F116a894984e2DB1123eB395"}
+    - {chainId: 1, address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"}
+  scope: Seaport 1.6 on Ethereum mainnet, blocks 25,878,705 to 26,093,737, through any interface.
+  sourceClaimIds: [onchain-seaport16-2026-09]
+  measure: count
+
+- id: weth9-seaport16-offer-volume-2026-09
+  subjectId: weth9
+  metric: WETH spent through Seaport 1.6 offers
+  metricDefinition: >-
+    The sum of WETH9 that makers spent in those fills. It is the gross amount offered, including any marketplace and
+    creator fees paid out of it.
+  value: "7484.6104238068629866"
+  unit: WETH
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x0000000000000068F116a894984e2DB1123eB395"}
+    - {chainId: 1, address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"}
+  scope: Seaport 1.6 on Ethereum mainnet, blocks 25,878,705 to 26,093,737, through any interface.
+  sourceClaimIds: [onchain-seaport16-2026-09]
+  measure: flow
+
+- id: weth9-seaport16-nft-offer-fills-2026-09
+  subjectId: weth9
+  metric: Seaport 1.6 NFT offers filled in WETH
+  metricDefinition: >-
+    OrderFulfilled events from the Seaport 1.6 contract in which the maker offered WETH9 and received an ERC-721 or
+    ERC-1155 item, as when an offer to buy an NFT is accepted. One event per order filled.
+  value: "146032"
+  unit: order fills
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x0000000000000068F116a894984e2DB1123eB395"}
+    - {chainId: 1, address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"}
+  scope: Seaport 1.6 on Ethereum mainnet, blocks 25,878,705 to 26,093,737, through any interface.
+  sourceClaimIds: [onchain-seaport16-2026-09]
+  measure: count
+  comparisonGroup: seaport16-nft-offer-fills-2026-09
+
+- id: weth9-held-by-morpho-blue-2026-10-01
+  subjectId: weth9
+  metric: WETH held by Morpho Blue
+  metricDefinition: >-
+    The WETH9 balance of the Morpho Blue contract: collateral posted in WETH plus WETH supplied and not lent out,
+    across all of its markets.
+  value: "11710.535277367334849177"
+  unit: WETH
+  asOf: 2026-10-01
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb"}
+  scope: The Morpho Blue contract on Ethereum mainnet at block 26,093,738. Morpho deployments on other chains are separate.
+  sourceClaimIds: [onchain-core-balances-2026-10-01]
+  measure: stock
+  comparisonGroup: weth9-held-by-cores-2026-10-01
+
+- id: weth9-held-by-uniswap-v4-2026-10-01
+  subjectId: weth9
+  metric: WETH held by the Uniswap v4 PoolManager
+  metricDefinition: The WETH9 balance of the Uniswap v4 PoolManager, which holds the tokens of every v4 pool on Ethereum.
+  value: "1199.138763604872448663"
+  unit: WETH
+  asOf: 2026-10-01
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x000000000004444c5dc75cB358380D2e3dE08A90"}
+  scope: The canonical v4 PoolManager on Ethereum mainnet at block 26,093,738.
+  sourceClaimIds: [onchain-core-balances-2026-10-01]
+  measure: stock
+  comparisonGroup: weth9-held-by-cores-2026-10-01
+
+- id: eth-held-by-uniswap-v4-2026-10-01
+  subjectId: uniswap-v4
+  metric: Native ETH held by the PoolManager
+  metricDefinition: >-
+    The native ETH balance of the Uniswap v4 PoolManager. Version 4 pools can pair native ETH directly, without
+    wrapping it.
+  value: "45812.471755964899333322"
+  unit: ETH
+  asOf: 2026-10-01
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x000000000004444c5dc75cB358380D2e3dE08A90"}
+  scope: The canonical v4 PoolManager on Ethereum mainnet at block 26,093,738.
+  sourceClaimIds: [onchain-core-balances-2026-10-01]
+  measure: stock
+
+- id: weth9-transactions-2022
+  subjectId: weth9
+  metric: Transactions involving WETH
+  metricDefinition: Ethereum transactions that involved the WETH9 contract since its deployment, as counted by Zellic.
+  value: "125000000"
+  comparator: more-than
+  unit: transactions
+  asOf: 2022-11-18
+  chainIds: [1]
+  scope: WETH9 on Ethereum mainnet from December 2017 to November 2022; a third-party count, not reproduced here.
+  sourceClaimIds: [zellic-weth-usage-2022]
+  measure: count
+
+# OpenSea on Seaport 1.6 -----------------------------------------------------------
+
+- id: opensea-weth-offer-fills-2026-09
+  subjectId: product:opensea-marketplace
+  metric: WETH offer fills through OpenSea's signed zone
+  metricDefinition: >-
+    Seaport 1.6 OrderFulfilled events in which the maker spent WETH9 and the order named OpenSea's Seaport 1.6 signed
+    zone, which requires a signature from a signer approved by its controller. One event per order filled.
+  value: "145629"
+  unit: order fills
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x0000000000000068F116a894984e2DB1123eB395"}
+    - {chainId: 1, address: "0x000056F7000000EcE9003ca63978907a00FFD100"}
+  scope: Seaport 1.6 on Ethereum mainnet, blocks 25,878,705 to 26,093,737. A subset of the WETH offer fills counted for WETH9.
+  sourceClaimIds: [onchain-seaport16-2026-09, opensea-signed-zone-1-6]
+  measure: count
+
+- id: opensea-weth-offer-volume-2026-09
+  subjectId: product:opensea-marketplace
+  metric: WETH spent through OpenSea's signed zone
+  metricDefinition: >-
+    The sum of WETH9 that makers spent in those fills, gross of any marketplace and creator fees paid out of it.
+  value: "7113.0416"
+  unit: WETH
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x0000000000000068F116a894984e2DB1123eB395"}
+    - {chainId: 1, address: "0x000056F7000000EcE9003ca63978907a00FFD100"}
+  scope: Seaport 1.6 on Ethereum mainnet, blocks 25,878,705 to 26,093,737. Part of the WETH spent through Seaport 1.6 offers, not in addition to it.
+  sourceClaimIds: [onchain-seaport16-2026-09, opensea-signed-zone-1-6]
+  measure: flow
+
+- id: opensea-zone-fills-2026-09
+  subjectId: product:opensea-marketplace
+  metric: Seaport 1.6 fills through OpenSea's signed zone
+  metricDefinition: >-
+    Seaport 1.6 OrderFulfilled events whose order named OpenSea's Seaport 1.6 signed zone, whatever was paid. One event
+    per order filled; a matched trade emits one event for each of its orders.
+  value: "230063"
+  unit: order fills
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x0000000000000068F116a894984e2DB1123eB395"}
+    - {chainId: 1, address: "0x000056F7000000EcE9003ca63978907a00FFD100"}
+  scope: Seaport 1.6 on Ethereum mainnet, blocks 25,878,705 to 26,093,737. A subset of all Seaport 1.6 fills in the month.
+  sourceClaimIds: [onchain-seaport16-2026-09, opensea-signed-zone-1-6]
+  measure: count
+
+# Seaport -----------------------------------------------------------------------
+
+- id: seaport16-fills-2026-09
+  subjectId: seaport-v1.6
+  metric: Orders filled
+  metricDefinition: >-
+    OrderFulfilled events emitted by the Seaport 1.6 contract. One event per order filled; a matched trade emits one
+    event for each of its orders, so fills are not trades, buyers or people.
+  value: "402200"
+  unit: order fills
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x0000000000000068F116a894984e2DB1123eB395"}
+  scope: Seaport 1.6 on Ethereum mainnet, blocks 25,878,705 to 26,093,737, through any interface.
+  sourceClaimIds: [onchain-seaport16-2026-09]
+  measure: count
+
+- id: seaport16-token-nft-offer-fills-2026-09
+  subjectId: seaport-v1.6
+  metric: NFT offers filled in any ERC-20 token
+  metricDefinition: >-
+    OrderFulfilled events from the Seaport 1.6 contract in which the maker offered any ERC-20 token and received an
+    ERC-721 or ERC-1155 item. One event per order filled.
+  value: "146151"
+  unit: order fills
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x0000000000000068F116a894984e2DB1123eB395"}
+  scope: Seaport 1.6 on Ethereum mainnet, blocks 25,878,705 to 26,093,737, through any interface.
+  sourceClaimIds: [onchain-seaport16-2026-09]
+  measure: count
+  comparisonGroup: seaport16-nft-offer-fills-2026-09
+
+# USDC ---------------------------------------------------------------------------
+
+- id: usdc-supply-ethereum-2026-10-01
+  subjectId: usdc
+  metric: USDC supply on Ethereum
+  metricDefinition: The totalSupply() of the USDC contract on Ethereum mainnet, in USDC.
+  value: "49295701138.130357"
+  unit: USDC
+  asOf: 2026-10-01
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"}
+  scope: USDC on Ethereum mainnet at block 26,093,738 (00:00:11 UTC). Includes USDC held by contracts and bridges.
+  sourceClaimIds: [onchain-usdc-2026-10-01]
+  measure: stock
+  comparisonGroup: usdc-supply-by-chain-2026-10-01
+
+- id: usdc-supply-base-2026-10-01
+  subjectId: deployment:usdc-base
+  metric: USDC supply on Base
+  metricDefinition: The totalSupply() of Circle's native USDC contract on Base, in USDC.
+  value: "4319085272.006935"
+  unit: USDC
+  asOf: 2026-10-01
+  chainIds: [8453]
+  deploymentAddresses:
+    - {chainId: 8453, address: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"}
+  scope: Circle's USDC contract on Base at block 52,011,727 (00:00:01 UTC). A separate deployment from USDC on Ethereum.
+  sourceClaimIds: [onchain-usdc-2026-10-01]
+  measure: stock
+  comparisonGroup: usdc-supply-by-chain-2026-10-01
+
+- id: usdc-held-by-morpho-blue-2026-10-01
+  subjectId: usdc
+  metric: USDC held by Morpho Blue
+  metricDefinition: >-
+    The USDC balance of the Morpho Blue contract: USDC supplied to its markets and not lent out, plus any USDC posted as
+    collateral. Lent USDC is not in the balance.
+  value: "112033376.303624"
+  unit: USDC
+  asOf: 2026-10-01
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb"}
+  scope: The Morpho Blue contract on Ethereum mainnet at block 26,093,738. Part of USDC's supply on Ethereum, not additional to it.
+  sourceClaimIds: [onchain-usdc-in-cores-2026-10-01]
+  measure: stock
+  comparisonGroup: usdc-held-by-cores-2026-10-01
+
+- id: usdc-held-by-uniswap-v4-2026-10-01
+  subjectId: usdc
+  metric: USDC held by the Uniswap v4 PoolManager
+  metricDefinition: The USDC balance of the Uniswap v4 PoolManager, which holds the tokens of every v4 pool on Ethereum.
+  value: "55608414.894505"
+  unit: USDC
+  asOf: 2026-10-01
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x000000000004444c5dc75cB358380D2e3dE08A90"}
+  scope: The canonical v4 PoolManager on Ethereum mainnet at block 26,093,738. Part of USDC's supply on Ethereum, not additional to it.
+  sourceClaimIds: [onchain-usdc-in-cores-2026-10-01]
+  measure: stock
+  comparisonGroup: usdc-held-by-cores-2026-10-01
+
+- id: usdc-circulation-2026-09-24
+  subjectId: org:circle
+  metric: USDC in circulation, all chains
+  metricDefinition: USDC in circulation as reported by Circle, across every chain where it issues USDC.
+  value: "75240000000"
+  comparator: about
+  unit: USDC
+  asOf: 2026-09-24
+  chainIds: multichain-unsplit
+  scope: All USDC issued by Circle on every supported chain; Circle's page does not split this total by chain.
+  sourceClaimIds: [circle-transparency-2026-09]
+  measure: stock
+
+- id: usdc-issued-365d-2026-09-24
+  subjectId: org:circle
+  metric: USDC issued in 365 days
+  metricDefinition: USDC that Circle issued in exchange for dollars over the 365 days to 24 September 2026, as Circle reports it.
+  value: "341740000000"
+  comparator: about
+  unit: USDC
+  interval: {start: 2025-09-24, end: 2026-09-24}
+  chainIds: multichain-unsplit
+  scope: Issuance across every chain where Circle issues USDC; not split by chain.
+  sourceClaimIds: [circle-transparency-2026-09]
+  measure: flow
+  comparisonGroup: circle-usdc-issuance-flows-365d-2026-09-24
+
+- id: usdc-redeemed-365d-2026-09-24
+  subjectId: org:circle
+  metric: USDC redeemed in 365 days
+  metricDefinition: USDC that Circle redeemed for dollars over the 365 days to 24 September 2026, as Circle reports it.
+  value: "340510000000"
+  comparator: about
+  unit: USDC
+  interval: {start: 2025-09-24, end: 2026-09-24}
+  chainIds: multichain-unsplit
+  scope: Redemptions across every chain where Circle issues USDC; not split by chain.
+  sourceClaimIds: [circle-transparency-2026-09]
+  measure: flow
+  comparisonGroup: circle-usdc-issuance-flows-365d-2026-09-24
+
+# Visa settlement -------------------------------------------------------------------
+
+- id: visa-stablecoin-run-rate-2025-11
+  subjectId: product:visa-stablecoin-settlement
+  metric: Stablecoin settlement run rate
+  metricDefinition: Visa's monthly stablecoin settlement volume expressed as an annualized run rate, as Visa reports it.
+  value: "3500000000"
+  comparator: more-than
+  unit: USD
+  asOf: 2025-11-30
+  chainIds: multichain-unsplit
+  scope: All of Visa's stablecoin settlement pilots worldwide, across every supported chain and stablecoin.
+  sourceClaimIds: [visa-us-settlement-2025]
+  measure: rate
+  ratePeriod: year
+  comparisonGroup: visa-stablecoin-settlement-run-rate
+
+- id: visa-stablecoin-run-rate-2026-04
+  subjectId: product:visa-stablecoin-settlement
+  metric: Stablecoin settlement run rate
+  metricDefinition: Visa's stablecoin settlement volume expressed as an annualized run rate, as Visa reports it.
+  value: "7000000000"
+  comparator: about
+  unit: USD
+  asOf: 2026-04-29
+  chainIds: multichain-unsplit
+  scope: All of Visa's stablecoin settlement across nine blockchains, Ethereum among them; no Ethereum-only figure is given.
+  sourceClaimIds: [visa-nine-chains-2026]
+  measure: rate
+  ratePeriod: year
+  comparisonGroup: visa-stablecoin-settlement-run-rate
