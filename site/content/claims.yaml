@@ -371,8 +371,8 @@
 - id: onchain-usdc-2026-10-01
   statement: >-
     At 00:00 UTC on 1 October 2026 the USDC contract on Ethereum reported a total supply of 49,295,701,138.13 USDC
-    (after block 26,093,737), and Circle's USDC contract on Base reported
-    4,319,085,272.01 USDC.
+    (after Ethereum block 26,093,737), and Circle's USDC contract on Base reported 4,319,085,272.01 USDC (after Base
+    block 52,011,726).
   sourceUrl: https://github.com/ryanberckmans/ethereum-decentralization-index/blob/main/site/content/evidence/onchain.json
   publisher: Ethereum and Base, read by the directory
   title: Onchain reads at pinned blocks
@@ -555,3 +555,1484 @@
   subjects: [product:visa-stablecoin-settlement, org:visa, ethereum, base]
   locator: '"has reached a $7 billion annualized stablecoin settlement run rate"'
   qualification: Run rate across nine blockchains and all supported stablecoins. Visa gives no Ethereum-only figure.
+
+# ETH -------------------------------------------------------------------------------
+
+- id: ethereum-org-what-is-ether
+  statement: >-
+    ethereum.org describes ETH as Ethereum's native currency: it pays the network's transaction fees (gas), secures
+    the network through staking and serves as money for payments and investment.
+  sourceUrl: https://ethereum.org/what-is-ether/
+  publisher: ethereum.org
+  title: What is ether (ETH)?
+  sourcePublishedAt: 2026-08-06
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [native-eth, ethereum]
+  locator: '"It''s used to pay transaction fees (known as ''gas'') for using the network and the applications built on top of it, to secure the network through staking"'
+
+- id: ethereum-org-ether-fees-only
+  statement: >-
+    ethereum.org's technical introduction to ether says it is the only accepted payment for transaction fees and,
+    since The Merge, is required to validate and propose blocks on Ethereum mainnet. It is also used as collateral in
+    lending markets and as a unit of account in NFT marketplaces.
+  sourceUrl: https://ethereum.org/developers/docs/intro-to-ether/
+  publisher: ethereum.org
+  title: Technical intro to ether
+  sourcePublishedAt: 2025-08-07
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [native-eth, ethereum]
+  locator: '"Fundamentally, it is the only acceptable form of payment for transaction fees"'
+
+- id: ethereum-org-ether-issuance
+  statement: >-
+    ethereum.org says new ether is created only by the Ethereum protocol, as a reward for proposing blocks and for
+    other validator work; no user can create it.
+  sourceUrl: https://ethereum.org/developers/docs/intro-to-ether/
+  publisher: ethereum.org
+  title: Technical intro to ether
+  sourcePublishedAt: 2025-08-07
+  retrievedAt: 2026-10-02
+  state: capability
+  subjects: [native-eth, ethereum]
+  locator: 'Minting ether: "The underlying Ethereum protocol creates the new ether, and it is not possible for a user to create ether."'
+
+- id: ethereum-org-base-fee-burned
+  statement: >-
+    ethereum.org's page on gas says every block has a base fee set by the protocol from the blocks before it, and that
+    the base fee is burned, removed from circulation, when the block is created. Only the tip goes to the validator.
+  sourceUrl: https://ethereum.org/developers/docs/gas/
+  publisher: ethereum.org
+  title: Gas and fees
+  sourcePublishedAt: 2026-06-24
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [native-eth, ethereum]
+  locator: 'Base fee: "When the block is created this base fee is ''burned'', removing it from circulation."'
+
+- id: eip-1559-base-fee-burned
+  statement: >-
+    EIP-1559, a final standard created in April 2019, specifies that the base fee is always burned by the protocol and
+    block producers keep only the priority fee, so that only ETH can ever pay for transactions on Ethereum.
+  sourceUrl: https://eips.ethereum.org/EIPS/eip-1559
+  publisher: Ethereum Improvement Proposals
+  title: 'EIP-1559: Fee market change for ETH 1.0 chain'
+  sourcePublishedAt: 2019-04-13
+  retrievedAt: 2026-10-02
+  state: capability
+  subjects: [native-eth, ethereum]
+  locator: 'Motivation: "The base fee is always burned (i.e. it is destroyed by the protocol)."'
+  qualification: The specification predates The Merge and says miners where validators now propose blocks.
+
+- id: ethereum-org-burn-since-london
+  statement: ethereum.org says fee burning went live with the London upgrade in August 2021 and has not changed since The Merge.
+  sourceUrl: https://ethereum.org/roadmap/merge/issuance/
+  publisher: ethereum.org
+  title: How The Merge impacted ETH supply
+  sourcePublishedAt: 2026-06-06
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [native-eth, ethereum]
+  locator: 'The burn: "Fee burning went live with the London upgrade in August 2021, and remains unchanged since The Merge."'
+
+- id: ethereum-org-staking
+  statement: >-
+    ethereum.org describes staking as depositing ETH to activate a validator, which proposes blocks and attests to the
+    head of the chain. A validator needs at least 32 ETH and can hold up to 2,048 ETH.
+  sourceUrl: https://ethereum.org/staking/
+  publisher: ethereum.org
+  title: Earn rewards while securing Ethereum
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [native-eth, ethereum]
+  locator: '"Your own validator requires at least 32 ETH and can hold up to 2048 ETH."'
+  qualification: The page's displayed update date predates the May 2025 upgrade it describes, so it is not used as a date here.
+
+- id: ethereum-org-accounts
+  statement: >-
+    ethereum.org defines an Ethereum account as an entity with an ETH balance that can send messages on Ethereum,
+    controlled either by a user or by contract code. The balance is part of the account's state.
+  sourceUrl: https://ethereum.org/developers/docs/accounts/
+  publisher: ethereum.org
+  title: Ethereum accounts
+  sourcePublishedAt: 2026-08-06
+  retrievedAt: 2026-10-02
+  state: capability
+  subjects: [native-eth, ethereum]
+  locator: '"An Ethereum account is an entity with an ether (ETH) balance that can send messages on Ethereum."'
+
+- id: eip-4844-blob-fee-burned
+  statement: >-
+    EIP-4844, a final standard that added data blobs to Ethereum for rollups, specifies that a blob transaction's blob
+    fee is deducted from the sender and burned, and is not refunded if the transaction fails.
+  sourceUrl: https://eips.ethereum.org/EIPS/eip-4844
+  publisher: Ethereum Improvement Proposals
+  title: 'EIP-4844: Shard Blob Transactions'
+  sourcePublishedAt: 2022-02-25
+  retrievedAt: 2026-10-02
+  state: capability
+  subjects: [native-eth, ethereum]
+  locator: 'Gas accounting: "is deducted from the sender balance before transaction execution and burned"'
+
+- id: onchain-ethereum-blocks-2026-09
+  statement: >-
+    In September 2026 (blocks 25,878,705 to 26,093,737, 215,033 blocks) Ethereum mainnet included 56,880,856
+    transactions using 6,522,419,274,588 gas. Their base fees, which the protocol burns, came to 1,881.239 ETH. 183,813
+    of the blocks carried blobs, whose fees burned a further 2.830 ETH.
+  sourceUrl: https://github.com/ryanberckmans/ethereum-decentralization-index/blob/main/site/content/evidence/onchain.json
+  publisher: Ethereum mainnet, read by the directory
+  title: Onchain reads at pinned blocks
+  observedAt: 2026-09-30
+  retrievedAt: 2026-10-02
+  state: reproduced-observation
+  subjects: [ethereum, native-eth]
+  locator: read ethereum-blocks-2026-09
+  qualification: Summed from every block header in the range. Tips paid to validators are not burned and are not included.
+
+# Seaport ------------------------------------------------------------------------------
+
+- id: seaport-launch-2022
+  statement: >-
+    Announcing Seaport on 20 May 2022, OpenSea said the protocol was for all NFT builders, creators and collectors, not
+    just OpenSea, and that its core contract is open source with no contract owner, upgradeability or other special
+    privileges.
+  sourceUrl: https://opensea.io/blog/articles/introducing-seaport-protocol
+  publisher: OpenSea
+  title: Introducing Seaport Protocol
+  sourcePublishedAt: 2022-05-20
+  retrievedAt: 2026-10-02
+  state: announced
+  subjects: [seaport-v1.6, org:opensea]
+  locator: '"The core smart contract is open source and inherently decentralized, with no contract owner, upgradeability, or other special privileges."'
+  qualification: Written about the first Seaport release. Zones and conduits are separate contracts outside this statement.
+
+- id: seaport-zones-and-conduits
+  statement: >-
+    Seaport orders can name a zone and a conduit, and anyone can create either. A zone is an account, usually a
+    contract, that performs extra checks before an order is filled and can cancel it for the offerer. A conduit holds
+    token approvals, and its owner decides which contracts may use them.
+  sourceUrl: https://opensea.io/blog/articles/introducing-seaport-protocol
+  publisher: OpenSea
+  title: Introducing Seaport Protocol
+  sourcePublishedAt: 2022-05-20
+  retrievedAt: 2026-10-02
+  state: capability
+  subjects: [seaport-v1.6]
+  locator: 'Seaport Deep-Dive: "Anyone can create new zones or deploy new conduits."'
+
+- id: seaport-1-6-announcement
+  statement: >-
+    OpenSea and the Seaport Working Group announced Seaport 1.6 on 20 March 2024. Its new capability, Seaport hooks,
+    lets the contract call other contracts during an order's fulfillment, made practical by Ethereum's Dencun upgrade.
+  sourceUrl: https://opensea.io/blog/articles/introducing-seaport-1-6
+  publisher: OpenSea
+  title: Introducing Seaport 1.6
+  sourcePublishedAt: 2024-03-20
+  retrievedAt: 2026-10-02
+  state: announced
+  subjects: [seaport-v1.6, org:opensea]
+  locator: '"Seaport 1.6 introduces a new capability enabled by the recent Ethereum Dencun upgrade called Seaport hooks"'
+
+- id: opensea-seaport-1-6-migration
+  statement: >-
+    On 20 March 2024 OpenSea said Seaport 1.6 was live, that it would start moving its users' orders to 1.6 on 25
+    March and stop accepting Seaport 1.5 orders through its API on 1 April. It also said its conduit would drop Seaport
+    1.5 as an approved channel in the coming months.
+  sourceUrl: https://opensea.io/blog/articles/introducing-seaport-1-6
+  publisher: OpenSea
+  title: Introducing Seaport 1.6
+  sourcePublishedAt: 2024-03-20
+  retrievedAt: 2026-10-02
+  state: announced
+  subjects: [seaport-v1.6, product:opensea-marketplace]
+  locator: '"OpenSea will begin migrating its users to submit orders on Seaport 1.6 on Monday, March 25th."'
+  qualification: On 1 October 2026 Seaport 1.5 was still an open channel on the OpenSea Conduit (claim onchain-opensea-conduit-2026-10-01).
+
+- id: seaport-readme-addresses
+  statement: >-
+    The Seaport repository lists Seaport 1.6 on Ethereum at 0x0000000000000068F116a894984e2DB1123eB395, the same
+    canonical address it uses on every EVM network where 1.6 is deployed.
+  sourceUrl: https://github.com/ProjectOpenSea/seaport/blob/main/README.md
+  publisher: OpenSea (ProjectOpenSea on GitHub)
+  title: Seaport README
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [seaport-v1.6]
+  locator: 'Deployments by EVM chain, row Ethereum, column Seaport 1.6'
+  qualification: EDI's record covers the Ethereum contract only; each network's copy is a separate deployment.
+
+- id: seaport-readme-orders
+  statement: >-
+    The Seaport repository describes Seaport as a marketplace protocol for buying and selling NFTs. Each order lists
+    any number of items its maker will give, the offer, and any number of items that must be received in return, each
+    with its recipient, the consideration.
+  sourceUrl: https://github.com/ProjectOpenSea/seaport/blob/main/README.md
+  publisher: OpenSea (ProjectOpenSea on GitHub)
+  title: Seaport README
+  retrievedAt: 2026-10-02
+  state: capability
+  subjects: [seaport-v1.6]
+  locator: 'Background: "Each listing contains an arbitrary number of items that the offerer is willing to give"'
+
+- id: seaport-hooks-docs
+  statement: >-
+    OpenSea's documentation says that for a restricted order Seaport calls the order's zone twice, before any tokens
+    move and after, and the fill fails if the zone rejects it. The page calls hooks emergent and experimental.
+  sourceUrl: https://docs.opensea.io/docs/seaport-hooks
+  publisher: OpenSea
+  title: Seaport hooks
+  sourcePublishedAt: 2026-08-17
+  retrievedAt: 2026-10-02
+  state: capability
+  subjects: [seaport-v1.6]
+  locator: 'Zone Hooks: "once before executing any token transfers ( authorizeOrder) and again after executing the token transfers (validateOrder)"'
+
+- id: seaport-conduit-controller-docs
+  statement: >-
+    Seaport's conduit controller documentation says only a conduit's owner can open or close its channels, and warns
+    that a malicious or vulnerable channel can move any token whose holder approved that conduit.
+  sourceUrl: https://docs.opensea.io/docs/seaport-conduit-controller
+  publisher: OpenSea
+  title: Conduit controller
+  sourcePublishedAt: 2026-08-17
+  retrievedAt: 2026-10-02
+  state: capability
+  subjects: [seaport-v1.6, product:opensea-marketplace]
+  locator: 'updateChannel: "Only the owner of the conduit in question may call this function."'
+
+- id: opensea-seaport-most-used
+  statement: >-
+    OpenSea's documentation calls Seaport the most used protocol for NFT transactions and says every order created or
+    filled on OpenSea uses it.
+  sourceUrl: https://docs.opensea.io/docs/seaport
+  publisher: OpenSea
+  title: Seaport
+  sourcePublishedAt: 2025-09-18
+  retrievedAt: 2026-10-02
+  state: reported-adoption
+  subjects: [seaport-v1.6, product:opensea-marketplace]
+  locator: '"Seaport powers the OpenSea website -- all orders created or fulfilled on OpenSea use the Seaport protocol."'
+  qualification: OpenSea's own claim, not measured on the page, and not specific to version 1.6.
+
+- id: onchain-seaport16-deployed
+  statement: >-
+    The Seaport 1.6 contract at 0x0000000000000068F116a894984e2DB1123eB395 first has code in Ethereum block 19,442,152,
+    on 15 March 2024.
+  sourceUrl: https://github.com/ryanberckmans/ethereum-decentralization-index/blob/main/site/content/evidence/onchain.json
+  publisher: Ethereum mainnet, read by the directory
+  title: Onchain reads at pinned blocks
+  retrievedAt: 2026-10-02
+  state: reproduced-observation
+  subjects: [seaport-v1.6]
+  locator: read seaport16-first-code-block
+
+# Base ---------------------------------------------------------------------------------
+
+- id: base-mainnet-launch
+  statement: Coinbase announced on 9 August 2023 that Base mainnet was open.
+  sourceUrl: https://x.com/coinbase/status/1689320915937705985
+  publisher: Coinbase (@coinbase on X)
+  title: Today's the day—@BuildOnBase mainnet is here.
+  sourcePublishedAt: 2023-08-09
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [base, org:coinbase]
+  locator: '"Today''s the day—@BuildOnBase mainnet is here."'
+  qualification: Base had opened for bridging on 3 August; 9 August 2023 was the opening to everyone.
+
+- id: base-connect-docs
+  statement: Base's documentation gives Base mainnet the chain ID 8453.
+  sourceUrl: https://docs.base.org/get-started/connect-to-base
+  publisher: Base
+  title: Connect to Base
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [base]
+  locator: 'Network details table: "Chain ID | 8453"'
+
+- id: base-protocol-overview
+  statement: >-
+    Base's documentation describes Base as a rollup built on Ethereum: transaction data is posted to Ethereum, and
+    proofs let anyone challenge an invalid state. Base runs a single active sequencer, which orders transactions into
+    blocks.
+  sourceUrl: https://docs.base.org/specifications/base-protocol/overview
+  publisher: Base
+  title: Base Chain protocol overview
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [base, ethereum]
+  locator: '"Base is a rollup built on Ethereum." Sequencers: "Base currently operates with a single active sequencer."'
+
+- id: base-withdrawals-docs
+  statement: >-
+    Base's documentation says a withdrawal to Ethereum can be finalized only after the dispute game it is proven
+    against has passed its window: 5 days with a single proof, or 1 day when both a TEE proof and a ZK proof back the
+    same proposal.
+  sourceUrl: https://docs.base.org/specifications/base-protocol/bridging/withdrawals
+  publisher: Base
+  title: Withdrawals
+  retrievedAt: 2026-10-02
+  state: capability
+  subjects: [base, base-canonical-bridge]
+  locator: '"that window is 5 days for a single-proof dispute game and 1 day on the dual-proof fast path"'
+
+- id: base-security-council-docs
+  statement: >-
+    Base's documentation says contract upgrades need two approvals: a 3-of-6 multisig operated by Coinbase and 8 of
+    the 11 members of an independent Security Council.
+  sourceUrl: https://docs.base.org/specifications/security/security-council-for-base
+  publisher: Base
+  title: Security Council for Base
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [base, org:coinbase]
+  locator: 'Composition and quorum: "These upgrades are governed by a 2-of-2 multisig."'
+
+- id: base-contracts-docs
+  statement: >-
+    Base's contract list names its Ethereum contracts, among them the OptimismPortal at
+    0x49048044D57e1C92A77f79988d21Fa8fAF74E97e and the DisputeGameFactory at 0x43edB88C4B80fDD2AdFF2412A7BebF9dF42cB40e.
+    Its batch sender, output proposer and challenger are each an account managed by Coinbase Technologies.
+  sourceUrl: https://docs.base.org/specifications/reference/base-contracts
+  publisher: Base
+  title: Contract Addresses
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [base, base-canonical-bridge, org:coinbase]
+  locator: 'L1 contract addresses, Ethereum mainnet; Base admin addresses: "EOA managed by Coinbase Technologies"'
+
+- id: base-unified-stack-2026
+  statement: >-
+    Base announced in February 2026 that it would move away from the OP Stack over the following months to a
+    Base-operated stack, while remaining a Stage 1 rollup.
+  sourceUrl: https://blog.base.dev/next-chapter-for-base-chain-1
+  publisher: Base
+  title: A new, unified stack for Base Chain
+  sourcePublishedAt: 2026-02-18
+  retrievedAt: 2026-10-02
+  state: announced
+  subjects: [base]
+  locator: 'Accelerating Upgrades: "Over the coming months, Base is moving away from the OP Stack"'
+  qualification: Base's own site lists the post under 10 April 2026; the date here is the post's own metadata.
+
+- id: l2beat-base
+  statement: >-
+    L2BEAT, an independent tracker of Ethereum rollups, rates Base at Stage 1 and notes that upgrades need both a
+    Coinbase multisig and the Security Council, with no delay before an upgrade takes effect.
+  sourceUrl: https://l2beat.com/layer2s/projects/base
+  publisher: L2BEAT
+  title: Base Chain
+  retrievedAt: 2026-10-02
+  observedAt: 2026-10-02
+  state: live
+  subjects: [base]
+  locator: '"Upgrades require approval from both parties. There is no delay on upgrades."'
+  qualification: Third-party context. EDI's assessment of Base is the directory's only grade.
+
+- id: onchain-base-2026-09
+  statement: >-
+    At 00:00 UTC on 1 October 2026 (after Ethereum block 26,093,737) Base's OptimismPortal held 770,315.019 ETH. In
+    September 2026 it emitted 14,879 TransactionDeposited events, transactions sent from Ethereum into Base, and 1,432
+    WithdrawalFinalized events, and Base's DisputeGameFactory created 2,160 games proposing Base's state. The portal
+    has had code since block 17,482,143 (15 June 2023).
+  sourceUrl: https://github.com/ryanberckmans/ethereum-decentralization-index/blob/main/site/content/evidence/onchain.json
+  publisher: Ethereum mainnet, read by the directory
+  title: Onchain reads at pinned blocks
+  observedAt: 2026-09-30
+  retrievedAt: 2026-10-02
+  state: reproduced-observation
+  subjects: [base, base-canonical-bridge, native-eth]
+  locator: reads base-portal-eth-2026-10-01, base-deposits-2026-09, base-withdrawals-finalized-2026-09, base-dispute-games-2026-09 and base-portal-first-code-block
+  qualification: Counts events on Ethereum only, not activity inside Base. A deposit is any transaction sent into Base, with or without value.
+
+# Uniswap -------------------------------------------------------------------------
+
+- id: uniswap-v2-launch
+  statement: >-
+    Uniswap Labs announced on 18 May 2020 that Uniswap v2 was deployed to Ethereum mainnet, linking the v2 factory
+    contract at 0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f.
+  sourceUrl: https://blog.uniswap.org/launch-uniswap-v2
+  publisher: Uniswap Labs
+  title: Uniswap v2 Mainnet Launch
+  sourcePublishedAt: 2020-05-18
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [uniswap-v2, org:uniswap-labs]
+  locator: '"Uniswap v2, the second iteration of the Uniswap protocol, has been deployed to the Ethereum mainnet!"'
+
+- id: uniswap-2020-review-v2
+  statement: >-
+    Uniswap Labs' review of 2020 says Uniswap v2 launched that May with pools for any pair of ERC-20 tokens,
+    time-weighted average price oracles and flash swaps.
+  sourceUrl: https://blog.uniswap.org/year-in-review
+  publisher: Uniswap Labs
+  title: "Uniswap's Year in Review: 2020"
+  sourcePublishedAt: 2020-12-31
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [uniswap-v2]
+  locator: '"bringing support for arbitrary ERC20/ERC20 pairs, robust time weighted average price oracles, flash swaps"'
+
+- id: uniswap-2020-oracle-integrations
+  statement: >-
+    Uniswap Labs reported at the end of 2020 that over 50 protocols, including Compound and Augur v2, had integrated
+    Uniswap's time-weighted average price oracle, introduced with v2.
+  sourceUrl: https://blog.uniswap.org/year-in-review
+  publisher: Uniswap Labs
+  title: "Uniswap's Year in Review: 2020"
+  sourcePublishedAt: 2020-12-31
+  observedAt: 2020-12-31
+  retrievedAt: 2026-10-02
+  state: reported-adoption
+  subjects: [uniswap-v2]
+  locator: '"counting integrations across over 50 protocols including Compound, Augur v2, and Empty Set Dollar"'
+  qualification: Uniswap Labs' own count, given without a method.
+
+- id: uniswap-2020-flash-swaps-volume
+  statement: >-
+    Uniswap Labs' review of 2020 reported that Uniswap v2 flash swaps had generated 4.8 billion dollars of volume since
+    May 2020, producing 14.4 million dollars in liquidity provider fees.
+  sourceUrl: https://blog.uniswap.org/year-in-review
+  publisher: Uniswap Labs
+  title: "Uniswap's Year in Review: 2020"
+  sourcePublishedAt: 2020-12-31
+  observedAt: 2020-12-31
+  retrievedAt: 2026-10-02
+  state: reported-adoption
+  subjects: [uniswap-v2]
+  locator: '"Flash swaps have generated $4.8bn volume since May, producing $14.4m in liquidity provider fees."'
+  qualification: Uniswap Labs' own cumulative figure, given without a method and without naming a chain.
+
+- id: uniswap-v2-flash-swaps-docs
+  statement: >-
+    Uniswap's documentation describes v2 flash swaps: a caller can withdraw up to a pair's full reserves of a token and
+    run any logic, provided that by the end of the transaction it pays with the pair's other token or returns the
+    tokens plus a small fee.
+  sourceUrl: https://developers.uniswap.org/docs/protocols/v2/concepts/flash-swap
+  publisher: Uniswap Labs
+  title: Uniswap v2 Flash Swaps
+  retrievedAt: 2026-10-02
+  state: capability
+  subjects: [uniswap-v2]
+  locator: '"withdraw up to the full reserves of any ERC20 token on Uniswap and execute arbitrary logic at no upfront cost"'
+
+- id: uniswap-v2-flash-swaps-arbitrage
+  statement: >-
+    Uniswap's documentation gives capital-free arbitrage as a use of flash swaps: a trader without funds of their own
+    can withdraw tokens from a pool, sell them for more on another venue and repay the pool in the same transaction,
+    paying only gas.
+  sourceUrl: https://developers.uniswap.org/docs/protocols/v2/concepts/flash-swap
+  publisher: Uniswap Labs
+  title: Uniswap v2 Flash Swaps
+  retrievedAt: 2026-10-02
+  state: capability
+  subjects: [uniswap-v2]
+  locator: 'Capital Free Arbitrage: "Flash swaps remove this barrier entirely, effectively democratizing arbitrage."'
+
+- id: uniswap-v3-launch
+  statement: Uniswap Labs announced on 5 May 2021 that Uniswap v3 was deployed to Ethereum mainnet.
+  sourceUrl: https://blog.uniswap.org/launch-uniswap-v3
+  publisher: Uniswap Labs
+  title: Uniswap v3 Mainnet launch
+  sourcePublishedAt: 2021-05-05
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [uniswap-v3, org:uniswap-labs]
+  locator: '"We''re thrilled to announce that Uniswap v3 has been deployed to the Ethereum mainnet!"'
+
+- id: uniswap-v3-launch-positions
+  statement: >-
+    Uniswap Labs' v3 launch post says liquidity providers can create positions at several fee tiers, each with its own
+    price range, and that each position is represented by an NFT.
+  sourceUrl: https://blog.uniswap.org/launch-uniswap-v3
+  publisher: Uniswap Labs
+  title: Uniswap v3 Mainnet launch
+  sourcePublishedAt: 2021-05-05
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [uniswap-v3]
+  locator: '"positions with multiple fee tiers and concentrated liquidity ranges. Each position is represented as an NFT"'
+
+- id: uniswap-v3-concentrated-liquidity-docs
+  statement: >-
+    Uniswap's documentation calls concentrated liquidity the defining idea of Uniswap v3: a liquidity provider places
+    liquidity within a price range of its choosing, where earlier versions spread it evenly across all prices.
+  sourceUrl: https://developers.uniswap.org/docs/get-started/concepts/liquidity-providers/concentrated-liquidity
+  publisher: Uniswap Labs
+  title: Concentrated Liquidity
+  retrievedAt: 2026-10-02
+  state: capability
+  subjects: [uniswap-v3]
+  locator: '"The defining idea of Uniswap v3 is concentrated liquidity: liquidity that is allocated within a custom price range."'
+
+- id: uniswap-v4-launch
+  statement: Uniswap Labs announced on 31 January 2025 that Uniswap v4 was live on ten networks at once, Ethereum among them.
+  sourceUrl: https://blog.uniswap.org/uniswap-v4-is-here
+  publisher: Uniswap Labs
+  title: Uniswap v4 is Here – A New Era of DeFi
+  sourcePublishedAt: 2025-01-31
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [uniswap-v4, org:uniswap-labs]
+  locator: '"It is live on Ethereum, Polygon, Arbitrum, OP Mainnet, Base, BNB Chain, Blast, World Chain, Avalanche, and Zora Network today."'
+  qualification: Each network has its own v4 deployment. EDI's record covers the PoolManager on Ethereum.
+
+- id: uniswap-v4-launch-hooks-costs
+  statement: >-
+    Announcing v4, Uniswap Labs described hooks as plugins that let developers write custom logic for pools, swaps, fees
+    and liquidity positions, and said over 150 had already been developed. It said creating a pool costs up to 99.99%
+    less than in earlier versions, with further savings for pairs of native ETH.
+  sourceUrl: https://blog.uniswap.org/uniswap-v4-is-here
+  publisher: Uniswap Labs
+  title: Uniswap v4 is Here – A New Era of DeFi
+  sourcePublishedAt: 2025-01-31
+  retrievedAt: 2026-10-02
+  state: announced
+  subjects: [uniswap-v4, native-eth]
+  locator: '"Creating new pools with v4 is up to 99.99% cheaper than in previous versions"'
+  qualification: Uniswap Labs' own description at launch. The hook count and cost savings are not measured here.
+
+- id: uniswap-v4-hooks-docs
+  statement: >-
+    Uniswap's documentation describes v4 hooks as optional external contracts attached to individual pools. A pool has
+    at most one hook, set when the pool is created and impossible to add, remove or swap afterwards, and one hook can
+    serve many pools.
+  sourceUrl: https://developers.uniswap.org/docs/protocols/v4/concepts/hooks
+  publisher: Uniswap Labs
+  title: Uniswap v4 Hooks
+  retrievedAt: 2026-10-02
+  state: capability
+  subjects: [uniswap-v4]
+  locator: 'FAQ, "Can I add a hook to an existing pool?": "It cannot be added, removed, or swapped afterward."'
+
+- id: uniswap-unification-proposal
+  statement: >-
+    The UNIfication proposal of 10 November 2025, from Uniswap Labs and the Uniswap Foundation, proposed protocol fees
+    starting with v2 pools and a set of v3 pools on Ethereum mainnet. Governance can switch v2 fees only on or off for
+    all v2 pools at once; when on, the 0.30% swap fee splits into 0.25% for liquidity providers and 0.05% for the
+    protocol.
+  sourceUrl: https://blog.uniswap.org/unification
+  publisher: Uniswap Labs and Uniswap Foundation
+  title: UNIfication
+  sourcePublishedAt: 2025-11-10
+  retrievedAt: 2026-10-02
+  state: announced
+  subjects: [uniswap-v2, uniswap-v3, token:uniswap, org:uniswap-labs]
+  locator: 'Protocol Fee Rollout: "Once activated, LP fees are 0.25% and protocol fees are 0.05%."'
+
+- id: uniswap-unification-executed
+  statement: >-
+    Uniswap governance proposal 93, UNIfication, passed with 125,342,017 UNI for and 742 against and was executed. Its
+    actions burned 100 million UNI, made a fee controller the owner of the v3 factory and set a fee recipient on the
+    v2 factory, which turns on the v2 protocol fee for every pair.
+  sourceUrl: https://vote.uniswapfoundation.org/proposals/93
+  publisher: Uniswap governance portal
+  title: UNIfication
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [uniswap-v2, uniswap-v3, token:uniswap]
+  locator: 'Proposal Spec, calls 1 and 2 of 8, and the vote summary "FOR - 125,342,017 AGAINST - 742"'
+  qualification: The page marks the proposal executed; its displayed execution time is not used as a date here.
+
+- id: uniswap-fees-live-v2-v3
+  statement: >-
+    Uniswap Labs said on 7 July 2026 that protocol fees were live across all v2 and v3 pools on 11 networks, Ethereum
+    among them.
+  sourceUrl: https://gov.uniswap.org/t/temp-check-activate-v4-protocol-fees/26162/1
+  publisher: Uniswap Labs (Uniswap governance forum)
+  title: "[Temp Check] Activate v4 Protocol Fees"
+  sourcePublishedAt: 2026-07-07
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [uniswap-v2, uniswap-v3]
+  locator: '"Protocol fees are now live across all v2 and v3 pools on 11 chains"'
+
+- id: uniswap-v4-fees-proposal
+  statement: >-
+    Uniswap governance proposal 100 turned on v4 protocol fees on Ethereum and six other networks for three families
+    of pools, one of them pools without hooks, and was executed. It enables no protocol fee on other v4 pools.
+  sourceUrl: https://vote.uniswapfoundation.org/proposals/100
+  publisher: Uniswap governance portal
+  title: Activate v4 Protocol Fees (Part 1/2)
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [uniswap-v4]
+  locator: '"This proposal does not enable the protocol fee for any pools other than those in the Families mentioned above."'
+
+- id: uniswap-fee-contracts-docs
+  statement: >-
+    Uniswap's protocol fee documentation lists the fee contracts on Ethereum, among them the TokenJar at
+    0xf38521f130fcCF29dB1961597bc5d2B60F995f85, the V3OpenFeeAdapter at 0xf2371551Fe3937Db7c750f4DfABe5c2fFFdcBf5A and
+    the V4FeeAdapter at 0x89A5D5bF00a27D55c02951E49078a5C5771051dB.
+  sourceUrl: https://developers.uniswap.org/docs/protocols/protocol-fee/deployments
+  publisher: Uniswap Labs
+  title: Protocol Fee Deployments
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [uniswap-v2, uniswap-v3, uniswap-v4]
+  locator: Deployments table, rows TokenJar, V3OpenFeeAdapter and V4FeeAdapter
+
+- id: uniswap-governance-timelock-docs
+  statement: >-
+    Uniswap's governance technical reference lists the governance Timelock contract on Ethereum at
+    0x1a9C8182C09F50C8318d769245beA52c32BE35BC.
+  sourceUrl: https://developers.uniswap.org/docs/ecosystem/governance/technical-reference
+  publisher: Uniswap Labs
+  title: Technical Reference
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [uniswap-v2, uniswap-v3, uniswap-v4, token:uniswap]
+  locator: 'Contract table, row "Timelock": 0x1a9C8182C09F50C8318d769245beA52c32BE35BC'
+
+- id: uniswap-permissioned-pools-announced
+  statement: >-
+    On 23 July 2026 Uniswap Labs announced Permissioned Pools, a Uniswap v4 hook standard in which the pool itself
+    checks that a wallet is approved before a swap or liquidity action. The issuer keeps control of the allowlist.
+    Superstate, Securitize and Dowgo were named as launch partners.
+  sourceUrl: https://blog.uniswap.org/introducing-permissioned-pools-on-uniswap-v4
+  publisher: Uniswap Labs
+  title: Introducing Permissioned Pools on Uniswap v4
+  sourcePublishedAt: 2026-07-23
+  retrievedAt: 2026-10-02
+  state: announced
+  subjects: [uniswap-v4, product:uniswap-permissioned-pools, org:uniswap-labs, org:securitize]
+  locator: '"the pool itself verifies whether a wallet is approved before a swap or liquidity action goes through"'
+  qualification: The post names no live pool, token or issuer address. It says Dowgo will use the standard once it receives EU authorization.
+
+- id: uniswap-permissioned-pools-architecture
+  statement: >-
+    Uniswap's documentation says the Permissioned Pools factory and hook are shared contracts that Uniswap deploys and
+    issuers do not control. An issuer cannot move positions or pull funds directly, but it can replace the contract
+    that decides who may trade and can pause swapping of its token.
+  sourceUrl: https://developers.uniswap.org/docs/protocols/uniswap-labs-hooks/permissioned-pools/architecture
+  publisher: Uniswap Labs
+  title: Permissioned Pools Architecture
+  retrievedAt: 2026-10-02
+  state: capability
+  subjects: [product:uniswap-permissioned-pools, uniswap-v4]
+  locator: 'Security Considerations: "The factory and hook are shared contracts that Uniswap deploys, and they are not issuer-controlled."'
+
+- id: uniswap-permissioned-pools-live
+  statement: >-
+    Uniswap Labs said on 24 August 2026 that the Permissioned Pools standard was live on Ethereum mainnet and on the
+    Sepolia test network, with Superstate, Securitize and Dowgo building on it.
+  sourceUrl: https://blog.uniswap.org/how-permissioned-pools-work-on-uniswap-v4
+  publisher: Uniswap Labs
+  title: How Permissioned Pools Work on Uniswap v4
+  sourcePublishedAt: 2026-08-24
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [product:uniswap-permissioned-pools, uniswap-v4]
+  locator: '"it''s live on Ethereum mainnet and Sepolia today"'
+  qualification: Live means the shared contracts are deployed. The post names no pool in use.
+
+- id: uniswap-permissioned-pools-addresses
+  statement: >-
+    Uniswap's guide to deploying a permissioned pool lists the shared PermissionedHooks contract on Ethereum at
+    0x499a724Ab630549f14C995EC41a8E04fA3fd28c0, with its own adapter factory, position manager and router.
+  sourceUrl: https://developers.uniswap.org/docs/protocols/uniswap-labs-hooks/permissioned-pools/deploy-a-permissioned-pool
+  publisher: Uniswap Labs
+  title: Deploy a Permissioned Pool
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [product:uniswap-permissioned-pools, uniswap-v4]
+  locator: 'Deployment Addresses, Ethereum mainnet: "PermissionedHooks| 0x499a724Ab630549f14C995EC41a8E04fA3fd28c0"'
+
+- id: uniswap-v2-deployments
+  statement: Uniswap's documentation lists the v2 factory on Ethereum mainnet at 0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f.
+  sourceUrl: https://developers.uniswap.org/docs/protocols/v2/deployments
+  publisher: Uniswap Labs
+  title: Uniswap v2 Deployments
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [uniswap-v2]
+  locator: 'Table row "Mainnet", factory column'
+
+- id: uniswap-v3-deployments
+  statement: Uniswap's documentation lists the v3 factory on Ethereum mainnet at 0x1F98431c8aD98523631AE4a59f267346ea31F984.
+  sourceUrl: https://developers.uniswap.org/docs/protocols/v3/deployments/v3-ethereum-deployments
+  publisher: Uniswap Labs
+  title: Uniswap v3 Ethereum Deployments
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [uniswap-v3]
+  locator: 'Row "UniswapV3Factory": 0x1F98431c8aD98523631AE4a59f267346ea31F984'
+
+- id: uniswap-v4-deployments
+  statement: >-
+    Uniswap's documentation lists the v4 PoolManager on Ethereum mainnet at 0x000000000004444c5dc75cB358380D2e3dE08A90,
+    a single contract that holds every v4 pool.
+  sourceUrl: https://developers.uniswap.org/docs/protocols/v4/deployments
+  publisher: Uniswap Labs
+  title: Uniswap v4 Deployments
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [uniswap-v4]
+  locator: 'Ethereum table, row "PoolManager": 0x000000000004444c5dc75cB358380D2e3dE08A90'
+
+- id: onchain-uniswap-cores-2026-10-01
+  statement: >-
+    The Uniswap v2 factory has had code since Ethereum block 10,000,835 (4 May 2020), the v3 factory since block
+    12,369,621 (4 May 2021) and the v4 PoolManager since block 21,688,329 (23 January 2025). By 00:00 UTC on 1 October
+    2026 the v2 factory had created 523,404 pairs and the v3 factory 73,307 pools, and 148,737 pools had been
+    initialized in the PoolManager, 36,138 of them with a hook.
+  sourceUrl: https://github.com/ryanberckmans/ethereum-decentralization-index/blob/main/site/content/evidence/onchain.json
+  publisher: Ethereum mainnet, read by the directory
+  title: Onchain reads at pinned blocks
+  observedAt: 2026-09-30
+  retrievedAt: 2026-10-02
+  state: reproduced-observation
+  subjects: [uniswap-v2, uniswap-v3, uniswap-v4]
+  locator: reads uniswap-v2-pairs-2026-10-01, uniswap-v3-pools-2026-10-01, uniswap-v4-swaps-2026-09 and the three first-code-block reads
+  qualification: Anyone can create a pool, so these count markets created, not markets in use.
+
+- id: onchain-uniswap-fees-2026-10-01
+  statement: >-
+    At 00:00 UTC on 1 October 2026 the v2 factory's fee recipient was the TokenJar, which turns on the v2 protocol fee
+    for every pair, and its fee setter was the governance Timelock. The v3 factory's owner was the V3OpenFeeAdapter.
+    The v4 PoolManager's owner was the Timelock and its protocol fee controller the V4FeeAdapter. The Timelock also
+    owned both fee adapters.
+  sourceUrl: https://github.com/ryanberckmans/ethereum-decentralization-index/blob/main/site/content/evidence/onchain.json
+  publisher: Ethereum mainnet, read by the directory
+  title: Onchain reads at pinned blocks
+  observedAt: 2026-09-30
+  retrievedAt: 2026-10-02
+  state: reproduced-observation
+  subjects: [uniswap-v2, uniswap-v3, uniswap-v4, token:uniswap]
+  locator: reads uniswap-v2-fee-to-2026-10-01 to uniswap-v4-fee-adapter-owner-2026-10-01
+  qualification: Contract names come from Uniswap's documentation (claims uniswap-fee-contracts-docs and uniswap-governance-timelock-docs).
+
+- id: onchain-uniswap-v4-swaps-2026-09
+  statement: >-
+    In September 2026 (Ethereum blocks 25,878,705 to 26,093,737) the Uniswap v4 PoolManager emitted 3,731,479 Swap
+    events in 16,146 pools: 2,743,172 in pools without a hook and 988,307 in 4,661 pools with one, served by 1,210
+    distinct hooks. 1,764,358 were in pools that pair native ETH. Uniswap's PermissionedHooks served one pool, which
+    recorded 2 swaps.
+  sourceUrl: https://github.com/ryanberckmans/ethereum-decentralization-index/blob/main/site/content/evidence/onchain.json
+  publisher: Ethereum mainnet, read by the directory
+  title: Onchain reads at pinned blocks
+  observedAt: 2026-09-30
+  retrievedAt: 2026-10-02
+  state: reproduced-observation
+  subjects: [uniswap-v4, native-eth, product:uniswap-permissioned-pools]
+  locator: read uniswap-v4-swaps-2026-09
+  qualification: A Swap event is one pool step; a routed trade through several pools emits several. Events are not trades or traders.
+
+- id: onchain-uniswap-v3-swaps-2026-09
+  statement: >-
+    In September 2026 (Ethereum blocks 25,878,705 to 26,093,737), 11,876 pools created by the Uniswap v3 factory
+    emitted 4,121,099 Swap events. Another 138,311 events with the same signature came from 425 contracts the factory
+    did not create, such as forks, and are not counted.
+  sourceUrl: https://github.com/ryanberckmans/ethereum-decentralization-index/blob/main/site/content/evidence/onchain.json
+  publisher: Ethereum mainnet, read by the directory
+  title: Onchain reads at pinned blocks
+  observedAt: 2026-09-30
+  retrievedAt: 2026-10-02
+  state: reproduced-observation
+  subjects: [uniswap-v3]
+  locator: read uniswap-v3-swaps-2026-09
+  qualification: A Swap event is one pool step; a routed trade through several pools emits several. Events are not trades or traders.
+
+# Morpho ----------------------------------------------------------------------------
+
+- id: morpho-blue-live-2024
+  statement: Morpho announced on 10 January 2024 that Morpho Blue was live on Ethereum mainnet.
+  sourceUrl: https://x.com/Morpho/status/1745083606857384106
+  publisher: Morpho (@Morpho on X)
+  title: Morpho Blue is officially live on Mainnet
+  sourcePublishedAt: 2024-01-10
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [morpho-blue]
+  locator: '"Morpho Blue is officially live on Mainnet!"'
+  qualification: Read through X's public embed endpoint.
+
+- id: morpho-deposits-2024
+  statement: >-
+    Morpho said on 1 August 2024 that Morpho Blue had passed 1.7 billion dollars in total deposits in the six months
+    since launching on Ethereum, and that its recent deployment on Base had reached 120 million dollars in deposits in
+    less than a month.
+  sourceUrl: https://morpho.org/blog/morpho-secures-50m-in-funding-led-by-ribbit-capital/
+  publisher: Morpho
+  title: Morpho Secures $50M in Funding, Led by Ribbit Capital
+  sourcePublishedAt: 2024-08-01
+  observedAt: 2024-08-01
+  retrievedAt: 2026-10-02
+  state: reported-adoption
+  subjects: [morpho-blue, deployment:morpho-blue-base]
+  locator: '"In just six months since launching on Ethereum, it surpassed $1.7B in total deposits"'
+  qualification: Morpho's own figures. Deposits are assets supplied, not loans outstanding; the two networks are reported separately.
+
+- id: morpho-docs-governance
+  statement: >-
+    Morpho's documentation says Morpho governance is intentionally limited in scope and the core contract code is
+    immutable. Governance's powers include turning on a fee of at most 25% of the interest borrowers pay, setting the
+    fee recipient, and whitelisting new liquidation loan-to-value ratios (LLTVs) and interest rate models.
+  sourceUrl: https://docs.morpho.org/learn/governance/organization
+  publisher: Morpho
+  title: Morpho Governance
+  retrievedAt: 2026-10-02
+  state: capability
+  subjects: [morpho-blue, token:morpho]
+  locator: '"Morpho Protocol governance is intentionally limited in scope. The core smart contract code is immutable."'
+  qualification: The same list includes ownership of the upgradeable MORPHO token contract, a separate EDI record.
+
+- id: morpho-docs-governance-multisig
+  statement: >-
+    Morpho's documentation names Morpho governance as morpho.eth, a 5-of-9 multisig at
+    0xcBa28b38103307Ec8dA98377ffF9816C164f9AFa, on both Ethereum and Base. MORPHO holders vote on Snapshot, and the
+    multisig carries out actions a vote approves.
+  sourceUrl: https://docs.morpho.org/learn/governance/organization
+  publisher: Morpho
+  title: Morpho Governance
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [morpho-blue, deployment:morpho-blue-base, token:morpho]
+  locator: 'Multisig and Addresses: "morpho.eth (5/9 multisig): 0xcBa28b38103307Ec8dA98377ffF9816C164f9AFa"'
+
+- id: morpho-docs-owner-powers
+  statement: >-
+    Morpho Blue's contract reference says its owner can change the owner, set fees on markets and the fee recipient,
+    and enable, but not disable, interest rate models and LLTVs.
+  sourceUrl: https://docs.morpho.org/developers/contracts/blue
+  publisher: Morpho
+  title: Blue
+  retrievedAt: 2026-10-02
+  state: capability
+  subjects: [morpho-blue]
+  locator: 'owner(): "It has the power to enable but not disable IRMs and LLTVs."'
+
+- id: morpho-docs-permissionless-markets
+  statement: >-
+    Morpho's documentation says anyone can create an isolated Morpho Blue lending market without a governance vote. A
+    market is defined by five parameters: the collateral asset, the loan asset, the LLTV, the oracle and the interest
+    rate model. They are fixed at creation, and the LLTV and rate model must come from options governance approved.
+  sourceUrl: https://docs.morpho.org/learn/concepts/blue
+  publisher: Morpho
+  title: Variable Rate Market (Morpho Blue)
+  retrievedAt: 2026-10-02
+  state: capability
+  subjects: [morpho-blue]
+  locator: '"In Morpho, each parameter is selected at market creation and persists in perpetuity."'
+
+- id: morpho-docs-oracle-per-market
+  statement: >-
+    Morpho's documentation says each market's oracle is chosen by the market's curators, not by Morpho, and cannot be
+    changed once the market is deployed.
+  sourceUrl: https://docs.morpho.org/learn/concepts/oracle
+  publisher: Morpho
+  title: Oracle
+  retrievedAt: 2026-10-02
+  state: capability
+  subjects: [morpho-blue]
+  locator: '"Market curators (not Morpho) are responsible for selecting and implementing appropriate oracles for their markets."'
+
+- id: morpho-docs-lender-risks
+  statement: >-
+    Morpho's risk documentation warns lenders that a lack of liquidity can prevent them from withdrawing for a period
+    of time, and that if collateral falls below a position's debt before it is liquidated, the borrower has no incentive
+    to repay.
+  sourceUrl: https://docs.morpho.org/learn/resources/risks
+  publisher: Morpho
+  title: Risk & Security Documentation
+  retrievedAt: 2026-10-02
+  state: capability
+  subjects: [morpho-blue]
+  locator: 'Liquidity Risk (for lenders): "A lack of liquidity can prevent suppliers from withdrawing their assets for a certain period of time."'
+
+- id: morpho-docs-adaptive-curve-irm
+  statement: >-
+    Morpho's documentation describes the AdaptiveCurveIRM: when a market's utilization stays above its 90% target the
+    rate curve keeps shifting upward, and at 100% utilization the rate at target doubles every five days, the fastest
+    it can move.
+  sourceUrl: https://docs.morpho.org/learn/concepts/irm
+  publisher: Morpho
+  title: Interest Rate Model
+  retrievedAt: 2026-10-02
+  state: capability
+  subjects: [morpho-blue]
+  locator: '"If the utilization remains at 100%, it will progressively increase until it doubles after 5 days."'
+
+- id: morpho-docs-addresses
+  statement: >-
+    Morpho's address list gives the Morpho Blue core contract the same address, 0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb,
+    on Ethereum and on Base, both built from morpho-blue v1.0.0.
+  sourceUrl: https://docs.morpho.org/developers/contracts/addresses
+  publisher: Morpho
+  title: Addresses
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [morpho-blue, deployment:morpho-blue-base]
+  locator: Morpho Blue section, row "Morpho" on the Ethereum and Base tabs
+
+- id: coinbase-bitcoin-loans-launch
+  statement: >-
+    Coinbase announced on 16 January 2025 that its customers could borrow USDC against bitcoin, rolling out to US users
+    outside New York, powered by Morpho and built on Base.
+  sourceUrl: https://x.com/coinbase/status/1879902780564951530
+  publisher: Coinbase (@coinbase on X)
+  title: Bitcoin-backed loans are here
+  sourcePublishedAt: 2025-01-16
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [product:coinbase-crypto-backed-loans, org:coinbase, deployment:morpho-blue-base, base]
+  locator: '"Borrow USDC against bitcoin, without selling it. Rolling out to US users (ex. NY) starting now."'
+  qualification: Read through X's public embed endpoint.
+
+- id: morpho-coinbase-cbbtc-market
+  statement: >-
+    Morpho's recap of February 2025 links the cbBTC/USDC market on Base, ID 0x9103c3b4…1836, to demand from Coinbase's
+    cbBTC-backed loans. The market lends USDC against cbBTC at an 86% LLTV.
+  sourceUrl: https://morpho.org/blog/the-morpho-effect-february-2025
+  publisher: Morpho
+  title: "The Morpho Effect: February 2025"
+  sourcePublishedAt: 2025-03-04
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [deployment:morpho-blue-base, product:coinbase-crypto-backed-loans, deployment:cbbtc-base]
+  locator: '"The cbBTC/USDC market on Based Morpho grew by 50M benefiting from the increasing demand coming from Coinbase cbBTC-backed loans."'
+  qualification: The market's parameters are confirmed on chain (claim onchain-morpho-base-coinbase-market-2026-10-01).
+
+- id: morpho-coinbase-collateral-markets
+  statement: >-
+    Morpho's Coinbase case study says Coinbase's crypto-backed loans began with the cbBTC/USDC market and expanded to
+    nine collateral markets, adding ETH, XRP, SOL, ADA, DOGE and LTC.
+  sourceUrl: https://morpho.org/stories/coinbase
+  publisher: Morpho
+  title: Coinbase | Morpho
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [product:coinbase-crypto-backed-loans, deployment:morpho-blue-base]
+  locator: '"What began with cbBTC/USDC has since expanded to nine collateral markets, adding ETH, XRP, SOL, ADA, DOGE, and LTC."'
+  qualification: Updated after its 2025 publication date and undated in effect; read on the retrieval date.
+
+- id: morpho-coinbase-active-loans-2026-09
+  statement: >-
+    Morpho said on 22 September 2026 that Coinbase's Morpho-powered variable-rate loans had grown to more than 1.4
+    billion dollars in active loans, backed by about 3 billion dollars of collateral.
+  sourceUrl: https://morpho.org/blog/coinbase-launches-fixed-rate-crypto-backed-loans-powered-by-morpho-midnight
+  publisher: Morpho
+  title: Coinbase Launches Fixed-rate Crypto-backed Loans Powered by Morpho Midnight
+  sourcePublishedAt: 2026-09-22
+  observedAt: 2026-09-22
+  retrievedAt: 2026-10-02
+  state: reported-adoption
+  subjects: [product:coinbase-crypto-backed-loans, deployment:morpho-blue-base, org:coinbase]
+  locator: '"which have grown to more than $1.4 billion in active loans backed by approximately $3 billion of collateral"'
+  qualification: Loans outstanding across all of Coinbase's variable-rate collateral markets on Base, as reported by Morpho; not an Ethereum figure.
+
+- id: morpho-coinbase-fixed-rate-midnight
+  statement: >-
+    Morpho announced on 22 September 2026 that Coinbase had launched fixed-rate loans powered by Morpho Midnight, a
+    separate fixed-rate protocol on Base, alongside its variable-rate loans.
+  sourceUrl: https://morpho.org/blog/coinbase-launches-fixed-rate-crypto-backed-loans-powered-by-morpho-midnight
+  publisher: Morpho
+  title: Coinbase Launches Fixed-rate Crypto-backed Loans Powered by Morpho Midnight
+  sourcePublishedAt: 2026-09-22
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [product:coinbase-crypto-backed-loans, org:coinbase]
+  locator: '"Coinbase has launched fixed-rate loans powered by Morpho Midnight."'
+  qualification: Morpho Midnight is not Morpho Blue and is outside EDI's Morpho markets record.
+
+- id: steakhouse-coinbase-usdc-lending
+  statement: >-
+    Steakhouse Financial says Coinbase's USDC lending, launched in September 2025, deposits into Morpho vaults on Base
+    that Steakhouse curates, built on Morpho's immutable contracts.
+  sourceUrl: https://kitchen.steakhouse.financial/p/lend-your-usdc-on-coinbase
+  publisher: Steakhouse Financial
+  title: Lend your USDC on Coinbase
+  sourcePublishedAt: 2025-09-18
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [org:coinbase, deployment:morpho-blue-base]
+  locator: '"The Steakhouse and Coinbase partnership launched in September 2025 with the integration of the Steakhouse Prime into Coinbase."'
+  qualification: The curator's own description; the vault addresses are not given.
+
+- id: onchain-morpho-blue-ethereum-2026-10-01
+  statement: >-
+    By 1 October 2026, 1,800 markets had been created in the Morpho Blue contract on Ethereum, 711 of them lending
+    USDC; 435 of those had recorded borrows. In September 2026 the contract emitted 5,458 Borrow events in USDC-lending
+    markets, paying 590,550,524.665216 USDC to borrowers.
+  sourceUrl: https://github.com/ryanberckmans/ethereum-decentralization-index/blob/main/site/content/evidence/onchain.json
+  publisher: Ethereum mainnet, read by the directory
+  title: Onchain reads at pinned blocks
+  observedAt: 2026-09-30
+  retrievedAt: 2026-10-02
+  state: reproduced-observation
+  subjects: [morpho-blue, usdc]
+  locator: read morpho-blue-usdc-2026-10-01
+  qualification: Borrow events are gross originations; repayments are not netted and a refinanced loan counts again.
+
+- id: onchain-morpho-blue-weth-2026-09
+  statement: >-
+    By 1 October 2026, 97 of the 1,800 markets created in the Morpho Blue contract on Ethereum lent WETH. In September
+    2026 the contract emitted 429 Borrow events in those markets, paying 57,540.146 WETH to borrowers.
+  sourceUrl: https://github.com/ryanberckmans/ethereum-decentralization-index/blob/main/site/content/evidence/onchain.json
+  publisher: Ethereum mainnet, read by the directory
+  title: Onchain reads at pinned blocks
+  observedAt: 2026-09-30
+  retrievedAt: 2026-10-02
+  state: reproduced-observation
+  subjects: [morpho-blue, weth9]
+  locator: read morpho-blue-weth-2026-10-01
+  qualification: Borrow events are gross originations; repayments are not netted and a refinanced loan counts again.
+
+- id: onchain-morpho-ethereum-markets-2026-10-01
+  statement: >-
+    On 1 October 2026 the Morpho Blue cbBTC/USDC market on Ethereum (LLTV 86%) recorded 305,077,117.460114 USDC
+    borrowed of 338,326,918.169229 supplied. A PAXG/USDC market recorded 8,242,668,726.125807 USDC both borrowed and
+    supplied, last updated on 14 September 2026, and an sdeUSD/USDC market 6,440,491,787.68227, last updated on 22
+    September 2026. Across all of its markets the Morpho Blue contract held 86.164 PAXG and 8,944,788.406 sdeUSD.
+  sourceUrl: https://github.com/ryanberckmans/ethereum-decentralization-index/blob/main/site/content/evidence/onchain.json
+  publisher: Ethereum mainnet, read by the directory
+  title: Onchain reads at pinned blocks
+  observedAt: 2026-09-30
+  retrievedAt: 2026-10-02
+  state: reproduced-observation
+  subjects: [morpho-blue, usdc, paxg, cbbtc]
+  locator: reads morpho-eth-cbbtc-usdc-2026-10-01 to sdeusd-held-by-morpho-blue-2026-10-01
+  qualification: >-
+    Recorded totals are each market's own accounting, including interest accrued up to its last update, and need not
+    match the collateral the contract holds. In a market whose borrows equal its supply, none of the supply is free to
+    withdraw.
+
+- id: onchain-morpho-base-coinbase-market-2026-10-01
+  statement: >-
+    On 1 October 2026 the Morpho Blue market on Base with ID 0x9103c3b4…1836 lent USDC against cbBTC at an 86% LLTV
+    and recorded 1,502,020,352.477389 USDC borrowed of 1,667,677,923.093709 supplied. In September 2026 it emitted
+    45,973 Borrow events paying 177,191,246.452042 USDC to borrowers.
+  sourceUrl: https://github.com/ryanberckmans/ethereum-decentralization-index/blob/main/site/content/evidence/onchain.json
+  publisher: Base, read by the directory
+  title: Onchain reads at pinned blocks
+  observedAt: 2026-09-30
+  retrievedAt: 2026-10-02
+  state: reproduced-observation
+  subjects: [deployment:morpho-blue-base, product:coinbase-crypto-backed-loans, deployment:usdc-base, deployment:cbbtc-base]
+  locator: reads morpho-base-cbbtc-usdc-2026-10-01 and morpho-base-cbbtc-usdc-borrows-2026-09
+  qualification: The chain does not show which borrowers came through Coinbase; the market is open to anyone.
+
+- id: onchain-morpho-governance-2026-10-01
+  statement: >-
+    On 1 October 2026 the owner of Morpho Blue on Ethereum was 0xcba28b38103307ec8da98377fff9816c164f9afa, the
+    morpho.eth multisig, and its fee recipient was the zero address. The contract has had code since Ethereum block
+    18,883,124 (28 December 2023); the Base deployment since Base block 13,977,148 (3 May 2024).
+  sourceUrl: https://github.com/ryanberckmans/ethereum-decentralization-index/blob/main/site/content/evidence/onchain.json
+  publisher: Ethereum mainnet and Base, read by the directory
+  title: Onchain reads at pinned blocks
+  retrievedAt: 2026-10-02
+  state: reproduced-observation
+  subjects: [morpho-blue, deployment:morpho-blue-base]
+  locator: reads morpho-blue-owner-2026-10-01, morpho-blue-fee-recipient-2026-10-01 and the two first-code-block reads
+
+# BUIDL -------------------------------------------------------------------------------
+
+- id: buidl-launch-2024
+  statement: >-
+    BlackRock announced on 20 March 2024 its first tokenized fund issued on a public blockchain, the BlackRock USD
+    Institutional Digital Liquidity Fund (BUIDL), through which qualified investors earn US dollar yields by subscribing
+    via Securitize Markets.
+  sourceUrl: https://www.silicon.co.uk/press-release/blackrock-launches-its-first-tokenized-fund-buidl-on-the-ethereum-network
+  publisher: BlackRock and Securitize (press release, syndicated by Silicon UK)
+  title: BlackRock Launches Its First Tokenized Fund, BUIDL, on the Ethereum Network
+  sourcePublishedAt: 2024-03-20
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [buidl, org:blackrock, org:securitize]
+  locator: '"BlackRock today unveils its first tokenized fund issued on a public blockchain"'
+  qualification: Only the headline names Ethereum; BlackRock's November 2024 release confirms the March 2024 launch was on Ethereum.
+
+- id: buidl-design-2024
+  statement: >-
+    At launch BUIDL sought a stable value of 1 dollar per token and invested all its assets in cash, US Treasury bills
+    and repurchase agreements. Dividends accrue daily and are paid monthly as new tokens, and holders can transfer
+    tokens at any hour, but only to other pre-approved investors.
+  sourceUrl: https://www.silicon.co.uk/press-release/blackrock-launches-its-first-tokenized-fund-buidl-on-the-ethereum-network
+  publisher: BlackRock and Securitize (press release, syndicated by Silicon UK)
+  title: BlackRock Launches Its First Tokenized Fund, BUIDL, on the Ethereum Network
+  sourcePublishedAt: 2024-03-20
+  retrievedAt: 2026-10-02
+  state: capability
+  subjects: [buidl, ref:us-dollar]
+  locator: '"Investors can transfer their tokens 24/7/365 to other pre-approved investors."'
+  qualification: The same release says BUIDL may not be able to keep a stable value of 1 dollar per token at all times.
+
+- id: buidl-service-providers
+  statement: >-
+    BUIDL's investment manager is BlackRock Financial Management, Bank of New York Mellon is custodian and administrator
+    of its assets, and Securitize is transfer agent and tokenization platform, managing the tokenized shares and
+    reporting subscriptions, redemptions and distributions.
+  sourceUrl: https://www.silicon.co.uk/press-release/blackrock-launches-its-first-tokenized-fund-buidl-on-the-ethereum-network
+  publisher: BlackRock and Securitize (press release, syndicated by Silicon UK)
+  title: BlackRock Launches Its First Tokenized Fund, BUIDL, on the Ethereum Network
+  sourcePublishedAt: 2024-03-20
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [buidl, org:blackrock, org:securitize]
+  locator: '"Securitize will act as a transfer agent and tokenization platform, managing the tokenized shares"'
+
+- id: buidl-share-classes-2024
+  statement: >-
+    BlackRock announced on 13 November 2024 that BUIDL, launched on Ethereum in March 2024, would add share classes on
+    Aptos, Arbitrum, Avalanche, OP Mainnet and Polygon.
+  sourceUrl: https://www.prnewswire.com/news-releases/blackrock-launches-new-buidl-share-classes-across-multiple-blockchains-to-expand-access-and-potential-of-buidl-ecosystem-302304035.html
+  publisher: BlackRock and Securitize (PR Newswire)
+  title: BlackRock Launches New BUIDL Share Classes Across Multiple Blockchains to Expand Access and Potential of BUIDL Ecosystem
+  sourcePublishedAt: 2024-11-13
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [buidl, org:blackrock]
+  locator: '"was initially launched on the Ethereum network in March 2024"'
+  qualification: Each network has its own share class and contract; the Ethereum token is not bridged to them.
+
+- id: buidl-solana-2025
+  statement: >-
+    Securitize announced on 25 March 2025 a BUIDL share class on Solana, making BUIDL available on seven blockchains,
+    with transfers between them through Wormhole.
+  sourceUrl: https://www.prnewswire.com/news-releases/blackrock-and-securitize-debut-new-buidl-share-class-on-solana-network-302410160.html
+  publisher: Securitize (PR Newswire)
+  title: BlackRock and Securitize Debut New BUIDL Share Class on Solana Network
+  sourcePublishedAt: 2025-03-25
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [buidl, org:securitize, network:solana]
+  locator: '"BUIDL is now available on seven blockchains, Aptos, Arbitrum, Avalanche, Ethereum, Optimism, Polygon, and Solana"'
+
+- id: buidl-token-addresses
+  statement: >-
+    BlackRock's page of official token addresses lists two BUIDL addresses on Ethereum,
+    0x7712c34205737192402172409a8f7ccef8aa2aec and 0x6a9DA2D710BB9B700acde7Cb81F10F1fF8C89041, and others on Solana,
+    Polygon, Avalanche, Optimism, Arbitrum and Aptos.
+  sourceUrl: https://www.blackrock.com/corporate/compliance/scams-and-fraud/blackrock-token-addresses
+  publisher: BlackRock
+  title: BlackRock's official token addresses
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [buidl, deployment:buidl-i-ethereum, org:blackrock]
+  locator: 'Token Name: BlackRock USD Institutional Digital Liquidity Fund ("BUIDL"), Ethereum'
+  qualification: The page does not say which address is which class. On chain, 0x7712… reports the symbol BUIDL and 0x6a9D… BUIDL-I.
+
+- id: buidl-collateral-exchanges-2025
+  statement: >-
+    Securitize announced on 18 June 2025 that BUIDL would be accepted as collateral on the Crypto.com and Deribit
+    exchanges.
+  sourceUrl: https://www.prnewswire.com/news-releases/blackrocks-buidl-tokenized-by-securitize-accepted-as-collateral-on-cryptocom-and-deribit-302484633.html
+  publisher: Securitize (PR Newswire)
+  title: BlackRock's BUIDL, Tokenized by Securitize, Accepted as Collateral on Crypto.com and Deribit
+  sourcePublishedAt: 2025-06-18
+  retrievedAt: 2026-10-02
+  state: announced
+  subjects: [buidl, org:securitize, org:crypto-com]
+  locator: '"will now be accepted as collateral on two of the most active crypto exchanges in the world: Crypto.com and Deribit"'
+  qualification: Collateral on centralized exchanges. The release names no blockchain or share class.
+
+- id: buidl-collateral-binance-2025
+  statement: >-
+    Securitize and Binance announced on 14 November 2025 that BUIDL would be accepted as off-exchange collateral for
+    trading on Binance.
+  sourceUrl: https://www.prnewswire.com/news-releases/blackrocks-buidl-tokenized-by-securitize-now-accepted-as-collateral-for-trading-on-binance-and-launches-on-bnb-chain-302613374.html
+  publisher: Securitize and Binance (PR Newswire)
+  title: BlackRock's BUIDL, Tokenized by Securitize, Now Accepted as Collateral for Trading on Binance and Launches on BNB Chain
+  sourcePublishedAt: 2025-11-14
+  retrievedAt: 2026-10-02
+  state: announced
+  subjects: [buidl, org:securitize]
+  locator: '"will now be accepted as off-exchange collateral for trading on Binance"'
+  qualification: Collateral held off-exchange with custody partners, not in an Ethereum application. No blockchain is named.
+
+- id: buidl-uniswapx-2026
+  statement: >-
+    Uniswap Labs and Securitize announced on 11 February 2026 that BUIDL could be traded through UniswapX. Investors,
+    each pre-qualified and whitelisted through Securitize, request quotes from whitelisted market makers, and trades
+    settle atomically on chain through smart contracts.
+  sourceUrl: https://blog.uniswap.org/unlocking-defi-liquidity-for-buidl
+  publisher: Uniswap Labs (with the joint Uniswap Labs and Securitize release)
+  title: Uniswap Labs and Securitize Partner to Unlock DeFi Liquidity for BlackRock’s BUIDL
+  sourcePublishedAt: 2026-02-11
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [buidl, product:uniswapx, org:securitize, org:uniswap-labs]
+  locator: '"All investors utilizing the capability are pre-qualified and whitelisted through Securitize."'
+  qualification: Neither the post nor the release names the blockchain BUIDL trades on through UniswapX. A request-for-quote system, not a Uniswap pool.
+
+# PAXG ----------------------------------------------------------------------------------
+
+- id: paxg-definition
+  statement: >-
+    Paxos defines PAXG as a token in which one token represents one fine troy ounce of a London Good Delivery gold bar
+    stored in professional vaults. Holders have ownership rights to that gold, in the custody of Paxos Trust Company.
+  sourceUrl: https://www.paxos.com/pax-gold
+  publisher: Paxos
+  title: Pax Gold (PAXG)
+  retrievedAt: 2026-10-02
+  state: capability
+  subjects: [paxg, org:paxos, ref:gold]
+  locator: '"one token represents one fine troy ounce of a London Good Delivery gold bar, stored in professional vault facilities"'
+
+- id: paxg-redemption
+  statement: >-
+    Paxos says PAXG can be redeemed through the Paxos site for London Good Delivery gold bars, which requires holding
+    430 PAXG, for unallocated gold held in London, or for US dollars at the market price.
+  sourceUrl: https://www.paxos.com/blog/bringing-paxg-to-solana
+  publisher: Paxos
+  title: "Bringing PAXG to Solana: Gold-Backed Token Expands"
+  sourcePublishedAt: 2026-06-25
+  retrievedAt: 2026-10-02
+  state: capability
+  subjects: [paxg, org:paxos]
+  locator: '"PAXG is redeemable for LBMA Good Delivery gold bullion bars (requires holder to have 430 PAXG)"'
+  qualification: Redemption is for verified Paxos customers.
+
+- id: paxg-solana-2026
+  statement: >-
+    Paxos extended PAXG to Solana on 25 June 2026, calling it the first step in PAXG's expansion to other networks. It
+    says PAXG launched on Ethereum in 2019 and that Ethereum holders can bridge through the Paxos platform or LayerZero.
+  sourceUrl: https://www.paxos.com/blog/bringing-paxg-to-solana
+  publisher: Paxos
+  title: "Bringing PAXG to Solana: Gold-Backed Token Expands"
+  sourcePublishedAt: 2026-06-25
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [paxg, org:paxos, network:solana]
+  locator: '"Today we''re extending PAXG to Solana, the first step in PAXG''s multi-chain expansion."'
+
+- id: paxg-addresses
+  statement: >-
+    Paxos's documentation lists PAXG on Ethereum at 0x45804880De22913dAFE09f4980848ECE6EcbAf78 and a separate token on
+    Solana.
+  sourceUrl: https://docs.paxos.com/guides/stablecoin/paxg/mainnet
+  publisher: Paxos
+  title: PAXG on Main Networks
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [paxg]
+  locator: 'Table "Network | Token Address", row Ethereum Mainnet'
+
+- id: paxg-report-2026-08
+  statement: >-
+    Paxos's PAXG Redemption Assets Report as of 31 August 2026, examined by KPMG, counts 431,313 PAXG natively minted
+    and redeemable: 428,830 on Ethereum, 2,478 on Solana and 5 on Robinhood Chain. It says the gold is stored with
+    Brink's Global Services and ICBC Standard Bank, both LBMA-approved vaults.
+  sourceUrl: https://framerusercontent.com/assets/9bk8TbTXouqOrpoxLSn5XIf7Ufo.pdf
+  publisher: Paxos Trust Company (report examined by KPMG)
+  title: Pax Gold (PAXG) Redemption Assets Report as of August 31, 2026
+  sourcePublishedAt: 2026-09-24
+  observedAt: 2026-08-31
+  retrievedAt: 2026-10-02
+  state: reported-adoption
+  subjects: [paxg, org:paxos, ref:gold]
+  locator: 'Exhibit A, "Total PAXG natively minted tokens 428,830 2,478 5 431,313"; Exhibit B on storage'
+  qualification: Linked from paxos.com/paxg-transparency as the August 2026 report. Token counts are rounded to whole tokens.
+
+- id: paxg-terms-freeze
+  statement: >-
+    The PAX Gold Terms give Paxos the ability and right to freeze and upgrade all PAXG tokens wherever they are held.
+    Paxos says it will freeze PAXG only when required by law, on formal notice from a partner under agreed terms, or as
+    it deems necessary in its sole discretion.
+  sourceUrl: https://www.paxos.com/terms-and-conditions/pax-gold-terms-conditions
+  publisher: Paxos
+  title: PAX Gold Terms and Conditions
+  retrievedAt: 2026-10-02
+  state: capability
+  subjects: [paxg, org:paxos]
+  locator: 'Section 14, Freezes and Upgrades, 14.1 and 14.2'
+
+- id: paxos-token-roles
+  statement: >-
+    The README of Paxos's token contracts, which cover PYUSD and PAXG, says an asset protection role can freeze and
+    unfreeze any address's balance and wipe a frozen balance so authorities can seize the backing assets, a pause role
+    can stop transfers, and only supply controllers can mint and burn. It says Paxos will not freeze on its own accord.
+  sourceUrl: https://github.com/paxosglobal/paxos-token-contracts/blob/master/README.md
+  publisher: Paxos (GitHub)
+  title: paxos-token-contracts README
+  retrievedAt: 2026-10-02
+  state: capability
+  subjects: [paxg, pyusd, org:paxos]
+  locator: '"The ASSET_PROTECTION_ROLE can freeze and unfreeze the token balance of any address on chain."'
+  qualification: Undated. The PAX Gold Terms also allow a freeze at Paxos's sole discretion (claim paxg-terms-freeze).
+
+# PYUSD ---------------------------------------------------------------------------------
+
+- id: pyusd-launch-2023
+  statement: >-
+    PayPal launched PayPal USD (PYUSD) on 7 August 2023: a dollar stablecoin backed by US dollar deposits, short-term
+    US Treasuries and similar cash equivalents, redeemable 1:1 for US dollars, issued by Paxos Trust Company as an
+    ERC-20 token on Ethereum.
+  sourceUrl: https://newsroom.paypal-corp.com/2023-08-07-PayPal-Launches-U-S-Dollar-Stablecoin
+  publisher: PayPal
+  title: PayPal Launches U.S. Dollar Stablecoin
+  sourcePublishedAt: 2023-08-07
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [pyusd, org:paypal, org:paxos, ref:us-dollar]
+  locator: '"As an ERC-20 token issued on the Ethereum blockchain, PayPal USD will be available to an already large and growing community"'
+
+- id: pyusd-paypal-uses-2023
+  statement: >-
+    From launch, eligible US PayPal customers who bought PYUSD could move it between PayPal and compatible external
+    wallets, send it to other people, pay with it at checkout and convert supported cryptocurrencies to and from it.
+  sourceUrl: https://newsroom.paypal-corp.com/2023-08-07-PayPal-Launches-U-S-Dollar-Stablecoin
+  publisher: PayPal
+  title: PayPal Launches U.S. Dollar Stablecoin
+  sourcePublishedAt: 2023-08-07
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [pyusd, org:paypal]
+  locator: '"Transfer PayPal USD between PayPal and compatible external wallets"'
+  qualification: US customers only at launch, rolling out over the following weeks.
+
+- id: pyusd-solana-2024
+  statement: PayPal announced on 29 May 2024 that PYUSD was available on Solana as well as Ethereum.
+  sourceUrl: https://newsroom.paypal-corp.com/2024-05-29-PayPal-USD-Stablecoin-Now-Available-on-Solana-Blockchain,-Providing-Faster,-Cheaper-Transactions-for-Consumers
+  publisher: PayPal
+  title: PayPal USD Stablecoin Now Available on Solana Blockchain
+  sourcePublishedAt: 2024-05-29
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [pyusd, org:paypal, network:solana]
+  locator: '"PayPal USD (PYUSD) is now available on the Solana blockchain"'
+
+- id: pyusd-layerzero-2025
+  statement: >-
+    PayPal's developer blog says PYUSD moves between Ethereum and Solana through LayerZero by burn and mint: tokens are
+    burned on the source chain and minted on the destination chain.
+  sourceUrl: https://developer.paypal.com/community/blog/pyusd-layerzero/
+  publisher: PayPal (developer blog)
+  title: "Building the Future of Stablecoin Interoperability: PYUSD and LayerZero"
+  sourcePublishedAt: 2025-03-19
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [pyusd, network:solana]
+  locator: '"The PYUSD/LayerZero integration uses a burn-and-mint mechanism."'
+
+- id: pyusd-arbitrum-2025
+  statement: PayPal announced on 17 July 2025 that PYUSD was expanding to layer-2 networks, starting with Arbitrum.
+  sourceUrl: https://newsroom.paypal-corp.com/2025-07-17-PayPal-USD-Expands-to-Arbitrum-Bringing-Layer-2-Efficiency-to-Multi-Chain-Development-Stack
+  publisher: PayPal
+  title: PayPal USD Expands to Arbitrum, Bringing Layer 2 Efficiency to Multi-Chain Development Stack
+  sourcePublishedAt: 2025-07-17
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [pyusd, org:paypal, arbitrum]
+  locator: '"PayPal announced that it is expanding PayPal USD (PYUSD) onto Layer-2 blockchains starting with Arbitrum"'
+
+- id: pyusd-addresses
+  statement: >-
+    Paxos's documentation lists PYUSD on Ethereum at 0x6c3ea9036406852006290770BEdFcAbA0e23A0e8, with separate tokens
+    on Arbitrum, Polygon PoS, Solana and X Layer.
+  sourceUrl: https://docs.paxos.com/guides/stablecoin/pyusd/mainnet
+  publisher: Paxos
+  title: PYUSD on Main Networks
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [pyusd]
+  locator: 'Table "Network | Token Address", row Ethereum Mainnet'
+
+- id: pyusd-report-2026-08
+  statement: >-
+    Paxos's PYUSD Redemption Assets Report, examined by KPMG, counts 2,886,948,845 PYUSD natively minted on 31 August
+    2026, of which 1,840,077,337 on Ethereum, 743,923,272 on Solana and 277,212,847 on Arbitrum One, the rest on
+    Stellar, Polygon, Ink and X Layer.
+  sourceUrl: https://framerusercontent.com/assets/VdMoM8qevL5j7tgTTmLhkemRdY.pdf
+  publisher: Paxos Trust Company (report examined by KPMG)
+  title: PayPal USD (PYUSD) Redemption Assets Report as of August 6, 2026 and August 31, 2026
+  sourcePublishedAt: 2026-09-24
+  observedAt: 2026-08-31
+  retrievedAt: 2026-10-02
+  state: reported-adoption
+  subjects: [pyusd, org:paxos]
+  locator: 'Exhibit A, August 31, 2026: "Total PYUSD natively minted tokens 1,840,077,337 743,923,272 277,212,847"'
+  qualification: Linked from paxos.com/pyusd-transparency as the August 2026 report. Natively minted excludes tokens third-party bridges issue.
+
+- id: paxos-bridged-stablecoins
+  statement: >-
+    Paxos's terms for its dollar stablecoins, which govern PYUSD, say a token that a third-party bridge issues on
+    another chain against locked PYUSD is not issued, minted or redeemed by Paxos. The same terms give Paxos the
+    ability and right to freeze and upgrade all its dollar stablecoin tokens wherever they are held.
+  sourceUrl: https://www.paxos.com/terms-and-conditions/stablecoin-terms-conditions
+  publisher: Paxos
+  title: US Dollar-Backed Stablecoin Terms and Conditions
+  retrievedAt: 2026-10-02
+  state: capability
+  subjects: [pyusd, org:paxos]
+  locator: '3.4.1: "A Bridged Stablecoin is not issued, minted, or redeemed by Paxos"; 3.5.1 on freezes and upgrades'
+
+# Issuer tokens on chain ------------------------------------------------------------------
+
+- id: onchain-buidl-2026-09
+  statement: >-
+    BUIDL's Ethereum contract 0x7712…2aec had a supply of 203,389,187.177549 tokens on 1 October 2026 and
+    211,864,943.860349 on 1 September. In September it emitted 694 mints totalling 9,665,773.660011, 11 burns totalling
+    18,141,530.342811 and 33 transfers between holders totalling 18,407,441.186307. Its first code is in block
+    19,343,293 (1 March 2024).
+  sourceUrl: https://github.com/ryanberckmans/ethereum-decentralization-index/blob/main/site/content/evidence/onchain.json
+  publisher: Ethereum mainnet, read by the directory
+  title: Onchain reads at pinned blocks
+  observedAt: 2026-09-30
+  retrievedAt: 2026-10-02
+  state: reproduced-observation
+  subjects: [buidl]
+  locator: reads buidl-total-supply-2026-10-01, buidl-total-supply-2026-09-01, buidl-transfers-2026-09 and buidl-first-code-block
+  qualification: A mint is a Transfer from the zero address and a burn a Transfer to it; their difference equals the change in supply.
+
+- id: onchain-buidl-i-2026-09
+  statement: >-
+    The BUIDL I Class contract on Ethereum had a supply of 239,844,535.0901 tokens on 1 October 2026 and
+    801,395,176.9801 on 1 September. In September it emitted 16 burns totalling 562,994,006.600011, 79 mints totalling
+    1,443,364.710011 and 18 transfers between holders totalling 547,990,000.
+  sourceUrl: https://github.com/ryanberckmans/ethereum-decentralization-index/blob/main/site/content/evidence/onchain.json
+  publisher: Ethereum mainnet, read by the directory
+  title: Onchain reads at pinned blocks
+  observedAt: 2026-09-30
+  retrievedAt: 2026-10-02
+  state: reproduced-observation
+  subjects: [deployment:buidl-i-ethereum]
+  locator: reads buidl-i-total-supply-2026-10-01, buidl-i-total-supply-2026-09-01 and buidl-i-transfers-2026-09
+  qualification: Burns are redemptions or moves out of this share class; the chain does not say which.
+
+- id: onchain-paxg-2026-09
+  statement: >-
+    PAXG's Ethereum contract had a supply of 432,505.835239 on 1 October 2026 and 428,830.056219 on 1 September, the
+    same as at 5:00 PM Eastern on 31 August. In September it emitted 48 mints totalling 4,082.610334, 164 burns
+    totalling 406.831314 and 131,559 other Transfer events totalling 322,023.29826031859576645 PAXG.
+  sourceUrl: https://github.com/ryanberckmans/ethereum-decentralization-index/blob/main/site/content/evidence/onchain.json
+  publisher: Ethereum mainnet, read by the directory
+  title: Onchain reads at pinned blocks
+  observedAt: 2026-09-30
+  retrievedAt: 2026-10-02
+  state: reproduced-observation
+  subjects: [paxg]
+  locator: reads paxg-total-supply-2026-10-01, paxg-total-supply-2026-09-01, paxg-total-supply-2026-08-31-report and paxg-transfers-2026-09
+  qualification: Transfer events, not payments or people; one transfer can emit more than one event.
+
+- id: onchain-pyusd-2026-09
+  statement: >-
+    PYUSD's Ethereum contract had a supply of 1,686,931,301.760225 on 1 October 2026 and 1,828,528,201.321894 on 1
+    September, and 1,840,077,337.277328 at 5:00 PM Eastern on 31 August. In September it emitted 1,643 mints totalling
+    1,016,347,609.092287, 1,205 burns totalling 1,157,944,508.653956 and 319,318 other Transfer events totalling
+    12,061,986,134.017603 PYUSD.
+  sourceUrl: https://github.com/ryanberckmans/ethereum-decentralization-index/blob/main/site/content/evidence/onchain.json
+  publisher: Ethereum mainnet, read by the directory
+  title: Onchain reads at pinned blocks
+  observedAt: 2026-09-30
+  retrievedAt: 2026-10-02
+  state: reproduced-observation
+  subjects: [pyusd]
+  locator: reads pyusd-total-supply-2026-10-01, pyusd-total-supply-2026-09-01, pyusd-total-supply-2026-08-31-report and pyusd-transfers-2026-09
+  qualification: Moves to and from other chains through LayerZero also appear as mints and burns (claim pyusd-layerzero-2025). Transfer totals are gross.
+
+- id: onchain-issuer-freezes-2026-10-01
+  statement: >-
+    On 1 October 2026, 291 addresses were frozen in PAXG, every address it has ever frozen, with 10 frozen balances
+    wiped. PYUSD had frozen 158 addresses, 157 still frozen, and wiped 2. USDC had blocklisted 846 distinct addresses,
+    650 of them still blocked.
+  sourceUrl: https://github.com/ryanberckmans/ethereum-decentralization-index/blob/main/site/content/evidence/onchain.json
+  publisher: Ethereum mainnet, read by the directory
+  title: Onchain reads at pinned blocks
+  observedAt: 2026-09-30
+  retrievedAt: 2026-10-02
+  state: reproduced-observation
+  subjects: [paxg, pyusd, usdc, org:paxos, org:circle]
+  locator: reads paxg-frozen-2026-10-01, pyusd-frozen-2026-10-01 and usdc-blocklisted-2026-10-01
+  qualification: Counts every freeze and blocklisting event since each contract was deployed, then checks each address at the pinned block.
