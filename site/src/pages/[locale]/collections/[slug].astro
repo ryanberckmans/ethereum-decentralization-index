@@ -1,0 +1,25 @@
+---
+/** The two collections: /collections/d0 and /collections/global-economy. Collection IDs redirect to their slugs. */
+import Base from '../../../layouts/Base.astro';
+import {CollectionPage} from '../../../views/Collection.tsx';
+import {isLocale, PRODUCT} from '../../../config.ts';
+import {COLLECTION_IDS, type CollectionId} from '../../../content/vocab.ts';
+import {messages} from '../../../i18n/index.ts';
+import {catalog, evaluationDateFor} from '../../../server/site.ts';
+import {COLLECTION_BY_SLUG, paths} from '../../../model/urls.ts';
+
+const {locale, slug} = Astro.params;
+if (!isLocale(locale) || !slug) return Astro.rewrite('/404');
+if ((COLLECTION_IDS as readonly string[]).includes(slug) && !COLLECTION_BY_SLUG[slug]) return Astro.redirect(paths.collection(locale, slug as CollectionId), 301);
+const id = COLLECTION_BY_SLUG[slug];
+if (!id) return Astro.rewrite('/404');
+
+const m = messages(locale);
+const date = evaluationDateFor();
+const collection = catalog.collections.get(id);
+const title = collection?.title ?? m.collections[id];
+---
+
+<Base locale={locale} title={`${title} · ${PRODUCT.name}`} description={collection?.dek ?? title} path={paths.collection(locale, id)} current="stories" evaluationDate={date}>
+  <CollectionPage id={id} env={{locale, m, date}} />
+</Base>

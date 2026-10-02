@@ -55,17 +55,20 @@ export function formatQuantity(value: string, unit: string, locale: Locale, opti
   const compact = options.compact ?? true;
   const magnitude = Math.abs(Number(value));
   const useCompact = compact && magnitude >= 1_000_000;
+  // Display precision only; the exact value stays in the accessible text, the page title and the exports.
+  const precision: Intl.NumberFormatOptions = useCompact
+    ? {notation: 'compact', compactDisplay: 'long', maximumFractionDigits: 2}
+    : magnitude >= 1000
+      ? {maximumFractionDigits: 0}
+      : magnitude >= 1 || magnitude === 0
+        ? {maximumFractionDigits: 2}
+        : {maximumSignificantDigits: 3};
   // Intl formats decimal strings exactly (no float rounding) when given a string.
   const input = value as unknown as number;
   if (isCurrency(unit)) {
-    return new Intl.NumberFormat(locale, {
-      style: 'currency',
-      currency: unit,
-      currencyDisplay: 'narrowSymbol',
-      ...(useCompact ? {notation: 'compact', compactDisplay: 'long', maximumFractionDigits: 2} : {maximumFractionDigits: 2}),
-    }).format(input);
+    return new Intl.NumberFormat(locale, {style: 'currency', currency: unit, currencyDisplay: 'narrowSymbol', ...precision}).format(input);
   }
-  const number = new Intl.NumberFormat(locale, useCompact ? {notation: 'compact', compactDisplay: 'long', maximumFractionDigits: 2} : {maximumFractionDigits: 6}).format(input);
+  const number = new Intl.NumberFormat(locale, precision).format(input);
   return unit ? `${number} ${unit}` : number;
 }
 

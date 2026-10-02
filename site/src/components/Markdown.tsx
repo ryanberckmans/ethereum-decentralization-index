@@ -10,47 +10,69 @@ export interface TokenContext {
   render(token: TokenRef): ReactNode;
 }
 
+/** Punctuation that must not wrap away from the badge or citation before it. */
+const GLUE = /^[.,;:!?…)\]’”]+/;
+
 export function Inlines({nodes, ctx}: {nodes: readonly Inline[]; ctx: TokenContext}) {
-  return (
-    <>
-      {nodes.map((node, index) => {
-        switch (node.t) {
-          case 'text':
-            return <Fragment key={index}>{node.v}</Fragment>;
-          case 'em':
-            return (
-              <em key={index}>
-                <Inlines nodes={node.c} ctx={ctx} />
-              </em>
-            );
-          case 'strong':
-            return (
-              <strong key={index}>
-                <Inlines nodes={node.c} ctx={ctx} />
-              </strong>
-            );
-          case 'del':
-            return (
-              <del key={index}>
-                <Inlines nodes={node.c} ctx={ctx} />
-              </del>
-            );
-          case 'code':
-            return <code key={index}>{node.v}</code>;
-          case 'br':
-            return <br key={index} />;
-          case 'link':
-            return (
-              <a key={index} href={node.href} rel="noopener noreferrer">
-                <Inlines nodes={node.c} ctx={ctx} />
-              </a>
-            );
-          case 'token':
-            return <Fragment key={index}>{ctx.render(node)}</Fragment>;
-        }
-      })}
-    </>
-  );
+  const items: ReactNode[] = [];
+  for (let index = 0; index < nodes.length; index++) {
+    const node = nodes[index];
+    const next = nodes[index + 1];
+    if (node.t === 'token' && next?.t === 'text') {
+      const glue = GLUE.exec(next.v)?.[0];
+      if (glue) {
+        items.push(
+          <span key={index} className="nowrap">
+            {ctx.render(node)}
+            {glue}
+          </span>,
+        );
+        const rest = next.v.slice(glue.length);
+        if (rest) items.push(<Fragment key={index + 1}>{rest}</Fragment>);
+        index++;
+        continue;
+      }
+    }
+    items.push(<InlineNode key={index} node={node} ctx={ctx} />);
+  }
+  return <>{items}</>;
+}
+
+function InlineNode({node, ctx}: {node: Inline; ctx: TokenContext}) {
+  switch (node.t) {
+    case 'text':
+      return <>{node.v}</>;
+    case 'em':
+      return (
+        <em>
+          <Inlines nodes={node.c} ctx={ctx} />
+        </em>
+      );
+    case 'strong':
+      return (
+        <strong>
+          <Inlines nodes={node.c} ctx={ctx} />
+        </strong>
+      );
+    case 'del':
+      return (
+        <del>
+          <Inlines nodes={node.c} ctx={ctx} />
+        </del>
+      );
+    case 'code':
+      return <code>{node.v}</code>;
+    case 'br':
+      return <br />;
+    case 'link':
+      return (
+        <a href={node.href} rel="noopener noreferrer">
+          <Inlines nodes={node.c} ctx={ctx} />
+        </a>
+      );
+    case 'token':
+      return <>{ctx.render(node)}</>;
+  }
 }
 
 export function Blocks({blocks, ctx}: {blocks: readonly Block[]; ctx: TokenContext}) {
