@@ -1,0 +1,50 @@
+---
+/**
+ * /compare?ids=a,b,c: up to four exact EDI records side by side. The add and
+ * pair controls submit plain GET forms; every request is answered with, or
+ * redirected to, one canonical query. Combinations are not indexed.
+ */
+import Base from '../../layouts/Base.astro';
+import {ComparePage} from '../../views/Compare.tsx';
+import {isLocale, LIMITS, PRODUCT} from '../../config.ts';
+import {messages} from '../../i18n/index.ts';
+import {parseCompareParams} from '../../model/compare.ts';
+import {paths} from '../../model/urls.ts';
+import {catalog, evaluationDateFor} from '../../server/site.ts';
+
+const {locale} = Astro.params;
+if (!isLocale(locale)) return Astro.rewrite('/404');
+
+/** An EDI ID or a profile slug (current or old) to the EDI ID; nothing else. */
+function resolve(value: string): string | undefined {
+  const direct = catalog.object(value);
+  if (direct) return direct.id;
+  let resolved = catalog.resolveObject(value);
+  if (resolved.kind === 'redirect') resolved = catalog.resolveObject(resolved.slug);
+  return resolved.kind === 'found' ? resolved.value.id : undefined;
+}
+
+const params = parseCompareParams(Astro.url.searchParams, resolve, LIMITS.compare);
+const current = Astro.url.search.replace(/^\?/, '');
+if (!params.unknown.length && !params.truncated && current !== params.canonical) {
+  return Astro.redirect(`${paths.compare(locale)}${params.canonical ? `?${params.canonical}` : ''}`, 302);
+}
+
+const m = messages(locale);
+const date = evaluationDateFor();
+const objects = params.ids.map(id => catalog.object(id)!);
+const title = objects.length ? `${m.compare.title}: ${objects.map(object => object.name).join(', ')} · ${PRODUCT.name}` : `${m.compare.title} · ${PRODUCT.name}`;
+---
+
+<Base
+  locale={locale}
+  title={title}
+  description={m.compare.intro}
+  path={paths.compare(locale)}
+  query={params.canonical || undefined}
+  noindex={params.ids.length > 0 || params.unknown.length > 0}
+  current="compare"
+  evaluationDate={date}
+>
+  <ComparePage objects={objects} unknown={params.unknown} truncated={params.truncated} view={params.view} env={{locale, m, date}} />
+</Base>

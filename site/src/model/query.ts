@@ -76,9 +76,9 @@ export function filterCount(query: DirectoryQuery): number {
   );
 }
 
-function cleanText(value: string): string {
+export function cleanText(value: string): string {
   // Control characters, bidi overrides and surrounding space never belong in a query.
-  return value.replace(/[\u0000-\u001f\u007f-\u009f‪-‮⁦-⁩]/g, ' ').replace(/\s+/g, ' ').trim();
+  return value.replace(/[\u0000-\u001f\u007f-\u009f\u200b-\u200f\u202a-\u202e\u2066-\u2069]/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
 function levelOf(value: string): DLevel | null {
