@@ -3,6 +3,10 @@
  * (starting with =, +, -, @, a tab or a carriage return) is prefixed with an
  * apostrophe, so opening an export never runs anything. Numbers are written
  * as exact decimal strings and are not altered.
+ *
+ * @cc [label:security] safe-external-content
+ * Every exported text cell MUST pass through csvCell, so editorial or EDI text
+ * can never become a spreadsheet formula.
  */
 
 export type CsvValue = string | number | boolean | null | undefined;

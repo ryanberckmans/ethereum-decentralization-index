@@ -82,7 +82,15 @@ export const SubjectId = z.union([ContextSubjectId, EdiId]);
 
 export const EvidenceStateSchema = z.enum(EVIDENCE_STATES);
 
-/** Absolute https URL without credentials, IP-literal hosts or local names. */
+/**
+ * Absolute https URL without credentials, IP-literal hosts or local names.
+ *
+ * @cc [label:security] safe-external-content
+ * Every link that editorial content can place on a page (sources, official
+ * links, Markdown links) is validated here at import: https only, a public
+ * host name, no credentials. Pages render it as a plain link with
+ * rel="noopener noreferrer"; nothing from content is executed or embedded.
+ */
 export function isSafeHttpsUrl(value: string): boolean {
   if (value.length > 2048) return false;
   let url: URL;
@@ -283,7 +291,15 @@ export const ObservationSchema = z
   });
 export type Observation = z.infer<typeof ObservationSchema>;
 
-/** relationships.yaml: a typed, sourced, directed editorial connection. Never a control dependency. */
+/**
+ * relationships.yaml: a typed, sourced, directed editorial connection. Never a control dependency.
+ *
+ * @cc [label:product] typed-relationship-semantics
+ * A relationship has one type from a closed vocabulary, a direction, an
+ * evidence state and sources. It describes economic use (issues, settles on,
+ * holds as collateral); it MUST NOT stand in for an EDI control dependency,
+ * and no grade is inherited along it. Control paths come from EDI only.
+ */
 export const RelationshipSchema = z
   .strictObject({
     id: RecordId,

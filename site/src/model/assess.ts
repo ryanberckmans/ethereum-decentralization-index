@@ -15,6 +15,12 @@
  * the server and a browser can show the result for any UTC date (after
  * midnight, on a resumed tab or from a cache) without reimplementing EDI
  * semantics. Permanent D0 never expires with age.
+ *
+ * @cc [label:product] no-synthetic-research-renewal
+ * Only a new EDI registry renews a review. Directory code MUST NOT extend a
+ * due date, mark a record reviewed again or keep a complete grade past its
+ * due date; an overdue record shows EDI's partial result with its floor and
+ * the date the review fell due.
  */
 import type {Assessment} from 'ethereum-decentralization-index';
 import {registry, registryAssessment, reviewQueue, reviewTiming} from 'ethereum-decentralization-index/registry';
@@ -30,7 +36,16 @@ export function evaluationDate(requested: string): string {
   return maxDate(requested, REGISTRY_DATE);
 }
 
-/** Records that carry a separate EDI position review. Others have no position grade. */
+/**
+ * Records that carry a separate EDI position review. Others have no position grade.
+ *
+ * @cc [label:product] separate-mechanism-position-scope
+ * A mechanism grade describes the reviewed code and controls; a position
+ * grade describes what a holder's position depends on. They are computed,
+ * stored, shown and exported separately, each with its own review date. A
+ * D0 mechanism MUST NOT imply a position grade, and a record without a
+ * position review has none (null in exports), never D0.
+ */
 export function hasPositionReview(subject: Entity): boolean {
   return subject.positionReview !== undefined || subject.positionDependenciesUnreviewed === true;
 }
