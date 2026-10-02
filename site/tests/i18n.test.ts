@@ -18,7 +18,7 @@ const targets = LOCALES.filter(locale => locale !== 'en' && (!only || locale ===
 const PROTECTED = /EDI Directory|EDI|D0–D9|D\d|D\?|≥|SHA-256|JSON|CSV|GitHub|Sourcify|llms\.txt|agents\.md|sitemap\.xml/g;
 /** Characters that could hide or reorder text. No-break spaces are allowed. */
 const FORBIDDEN = /[\u0000-\u0008\u000b-\u001f\u007f-\u009f\u00ad\u200b-\u200f\u202a-\u202e\u2060-\u2064\u2066-\u2069\ufeff]/;
-const CJK = /[぀-ヿ㐀-鿿가-힯]/;
+const CJK = /[\u3040-\u30ff\u3400-\u9fff\uac00-\ud7af]/;
 
 const placeholders = (text: string) => new Set([...text.matchAll(/\{(\w+)\}/g)].map(match => match[1]));
 const protectedTerms = (text: string) => new Set(text.match(PROTECTED) ?? []);
