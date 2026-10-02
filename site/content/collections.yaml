@@ -1,0 +1,16 @@
+# The two collections. d0-in-use lists every complete D0 mechanism from the
+# current EDI edition by itself; storyIds are the curated stories, in order.
+# global-economy is defined once its first story is published.
+
+- id: d0-in-use
+  title: D0 in use
+  dek: Mechanisms that no one can change, pause or switch off, and what people build on them.
+  intro: >-
+    Every mechanism that EDI currently assesses as complete D0 is listed here, with stories about what people actually
+    do with them. A listing describes a mechanism and its use; it does not certify that the mechanism, or anything
+    built on it, is safe or successful. Each story names the authority that remains around the mechanism, such as an
+    issuer, a marketplace or a token's own contract.
+  entrance:
+    storyId: weth-shared-infrastructure
+    line: A contract from 2017 with no owner still turns ETH into the token behind nearly every NFT offer filled on Seaport 1.6.
+  storyIds: [weth-shared-infrastructure]

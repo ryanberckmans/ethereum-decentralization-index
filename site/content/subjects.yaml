@@ -1,0 +1,84 @@
+# Identities outside the EDI registry: organizations, products, deployments,
+# networks and economic references. They are listed and searchable but are
+# never graded. A deployment that shares code or a brand with an EDI record
+# names it in relatedEdiId and still does not inherit its assessment.
+
+# Organizations ---------------------------------------------------------------
+
+- id: org:circle
+  kind: organization
+  name: Circle
+  description: Circle Internet Financial, the company that issues USDC, holds its reserves and redeems it for US dollars.
+  officialUrl: https://www.circle.com
+  aliases: [Circle Internet Financial]
+
+- id: org:opensea
+  kind: organization
+  name: OpenSea
+  description: The company that developed the Seaport protocol in 2022 and operates the OpenSea marketplace.
+  officialUrl: https://opensea.io
+
+- id: org:visa
+  kind: organization
+  name: Visa
+  description: A global card payments network that settles some card obligations with its partners in USDC through a stablecoin settlement program.
+  officialUrl: https://usa.visa.com
+
+- id: org:crypto-com
+  kind: organization
+  name: Crypto.com
+  description: A crypto platform and Visa card program partner; the partner in Visa's first USDC settlement pilot in 2021.
+  officialUrl: https://crypto.com
+
+# Products -------------------------------------------------------------------
+
+- id: product:opensea-marketplace
+  kind: product
+  name: OpenSea marketplace
+  description: OpenSea's marketplace for NFTs. New orders placed through it settle on the Seaport 1.6 contract, and its offers are paid in WETH.
+  officialUrl: https://opensea.io
+  aliases: [OpenSea]
+
+- id: product:visa-stablecoin-settlement
+  kind: product
+  name: Visa stablecoin settlement
+  description: Visa's program that lets card issuers and acquirers settle their Visa obligations in stablecoins such as USDC over supported blockchains.
+  officialUrl: https://corporate.visa.com/en/sites/visa-perspectives/newsroom/visa-launches-stablecoin-settlement-in-the-united-states.html
+
+# Deployments ----------------------------------------------------------------
+
+- id: deployment:usdc-base
+  kind: deployment
+  name: USDC on Base
+  description: Circle's native USDC contract on Base. A separate deployment from USDC on Ethereum, with its own address and no EDI record of its own.
+  chainId: 8453
+  address: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"
+  relatedEdiId: usdc
+
+- id: deployment:weth-base
+  kind: deployment
+  name: WETH on Base
+  description: >-
+    The wrapped ETH contract on Base, a predeploy at 0x4200000000000000000000000000000000000006. A separate contract on a
+    separate network from WETH9 on Ethereum, so EDI's WETH9 record does not cover it.
+  chainId: 8453
+  address: "0x4200000000000000000000000000000000000006"
+  relatedEdiId: weth9
+  aliases: [WETH on Base, Base WETH]
+
+# Networks -------------------------------------------------------------------
+
+- id: network:solana
+  kind: network
+  name: Solana
+  description: A separate layer-1 blockchain that does not settle on Ethereum. Visa's first US banks to settle in USDC do so over Solana.
+  officialUrl: https://solana.com
+  ethereumRelation: outside-ethereum
+
+# Economic references ----------------------------------------------------------
+
+- id: ref:us-dollar
+  kind: reference
+  name: US dollar
+  description: The United States dollar. Dollar tokens such as USDC promise redemption in it through their issuer.
+  aliases: [USD, dollar]

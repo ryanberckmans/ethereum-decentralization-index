@@ -1,0 +1,124 @@
+# Typed, sourced editorial connections, read "from <type> to":
+#   settles-on          from lives on or settles on the network to
+#   issues              from issues the asset to
+#   interface-to        from is an application or product over the mechanism to
+#   integrates-with     from uses or builds on to
+#   collateral-for      from is used as collateral in to
+#   economic-reference  from economically references to (US dollars, gold)
+# None of these is a control dependency. EDI's own dependency edges come from the
+# registry and are drawn separately; nothing here changes an assessment.
+
+# WETH, Seaport and OpenSea ------------------------------------------------------
+
+- id: opensea-marketplace-seaport16
+  from: product:opensea-marketplace
+  to: seaport-v1.6
+  type: interface-to
+  state: reproduced-observation
+  sourceClaimIds: [opensea-seaport-1-6-orders, opensea-signed-zone-1-6, onchain-seaport16-2026-09]
+  chainIds: [1]
+  validFrom: 2024-03-25
+  note: New OpenSea orders settle on Seaport 1.6
+
+- id: opensea-marketplace-weth9
+  from: product:opensea-marketplace
+  to: weth9
+  type: integrates-with
+  state: reproduced-observation
+  sourceClaimIds: [opensea-weth-offers, opensea-seaport-weth-example, onchain-seaport16-2026-09]
+  chainIds: [1]
+  note: Offers on OpenSea are made in WETH
+
+- id: weth9-seaport16
+  from: weth9
+  to: seaport-v1.6
+  type: integrates-with
+  state: reproduced-observation
+  sourceClaimIds: [onchain-seaport16-2026-09]
+  chainIds: [1]
+  note: Seaport 1.6 settles offers paid in WETH
+
+# USDC ---------------------------------------------------------------------------
+
+- id: circle-issues-usdc
+  from: org:circle
+  to: usdc
+  type: issues
+  state: live
+  sourceClaimIds: [circle-usdc-terms, circle-usdc-addresses]
+  chainIds: [1]
+
+- id: circle-issues-usdc-base
+  from: org:circle
+  to: deployment:usdc-base
+  type: issues
+  state: live
+  sourceClaimIds: [circle-usdc-addresses]
+  chainIds: [8453]
+
+- id: usdc-us-dollar
+  from: usdc
+  to: ref:us-dollar
+  type: economic-reference
+  state: live
+  sourceClaimIds: [circle-usdc-terms]
+  note: Circle redeems 1 USDC for 1 US dollar for eligible holders
+
+- id: usdc-ethereum
+  from: usdc
+  to: ethereum
+  type: settles-on
+  state: reproduced-observation
+  sourceClaimIds: [circle-usdc-addresses, onchain-usdc-2026-10-01]
+  chainIds: [1]
+
+- id: usdc-base-base
+  from: deployment:usdc-base
+  to: base
+  type: settles-on
+  state: reproduced-observation
+  sourceClaimIds: [circle-usdc-addresses, onchain-usdc-2026-10-01]
+  chainIds: [8453]
+
+# Visa stablecoin settlement ---------------------------------------------------------
+
+- id: visa-settlement-usdc
+  from: product:visa-stablecoin-settlement
+  to: usdc
+  type: integrates-with
+  state: reported-adoption
+  sourceClaimIds: [visa-usdc-pilot-2021, visa-usdc-ethereum-settlement-2023]
+  chainIds: [1]
+  note: Card obligations settled in USDC sent over Ethereum
+
+- id: visa-settlement-ethereum
+  from: product:visa-stablecoin-settlement
+  to: ethereum
+  type: settles-on
+  state: reported-adoption
+  sourceClaimIds: [visa-usdc-ethereum-settlement-2023, visa-nine-chains-2026]
+
+- id: visa-settlement-solana
+  from: product:visa-stablecoin-settlement
+  to: network:solana
+  type: settles-on
+  state: reported-adoption
+  sourceClaimIds: [visa-us-settlement-2025]
+  note: The first US banks in the program settle over Solana, outside Ethereum
+
+- id: visa-settlement-base
+  from: product:visa-stablecoin-settlement
+  to: base
+  type: settles-on
+  state: announced
+  sourceClaimIds: [visa-nine-chains-2026]
+  validFrom: 2026-04-29
+  note: Added in April 2026; Visa gives no usage figure for Base
+
+- id: crypto-com-visa-settlement
+  from: org:crypto-com
+  to: product:visa-stablecoin-settlement
+  type: integrates-with
+  state: reported-adoption
+  sourceClaimIds: [visa-usdc-pilot-2021, visa-usdc-ethereum-settlement-2023]
+  note: Settles its Visa card program obligations in USDC
