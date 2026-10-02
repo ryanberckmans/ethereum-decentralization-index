@@ -552,6 +552,25 @@
 
 # Uniswap -------------------------------------------------------------------------
 
+- id: uniswap-v1-pools-2026-10-01
+  subjectId: uniswap-v1
+  metric: Pools created
+  metricDefinition: >-
+    Exchanges created by the Uniswap v1 factory since it was deployed, as its tokenCount() reports. Each pools one
+    token with ETH. Anyone can create one, so this counts markets created, not markets in use.
+  value: "4035"
+  unit: pools
+  asOf: 2026-10-01
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0xc0a47dFe034B400B47bDaD5FecDa2621de6c4d95"}
+  scope: >-
+    The Uniswap v1 factory on Ethereum mainnet at 00:00 UTC, after block 26,093,737. Forks and other networks are not
+    included.
+  sourceClaimIds: [onchain-uniswap-v1-2026-10-01]
+  measure: count
+  comparisonGroup: uniswap-pools-created-ethereum-2026-10-01
+
 - id: uniswap-v2-pools-2026-10-01
   subjectId: uniswap-v2
   metric: Pools created
@@ -701,7 +720,7 @@
   scope: >-
     Pools using PermissionedHooks on Ethereum mainnet, blocks 25,878,705 to 26,093,737. Pools using an issuer-deployed
     copy of the hook are not included.
-  sourceClaimIds: [onchain-uniswap-v4-swaps-2026-09, uniswap-permissioned-pools-addresses]
+  sourceClaimIds: [onchain-uniswap-v4-swaps-2026-09, onchain-permissioned-pool-2026-10-01, uniswap-permissioned-pools-addresses]
   measure: count
 
 - id: permissioned-pools-2026-10-01
@@ -718,8 +737,42 @@
     - {chainId: 1, address: "0x499a724Ab630549f14C995EC41a8E04fA3fd28c0"}
   scope: >-
     The Uniswap v4 PoolManager on Ethereum mainnet at 00:00 UTC, after block 26,093,737.
-  sourceClaimIds: [onchain-uniswap-v4-swaps-2026-09, uniswap-permissioned-pools-addresses]
+  sourceClaimIds: [onchain-uniswap-v4-swaps-2026-09, onchain-permissioned-pool-2026-10-01, uniswap-permissioned-pools-addresses]
   measure: count
+
+- id: uniswap-v1-swaps-2026-09
+  subjectId: uniswap-v1
+  metric: Swap events
+  metricDefinition: >-
+    TokenPurchase and EthPurchase events emitted by exchanges that the Uniswap v1 factory created, one for each exchange
+    a swap passes through. A swap between two tokens emits one of each, so events are not trades or traders.
+  value: "13763"
+  unit: swap events
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0xc0a47dFe034B400B47bDaD5FecDa2621de6c4d95"}
+  scope: >-
+    Every exchange of the Uniswap v1 factory on Ethereum mainnet, blocks 25,878,705 to 26,093,737, through any
+    interface. Contracts that emit the same events are not counted.
+  sourceClaimIds: [onchain-uniswap-v1-swaps-2026-09]
+  measure: count
+  comparisonGroup: uniswap-swap-events-ethereum-2026-09
+
+- id: uniswap-v1-pools-swapped-2026-09
+  subjectId: uniswap-v1
+  metric: Pools with swaps
+  metricDefinition: Exchanges created by the Uniswap v1 factory that emitted at least one TokenPurchase or EthPurchase event.
+  value: "187"
+  unit: pools
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0xc0a47dFe034B400B47bDaD5FecDa2621de6c4d95"}
+  scope: Every exchange of the Uniswap v1 factory on Ethereum mainnet, blocks 25,878,705 to 26,093,737.
+  sourceClaimIds: [onchain-uniswap-v1-swaps-2026-09]
+  measure: count
+  comparisonGroup: uniswap-pools-swapped-ethereum-2026-09
 
 - id: uniswap-v3-swaps-2026-09
   subjectId: uniswap-v3
@@ -1077,6 +1130,21 @@
   sourceClaimIds: [morpho-coinbase-active-loans-2026-09]
   measure: stock
 
+- id: coinbase-loan-collateral-2026-09-22
+  subjectId: product:coinbase-crypto-backed-loans
+  metric: Collateral behind active variable-rate loans
+  metricDefinition: >-
+    The crypto collateral backing the loans outstanding in Coinbase's Morpho-powered variable-rate crypto-backed loans,
+    valued in dollars as Morpho reported it. Morpho gives no method or prices.
+  value: "3000000000"
+  comparator: about
+  unit: USD
+  asOf: 2026-09-22
+  chainIds: [8453]
+  scope: Coinbase's variable-rate loans across its collateral markets on Morpho on Base. Not an Ethereum figure.
+  sourceClaimIds: [morpho-coinbase-active-loans-2026-09]
+  measure: stock
+
 - id: morpho-blue-deposits-2024-08-01
   subjectId: morpho-blue
   metric: Total deposits, reported
@@ -1181,6 +1249,34 @@
     - {chainId: 1, address: "0x7712c34205737192402172409a8F7ccef8aA2AEc"}
   scope: The BUIDL contract on Ethereum mainnet, blocks 25,878,705 to 26,093,737.
   sourceClaimIds: [onchain-buidl-2026-09]
+  measure: count
+
+- id: buidl-holder-transfer-senders-2026-09
+  subjectId: buidl
+  metric: Addresses that sent BUIDL to other holders
+  metricDefinition: Distinct senders of Transfer events in the BUIDL contract that neither issue nor burn tokens.
+  value: "8"
+  unit: addresses
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x7712c34205737192402172409a8F7ccef8aA2AEc"}
+  scope: The BUIDL contract on Ethereum mainnet, blocks 25,878,705 to 26,093,737. Addresses are not investors.
+  sourceClaimIds: [onchain-buidl-holder-transfers-2026-09]
+  measure: count
+
+- id: buidl-holder-transfer-receivers-2026-09
+  subjectId: buidl
+  metric: Addresses that received BUIDL from other holders
+  metricDefinition: Distinct receivers of Transfer events in the BUIDL contract that neither issue nor burn tokens.
+  value: "5"
+  unit: addresses
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x7712c34205737192402172409a8F7ccef8aA2AEc"}
+  scope: The BUIDL contract on Ethereum mainnet, blocks 25,878,705 to 26,093,737. Addresses are not investors.
+  sourceClaimIds: [onchain-buidl-holder-transfers-2026-09]
   measure: count
 
 - id: buidl-holder-transfer-volume-2026-09

@@ -948,6 +948,60 @@
 
 # Uniswap -------------------------------------------------------------------------
 
+- id: uniswap-v1-launch-2018
+  statement: >-
+    Uniswap Labs dates the launch of Uniswap v1 to November 2018, as a proof of concept for automated market makers, a
+    type of exchange where anyone can pool assets into shared market-making strategies.
+  sourceUrl: https://blog.uniswap.org/uniswap-v3
+  publisher: Uniswap Labs
+  title: Introducing Uniswap v3
+  sourcePublishedAt: 2021-03-23
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [uniswap-v1, org:uniswap-labs]
+  locator: '"Uniswap v1 was launched in November 2018 as a proof of concept for automated market makers (AMMs)"'
+
+- id: uniswap-v1-without-upkeep
+  statement: >-
+    Uniswap Labs wrote in March 2020 that Uniswap v1 functions without upkeep and will continue to work for as long as
+    Ethereum exists.
+  sourceUrl: https://blog.uniswap.org/uniswap-v2
+  publisher: Uniswap Labs
+  title: Uniswap v2 Overview
+  sourcePublishedAt: 2020-03-23
+  retrievedAt: 2026-10-02
+  state: capability
+  subjects: [uniswap-v1]
+  locator: '"Uniswap V1 will continue to work for as long as Ethereum exists"'
+
+- id: uniswap-v2-overview-pairs
+  statement: >-
+    Uniswap Labs' overview of v2 explains that every v1 pool paired ETH with a single ERC-20 token, so a swap between
+    two other tokens, such as DAI for USDC, went through ETH and paid fees and slippage on two pools. In v2 any ERC-20
+    token can be pooled directly with any other.
+  sourceUrl: https://blog.uniswap.org/uniswap-v2
+  publisher: Uniswap Labs
+  title: Uniswap v2 Overview
+  sourcePublishedAt: 2020-03-23
+  retrievedAt: 2026-10-02
+  state: capability
+  subjects: [uniswap-v1, uniswap-v2]
+  locator: '"In Uniswap V1, all liquidity pools are between ETH and a single ERC20 token."'
+
+- id: uniswap-v3-intro-idle-capital
+  statement: >-
+    Introducing v3, Uniswap Labs wrote that a v2 pool spreads its liquidity across every price from zero to infinity,
+    so for most pools the majority of it is never used, and that v3 lets liquidity providers concentrate capital within
+    price ranges they choose.
+  sourceUrl: https://blog.uniswap.org/uniswap-v3
+  publisher: Uniswap Labs
+  title: Introducing Uniswap v3
+  sourcePublishedAt: 2021-03-23
+  retrievedAt: 2026-10-02
+  state: capability
+  subjects: [uniswap-v2, uniswap-v3]
+  locator: '"For most pools, a majority of this liquidity is never put to use."'
+
 - id: uniswap-v2-launch
   statement: >-
     Uniswap Labs announced on 18 May 2020 that Uniswap v2 was deployed to Ethereum mainnet, linking the v2 factory
@@ -1271,6 +1325,20 @@
   subjects: [uniswap-v4]
   locator: 'Ethereum table, row "PoolManager": 0x000000000004444c5dc75cB358380D2e3dE08A90'
 
+- id: onchain-uniswap-v1-2026-10-01
+  statement: >-
+    The Uniswap v1 factory has had code since Ethereum block 6,627,917 (2 November 2018). By 00:00 UTC on 1 October
+    2026 it had created 4,035 exchanges, one for each token.
+  sourceUrl: https://github.com/ryanberckmans/ethereum-decentralization-index/blob/main/site/content/evidence/onchain.json
+  publisher: Ethereum mainnet, read by the directory
+  title: Onchain reads at pinned blocks
+  observedAt: 2026-09-30
+  retrievedAt: 2026-10-02
+  state: reproduced-observation
+  subjects: [uniswap-v1]
+  locator: reads uniswap-v1-exchanges-2026-10-01 and uniswap-v1-first-code-block
+  qualification: Anyone can create an exchange, so this counts markets created, not markets in use.
+
 - id: onchain-uniswap-cores-2026-10-01
   statement: >-
     The Uniswap v2 factory has had code since Ethereum block 10,000,835 (4 May 2020), the v3 factory since block
@@ -1318,6 +1386,41 @@
   subjects: [uniswap-v4, native-eth, product:uniswap-permissioned-pools]
   locator: read uniswap-v4-swaps-2026-09
   qualification: A Swap event is one pool step; a routed trade through several pools emits several. Events are not trades or traders.
+
+- id: onchain-permissioned-pool-2026-10-01
+  statement: >-
+    The one Uniswap v4 pool on Ethereum whose hook was Uniswap's shared PermissionedHooks by 1 October 2026, ID
+    0xd779…7210, was created in block 26,052,832 (25 September 2026). It pairs USDC with Uniswap v4 THING, a
+    PermissionsAdapter that wraps a token named THING at 0x24bf…66eb, at a 0.3% fee, and recorded 2 swap events in
+    September. The adapter's owner, 0x384b…1f75, had swapping turned on.
+  sourceUrl: https://github.com/ryanberckmans/ethereum-decentralization-index/blob/main/site/content/evidence/onchain.json
+  publisher: Ethereum mainnet, read by the directory
+  title: Onchain reads at pinned blocks
+  observedAt: 2026-09-30
+  retrievedAt: 2026-10-02
+  state: reproduced-observation
+  subjects: [product:uniswap-permissioned-pools, uniswap-v4, usdc]
+  locator: reads permissioned-pool-2026-09 to permissioned-pool-adapter-swapping-2026-10-01
+  qualification: >-
+    No Uniswap or issuer source names this pool, the THING token or its issuer, and the owner's identity is unknown.
+    Pools that use an issuer's own copy of the hook are not covered.
+
+- id: onchain-uniswap-v1-swaps-2026-09
+  statement: >-
+    In September 2026 (Ethereum blocks 25,878,705 to 26,093,737), 187 exchanges created by the Uniswap v1 factory
+    emitted 13,763 TokenPurchase and EthPurchase events, the two kinds of v1 swap. Another 1,012 events with the same
+    signatures came from 8 contracts the factory did not create and are not counted.
+  sourceUrl: https://github.com/ryanberckmans/ethereum-decentralization-index/blob/main/site/content/evidence/onchain.json
+  publisher: Ethereum mainnet, read by the directory
+  title: Onchain reads at pinned blocks
+  observedAt: 2026-09-30
+  retrievedAt: 2026-10-02
+  state: reproduced-observation
+  subjects: [uniswap-v1]
+  locator: read uniswap-v1-swaps-2026-09
+  qualification: >-
+    Each event is one swap in one exchange; a swap between two tokens passes through two exchanges and emits one of
+    each. Events are not trades or traders.
 
 - id: onchain-uniswap-v3-swaps-2026-09
   statement: >-
@@ -1479,6 +1582,21 @@
   subjects: [product:coinbase-crypto-backed-loans, org:coinbase, deployment:morpho-blue-base, base]
   locator: '"Borrow USDC against bitcoin, without selling it. Rolling out to US users (ex. NY) starting now."'
   qualification: Read through X's public embed endpoint.
+
+- id: morpho-coinbase-abstraction
+  statement: >-
+    Morpho's page on Coinbase's crypto-backed loans says the product gives Coinbase users onchain loans without the
+    complexity of using DeFi directly: Coinbase handles the blockchain, wallets, gas fees and wrapping, customers borrow
+    USDC against bitcoin in the Coinbase app, and the loans run on Morpho, with terms, collateral and balances
+    verifiable on chain.
+  sourceUrl: https://morpho.org/coinbase-loans
+  publisher: Morpho
+  title: Bitcoin-Backed Loans with Morpho
+  retrievedAt: 2026-10-02
+  state: live
+  subjects: [product:coinbase-crypto-backed-loans, deployment:morpho-blue-base, org:coinbase]
+  locator: '"Coinbase abstracts the blockchain itself, wallets, gas fees, and wrapping"'
+  qualification: Morpho's description of a partner's product. The page's live dashboard figures are not used here.
 
 - id: morpho-coinbase-cbbtc-market
   statement: >-
@@ -1990,6 +2108,24 @@
   subjects: [deployment:buidl-i-ethereum]
   locator: reads buidl-i-total-supply-2026-10-01, buidl-i-total-supply-2026-09-01 and buidl-i-transfers-2026-09
   qualification: Burns are redemptions or moves out of this share class; the chain does not say which.
+
+- id: onchain-buidl-holder-transfers-2026-09
+  statement: >-
+    In September 2026 all 33 transfers between holders of BUIDL's Ethereum contract 0x7712…2aec were transactions sent
+    directly to the token contract, from 8 senders to 5 receivers; none was made through another contract. Of the 18
+    transfers between holders of the BUIDL-I contract, 15 were made through a Safe multisig, 2 through Securitize's
+    SecuritizeOnRamp contract and 1 directly.
+  sourceUrl: https://github.com/ryanberckmans/ethereum-decentralization-index/blob/main/site/content/evidence/onchain.json
+  publisher: Ethereum mainnet, read by the directory
+  title: Onchain reads at pinned blocks
+  observedAt: 2026-09-30
+  retrievedAt: 2026-10-02
+  state: reproduced-observation
+  subjects: [buidl, deployment:buidl-i-ethereum]
+  locator: reads buidl-holder-transfer-calls-2026-09 and buidl-i-holder-transfer-calls-2026-09
+  qualification: >-
+    A trade through UniswapX or an exchange pool would show that contract as the one the transaction called. Contract
+    names come from Blockscout's verified-source records.
 
 - id: onchain-paxg-2026-09
   statement: >-
