@@ -1,28 +1,33 @@
 {
- "about": "Onchain reads behind the directory's reproduced observations. Each read names its chain, its pinned block and the result recorded on retrieval. Re-run with onchain.mjs against any archive node; see README.md.",
+ "about": "Onchain reads behind the directory's reproduced observations. Each read names its chain, its block and the result recorded on retrieval; every block it depends on is pinned by hash. A stock dated D is the state at 00:00 UTC on D, read at the last block before then; a flow over a period covers every block whose timestamp falls in it. Re-run with onchain.mjs against any archive node; see README.md.",
  "retrievedAt": "2026-10-02",
  "blocks": {
-  "1:26093738": {
-   "hash": "0x41ebfe304393a8d19fb0b8273a5fa88573cc9a1962a6b8645d139a1d4f860edb",
-   "timestamp": "2026-10-01T00:00:11Z",
-   "note": "First Ethereum block at or after 2026-10-01T00:00:00Z"
+  "1:25878704": {
+   "hash": "0x1d63bf12e101c849b9e8bceca81a71d801735fca65ff9f1f12284e9d77c20547",
+   "timestamp": "2026-08-31T23:59:59Z",
+   "note": "Last Ethereum block before 2026-09-01T00:00:00Z: state as of 1 September 2026"
   },
   "1:25878705": {
    "hash": "0x662c360bd4fc0e07275631eab7827ad22cc804c5282fd7190686f8325150bf66",
    "timestamp": "2026-09-01T00:00:11Z",
-   "note": "First Ethereum block at or after 2026-09-01T00:00:00Z"
+   "note": "First Ethereum block of September 2026 (UTC)"
   },
-  "8453:52011727": {
-   "hash": "0x49b2a60155e2a2ecfc96dcbe9f446c32696fa9b98b40a10141f584a5db53b742",
-   "timestamp": "2026-10-01T00:00:01Z",
-   "note": "First Base block at or after 2026-10-01T00:00:00Z"
+  "1:26093737": {
+   "hash": "0xcd26204e996dceb606ccf0bc6f5bf8ea6747a471df8be73b5855f01624d5d743",
+   "timestamp": "2026-09-30T23:59:59Z",
+   "note": "Last Ethereum block before 2026-10-01T00:00:00Z: state as of 1 October 2026"
+  },
+  "8453:52011726": {
+   "hash": "0xc6daf95895eb36f8855a8f2da96dde89f43090e9c2fcd8adf05eea87469ff598",
+   "timestamp": "2026-09-30T23:59:59Z",
+   "note": "Last Base block before 2026-10-01T00:00:00Z: state as of 1 October 2026"
   }
  },
  "reads": [
   {
    "id": "weth9-total-supply-2026-10-01",
    "chainId": 1,
-   "block": 26093738,
+   "block": 26093737,
    "read": {
     "kind": "erc20.totalSupply",
     "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
@@ -37,7 +42,7 @@
   {
    "id": "weth9-eth-balance-2026-10-01",
    "chainId": 1,
-   "block": 26093738,
+   "block": 26093737,
    "read": {
     "kind": "eth.balance",
     "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
@@ -51,7 +56,7 @@
   {
    "id": "weth9-first-code-block",
    "chainId": 1,
-   "block": 26093738,
+   "block": 26093737,
    "read": {
     "kind": "code.firstBlock",
     "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
@@ -64,7 +69,7 @@
   {
    "id": "weth9-held-by-morpho-blue-2026-10-01",
    "chainId": 1,
-   "block": 26093738,
+   "block": 26093737,
    "read": {
     "kind": "erc20.balanceOf",
     "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
@@ -79,7 +84,7 @@
   {
    "id": "weth9-held-by-uniswap-v4-2026-10-01",
    "chainId": 1,
-   "block": 26093738,
+   "block": 26093737,
    "read": {
     "kind": "erc20.balanceOf",
     "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
@@ -94,7 +99,7 @@
   {
    "id": "eth-held-by-uniswap-v4-2026-10-01",
    "chainId": 1,
-   "block": 26093738,
+   "block": 26093737,
    "read": {
     "kind": "eth.balance",
     "address": "0x000000000004444c5dc75cb358380d2e3de08a90"
@@ -108,7 +113,7 @@
   {
    "id": "seaport16-fills-2026-09",
    "chainId": 1,
-   "block": 26093738,
+   "block": 26093737,
    "read": {
     "kind": "seaport.orderFulfilled",
     "address": "0x0000000000000068f116a894984e2db1123eb395",
@@ -138,7 +143,7 @@
   {
    "id": "usdc-total-supply-ethereum-2026-10-01",
    "chainId": 1,
-   "block": 26093738,
+   "block": 26093737,
    "read": {
     "kind": "erc20.totalSupply",
     "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"
@@ -152,7 +157,7 @@
   {
    "id": "usdc-total-supply-base-2026-10-01",
    "chainId": 8453,
-   "block": 52011727,
+   "block": 52011726,
    "read": {
     "kind": "erc20.totalSupply",
     "token": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913"
@@ -165,9 +170,23 @@
    }
   },
   {
+   "id": "usdc-total-supply-ethereum-2026-09-01",
+   "chainId": 1,
+   "block": 25878704,
+   "read": {
+    "kind": "erc20.totalSupply",
+    "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"
+   },
+   "result": {
+    "raw": "50516268512473003",
+    "decimals": 6,
+    "value": "50516268512.473003"
+   }
+  },
+  {
    "id": "opensea-conduit-owner-2026-10-01",
    "chainId": 1,
-   "block": 26093738,
+   "block": 26093737,
    "read": {
     "kind": "call",
     "to": "0x00000000f9490004c11cef243f5400493c00ad63",
@@ -184,7 +203,7 @@
   {
    "id": "opensea-conduit-channels-2026-10-01",
    "chainId": 1,
-   "block": 26093738,
+   "block": 26093737,
    "read": {
     "kind": "call",
     "to": "0x00000000f9490004c11cef243f5400493c00ad63",
@@ -205,7 +224,7 @@
   {
    "id": "conduit-captain-owner-2026-10-01",
    "chainId": 1,
-   "block": 26093738,
+   "block": 26093737,
    "read": {
     "kind": "call",
     "to": "0x0000000000d132a69d773c838080dc4fa478388f",
@@ -222,7 +241,7 @@
   {
    "id": "conduit-captain-owner-threshold-2026-10-01",
    "chainId": 1,
-   "block": 26093738,
+   "block": 26093737,
    "read": {
     "kind": "call",
     "to": "0xc669b5f25f03be2ac0323037cb57f49eb543657a",
@@ -239,7 +258,7 @@
   {
    "id": "conduit-captain-owner-signers-2026-10-01",
    "chainId": 1,
-   "block": 26093738,
+   "block": 26093737,
    "read": {
     "kind": "call",
     "to": "0xc669b5f25f03be2ac0323037cb57f49eb543657a",
@@ -264,7 +283,7 @@
   {
    "id": "usdc-held-by-morpho-blue-2026-10-01",
    "chainId": 1,
-   "block": 26093738,
+   "block": 26093737,
    "read": {
     "kind": "erc20.balanceOf",
     "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
@@ -279,7 +298,7 @@
   {
    "id": "usdc-held-by-uniswap-v4-2026-10-01",
    "chainId": 1,
-   "block": 26093738,
+   "block": 26093737,
    "read": {
     "kind": "erc20.balanceOf",
     "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
@@ -289,6 +308,50 @@
     "raw": "55608414894505",
     "decimals": 6,
     "value": "55608414.894505"
+   }
+  },
+  {
+   "id": "usdc-issuer-events-ethereum-2026-09",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "fiattoken.events",
+    "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+    "fromBlock": 25878705,
+    "toBlock": 26093737,
+    "decimals": 6,
+    "groups": {
+     "crossChain": [
+      "0xc4922d64a24675e16e1586e3e3aa56c06fabe907",
+      "0xfd78ee919681417d192449715b2594ab58f5d002",
+      "0x2222222d7164433c4c09b0b0d809a9b52c04c205",
+      "0x77777777dcc4d5a8b6e418fd04d8997ef11000ee"
+     ]
+    }
+   },
+   "note": "USDC Mint, Burn, Blacklisted and UnBlacklisted events on Ethereum in September 2026 (UTC). crossChain is Circle's cross-chain contracts on Ethereum as listed in its documentation: CCTP V1 TokenMinter, CCTP V2 TokenMinterV2, Gateway's GatewayMinter and GatewayWallet. other is every other minter, all of which Circle authorizes.",
+   "result": {
+    "mintEvents": 113055,
+    "minted": "22747161584.52023",
+    "burnEvents": 81136,
+    "burned": "23967728958.862876",
+    "groups": {
+     "crossChain": {
+      "mintEvents": 110678,
+      "minted": "6350590654.954893",
+      "burnEvents": 75831,
+      "burned": "5820123472.229164"
+     },
+     "other": {
+      "mintEvents": 2377,
+      "minted": "16396570929.565337",
+      "burnEvents": 5305,
+      "burned": "18147605486.633712"
+     }
+    },
+    "blacklistedEvents": 68,
+    "unBlacklistedEvents": 2,
+    "logsFingerprintSha256": "5d76acc17c4178b4b143bb7fff6275461cc14a48603bf4da56420b680d93c5c4"
    }
   }
  ]

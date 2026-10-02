@@ -39,6 +39,10 @@ const SEL = {
 const TOPIC = {
   // OrderFulfilled(bytes32,address,address,address,(uint8,address,uint256,uint256)[],(uint8,address,uint256,uint256,address)[])
   seaportOrderFulfilled: '0x9d9af8e38d66c62e2c12f0225249fd9d721c54b83f48d9352c97c6cacdcb6f31',
+  mint: '0xab8530f87dc9b59234c4623bf917212bb2536d647574c8e7e5da92c2ede0c9f8', // Mint(address,address,uint256)
+  burn: '0xcc16f5dbb4873280815c1ee09dbd06736cffcc184412cf7a71a0fdb75d397ca5', // Burn(address,uint256)
+  blacklisted: '0xffa4e6181777692565cf28528fc88fd1516ea86b56da075235fa575af6a4b855', // Blacklisted(address)
+  unBlacklisted: '0x117e3210bb9aa7d9baff172026820255c6f6c30ba8999d1c2fd88e2848137c4e', // UnBlacklisted(address)
 };
 
 async function rpc(url, method, params, tries = 7) {
@@ -148,6 +152,51 @@ const READS = {
     }
     const header = await rpc(rpcUrl[chainId], 'eth_getBlockByNumber', [hex(lo), false]);
     return {block: lo, timestamp: iso(header.timestamp)};
+  },
+  async 'fiattoken.events'({chainId, read}) {
+    // Mint, Burn, Blacklisted and UnBlacklisted events of a FiatToken (USDC) contract.
+    // Mints and burns are split by the minting or burning address into named groups;
+    // addresses in no group are counted as `other`.
+    const groupOf = new Map();
+    for (const [name, addresses] of Object.entries(read.groups)) for (const address of addresses) groupOf.set(BigInt(address), name);
+    const empty = () => ({mintEvents: 0, mintedRaw: 0n, burnEvents: 0, burnedRaw: 0n});
+    const groups = Object.fromEntries([...Object.keys(read.groups), 'other'].map(name => [name, empty()]));
+    const total = empty();
+    let blacklistedEvents = 0;
+    let unBlacklistedEvents = 0;
+    const topics = [[TOPIC.mint, TOPIC.burn, TOPIC.blacklisted, TOPIC.unBlacklisted]];
+    const fingerprint = await scanLogs(chainId, read.address, topics, read.fromBlock, read.toBlock, logs => {
+      for (const log of logs) {
+        const [topic, account] = log.topics;
+        if (topic === TOPIC.blacklisted) blacklistedEvents++;
+        if (topic === TOPIC.unBlacklisted) unBlacklistedEvents++;
+        if (topic !== TOPIC.mint && topic !== TOPIC.burn) continue;
+        const amount = uint(log.data);
+        const group = groups[groupOf.get(BigInt(account)) ?? 'other'];
+        for (const sums of [group, total]) {
+          if (topic === TOPIC.mint) {
+            sums.mintEvents++;
+            sums.mintedRaw += amount;
+          } else {
+            sums.burnEvents++;
+            sums.burnedRaw += amount;
+          }
+        }
+      }
+    });
+    const show = sums => ({
+      mintEvents: sums.mintEvents,
+      minted: units(sums.mintedRaw, read.decimals),
+      burnEvents: sums.burnEvents,
+      burned: units(sums.burnedRaw, read.decimals),
+    });
+    return {
+      ...show(total),
+      groups: Object.fromEntries(Object.entries(groups).map(([name, sums]) => [name, show(sums)])),
+      blacklistedEvents,
+      unBlacklistedEvents,
+      logsFingerprintSha256: fingerprint,
+    };
   },
   async 'seaport.orderFulfilled'({chainId, read}) {
     // Counts Seaport OrderFulfilled events and the use of one ERC-20 token in them,
