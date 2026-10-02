@@ -82,9 +82,27 @@ export function formatCount(count: number, locale: Locale): string {
   return new Intl.NumberFormat(locale).format(count);
 }
 
-/** Pick a plural form: forms has `one` and `other` (and optionally `zero`). */
-export function plural(count: number, locale: Locale, forms: {zero?: string; one: string; other: string}): string {
-  if (count === 0 && forms.zero) return fmt(forms.zero, {count: formatCount(count, locale)});
-  const rule = new Intl.PluralRules(locale).select(count);
-  return fmt(rule === 'one' ? forms.one : forms.other, {count: formatCount(count, locale)});
+const listFormatters = new Map<Locale, Intl.ListFormat>();
+
+/** Names joined the way the language writes "A, B and C". */
+export function andList(items: readonly string[], locale: Locale): string {
+  let formatter = listFormatters.get(locale);
+  if (!formatter) listFormatters.set(locale, (formatter = new Intl.ListFormat(locale, {style: 'long', type: 'conjunction'})));
+  return formatter.format(items);
+}
+
+/** Plural forms of one message. `zero`, when given, is used for 0 in every language. */
+export interface Plural {
+  zero?: string;
+  one: string;
+  other: string;
+}
+
+/** Pick a plural form by the locale's rules and fill it; {count} is formatted for the locale. */
+export function plural(count: number, locale: Locale, forms: Plural, vars: Record<string, string | number> = {}): string {
+  const values = {...vars, count: formatCount(count, locale)};
+  if (count === 0 && forms.zero) return fmt(forms.zero, values);
+  // Brazilian Portuguese writes zero with the plural (“0 resultados”), although CLDR groups it with one.
+  const rule = count === 0 && locale === 'pt-BR' ? 'other' : new Intl.PluralRules(locale).select(count);
+  return fmt(rule === 'one' ? forms.one : forms.other, values);
 }

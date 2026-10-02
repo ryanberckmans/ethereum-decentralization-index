@@ -7,7 +7,7 @@
  */
 import type {ReactNode} from 'react';
 import {levelLabel} from 'ethereum-decentralization-index';
-import {fmt, formatDate} from '../i18n/format.ts';
+import {fmt, formatDate, plural} from '../i18n/format.ts';
 import {Dated} from '../components/Dated.tsx';
 import {GradeBadge} from '../components/Grade.tsx';
 import {paths} from '../model/urls.ts';
@@ -92,11 +92,11 @@ function ScheduledList({day, env}: {day: ScheduledDay; env: PageEnv}) {
   return (
     <>
       <p>
-        {count ? fmt(m.changes.upcomingSummary, {count}) : null} {day.overdue.length ? fmt(m.changes.upcomingReview, {count: day.overdue.length}) : null}
+        {count ? plural(count, locale, m.changes.upcomingSummary) : null} {day.overdue.length ? plural(day.overdue.length, locale, m.changes.upcomingReview) : null}
       </p>
       {day.changes.length ? (
         <details className="change-details">
-          <summary>{fmt(m.changes.showRecords, {count})}</summary>
+          <summary>{plural(count, locale, m.changes.showRecords)}</summary>
           <ul className="change-list">
             {day.changes.map(change => {
               const object = catalog.object(change.id)!;

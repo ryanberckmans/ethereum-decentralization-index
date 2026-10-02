@@ -15,7 +15,7 @@
 import {useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent, type SubmitEvent, type KeyboardEvent, type MouseEvent, type ReactNode} from 'react';
 import {LIMITS, type Locale} from '../config.ts';
 import type {Role} from '../content/vocab.ts';
-import {fmt, formatDate, plural} from '../i18n/format.ts';
+import {andList, fmt, formatDate, plural} from '../i18n/format.ts';
 import type {Messages} from '../i18n/en.ts';
 import {runDirectory, type DirectoryResult, type Facets} from '../model/directory.ts';
 import {
@@ -460,7 +460,7 @@ export default function DirectoryApp(props: DirectoryAppProps) {
         {props.entrances}
         {props.invalid.length ? (
           <p className="notice notice-warn" role="note">
-            {fmt(m.directory.invalidParams, {names: props.invalid.join(', ')})}
+            {fmt(m.directory.invalidParams, {names: props.invalid.join(m.common.listSeparator)})}
           </p>
         ) : null}
         {stale && indexFailed && nextChange ? (
@@ -586,7 +586,7 @@ export default function DirectoryApp(props: DirectoryAppProps) {
                 closeSheet();
               }}
             >
-              {fmt(m.directory.apply, {count: summary.total})}
+              {plural(summary.total, locale, m.directory.apply)}
             </button>
           </div>
         </div>
@@ -641,8 +641,11 @@ export default function DirectoryApp(props: DirectoryAppProps) {
             <div className="tray" role="region" aria-label={fmt(m.directory.compareTray, {count: query.compare.length, max: LIMITS.compare})}>
               <p className="tray-names">
                 <strong>{fmt(m.directory.compareTray, {count: query.compare.length, max: LIMITS.compare})}</strong>
-                {': '}
-                {query.compare.map(id => names[id] ?? id).join(', ')}
+                {m.common.labelSeparator}
+                {andList(
+                  query.compare.map(id => names[id] ?? id),
+                  locale,
+                )}
               </p>
               <button type="button" className="button tray-clear" onClick={() => void toggleCompareClear()}>
                 {m.directory.clear}

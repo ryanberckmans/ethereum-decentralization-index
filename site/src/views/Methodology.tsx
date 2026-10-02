@@ -11,7 +11,7 @@ import {EDI_LOCALE, PRODUCT} from '../config.ts';
 import {METHODOLOGY_SECTIONS} from '../content/schema.ts';
 import {EVIDENCE_STATES} from '../content/vocab.ts';
 import type {Block} from '../content/markdown.ts';
-import {fmt, formatDate} from '../i18n/format.ts';
+import {fmt, formatCount, formatDate, plural, type Plural} from '../i18n/format.ts';
 import {Blocks} from '../components/Markdown.tsx';
 import {Dated} from '../components/Dated.tsx';
 import {GradeBadge} from '../components/Grade.tsx';
@@ -117,7 +117,7 @@ export function MethodologyPage({env}: {env: PageEnv}) {
     [edi.unknownTitle, edi.unknownBody],
     [edi.judgmentTitle, edi.judgmentBody],
   ];
-  const stats = (value: Coverage): [number, string][] => [
+  const stats = (value: Coverage): [number, Plural][] => [
     [catalog.objects.length, m.methodology.coverageRecords],
     [value.complete, m.methodology.coverageComplete],
     [value.partial, m.methodology.coveragePartial],
@@ -129,16 +129,19 @@ export function MethodologyPage({env}: {env: PageEnv}) {
     [catalog.observations.size, m.methodology.coverageObservations],
     [catalog.claims.size, m.methodology.coverageClaims],
   ];
-  const count = (template: string, n: number) => {
-    const text = fmt(template, {count: n});
-    const at = text.indexOf(String(n));
-    return at < 0 ? (
-      text
-    ) : (
+  /** A coverage figure: the number set large, the rest of the phrase as its label, in either order. */
+  const count = (forms: Plural, n: number) => {
+    const text = plural(n, locale, forms);
+    const number = formatCount(n, locale);
+    const at = text.indexOf(number);
+    if (at < 0) return <span className="stat-label">{text}</span>;
+    const before = text.slice(0, at).trim();
+    const after = text.slice(at + number.length).trim();
+    return (
       <>
-        {text.slice(0, at)}
-        <strong className="stat-n">{n}</strong>
-        <span className="stat-label">{text.slice(at + String(n).length)}</span>
+        {before ? <span className="stat-label">{before}</span> : null}
+        <strong className="stat-n">{number}</strong>
+        {after ? <span className="stat-label">{after}</span> : null}
       </>
     );
   };
@@ -208,8 +211,8 @@ export function MethodologyPage({env}: {env: PageEnv}) {
                           <span className="spectrum-count">
                             {counts.complete || counts.floor ? (
                               <>
-                                {counts.complete ? <span>{fmt(m.methodology.levelComplete, {count: counts.complete})}</span> : null}
-                                {counts.floor ? <span>{fmt(m.methodology.levelFloor, {count: counts.floor})}</span> : null}
+                                {counts.complete ? <span>{plural(counts.complete, locale, m.methodology.levelComplete)}</span> : null}
+                                {counts.floor ? <span>{plural(counts.floor, locale, m.methodology.levelFloor)}</span> : null}
                               </>
                             ) : (
                               <span className="muted">{m.methodology.levelNone}</span>
@@ -220,7 +223,7 @@ export function MethodologyPage({env}: {env: PageEnv}) {
                     })}
                   </ol>
                   <p className="section-note">
-                    {fmt(m.methodology.spectrumNote, {date: formatDate(date, locale)})} {fmt(m.methodology.unknownCount, {count: value.unknown})}
+                    {fmt(m.methodology.spectrumNote, {date: formatDate(date, locale)})} {plural(value.unknown, locale, m.methodology.unknownCount)}
                   </p>
                 </>
               )}
@@ -264,9 +267,9 @@ export function MethodologyPage({env}: {env: PageEnv}) {
               render={value => (
                 <>
                   <ul className="stat-grid">
-                    {stats(value).map(([n, template]) => (
-                      <li key={template} className="stat">
-                        {count(template, n)}
+                    {stats(value).map(([n, forms]) => (
+                      <li key={forms.other} className="stat">
+                        {count(forms, n)}
                       </li>
                     ))}
                   </ul>

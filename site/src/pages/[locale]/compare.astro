@@ -8,6 +8,7 @@ import Base from '../../layouts/Base.astro';
 import {ComparePage} from '../../views/Compare.tsx';
 import {isLocale, LIMITS, PRODUCT} from '../../config.ts';
 import {messages} from '../../i18n/index.ts';
+import {andList} from '../../i18n/format.ts';
 import {parseCompareParams} from '../../model/compare.ts';
 import {paths} from '../../model/urls.ts';
 import {catalog, evaluationDateFor} from '../../server/site.ts';
@@ -33,7 +34,12 @@ if (!params.unknown.length && !params.truncated && current !== params.canonical)
 const m = messages(locale);
 const date = evaluationDateFor();
 const objects = params.ids.map(id => catalog.object(id)!);
-const title = objects.length ? `${m.compare.title}: ${objects.map(object => object.name).join(', ')} · ${PRODUCT.name}` : `${m.compare.title} · ${PRODUCT.name}`;
+const title = objects.length
+  ? `${m.compare.title}${m.common.labelSeparator}${andList(
+      objects.map(object => object.name),
+      locale,
+    )} · ${PRODUCT.name}`
+  : `${m.compare.title} · ${PRODUCT.name}`;
 ---
 
 <Base

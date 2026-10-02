@@ -18,6 +18,11 @@ export function Inlines({nodes, ctx}: {nodes: readonly Inline[]; ctx: TokenConte
   for (let index = 0; index < nodes.length; index++) {
     const node = nodes[index];
     const next = nodes[index + 1];
+    // A citation attaches to the word before it, whatever spacing the source used.
+    if (node.t === 'text' && next?.t === 'token' && next.kind === 'claim' && /\s$/.test(node.v)) {
+      items.push(<Fragment key={index}>{node.v.trimEnd()}</Fragment>);
+      continue;
+    }
     if (node.t === 'token' && next?.t === 'text') {
       const glue = GLUE.exec(next.v)?.[0];
       if (glue) {

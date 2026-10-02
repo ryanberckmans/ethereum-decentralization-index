@@ -53,6 +53,15 @@ export interface Diagram {
   edges: DiagramEdge[];
 }
 
+const WIDE = /[\u1100-\u115f\u2e80-\u303e\u3041-\u33ff\u3400-\u4dbf\u4e00-\u9fff\ua960-\ua97f\uac00-\ud7a3\uf900-\ufaff\ufe30-\ufe4f\uff00-\uff60\uffe0-\uffe6]/;
+
+/** Width of an edge label at its 11-pixel size: Chinese, Japanese and Korean characters take a full em. */
+export function labelWidth(text: string): number {
+  let width = 0;
+  for (const char of text) width += WIDE.test(char) ? 11 : 6.4;
+  return Math.round(width + 14);
+}
+
 /** Wrap a name into at most two lines of about `max` characters. */
 export function wrapName(name: string, max = 23): string[] {
   const lines: string[] = [];
@@ -171,7 +180,7 @@ export function layoutDiagram(inputNodes: readonly DiagramInputNode[], inputEdge
   };
 
   const drawn: DiagramEdge[] = edges.map(edge => {
-    const labelW = Math.round(edge.label.length * 6.4 + 14);
+    const labelW = labelWidth(edge.label);
     const chain = chains.get(edge);
     let path: string;
     let lx: number;

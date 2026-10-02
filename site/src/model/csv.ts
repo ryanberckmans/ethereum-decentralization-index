@@ -23,5 +23,5 @@ export function csvCell(value: CsvValue): string {
 export function toCsv<T>(rows: readonly T[], columns: readonly (readonly [header: string, value: (row: T) => CsvValue])[]): string {
   const lines = [columns.map(([header]) => csvCell(header)).join(',')];
   for (const row of rows) lines.push(columns.map(([, value]) => csvCell(value(row))).join(','));
-  return `﻿${lines.join('\r\n')}\r\n`;
+  return `\ufeff${lines.join('\r\n')}\r\n`;
 }

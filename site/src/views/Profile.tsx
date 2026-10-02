@@ -5,7 +5,7 @@
  */
 import {safeEvidenceUrl} from 'ethereum-decentralization-index';
 import {EDI_LOCALE, PRODUCT} from '../config.ts';
-import {fmt, formatDate} from '../i18n/format.ts';
+import {andList, fmt, formatDate} from '../i18n/format.ts';
 import {Dated} from '../components/Dated.tsx';
 import {completeness} from '../model/view-types.ts';
 import {GradeBadge, ReviewNote, completenessLong} from '../components/Grade.tsx';
@@ -258,9 +258,12 @@ function ControlSection({model, env}: {model: ProfileModel; env: PageEnv}) {
                 }
               />
               {object.entity.positionReview?.reason ? (
-                <p lang={lang}>
-                  <strong>{m.profile.positionReason}: </strong>
-                  {object.entity.positionReview.reason}
+                <p>
+                  <strong>
+                    {m.profile.positionReason}
+                    {m.common.labelSeparator}
+                  </strong>
+                  <span lang={lang}>{object.entity.positionReview.reason}</span>
                 </p>
               ) : null}
             </>
@@ -307,7 +310,7 @@ function IdentitySection({model, env}: {model: ProfileModel; env: PageEnv}) {
             {ediAliases.length ? (
               <div className="facts-row">
                 <dt>{m.profile.aliases}</dt>
-                <dd>{ediAliases.join(', ')}</dd>
+                <dd>{ediAliases.join(m.common.listSeparator)}</dd>
               </div>
             ) : null}
             {editorialAliases.length ? (
@@ -472,7 +475,7 @@ export function ProfilePage({model, env}: {model: ProfileModel; env: PageEnv}) {
             {object.summary ?? object.entity.scope}
           </p>
           <p className="profile-kind">
-            <span>{networks.length ? fmt(m.profile.onNetworks, {networks: networks.join(', ')}) : m.profile.networkUnrecorded}</span>
+            <span>{networks.length ? fmt(m.profile.onNetworks, {networks: andList(networks, locale)}) : m.profile.networkUnrecorded}</span>
             <span>
               <code>{object.id}</code>
             </span>

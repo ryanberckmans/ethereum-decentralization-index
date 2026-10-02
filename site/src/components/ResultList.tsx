@@ -4,7 +4,7 @@
  */
 import {Fragment} from 'react';
 import type {Locale} from '../config.ts';
-import {fmt} from '../i18n/format.ts';
+import {andList, fmt} from '../i18n/format.ts';
 import type {Messages} from '../i18n/en.ts';
 import type {GradeGroup, ObjectHit} from '../model/directory.ts';
 import type {Snippet} from '../model/search.ts';
@@ -29,6 +29,9 @@ function ticker(hit: ObjectHit): string | undefined {
   const {name, aliases} = hit.entry;
   return aliases.find(alias => TICKER.test(alias) && alias === alias.toUpperCase() && alias.toLowerCase() !== name.toLowerCase() && !name.includes(alias));
 }
+
+/** Fields whose text is English editorial or EDI text rather than an interface label or a name. */
+const ENGLISH_FIELDS: ReadonlySet<Snippet['field']> = new Set(['tags', 'summary', 'story', 'title', 'dek', 'scope', 'controls', 'reason', 'description']);
 
 function fieldLabel(field: Snippet['field'], m: DirectoryMessages): string {
   const d = m.directory;
@@ -82,17 +85,21 @@ export function ResultRow({hit, ctx}: {hit: ObjectHit; ctx: RowContext}) {
   const networks = entry.networks.map(id => ctx.networkNames[id] ?? id);
   const selected = ctx.compare.includes(entry.id);
   const full = !selected && ctx.compare.length >= ctx.compareMax;
+  /** Summaries and metric names are English editorial or EDI text. */
+  const english = locale === 'en' ? undefined : 'en';
   return (
     <li className="row" data-id={entry.id}>
       <div className="row-name">
         <a href={ctx.objectHref(entry.slug)}>{entry.name}</a>
         {symbol ? <span className="row-ticker">{symbol}</span> : null}
       </div>
-      <p className={`row-summary${entry.ediSummary ? ' is-edi' : ''}`}>{entry.summary}</p>
+      <p className={`row-summary${entry.ediSummary ? ' is-edi' : ''}`} lang={english}>
+        {entry.summary}
+      </p>
       <div className="row-meta">
         {entry.role ? <span className="row-role">{m.roles[entry.role]}</span> : null}
         <span>{m.kinds[entry.kind]}</span>
-        {networks.length ? <span>{fmt(m.directory.chains, {chains: networks.join(', ')})}</span> : null}
+        {networks.length ? <span>{fmt(m.directory.chains, {chains: andList(networks, locale)})}</span> : null}
       </div>
       <div className="row-grade">
         <GradeBadge grade={state.mechanism} m={m} scope={m.grade.mechanism} />
@@ -106,7 +113,11 @@ export function ResultRow({hit, ctx}: {hit: ObjectHit; ctx: RowContext}) {
       <div className="row-extra">
         {entry.observation ? (
           <span className="row-obs">
-            {entry.observation.metric}: <strong>{entry.observation.value}</strong>, {entry.observation.when}
+            <span lang={english}>{entry.observation.metric}</span>
+            {m.common.labelSeparator}
+            <strong>{entry.observation.value}</strong>
+            {m.common.listSeparator}
+            {entry.observation.when}
             {entry.observation.scope ? ` (${entry.observation.scope})` : ''}
           </span>
         ) : null}
@@ -133,13 +144,18 @@ export function ResultRow({hit, ctx}: {hit: ObjectHit; ctx: RowContext}) {
         </button>
         {match?.chains ? (
           <span className="row-match">
-            {fmt(m.directory.matchedIn, {field: m.directory.fieldAddress})}: {match.chains.map(chainId => ctx.chainNames[chainId] ?? `${chainId}`).join(', ')}
+            {fmt(m.directory.matchedIn, {field: m.directory.fieldAddress})}
+            {m.common.labelSeparator}
+            {match.chains.map(chainId => ctx.chainNames[chainId] ?? `${chainId}`).join(m.common.listSeparator)}
           </span>
         ) : match?.snippet ? (
           <span className="row-match">
-            {fmt(m.directory.matchedIn, {field: fieldLabel(match.snippet.field, m)})}:{' '}
+            {fmt(m.directory.matchedIn, {field: fieldLabel(match.snippet.field, m)})}
+            {m.common.labelSeparator}
             <q>
-              <Highlighted snippet={match.snippet} />
+              <span lang={ctx.locale !== 'en' && ENGLISH_FIELDS.has(match.snippet.field) ? 'en' : undefined}>
+                <Highlighted snippet={match.snippet} />
+              </span>
             </q>
           </span>
         ) : null}
