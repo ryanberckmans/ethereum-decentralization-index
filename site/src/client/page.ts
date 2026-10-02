@@ -146,11 +146,6 @@ document.addEventListener('click', event => {
   });
 });
 
-// ---------------------------------------------------------------- forms
-
-for (const select of document.querySelectorAll<HTMLSelectElement>('select[data-autosubmit]'))
-  select.addEventListener('change', () => select.form?.requestSubmit());
-
 // ---------------------------------------------------------------- EDI guide
 
 document.addEventListener('click', event => {
