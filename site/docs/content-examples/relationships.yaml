@@ -1,0 +1,9 @@
+# Example only. Verify every fact before publishing.
+- id: uniswap-labs-interface-v2
+  from: org:uniswap-labs
+  to: uniswap-v2
+  type: interface-to
+  state: live
+  sourceClaimIds: [uniswap-2020-review]
+  chainIds: [1]
+  note: Uniswap Labs publishes an interface to the v2 pools

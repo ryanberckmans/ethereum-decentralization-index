@@ -1,0 +1,11 @@
+# Example only. Verify every fact before publishing.
+- id: uniswap-2020-review
+  statement: Uniswap Labs reported 4.8 billion dollars of v2 flash-swap volume between the v2 launch in May 2020 and the end of 2020.
+  sourceUrl: https://blog.uniswap.org/year-in-review
+  publisher: Uniswap Labs
+  title: Uniswap in 2020
+  sourcePublishedAt: 2020-12-31
+  retrievedAt: 2026-10-02
+  state: reported-adoption
+  subjects: [uniswap-v2, org:uniswap-labs]
+  qualification: A first-party historical report of flash swaps only; narrower than the article's protocol-wide volume.
