@@ -1,0 +1,37 @@
+# Dated changes to published editorial content, newest first. EDI's own edition
+# changes are added by the build. kind: editorial for new or rewritten content,
+# correction for a fix to something already published.
+
+- date: 2026-10-02
+  kind: editorial
+  summary: >-
+    Published the methodology's editorial sections: what a grade covers, what is listed, what counts as success,
+    which networks the directory reads, how figures are dated and how errors are corrected.
+  subjects: []
+
+- date: 2026-10-02
+  kind: editorial
+  summary: >-
+    Published six stories, each following one economic outcome on Ethereum with the strongest evidence for it and
+    the control that remains around it.
+  subjects:
+    - weth-shared-infrastructure
+    - uniswap-cores-in-use
+    - open-cores-controlled-markets
+    - dollars-on-ethereum
+    - fund-shares-onchain-liquidity
+    - morpho-and-distribution
+
+- date: 2026-10-02
+  kind: editorial
+  summary: >-
+    Published edited profiles for twelve records: what each enables, its control and dependencies, dated figures
+    read from the chain or reported by their operators, connections and sources.
+  subjects: [native-eth, weth9, usdc, seaport-v1.6, uniswap-v2, uniswap-v3, uniswap-v4, morpho-blue, buidl, paxg, pyusd, base]
+
+- date: 2026-10-02
+  kind: editorial
+  summary: >-
+    Gave the other EDI records an editorial role where one fits, and search aliases, such as a token's onchain ticker,
+    where its name differs.
+  subjects: []

@@ -60,7 +60,11 @@ observationIds:
   - morpho-blue-usdc-markets-2026-10-01
   - morpho-blue-usdc-borrow-events-2026-09
   - morpho-blue-usdc-borrowed-2026-09
-relationshipIds: []
+relationshipIds:
+  - coinbase-loans-morpho-base
+  - cbbtc-base-morpho-base
+  - morpho-blue-base-base
+  - base-ethereum
 reviewedAt: 2026-10-02
 ---
 

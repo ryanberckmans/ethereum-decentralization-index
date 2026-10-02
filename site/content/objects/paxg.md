@@ -49,7 +49,8 @@ the same as at the report's cut-off, and reached {{obs:paxg-supply-ethereum-2026
 {{obs:paxg-burned-2026-09}}, and holders made {{obs:paxg-transfers-2026-09}} besides mints and burns.
 
 PAXG also serves as collateral. The Morpho Blue lending contract held {{obs:morpho-blue-paxg-held-2026-10-01}} on 1
-October across all its markets {{claim:onchain-morpho-ethereum-markets-2026-10-01}}.
+October across all its markets {{claim:onchain-morpho-ethereum-markets-2026-10-01}}, nearly all of it posted as
+collateral rather than supplied for lending {{claim:onchain-morpho-paxg-collateral-2026-10-01}}.
 
 ## Control in context
 

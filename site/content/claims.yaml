@@ -6,7 +6,7 @@
 # which records each read's chain, pinned block and result. Re-run them with
 # evidence/onchain.mjs against any archive node.
 
-# Wrapped ETH -------------------------------------------------------------------
+# Wrapped ETH ------------------------------------------------------------------
 
 - id: ethereum-org-why-weth
   statement: >-
@@ -149,7 +149,7 @@
   locator: reads opensea-conduit-owner-2026-10-01 to conduit-captain-owner-signers-2026-10-01
   qualification: No fetched source names the people behind the Safe; that OpenSea controls it is an inference from its role.
 
-# OpenSea and Seaport ---------------------------------------------------------------
+# OpenSea and Seaport ----------------------------------------------------------
 
 - id: opensea-weth-offers
   statement: OpenSea's developer documentation states that offers on OpenSea require WETH, and its SDK provides helpers to wrap ETH into WETH and unwrap it.
@@ -273,7 +273,7 @@
   subjects: [weth9, seaport-v1.6]
   locator: 'How does it work? "Offer Example"'
 
-# USDC ---------------------------------------------------------------------------
+# USDC -------------------------------------------------------------------------
 
 - id: circle-usdc-terms
   statement: >-
@@ -478,7 +478,7 @@
   subjects: [usdc, org:circle]
   locator: 'Mainnet contract addresses, GatewayWallet and GatewayMinter, row "Ethereum"'
 
-# Visa settlement -------------------------------------------------------------------
+# Visa settlement --------------------------------------------------------------
 
 - id: visa-usdc-pilot-2021
   statement: >-
@@ -556,7 +556,7 @@
   locator: '"has reached a $7 billion annualized stablecoin settlement run rate"'
   qualification: Run rate across nine blockchains and all supported stablecoins. Visa gives no Ethereum-only figure.
 
-# ETH -------------------------------------------------------------------------------
+# ETH --------------------------------------------------------------------------
 
 - id: ethereum-org-what-is-ether
   statement: >-
@@ -690,7 +690,7 @@
   locator: read ethereum-blocks-2026-09
   qualification: Summed from every block header in the range. Tips paid to validators are not burned and are not included.
 
-# Seaport ------------------------------------------------------------------------------
+# Seaport ----------------------------------------------------------------------
 
 - id: seaport-launch-2022
   statement: >-
@@ -827,7 +827,7 @@
   subjects: [seaport-v1.6]
   locator: read seaport16-first-code-block
 
-# Base ---------------------------------------------------------------------------------
+# Base -------------------------------------------------------------------------
 
 - id: base-mainnet-launch
   statement: Coinbase announced on 9 August 2023 that Base mainnet was open.
@@ -946,7 +946,7 @@
   locator: reads base-portal-eth-2026-10-01, base-deposits-2026-09, base-withdrawals-finalized-2026-09, base-dispute-games-2026-09 and base-portal-first-code-block
   qualification: Counts events on Ethereum only, not activity inside Base. A deposit is any transaction sent into Base, with or without value.
 
-# Uniswap -------------------------------------------------------------------------
+# Uniswap ----------------------------------------------------------------------
 
 - id: uniswap-v1-launch-2018
   statement: >-
@@ -1480,7 +1480,7 @@
   locator: read uniswap-v3-swaps-2026-09
   qualification: A Swap event is one pool step; a routed trade through several pools emits several. Events are not trades or traders.
 
-# Morpho ----------------------------------------------------------------------------
+# Morpho -----------------------------------------------------------------------
 
 - id: morpho-blue-live-2024
   statement: Morpho announced on 10 January 2024 that Morpho Blue was live on Ethereum mainnet.
@@ -1759,6 +1759,19 @@
     match the collateral the contract holds. In a market whose borrows equal its supply, none of the supply is free to
     withdraw.
 
+- id: onchain-morpho-paxg-collateral-2026-10-01
+  statement: >-
+    On 1 October 2026 one of the 1,800 Morpho Blue markets on Ethereum lent PAXG, and it recorded 0.0019 PAXG supplied
+    and none borrowed. Nearly all of the 86.164 PAXG the contract held was therefore collateral posted in other markets.
+  sourceUrl: https://github.com/ryanberckmans/ethereum-decentralization-index/blob/main/site/content/evidence/onchain.json
+  publisher: Ethereum mainnet, read by the directory
+  title: Onchain reads at pinned blocks
+  observedAt: 2026-09-30
+  retrievedAt: 2026-10-02
+  state: reproduced-observation
+  subjects: [morpho-blue, paxg]
+  locator: reads paxg-held-by-morpho-blue-2026-10-01 and morpho-blue-paxg-lent-2026-10-01
+
 - id: onchain-morpho-base-coinbase-market-2026-10-01
   statement: >-
     On 1 October 2026 the Morpho Blue market on Base with ID 0x9103c3b4…1836 lent USDC against cbBTC at an 86% LLTV
@@ -1787,7 +1800,7 @@
   subjects: [morpho-blue, deployment:morpho-blue-base]
   locator: reads morpho-blue-owner-2026-10-01, morpho-blue-fee-recipient-2026-10-01 and the two first-code-block reads
 
-# BUIDL -------------------------------------------------------------------------------
+# BUIDL ------------------------------------------------------------------------
 
 - id: buidl-launch-2024
   statement: >-
@@ -1917,7 +1930,7 @@
   locator: '"All investors utilizing the capability are pre-qualified and whitelisted through Securitize."'
   qualification: Neither the post nor the release names the blockchain BUIDL trades on through UniswapX. A request-for-quote system, not a Uniswap pool.
 
-# PAXG ----------------------------------------------------------------------------------
+# PAXG -------------------------------------------------------------------------
 
 - id: paxg-definition
   statement: >-
@@ -2013,7 +2026,7 @@
   locator: '"The ASSET_PROTECTION_ROLE can freeze and unfreeze the token balance of any address on chain."'
   qualification: Undated. The PAX Gold Terms also allow a freeze at Paxos's sole discretion (claim paxg-terms-freeze).
 
-# PYUSD ---------------------------------------------------------------------------------
+# PYUSD ------------------------------------------------------------------------
 
 - id: pyusd-launch-2023
   statement: >-
@@ -2119,7 +2132,7 @@
   subjects: [pyusd, org:paxos]
   locator: '3.4.1: "A Bridged Stablecoin is not issued, minted, or redeemed by Paxos"; 3.5.1 on freezes and upgrades'
 
-# Issuer tokens on chain ------------------------------------------------------------------
+# Issuer tokens on chain -------------------------------------------------------
 
 - id: onchain-buidl-2026-09
   statement: >-
