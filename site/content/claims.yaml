@@ -1267,6 +1267,49 @@
   subjects: [product:uniswap-permissioned-pools, uniswap-v4]
   locator: 'Security Considerations: "The factory and hook are shared contracts that Uniswap deploys, and they are not issuer-controlled."'
 
+- id: uniswap-permissioned-pools-before
+  statement: >-
+    Uniswap Labs wrote that Permissioned Pools give approved investors direct onchain trading for assets that previously
+    could not trade on an AMM at all, with the pool itself checking each wallet instead of a frontend gate, and that the
+    protocol stays permissionless: anyone can still deploy pools on v4, or deploy a permissioned pool for one asset.
+  sourceUrl: https://blog.uniswap.org/introducing-permissioned-pools-on-uniswap-v4
+  publisher: Uniswap Labs
+  title: Introducing Permissioned Pools on Uniswap v4
+  sourcePublishedAt: 2026-07-23
+  retrievedAt: 2026-10-02
+  state: announced
+  subjects: [product:uniswap-permissioned-pools, uniswap-v4]
+  locator: '"For approved investors, it means direct onchain trading for assets that previously couldn''t trade on an AMM at all."'
+  qualification: Uniswap Labs' own framing at launch.
+
+- id: uniswap-permissioned-pools-adapter
+  statement: >-
+    Uniswap's documentation says a permissioned pool trades a Permissions Adapter, an ERC-20 that holds the permissioned
+    token and stands in for it, because the shared PoolManager cannot be added to every issuer's allowlist. Only the
+    PoolManager can hold the adapter token, the hook checks the issuer's allowlist before every swap and new position,
+    and the router converts to and from the real token.
+  sourceUrl: https://developers.uniswap.org/docs/protocols/uniswap-labs-hooks/permissioned-pools/architecture
+  publisher: Uniswap Labs
+  title: Permissioned Pools Architecture
+  retrievedAt: 2026-10-02
+  state: capability
+  subjects: [product:uniswap-permissioned-pools, uniswap-v4]
+  locator: 'The Permissions Adapter: "The `PoolManager` is a single shared contract, so it cannot be added to every issuer''s allowlist."'
+
+- id: uniswap-permissioned-pools-issuer-recall
+  statement: >-
+    Uniswap's documentation says the owner of a Permissions Adapter, the issuer, can unwind any position in its pool,
+    removing the liquidity and sending each asset back to the holder, or to that asset's own issuer if the holder can
+    no longer receive it. Positions cannot be transferred, and swapping is off on a new adapter until the issuer turns
+    it on.
+  sourceUrl: https://developers.uniswap.org/docs/protocols/uniswap-labs-hooks/permissioned-pools/architecture
+  publisher: Uniswap Labs
+  title: Permissioned Pools Architecture
+  retrievedAt: 2026-10-02
+  state: capability
+  subjects: [product:uniswap-permissioned-pools, uniswap-v4]
+  locator: 'Security Considerations: "if a holder loses permissions, the Permissions Adapter owner can call `unwindPosition` to remove their liquidity and route the assets back."'
+
 - id: uniswap-permissioned-pools-live
   statement: >-
     Uniswap Labs said on 24 August 2026 that the Permissioned Pools standard was live on Ethereum mainnet and on the
