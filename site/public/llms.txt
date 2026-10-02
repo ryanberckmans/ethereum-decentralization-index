@@ -1,0 +1,11 @@
+# Ethereum Directory
+
+A reference directory of exact economic objects assessed by the Ethereum Decentralization Index (EDI), with sourced stories about their usefulness and economic connections.
+
+- [Directory](/en)
+- [D0 in use](/en/collections/d0)
+- [The global economy on Ethereum](/en/collections/global-economy)
+- [Methodology](/en/methodology)
+- [Versioned directory data](/data/directory.json)
+- [Economic observations and sources](/data/observations.json)
+- [Agent guidance](/agents.md)

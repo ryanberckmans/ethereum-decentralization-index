@@ -1,0 +1,529 @@
+{
+  "profiles": [
+    {
+      "id": "native-eth",
+      "role": "money",
+      "title": "ETH",
+      "summary": "결제, 수수료, 네트워크 보안을 위한 이더리움의 네이티브 자산.",
+      "enables": "ETH는 실행 비용을 지불하고 스테이킹으로 이더리움을 보호합니다. 기업의 상환 약속 없이 애플리케이션에서 사용할 수 있습니다.",
+      "boundary": "D0는 이더리움 기준의 네이티브 ETH를 뜻합니다. 수탁, 스테이킹 서비스, 대출 포지션, 브리지 표현 자산은 별도 의존 관계를 추가합니다.",
+      "storyIds": [
+        "weth-shared-infrastructure"
+      ],
+      "tags": [
+        "ether",
+        "native asset",
+        "gas"
+      ]
+    },
+    {
+      "id": "weth9",
+      "role": "infrastructure",
+      "title": "WETH",
+      "summary": "고정된 규칙으로 ETH에 공통 토큰 인터페이스를 제공하는 래퍼.",
+      "enables": "WETH9는 ERC-20 잔액, 전송, 승인을 지원합니다. OpenSea는 WETH 제안을 문서화하며 Seaport 예제에서 표준 컨트랙트를 식별합니다.",
+      "boundary": "평가는 기록된 이더리움 WETH9에만 적용됩니다. 다른 체인의 동명 토큰, 승인 대상, 사용 애플리케이션은 별도 검토가 필요합니다.",
+      "storyIds": [
+        "weth-shared-infrastructure"
+      ],
+      "tags": [
+        "wrapped ether",
+        "ERC-20",
+        "offers"
+      ]
+    },
+    {
+      "id": "uniswap-v2",
+      "role": "exchange",
+      "title": "Uniswap v2",
+      "summary": "다른 프로그램이 조합할 수 있는 변경 불가능한 교환 메커니즘.",
+      "enables": "플래시 스왑은 한 트랜잭션에서 자산을 받고 의무를 이행합니다. Uniswap은 2020년 보고서에서 5월 출시 이후 거래량이 48억 달러라고 밝혔습니다.",
+      "boundary": "D0는 검토된 코어에 해당합니다. 이 과거 활동 수치가 참여한 모든 토큰, 래퍼, 포지션을 평가하지는 않습니다.",
+      "storyIds": [
+        "uniswap-cores"
+      ],
+      "tags": [
+        "swaps",
+        "AMM",
+        "flash swaps"
+      ]
+    },
+    {
+      "id": "uniswap-v3",
+      "role": "exchange",
+      "title": "Uniswap v3",
+      "summary": "집중 유동성을 제공하는 고정된 교환 코어.",
+      "enables": "유동성 공급자는 선택한 가격 구간에 자본을 집중할 수 있습니다. 코어는 애플리케이션과 인터페이스에 공통 인프라를 제공합니다.",
+      "boundary": "불변성은 발행자 권한, 시장 노출, 외부 관리자의 통제를 제거하지 않습니다. 관리되는 포지션이 자동으로 D0를 상속하지 않습니다.",
+      "storyIds": [
+        "uniswap-cores"
+      ],
+      "tags": [
+        "swaps",
+        "AMM",
+        "concentrated liquidity"
+      ]
+    },
+    {
+      "id": "uniswap-v4",
+      "role": "exchange",
+      "title": "Uniswap v4",
+      "summary": "풀별 로직을 확장할 수 있는 변경 불가능한 교환 코어.",
+      "enables": "훅은 공통 PoolManager를 확장합니다. Permissioned Pools는 개방형 인프라에서 발행자의 접근 규칙을 적용하는 방식을 설명합니다.",
+      "boundary": "D0는 기록된 이더리움 PoolManager만 평가합니다. 훅, 토큰, 포지션 의존 관계는 별도 검토 전까지 미해결입니다.",
+      "storyIds": [
+        "open-cores-controlled-markets",
+        "uniswap-cores"
+      ],
+      "tags": [
+        "PoolManager",
+        "hooks",
+        "permissioned pools"
+      ],
+      "global": true
+    },
+    {
+      "id": "morpho-blue",
+      "role": "lending",
+      "title": "Morpho Blue",
+      "summary": "도입 실적이 보고된 재사용 가능한 대출 코어.",
+      "enables": "Morpho는 2024년 이더리움 출시 6개월 후 예치금이 17억 달러를 넘었다고 보고했습니다. Coinbase는 또 다른 유통 경로를 보여줍니다.",
+      "boundary": "EDI는 정확한 이더리움 L1 코어를 평가합니다. 오라클, 담보, 볼트, Base 배포는 연관성만으로 완전한 D0를 얻지 않습니다.",
+      "storyIds": [
+        "morpho-distribution"
+      ],
+      "tags": [
+        "borrow",
+        "lend",
+        "Coinbase",
+        "oracles"
+      ],
+      "global": true
+    },
+    {
+      "id": "seaport-v1.6",
+      "role": "settlement",
+      "title": "Seaport 1.6",
+      "summary": "디지털 소유권 시장을 위한 공통 결제 메커니즘.",
+      "enables": "OpenSea는 신규 주문에 Seaport 1.6을 지정합니다. 이 메커니즘은 제안, 대가, 결제를 연결하며 WETH도 사용할 수 있습니다.",
+      "boundary": "D0는 정확히 검토된 메커니즘에만 해당합니다. 존, 컨듀잇, NFT 및 다른 자산은 자체 의존 관계를 유지합니다.",
+      "storyIds": [
+        "weth-shared-infrastructure"
+      ],
+      "tags": [
+        "NFT",
+        "OpenSea",
+        "digital property"
+      ]
+    },
+    {
+      "id": "usdc",
+      "role": "money",
+      "title": "USDC",
+      "summary": "발행자가 뒷받침하는 달러가 프로그래밍 가능한 결제에 참여합니다.",
+      "enables": "Visa의 2021년 시범 운영은 이더리움의 USDC 결제를 보여줬습니다. 발행과 상환 책임은 여전히 기관에 있습니다.",
+      "boundary": "발행자와 준비자산은 자산의 일부입니다. D9는 준비자산, 상환, 압류에 대한 통제를 설명하며 이더리움이 이를 제거하지는 않습니다.",
+      "storyIds": [
+        "dollars-on-ethereum",
+        "morpho-distribution"
+      ],
+      "tags": [
+        "Circle",
+        "dollars",
+        "stablecoin",
+        "Visa",
+        "payments"
+      ],
+      "global": true
+    },
+    {
+      "id": "buidl",
+      "role": "assets",
+      "title": "BUIDL",
+      "summary": "온체인 결제와 유동성에 연결되는 기관용 펀드 지분.",
+      "enables": "BlackRock은 2024년 이더리움에서 BUIDL을 출시했습니다. Securitize는 2026년 적격 투자자와 승인된 거래 상대방을 위한 UniswapX 거래를 발표했습니다.",
+      "boundary": "소유권, 준비자산, 이전, 상환에는 기관 통제가 남습니다. 발표는 특정 v4 풀이나 독립적으로 측정한 거래 활동을 증명하지 않습니다.",
+      "storyIds": [
+        "fund-shares-liquidity"
+      ],
+      "tags": [
+        "BlackRock",
+        "Securitize",
+        "treasuries",
+        "UniswapX"
+      ],
+      "global": true
+    },
+    {
+      "id": "paxg",
+      "role": "assets",
+      "title": "PAX Gold",
+      "summary": "실물 금에 대한 청구권을 토큰 흐름과 연결하는 자산.",
+      "enables": "PAXG의 유용성은 토큰과 금 준비자산의 관계에 달려 있습니다. 이 프로필은 현재 잔액이나 도입 실적을 추정하지 않습니다.",
+      "boundary": "수탁, 준비자산, 상환은 발행자에 의존합니다. D9는 권한을 설명하며 금 가격이나 수탁기관의 품질을 평가하지 않습니다.",
+      "storyIds": [],
+      "tags": [
+        "Paxos",
+        "gold",
+        "commodity"
+      ],
+      "global": true
+    },
+    {
+      "id": "pyusd",
+      "role": "money",
+      "title": "PayPal USD",
+      "summary": "익숙한 결제 유통망과 연결된 달러 토큰.",
+      "enables": "PYUSD는 발행자 기반 화폐가 온체인 시스템에 참여하는 사례입니다. 이더리움 활동은 다른 네트워크와 구분해야 합니다.",
+      "boundary": "발행자는 준비자산과 상환 통제를 유지합니다. 이더리움만의 결제량이나 고객 수를 주장하지 않습니다.",
+      "storyIds": [],
+      "tags": [
+        "PayPal",
+        "Paxos",
+        "dollars",
+        "payments"
+      ],
+      "global": true
+    },
+    {
+      "id": "base",
+      "role": "network",
+      "title": "Base",
+      "summary": "이더리움에서 결제하며 실행과 유통을 확장하는 네트워크.",
+      "enables": "Coinbase는 2026년 4월 14일까지 Base의 Morpho를 통한 누적 대출 실행액이 21억 7천만 USDC를 넘었다고 보고했습니다.",
+      "boundary": "10월 기록에는 운영자와 위원회의 권한이 명시되어 있습니다. 체인 평가는 발행자, 시장, 오라클, 수탁과 구분됩니다.",
+      "storyIds": [
+        "morpho-distribution"
+      ],
+      "tags": [
+        "Coinbase",
+        "rollup",
+        "L2"
+      ],
+      "global": true
+    }
+  ],
+  "stories": [
+    {
+      "id": "uniswap-cores",
+      "title": "교환을 재사용 가능한 기능으로",
+      "subtitle": "다른 프로그램이 사용할 때 D0 메커니즘은 인프라가 됩니다.",
+      "collection": [
+        "d0"
+      ],
+      "objectIds": [
+        "uniswap-v2",
+        "uniswap-v3",
+        "uniswap-v4"
+      ],
+      "claimIds": [
+        "uniswap-2020"
+      ],
+      "observationIds": [
+        "v2-flash-2020"
+      ],
+      "state": "reported-adoption",
+      "sections": [
+        {
+          "heading": "구체적인 사용 기록",
+          "body": "Uniswap은 2020년 5월 이후 v2 플래시 스왑 거래량을 48억 달러로 보고했습니다. 프로젝트 자체의 과거 보고이며 현재 잔액이나 전체 Uniswap 거래량이 아닙니다."
+        },
+        {
+          "heading": "계속 이용할 수 있는 인프라",
+          "body": "플래시 스왑은 하나의 원자적 트랜잭션에서 자산을 사용하고 의무를 이행합니다. 재사용 가능한 교환 부품입니다. D0는 코어의 권한 경계를 나타내며 탈중앙화가 도입을 유발했다는 인과관계를 증명하지 않습니다."
+        },
+        {
+          "heading": "정확한 객체를 따라가기",
+          "body": "v2, v3, v4는 다른 메커니즘입니다. UNI 토큰, 인터페이스, 관리 포지션도 별개입니다. 공통 이름은 검색을 돕지만 공통 평가를 만들지는 않습니다."
+        }
+      ],
+      "connection": [
+        {
+          "from": "애플리케이션",
+          "relation": "조합하여 사용",
+          "to": "Uniswap 코어"
+        },
+        {
+          "from": "Uniswap 코어",
+          "relation": "결제 기반",
+          "to": "이더리움"
+        }
+      ],
+      "relationshipIds": [
+        "v2-applications",
+        "v2-ethereum"
+      ]
+    },
+    {
+      "id": "morpho-distribution",
+      "title": "대출 코어가 새로운 입구를 찾다",
+      "subtitle": "이더리움의 실적과 Base의 유통을 각자의 범위로 이해합니다.",
+      "collection": [
+        "d0",
+        "global-economy"
+      ],
+      "objectIds": [
+        "morpho-blue",
+        "base",
+        "usdc"
+      ],
+      "claimIds": [
+        "morpho-2024",
+        "coinbase-2026"
+      ],
+      "observationIds": [
+        "morpho-deposits-2024",
+        "coinbase-originations-2026"
+      ],
+      "state": "reported-adoption",
+      "sections": [
+        {
+          "heading": "이더리움의 이정표",
+          "body": "2024년 8월 Morpho는 이더리움 출시 6개월 후 예치금이 17억 달러를 넘었다고 보고했습니다. 날짜가 명시된 이 잔액은 Morpho Blue L1의 사용을 기록합니다."
+        },
+        {
+          "heading": "새로운 유통 경로",
+          "body": "Coinbase는 Base의 Morpho 대출을 제품에 통합하고 2026년 4월 14일까지 누적 실행액이 21억 7천만 USDC를 넘었다고 보고했습니다. 미상환 부채가 아니며 이전 예치금과 합산할 수 없습니다."
+        },
+        {
+          "heading": "서로 다른 경계",
+          "body": "D0는 정확한 이더리움 코어에만 적용됩니다. 10월 기록은 Base의 추가 권한을 나타내며 USDC에는 발행자가, 시장에는 담보·오라클·수탁 의존 관계가 남습니다."
+        }
+      ],
+      "connection": [
+        {
+          "from": "Coinbase 대출",
+          "relation": "접근 경로 제공",
+          "to": "Base의 Morpho"
+        },
+        {
+          "from": "Base",
+          "relation": "결제 기반",
+          "to": "이더리움"
+        }
+      ],
+      "relationshipIds": [
+        "coinbase-morpho-base",
+        "base-ethereum"
+      ]
+    },
+    {
+      "id": "weth-shared-infrastructure",
+      "title": "WETH의 조용한 유용성",
+      "subtitle": "고정된 래퍼가 ETH와 토큰 기반 앱을 연결합니다.",
+      "collection": [
+        "d0"
+      ],
+      "objectIds": [
+        "weth9",
+        "native-eth",
+        "seaport-v1.6"
+      ],
+      "claimIds": [
+        "opensea-offers",
+        "opensea-seaport"
+      ],
+      "observationIds": [],
+      "state": "capability",
+      "sections": [
+        {
+          "heading": "작지만 유용한 인터페이스",
+          "body": "WETH9는 ETH를 ERC-20 인터페이스로 감쌉니다. 공통 잔액, 승인, 전송 기능과 고정된 ETH 상환 경로를 제공합니다. 검토된 컨트랙트에는 특권 소유자가 추가되지 않습니다."
+        },
+        {
+          "heading": "문서화된 연결",
+          "body": "OpenSea는 WETH 제안을 문서화하고 신규 주문에 Seaport 1.6을 지정합니다. 예제는 표준 이더리움 WETH를 사용합니다. 이는 통합의 증거이며 독립적으로 측정한 거래량은 아닙니다."
+        },
+        {
+          "heading": "조합하되 구분하기",
+          "body": "각 메커니즘은 자체 검토를 갖습니다. 주문에는 자산, 승인, 경우에 따라 존이나 컨듀잇도 포함됩니다. 전체 포지션에는 별도 범위가 필요합니다."
+        }
+      ],
+      "connection": [
+        {
+          "from": "ETH",
+          "relation": "래핑 메커니즘",
+          "to": "WETH9"
+        },
+        {
+          "from": "WETH 제안",
+          "relation": "결제 메커니즘",
+          "to": "Seaport"
+        }
+      ],
+      "relationshipIds": [
+        "eth-weth9",
+        "weth-offers-seaport"
+      ]
+    },
+    {
+      "id": "dollars-on-ethereum",
+      "title": "달러가 공유 결제를 만나다",
+      "subtitle": "시범 운영이 발행자 통제 자산의 기여를 보여줍니다.",
+      "collection": [
+        "global-economy"
+      ],
+      "objectIds": [
+        "usdc",
+        "ethereum"
+      ],
+      "claimIds": [
+        "visa-2021",
+        "visa-2026"
+      ],
+      "observationIds": [],
+      "state": "pilot",
+      "sections": [
+        {
+          "heading": "과거의 연결 사례",
+          "body": "2021년 3월 Visa는 Crypto.com과 이더리움에서 USDC 결제를 시험했습니다. 달러 토큰을 기존 결제망과 연결한 사례이며 모든 Visa 결제를 옮긴 것은 아닙니다."
+        },
+        {
+          "heading": "기관은 자산의 일부로 남는다",
+          "body": "토큰은 프로그래밍 가능한 인프라를 사용하면서도 발행자가 준비자산과 상환을 유지할 수 있습니다. D9 범주는 이 권한을 드러내며 유용한 기여와 양립합니다."
+        },
+        {
+          "heading": "성장을 올바르게 귀속하기",
+          "body": "Visa의 2026년 4월 발표는 아홉 체인을 다룹니다. 다중 체인의 연율 환산 수치를 이더리움만의 관측값으로 볼 수 없습니다. 범위가 명확한 시범 사례를 보존하고 성장 총액을 추정하지 않습니다."
+        }
+      ],
+      "connection": [
+        {
+          "from": "발행자 기반 USDC",
+          "relation": "사용된 곳",
+          "to": "Visa 시범 운영"
+        },
+        {
+          "from": "2021년 시범 운영",
+          "relation": "결제 기반",
+          "to": "이더리움"
+        }
+      ],
+      "relationshipIds": [
+        "usdc-visa",
+        "visa-ethereum"
+      ]
+    },
+    {
+      "id": "fund-shares-liquidity",
+      "title": "펀드 지분에 새로운 연결을",
+      "subtitle": "BUIDL은 기관 청구권을 온체인 시장과 연결합니다.",
+      "collection": [
+        "global-economy"
+      ],
+      "objectIds": [
+        "buidl",
+        "ethereum"
+      ],
+      "claimIds": [
+        "buidl-launch",
+        "buidl-uniswapx"
+      ],
+      "observationIds": [],
+      "state": "announced",
+      "sections": [
+        {
+          "heading": "자산과 책임",
+          "body": "BlackRock은 2024년 이더리움에서 BUIDL을 출시했습니다. 경제적 노출과 법적 구조는 토큰 인터페이스와 다릅니다. 발행자, 수탁기관, 투자자 자격은 여전히 중요합니다."
+        },
+        {
+          "heading": "새로운 유동성 경로",
+          "body": "2026년 2월 Securitize와 Uniswap Labs는 UniswapX 통합을 발표했습니다. 사전 적격 투자자, 승인된 거래 상대방, 견적 요청과 원자적 결제를 설명합니다. 독립적인 거래량 증거는 아닙니다."
+        },
+        {
+          "heading": "개방형 인프라와 특정 접근 조건",
+          "body": "기관 자산을 프로그래밍 가능한 시장에 연결하는 것은 유용합니다. D9는 준비자산과 상환 권한을 설명합니다. UniswapX와 v4는 다르며 이 발표는 특정 BUIDL v4 풀을 증명하지 않습니다."
+        }
+      ],
+      "connection": [
+        {
+          "from": "적격 투자자",
+          "relation": "견적 요청 경로",
+          "to": "UniswapX"
+        },
+        {
+          "from": "승인된 거래 상대방",
+          "relation": "거래 자산",
+          "to": "BUIDL 지분"
+        }
+      ],
+      "relationshipIds": [
+        "investor-uniswapx",
+        "counterparty-buidl"
+      ]
+    },
+    {
+      "id": "open-cores-controlled-markets",
+      "title": "열린 코어, 다른 시장 규칙",
+      "subtitle": "Permissioned Pools는 공통 기반 위의 다른 접근 조건을 보여줍니다.",
+      "collection": [
+        "d0",
+        "global-economy"
+      ],
+      "objectIds": [
+        "uniswap-v4"
+      ],
+      "claimIds": [
+        "permissioned-pools"
+      ],
+      "observationIds": [],
+      "state": "capability",
+      "sections": [
+        {
+          "heading": "확장 지점",
+          "body": "Uniswap v4는 PoolManager와 훅 로직을 분리합니다. 2026년 7월 문서는 교환이나 유동성 공급 시 접근 조건을 확인하는 훅을 설명합니다."
+        },
+        {
+          "heading": "유용한 조합",
+          "body": "발행자는 개방형 인프라를 사용하면서 참여 요건을 유지할 수 있습니다. 다른 자산과 참여자를 연결하는 것 자체가 기여입니다. 높은 D의 구성요소가 미래의 D0를 약속할 필요는 없습니다."
+        },
+        {
+          "heading": "메커니즘 예시",
+          "body": "D0는 정확히 검토된 PoolManager에 해당합니다. 이 이야기는 문서화된 기능을 설명하며 운영 중인 특정 풀, 도입 측정, 훅 평가를 뜻하지 않습니다. 실제 체인, 토큰, 통제를 확인해야 합니다."
+        }
+      ],
+      "connection": [
+        {
+          "from": "발행자 규칙",
+          "relation": "구현 위치",
+          "to": "풀별 훅"
+        },
+        {
+          "from": "훅",
+          "relation": "확장 대상",
+          "to": "Uniswap v4 코어"
+        }
+      ],
+      "relationshipIds": [
+        "access-rules-hook",
+        "hook-v4"
+      ]
+    }
+  ],
+  "methodology": [
+    {
+      "title": "D가 측정하는 것",
+      "body": "EDI는 이더리움 L1 대비 추가 권한을 측정합니다. D0는 검토된 원금 또는 출구 규칙을 변경할 추가 관리자가 없다는 뜻입니다. 순서가 있는 범주이며 확률, 등간격 수치, 경제적 가치 점수가 아닙니다."
+    },
+    {
+      "title": "정확한 메커니즘과 별도 포지션",
+      "body": "브랜드, 토큰, 배포, 포지션은 다른 식별 대상입니다. 관련 의존 경로에서 가장 강한 확인된 제약을 적용합니다. 미해결 의존 관계는 완전한 평가를 막고 알려진 하한을 유지합니다. 편집상 관계는 EDI 의존 그래프를 변경하지 않습니다."
+    },
+    {
+      "title": "세 개의 독립적인 날짜",
+      "body": "연구 검토일은 평가의 유효성을 결정합니다. 관측값과 편집 검토에는 각각 날짜가 있습니다. 비영구 연구는 EDI의 월별 규칙에 따라 만료되며 영구 D0는 나이만으로 만료되지 않습니다. 재무 갱신은 연구를 갱신하지 않습니다."
+    },
+    {
+      "title": "이야기가 뒷받침하는 것",
+      "body": "기능, 발표, 시범 운영, 보고된 도입을 구분합니다. 과거 수치는 과거로 남습니다. 예치금, 누적 대출, 거래량을 합산하거나 외부 자본의 순유입 또는 ETH 가치 귀속으로 추정하지 않습니다."
+    },
+    {
+      "title": "수록 범위와 정정",
+      "body": "기록 118개, 프로필 12개, 이야기 6개를 수록합니다. 기본 기록에서 도입 실적을 만들어내지 않습니다. 평가 정정은 EDI 저장소에서, 편집 정정은 주장·출처·객체를 명시하여 처리합니다. 원문 연구와 출처 제목은 원래 언어로 제공됩니다."
+    }
+  ],
+  "collectionDescriptions": {
+    "d0": "검토된 규칙에 추가 관리자가 없는 유용한 메커니즘. 정확한 객체와 사람들이 이를 활용해 만든 결과의 근거를 살펴보세요.",
+    "global-economy": "달러, 펀드, 실물 자산, 유통망이 실제 책임과 권한을 드러내며 이더리움 경제에 참여합니다."
+  }
+}
