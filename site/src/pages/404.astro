@@ -1,25 +1,80 @@
 ---
+/**
+ * Not found. The missing address is read as a search, so a mistyped or old
+ * link still leads somewhere: close matches from the directory and its
+ * stories, and a search box filled in with the words from the link.
+ */
 import Base from '../layouts/Base.astro';
-import {DEFAULT_LOCALE, isLocale} from '../config.ts';
+import {DEFAULT_LOCALE, LIMITS, PRODUCT, isLocale} from '../config.ts';
 import {messages} from '../i18n/index.ts';
-import {evaluationDateFor} from '../server/site.ts';
+import {cleanText} from '../model/query.ts';
+import {search} from '../model/search.ts';
 import {paths} from '../model/urls.ts';
+import {preparedFor} from '../server/directory.ts';
+import {catalog, evaluationDateFor} from '../server/site.ts';
+import {SearchIcon} from '../components/Icons.tsx';
 
-const segment = Astro.url.pathname.split('/')[1];
+const original = Astro.originPathname || Astro.url.pathname;
+const segment = original.split('/')[1];
 const locale = isLocale(segment) ? segment : DEFAULT_LOCALE;
 const m = messages(locale);
 Astro.response.status = 404;
+
+let words = '';
+try {
+  const last = decodeURIComponent(original.split('/').filter(Boolean).at(-1) ?? '');
+  words = cleanText(last.replace(/[-_.:+]+/g, ' ')).slice(0, LIMITS.query).trim();
+} catch {
+  words = '';
+}
+if (isLocale(words)) words = '';
+
+const index = preparedFor(locale);
+const matches = new Map<string, number>();
+const stories = new Map<string, number>();
+// Only identity matches (IDs, names, aliases, titles): a word found in some description is not a suggestion.
+const collect = (query: string, penalty: number) => {
+  const found = search(index, query);
+  for (const [id, match] of found.objects) if (match.tier <= 2) matches.set(id, Math.min(matches.get(id) ?? 99, match.tier + penalty));
+  for (const hit of found.stories) if (hit.match.tier <= 2) stories.set(hit.item.id, Math.min(stories.get(hit.item.id) ?? 99, hit.match.tier + penalty));
+};
+if (words) {
+  collect(words, 0);
+  if (!matches.size && !stories.size) for (const word of words.split(' ').filter(word => word.length >= 3)) collect(word, 4);
+}
+const rankOf = (id: string) => catalog.object(id)?.rank ?? 999;
+const objectHits = [...matches].sort((a, b) => a[1] - b[1] || rankOf(a[0]) - rankOf(b[0])).slice(0, 6).map(([id]) => catalog.object(id)!).filter(Boolean);
+const storyHits = [...stories].sort((a, b) => a[1] - b[1]).slice(0, 3).map(([id]) => catalog.story(id)!).filter(Boolean);
 ---
 
-<Base locale={locale} title={`${m.errors.notFound} · EDI Directory`} description={m.errors.notFoundBody} path={paths.home(locale)} noindex evaluationDate={evaluationDateFor()}>
-  <div class="shell error-page">
+<Base locale={locale} title={`${m.errors.notFound} · ${PRODUCT.name}`} description={m.errors.notFoundBody} path={paths.home(locale)} noindex evaluationDate={evaluationDateFor()}>
+  <div class="shell"><div class="error-page">
     <h1>{m.errors.notFound}</h1>
     <p class="lede">{m.errors.notFoundBody}</p>
+    {
+      objectHits.length || storyHits.length ? (
+        <section aria-labelledby="matches-title">
+          <h2 id="matches-title">{m.errors.suggestions}</h2>
+          <ul class="link-list">
+            {objectHits.map(object => (
+              <li>
+                <a href={paths.object(locale, object.slug)}>{object.name}</a> <span class="muted">{object.role ? m.roles[object.role] : m.kinds[object.kind]}</span>
+              </li>
+            ))}
+            {storyHits.map(story => (
+              <li>
+                <a href={paths.story(locale, story.slug)}>{story.data.title}</a> <span class="muted">{m.nav.stories}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null
+    }
     <form method="get" action={paths.home(locale)} class="search" role="search">
       <label for="nf-q" class="sr-only">{m.directory.searchLabel}</label>
-      <div class="search-field"><input id="nf-q" type="search" name="q" placeholder={m.directory.searchPlaceholder} maxlength="120" /></div>
+      <div class="search-field"><SearchIcon /><input id="nf-q" type="search" name="q" value={words} placeholder={m.directory.searchPlaceholder} maxlength={LIMITS.query} /></div>
       <button class="button" type="submit">{m.directory.searchButton}</button>
     </form>
     <p><a href={paths.home(locale)}>{m.errors.backToDirectory}</a></p>
-  </div>
+  </div></div>
 </Base>

@@ -1,0 +1,35 @@
+---
+/**
+ * Server error page. Deliberately independent of the edition data, so it
+ * still renders if the failure was there, and it never shows error details.
+ */
+import '../styles/global.css';
+import {DEFAULT_LOCALE, PRODUCT, isLocale} from '../config.ts';
+import {messages} from '../i18n/index.ts';
+import {paths} from '../model/urls.ts';
+
+const segment = Astro.url.pathname.split('/')[1];
+const locale = isLocale(segment) ? segment : DEFAULT_LOCALE;
+const m = messages(locale);
+Astro.response.status = 500;
+Astro.response.headers.set('cache-control', 'no-store');
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>{m.errors.serverError} · {PRODUCT.name}</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <main class="shell"><div class="error-page">
+      <p class="eyebrow">{PRODUCT.name}</p>
+      <h1>{m.errors.serverError}</h1>
+      <p class="lede">{m.errors.serverErrorBody}</p>
+      <p><a href={paths.home(locale)}>{m.errors.backToDirectory}</a></p>
+    </div></main>
+  </body>
+</html>
