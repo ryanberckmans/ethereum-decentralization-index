@@ -21,6 +21,9 @@ export interface EdiIdentity {
   id: string;
   name: string;
   aliases: readonly string[];
+  /** Present when EDI reviews positions in this record separately. */
+  positionReview?: unknown;
+  positionDependenciesUnreviewed?: boolean;
 }
 
 /** Which claim states can support an outcome stated with a given state. */
@@ -40,6 +43,9 @@ export function validateContent(content: LoadedContent, entities: readonly EdiId
   const warn = (file: string, message: string) => issues.push({level: 'warning', file, message});
 
   const ediIds = new Set(entities.map(entity => entity.id));
+  const withPositions = new Set(
+    entities.filter(entity => entity.positionReview !== undefined || entity.positionDependenciesUnreviewed === true).map(entity => entity.id),
+  );
   const aliasOf = new Map<string, string>();
   for (const entity of entities) for (const alias of entity.aliases) if (alias !== entity.id) aliasOf.set(alias, entity.id);
   const checkEdi = (file: string, id: string, what: string) => {
@@ -236,7 +242,8 @@ export function validateContent(content: LoadedContent, entities: readonly EdiId
       switch (token.kind) {
         case 'object':
         case 'grade':
-          checkEdi(file, token.id, `{{${token.kind}:…}}`);
+          if (checkEdi(file, token.id, `{{${token.kind}:…}}`) && token.scope === 'position' && !withPositions.has(token.id))
+            error(file, `{{grade:${token.id}:position}}: EDI does not review positions in ${token.id} separately, so there is no position grade to show`);
           break;
         case 'subject':
           if (!subjects.has(token.id)) error(file, `{{subject:${token.id}}} is not defined in subjects.yaml`);

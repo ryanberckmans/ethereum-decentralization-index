@@ -72,10 +72,16 @@ export function parseMarkdown(source: string): ParsedMarkdown {
     const out: Inline[] = [];
     let last = 0;
     for (const match of value.matchAll(TOKEN)) {
-      const before = value.slice(last, match.index);
+      const kind = match[1] as TokenKind;
+      let before = value.slice(last, match.index);
+      // A citation attaches to the word before it, like a footnote mark.
+      if (kind === 'claim') {
+        before = before.replace(/\s+$/, '');
+        const previous = out[out.length - 1];
+        if (!before && previous?.t === 'text') previous.v = previous.v.replace(/\s+$/, '');
+      }
       if (before) out.push(textInline(before));
       last = match.index + match[0].length;
-      const kind = match[1] as TokenKind;
       let id = match[2];
       if (!TOKEN_KINDS.has(kind)) {
         errors.push(`Unknown token {{${match[1]}:…}} at ${where(node)}`);

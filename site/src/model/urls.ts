@@ -34,3 +34,20 @@ export const EXPORTS = {
 export function localizedPath(path: string, locale: Locale): string {
   return path.replace(/^\/[^/]+(\/|$)/, `/${locale}$1`);
 }
+
+/** Block explorers for the chains EDI records deployments on. Links only; the site fetches nothing from them. */
+const EXPLORERS: Readonly<Record<number, string>> = {
+  1: 'https://eth.blockscout.com',
+  10: 'https://optimism.blockscout.com',
+  8453: 'https://base.blockscout.com',
+};
+
+export function explorerAddressUrl(chainId: number, address: string): string | undefined {
+  const base = EXPLORERS[chainId];
+  return base ? `${base}/address/${address}` : undefined;
+}
+
+/** Sourcify's public file listing for a verified contract. */
+export function sourcifyUrl(chainId: number, address: string): string {
+  return `https://repo.sourcify.dev/${chainId}/${address}`;
+}
