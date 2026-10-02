@@ -1,0 +1,204 @@
+---
+/**
+ * Every page's frame: head metadata, the masthead, the edition footer and the
+ * small page script. Pages pass their own title, description and canonical
+ * path; hreflang alternates point at the same path in every locale.
+ */
+import {Font} from 'astro:assets';
+import '../styles/global.css';
+import {DEFAULT_LOCALE, LOCALES, LOCALE_NAMES, PRODUCT, type Locale} from '../config.ts';
+import {messages} from '../i18n/index.ts';
+import {fmt, formatDate} from '../i18n/format.ts';
+import {catalog} from '../server/site.ts';
+import {EXPORTS, localizedPath, paths} from '../model/urls.ts';
+import {Glyph} from '../components/Icons.tsx';
+
+export type NavKey = 'directory' | 'stories' | 'compare' | 'methodology' | 'changes' | 'data';
+
+interface Props {
+  locale: Locale;
+  title: string;
+  description: string;
+  /** Canonical path without query, e.g. /en/objects/weth9. */
+  path: string;
+  /** Canonical query string (without ?) for pages whose content depends on it. */
+  query?: string;
+  current?: NavKey;
+  alternates?: boolean;
+  noindex?: boolean;
+  ogType?: 'website' | 'article';
+  jsonLd?: unknown;
+  evaluationDate: string;
+}
+
+const {locale, title, description, path, query, current, alternates = true, noindex = false, ogType = 'website', jsonLd, evaluationDate} = Astro.props;
+const m = messages(locale);
+const origin = (import.meta.env.PUBLIC_SITE_URL as string | undefined)?.replace(/\/$/, '') || Astro.url.origin;
+const canonical = `${origin}${path}${query ? `?${query}` : ''}`;
+const edition = catalog.edition;
+const shortCommit = edition.ediCommit === 'unknown' ? edition.ediCommit : edition.ediCommit.slice(0, 12);
+const commitUrl = edition.ediCommit === 'unknown' ? undefined : `${PRODUCT.repository}/tree/${edition.ediCommit}`;
+const nav: {key: NavKey; href: string; label: string}[] = [
+  {key: 'directory', href: paths.home(locale), label: m.nav.directory},
+  {key: 'stories', href: paths.stories(locale), label: m.nav.stories},
+  {key: 'compare', href: paths.compare(locale), label: m.nav.compare},
+  {key: 'methodology', href: paths.methodology(locale), label: m.nav.methodology},
+];
+const more: {key: NavKey; href: string; label: string}[] = [
+  {key: 'changes', href: paths.changes(locale), label: m.nav.changes},
+  {key: 'data', href: paths.data(locale), label: m.nav.data},
+];
+const socialImage = `${origin}/social/${locale}.png`;
+const ogLocale = locale.replace('-', '_');
+const ld = jsonLd ? JSON.stringify(jsonLd).replace(/</g, '\\u003c') : undefined;
+---
+
+<!doctype html>
+<html lang={locale} data-evaluated={evaluationDate} data-locale={locale} data-change-dates={catalog.changeDates.join(',')}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex ? <meta name="robots" content="noindex" /> : null}
+    {
+      alternates && !noindex
+        ? [
+            ...LOCALES.map(code => <link rel="alternate" hreflang={code} href={`${origin}${localizedPath(path, code)}${query ? `?${query}` : ''}`} />),
+            <link rel="alternate" hreflang="x-default" href={`${origin}${localizedPath(path, DEFAULT_LOCALE)}${query ? `?${query}` : ''}`} />,
+          ]
+        : null
+    }
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#f7f5ef" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0c1016" media="(prefers-color-scheme: dark)" />
+    <meta property="og:site_name" content={PRODUCT.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={ogLocale} />
+    <meta property="og:image" content={socialImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${PRODUCT.name}: ${m.meta.tagline}`} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate" type="application/json" href={EXPORTS.directoryJson} title={m.data.directoryJson} />
+    <script is:inline set:html={__THEME_INIT__} />
+    <Font cssVariable="--font-schibsted" preload={[{subset: 'latin', weight: '400 900', style: 'normal'}]} />
+    <Font cssVariable="--font-newsreader" preload={[{subset: 'latin', weight: '200 800', style: 'normal'}]} />
+    {ld ? <script type="application/ld+json" set:html={ld} /> : null}
+  </head>
+  <body>
+    <a class="skip" href="#main">{m.nav.skip}</a>
+    <header class="masthead">
+      <div class="shell masthead-inner">
+        <a class="wordmark" href={paths.home(locale)} aria-label={m.nav.home}>
+          <Glyph />
+          <span class="wordmark-text">
+            <span class="wordmark-name">{PRODUCT.name}</span>
+            <span class="wordmark-sub">{m.meta.tagline}</span>
+          </span>
+        </a>
+        <nav class="nav" aria-label={m.nav.primary}>
+          {nav.map(item => <a href={item.href} aria-current={item.key === current ? 'page' : undefined}>{item.label}</a>)}
+        </nav>
+        <div class="prefs">
+          <details class="menu menu-lang" data-menu>
+            <summary aria-label={m.nav.language}>
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                <circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9s1.3-6.4 3.8-9z"></path>
+              </svg>
+              <span>{locale.split('-')[0].toUpperCase()}</span>
+            </summary>
+            <div class="menu-panel">
+              <p class="menu-label eyebrow">{m.nav.language}</p>
+              {
+                LOCALES.map(code => (
+                  <a href={`${localizedPath(path, code)}${query ? `?${query}` : ''}`} hreflang={code} lang={code} aria-current={code === locale ? 'true' : undefined} data-lang={code}>
+                    {LOCALE_NAMES[code]}
+                  </a>
+                ))
+              }
+            </div>
+          </details>
+          <label class="theme-label">
+            <span class="sr-only">{m.nav.theme}</span>
+            <select class="theme-select" data-theme-select>
+              <option value="system">{m.nav.themeSystem}</option>
+              <option value="light">{m.nav.themeLight}</option>
+              <option value="dark">{m.nav.themeDark}</option>
+            </select>
+          </label>
+          <details class="menu menu-nav" data-menu>
+            <summary>{m.nav.menu}</summary>
+            <div class="menu-panel">
+              <nav aria-label={m.nav.primary}>
+                {[...nav, ...more].map(item => <a href={item.href} aria-current={item.key === current ? 'page' : undefined}>{item.label}</a>)}
+              </nav>
+              <label class="menu-theme js-only">
+                <span class="eyebrow">{m.nav.theme}</span>
+                <select class="theme-select" data-theme-select>
+                  <option value="system">{m.nav.themeSystem}</option>
+                  <option value="light">{m.nav.themeLight}</option>
+                  <option value="dark">{m.nav.themeDark}</option>
+                </select>
+              </label>
+            </div>
+          </details>
+        </div>
+      </div>
+    </header>
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <footer class="footer">
+      <div class="shell footer-inner">
+        <div>
+          <p>{m.footer.about}</p>
+          <ul class="footer-links">
+            <li><a href={paths.methodology(locale)}>{m.nav.methodology}</a></li>
+            <li><a href={paths.changes(locale)}>{m.nav.changes}</a></li>
+            <li><a href={paths.data(locale)}>{m.nav.data}</a></li>
+            <li><a href="/agents.md">{m.footer.agents}</a></li>
+            <li><a href={PRODUCT.repository} rel="noopener">{m.footer.source}</a></li>
+          </ul>
+        </div>
+        <dl class="edition" aria-label={m.edition.label}>
+          <div>
+            <dt>{m.edition.label}</dt>
+            <dd><code>{edition.id}</code></dd>
+          </div>
+          <div>
+            <dt>{m.edition.assessments}</dt>
+            <dd>
+              {fmt(m.edition.registry, {date: formatDate(edition.ediRegistryDate, locale)})}
+              <br />
+              <time datetime={evaluationDate} data-evaluated-text data-template={m.edition.evaluated}>{fmt(m.edition.evaluated, {date: formatDate(evaluationDate, locale)})}</time>
+            </dd>
+          </div>
+          <div>
+            <dt>{m.edition.commit}</dt>
+            <dd>
+              {commitUrl ? <a href={commitUrl} rel="noopener"><code>{shortCommit}</code></a> : <code>{shortCommit}</code>}
+              {edition.ediCommitDirty ? <span class="muted"> ({m.edition.commitDirty})</span> : null}
+            </dd>
+          </div>
+          {
+            edition.observedThrough ? (
+              <div>
+                <dt>{m.edition.observations}</dt>
+                <dd>{fmt(m.edition.observedThrough, {date: formatDate(edition.observedThrough, locale)})}</dd>
+              </div>
+            ) : null
+          }
+        </dl>
+      </div>
+    </footer>
+    <script>
+      import '../client/page.ts';
+    </script>
+  </body>
+</html>
