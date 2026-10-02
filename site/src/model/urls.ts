@@ -30,6 +30,14 @@ export const EXPORTS = {
   object: (slug: string) => `/data/v1/objects/${slug}.json`,
 } as const;
 
+/** Locale-free files for crawlers and agents. */
+export const AGENT_FILES = {
+  llms: '/llms.txt',
+  agents: '/agents.md',
+  sitemap: '/sitemap.xml',
+  robots: '/robots.txt',
+} as const;
+
 /** The same page in another locale: swap the first path segment. */
 export function localizedPath(path: string, locale: Locale): string {
   return path.replace(/^\/[^/]+(\/|$)/, `/${locale}$1`);
