@@ -1,7 +1,7 @@
 /**
  * The read model: canonical EDI identities joined to editorial records,
- * stories, claims, observations and relationships. Built once per Worker
- * isolate from the validated edition; nothing here evaluates EDI.
+ * stories, claims, observations and relationships. Built once per build
+ * from the validated edition; nothing here evaluates EDI.
  *
  * @cc [label:product] canonical-edi-ownership
  * Every object is an EDI record, named by EDI. Editorial data adds a role,

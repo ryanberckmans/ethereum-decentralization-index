@@ -96,6 +96,20 @@ export interface SearchLabels {
   object: (id: string) => string;
 }
 
+/** Labels for an index's records in the page language: its own names, and the interface's names for roles and kinds. */
+export function labelsFor(index: DirectoryIndex, names: {roles: Readonly<Record<string, string>>; kinds: Readonly<Record<string, string>>}): SearchLabels {
+  const networks = new Map(index.networks.map(network => [network.id, network.name]));
+  const stories = new Map(index.stories.map(story => [story.id, story.title]));
+  const objects = new Map(index.entries.map(entry => [entry.id, entry.name]));
+  return {
+    role: role => names.roles[role] ?? role,
+    kind: kind => names.kinds[kind] ?? kind,
+    network: id => networks.get(id) ?? id,
+    story: id => stories.get(id) ?? id,
+    object: id => objects.get(id) ?? id,
+  };
+}
+
 export interface PreparedIndex {
   objects: Prepared<DirectoryEntry>[];
   stories: Prepared<StoryEntry>[];

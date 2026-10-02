@@ -18,8 +18,8 @@ are what show it holds.
 | `typed-relationship-semantics`: relationships describe economic use and never act as control dependencies | `src/content/schema.ts` | `edition.test.ts`: a relationship posing as a control dependency fails the build |
 | `safe-editorial-markdown` (security): content Markdown is inert | `src/content/markdown.ts` | `edition.test.ts`: raw HTML, scripts, images and non-https links are rejected |
 | `safe-external-content` (security): links are https with public hosts; exports cannot run formulas | `src/content/schema.ts`, `src/model/csv.ts` | `edition.test.ts`: a `javascript:` source fails the build; `model.test.ts` and `surfaces.test.ts`: spreadsheet exports; `e2e/quality.spec.ts`: external links and exports |
-| `bounded-external-work` (security): one same-origin request after load, no third-party calls | `src/islands/DirectoryApp.tsx` | `e2e/quality.spec.ts`: no request leaves the site, CSP |
-| `restoration-without-side-effects`: the URL alone restores a view, and restoring does nothing else | `src/model/query.ts`, `src/islands/DirectoryApp.tsx` | `model.test.ts`: directory URL state; `e2e/directory.spec.ts`: Back, refresh and new tab |
+| `bounded-external-work` (security): after load, scripts read only the site's own data files, with a timeout and a version check; no third-party calls | `src/client/fetch.ts` | `e2e/quality.spec.ts`: no request leaves the site, the CSP, no policy violations |
+| `restoration-without-side-effects`: the URL alone restores a view, and restoring does nothing else | `src/model/query.ts`, `src/islands/DirectoryApp.tsx` | `model.test.ts`: directory URL state; `e2e/directory.spec.ts`: Back, refresh and new tab, search links, comparisons through Back and refresh |
 | `last-valid-edition-survives`: invalid input fails the build instead of publishing | `src/build/edition.ts` | `edition.test.ts`: invalid content never publishes |
 
 ## Acceptance cases

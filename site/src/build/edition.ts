@@ -1,6 +1,6 @@
 /**
  * The edition importer. Runs in Node at build time (and in `astro dev`), never
- * in the Worker or the browser.
+ * in the browser.
  *
  * It validates editorial content against its schema and the EDI registry,
  * checks that the bundled EDI registry is the one its snapshot describes, and
@@ -46,9 +46,9 @@ function sha256(bytes: Buffer | string): string {
   return createHash('sha256').update(bytes).digest('hex');
 }
 
-/** The commit this edition is built from. CI and Cloudflare builds provide it; locally, ask git. */
+/** The commit this edition is built from. GitHub Actions provides it; elsewhere, ask git. */
 function repositoryCommit(): {commit: string; dirty: boolean} {
-  const fromEnv = process.env.GITHUB_SHA ?? process.env.WORKERS_CI_COMMIT_SHA ?? process.env.CF_PAGES_COMMIT_SHA;
+  const fromEnv = process.env.GITHUB_SHA;
   if (fromEnv && /^[0-9a-f]{40}$/.test(fromEnv)) return {commit: fromEnv, dirty: false};
   try {
     const commit = execFileSync('git', ['rev-parse', 'HEAD'], {cwd: REPO_ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore']}).trim();

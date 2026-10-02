@@ -1,7 +1,8 @@
 # Checks the directory website in site/: its editorial content, types and unit
-# tests, the production build, and browser tests against the built Worker
-# (search and saved state, review dates, accessibility in both themes, phone
-# budgets, security headers, and all eight languages on phone widths).
+# tests, the production build, and browser tests against the built files
+# served as a plain static host serves them (search and saved state, missing
+# addresses, review dates, accessibility in both themes, phone budgets, the
+# Content-Security-Policy, and all eight languages on phone widths).
 # It runs when the site, the EDI package it reads, or this workflow changes,
 # and it deploys nothing: no deployment is set up.
 name: Site
@@ -60,5 +61,5 @@ jobs:
         run: npm run build
       - name: Install the test browser
         run: npx playwright install --with-deps chromium
-      - name: Run the browser tests against the built Worker
+      - name: Run the browser tests against the built files
         run: npm run test:e2e

@@ -1,7 +1,8 @@
 /**
  * The small script every page loads. It never evaluates EDI and never calls a
- * third party: it swaps in server-computed EDI results for the reader's UTC
- * date, applies display preferences, and wires copy, menu and guide controls.
+ * third party: it swaps in the EDI results the build computed for the
+ * reader's UTC date, applies display preferences, and wires language, copy,
+ * menu and guide controls.
  */
 import {utcToday, msUntilUtcMidnight} from '../model/dates.ts';
 
@@ -106,9 +107,15 @@ for (const select of themeSelects) {
 document.addEventListener('click', event => {
   const link = (event.target as Element).closest<HTMLAnchorElement>('a[data-lang]');
   if (!link) return;
-  const code = link.dataset.lang ?? '';
-  // Remembered only to choose the language when someone opens the bare site root.
-  document.cookie = `edi-lang=${encodeURIComponent(code)}; Path=/; Max-Age=31536000; SameSite=Lax${location.protocol === 'https:' ? '; Secure' : ''}`;
+  // The same search, filters, comparison or section in the other language.
+  link.search = location.search;
+  link.hash = location.hash;
+  try {
+    // Remembered in this browser only, to choose the language when someone opens the bare site root.
+    localStorage.setItem('edi-lang', link.dataset.lang ?? '');
+  } catch {
+    // Not remembered; the link still opens that language.
+  }
 });
 
 // ---------------------------------------------------------------- menus

@@ -3,7 +3,6 @@ import {readFileSync} from 'node:fs';
 import {fileURLToPath} from 'node:url';
 import {defineConfig, fontProviders} from 'astro/config';
 import react from '@astrojs/react';
-import cloudflare from '@astrojs/cloudflare';
 import {editionPlugin} from './src/build/vite-plugin.ts';
 
 /** The only inline script: it applies the saved theme before first paint. CSP allows it by hash. */
@@ -53,19 +52,21 @@ const LATIN_EXT = [
 
 const fontsource = (pkg: string, file: string) => `./node_modules/@fontsource-variable/${pkg}/files/${file}`;
 
+/** The public address, when the build is told it (see src/server/origin.ts). */
+const site = process.env.PUBLIC_SITE_URL?.trim() || undefined;
+
 export default defineConfig({
-  output: 'server',
-  // No session storage: the directory has no accounts and keeps no visitor state on the server.
-  session: false,
-  trailingSlash: 'ignore',
+  // Plain files that any static host can serve: one index.html per page, plus the data files.
+  output: 'static',
+  site,
+  trailingSlash: 'always',
   devToolbar: {enabled: false},
-  adapter: cloudflare({imageService: 'passthrough'}),
   integrations: [react()],
-  build: {inlineStylesheets: 'never'},
+  build: {format: 'directory', inlineStylesheets: 'never'},
   // Markdown is rendered by src/content/markdown.ts; Astro's highlighter would need inline styles.
   markdown: {syntaxHighlight: false},
   security: {
-    checkOrigin: true,
+    // A <meta> policy in every page. Framing is refused by the host's headers (docs/hosting.md): browsers ignore frame-ancestors in <meta>.
     csp: {
       algorithm: 'SHA-256',
       directives: [
@@ -79,8 +80,6 @@ export default defineConfig({
         "manifest-src 'self'",
         "worker-src 'none'",
         "frame-src 'none'",
-        // Pages are rendered on request, so the policy is a header and this directive applies.
-        "frame-ancestors 'none'",
       ],
       scriptDirective: {resources: ["'self'"], hashes: [themeInitHash]},
       styleDirective: {resources: ["'self'"]},

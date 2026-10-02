@@ -2,7 +2,9 @@
  * Crawler and agent surfaces: robots.txt, the sitemaps, llms.txt and
  * agents.md. All are generated from the edition, so counts, dates and links
  * are always the ones the site serves. They describe the public product
- * only, never how it is built.
+ * only, never how it is built. `origin` is the public address, or '' when
+ * the build does not know it: links are then relative, and nothing points at
+ * the sitemaps, which are not built.
  */
 import {DEFAULT_LOCALE, LOCALES, LOCALE_NAMES, PRODUCT, type Locale} from '../config.ts';
 import {AGENT_FILES, EXPORTS, localizedPath, paths} from '../model/urls.ts';
@@ -57,7 +59,7 @@ export function localeSitemap(origin: string, locale: Locale): string {
 }
 
 export function robotsTxt(origin: string): string {
-  return ['User-agent: *', 'Allow: /', 'Disallow: /*/directory-index.json', '', `Sitemap: ${origin}${AGENT_FILES.sitemap}`, ''].join('\n');
+  return ['User-agent: *', 'Allow: /', 'Disallow: /*/directory-index.json', 'Disallow: /*/compare-data.json', '', ...(origin ? [`Sitemap: ${origin}${AGENT_FILES.sitemap}`, ''] : [])].join('\n');
 }
 
 function editionLines(date: string): string[] {
@@ -65,7 +67,7 @@ function editionLines(date: string): string[] {
   const later = catalog.changeDates.filter(change => change > date);
   return [
     `- Edition ${edition.id}, built from repository commit ${edition.ediCommit.slice(0, 12)}, using the EDI registry dated ${edition.ediRegistryDate}.`,
-    `- Grades on these pages are evaluated for ${date} (UTC).${later.length ? ` They change on their own on ${later.join(', ')} as reviews fall due, without a new edition.` : ''}`,
+    `- Grades in this edition’s pages and files are evaluated for ${date} (UTC), the day it was built.${later.length ? ` EDI’s results change on ${later.join(', ')} as reviews fall due: pages show the result for the reader’s date in the browser, and the exports list later results under \`scheduled\`.` : ''}`,
     `- ${catalog.objects.length} EDI records (networks, assets and protocols), ${catalog.objects.filter(object => object.edited).length} edited profiles, ${catalog.stories.length} stories, ${catalog.observations.size} dated figures.`,
   ];
 }
@@ -114,7 +116,7 @@ export function llmsTxt(origin: string, date: string): string {
     '',
     '## Optional',
     '',
-    link('Sitemap', AGENT_FILES.sitemap, 'every page in every language'),
+    ...(origin ? [link('Sitemap', AGENT_FILES.sitemap, 'every page in every language')] : []),
     `- [${PRODUCT.indexName} repository](${PRODUCT.repository}): EDI's rubric, registry and functions`,
     '',
   ].join('\n');
@@ -162,12 +164,12 @@ export function agentsMd(origin: string, date: string): string {
     `- One record: ${origin}${EXPORTS.object(example.slug)}`,
     `- Figures: ${origin}${EXPORTS.observationsJson} and ${origin}${EXPORTS.observationsCsv}`,
     `- Claims, connections, stories: ${origin}${EXPORTS.claimsJson}, ${origin}${EXPORTS.relationshipsJson}, ${origin}${EXPORTS.storiesJson}`,
-    '- Every export has `schemaVersion`, `edition` and `evaluationDate`. EDI results are projections with the record ID, scope, evaluation date and source revision. Files change at most once a day (UTC) and with each edition; please cache them.',
-    '- No key or account is needed. Please do not crawl search or compare URLs with many query combinations; the exports hold the same data.',
+    '- Every export has `schemaVersion`, `edition` and `evaluationDate`. EDI results are projections with the record ID, scope, evaluation date and source revision; `scheduled` lists the results EDI’s review dates bring later. Files change only when the site is rebuilt; please cache them.',
+    '- No key or account is needed. Search and compare pages are computed in the browser from the same data, so read the exports rather than crawling search or compare URLs.',
     '',
     '## Addresses',
     '',
-    `- Profiles: ${origin}/{locale}/objects/{slug}. Raw EDI IDs also work and redirect, for example ${origin}${paths.object(en, example.id)}`,
+    `- Profiles: ${origin}/{locale}/objects/{slug}/, for example ${origin}${paths.object(en, example.slug)}. Each record’s slug is in the directory export; it is usually the EDI ID with \`:\` written as \`--\` and \`.\` as \`-\`.`,
     `- Search: ${origin}${paths.home(en)}?q=uniswap. Filters: role, kind, network, grade, atleast, review, story.`,
     `- Compare: ${origin}${paths.compare(en)}?ids=usdc,weth9 (up to four).`,
     `- Languages: ${LOCALES.map(locale => `${locale} (${LOCALE_NAMES[locale]})`).join(', ')}. The interface is translated; editorial text is in English in every language.`,

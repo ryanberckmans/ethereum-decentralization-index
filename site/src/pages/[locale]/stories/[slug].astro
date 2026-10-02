@@ -1,37 +1,45 @@
 ---
-/** One editorial story. Old slugs and story IDs redirect permanently. */
+/** One editorial story. Old slugs and story IDs get a page that redirects to the current slug. */
 import Base from '../../../layouts/Base.astro';
 import {StoryPage} from '../../../views/Story.tsx';
-import {isLocale, PRODUCT} from '../../../config.ts';
+import {LOCALES, PRODUCT, type Locale} from '../../../config.ts';
 import {messages} from '../../../i18n/index.ts';
-import {catalog, evaluationDateFor} from '../../../server/site.ts';
+import {SITE_URL} from '../../../server/origin.ts';
+import {storyRedirects} from '../../../server/redirects.ts';
+import {catalog, EVALUATION_DATE} from '../../../server/site.ts';
 import {storyModel} from '../../../server/story.ts';
 import {paths} from '../../../model/urls.ts';
 
-const {locale, slug} = Astro.params;
-if (!isLocale(locale) || !slug) return Astro.rewrite('/404');
+export function getStaticPaths() {
+  const redirects = [...storyRedirects()];
+  return LOCALES.flatMap(locale => [
+    ...catalog.stories.map(story => ({params: {locale, slug: story.slug}, props: {id: story.id}})),
+    ...redirects.map(([slug, to]) => ({params: {locale, slug}, props: {redirectTo: to}})),
+  ]);
+}
 
-const resolved = catalog.resolveStory(slug);
-if (resolved.kind === 'redirect') return Astro.redirect(paths.story(locale, resolved.slug), 301);
-if (resolved.kind === 'missing') return Astro.rewrite('/404');
+const locale = Astro.params.locale as Locale;
+const {id, redirectTo} = Astro.props as {id?: string; redirectTo?: string};
+if (redirectTo) return Astro.redirect(paths.story(locale, redirectTo), 301);
 
-const story = resolved.value;
+const story = catalog.story(id!)!;
 const m = messages(locale);
-const date = evaluationDateFor();
+const date = EVALUATION_DATE;
 const model = storyModel(story);
-const origin = Astro.url.origin;
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'Article',
-  headline: story.data.title,
-  description: story.data.dek,
-  inLanguage: 'en',
-  dateModified: story.data.reviewedAt,
-  url: `${origin}${paths.story(locale, story.slug)}`,
-  isPartOf: {'@type': 'WebSite', name: PRODUCT.name, url: `${origin}${paths.home(locale)}`},
-  about: story.data.objectIds.map(id => ({'@type': 'Thing', name: catalog.nameOf(id), url: `${origin}${paths.object(locale, catalog.object(id)?.slug ?? id)}`})),
-  citation: model.citations.ids.map(id => catalog.claims.get(id)?.sourceUrl).filter(Boolean),
-};
+const jsonLd = SITE_URL
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'Article',
+      headline: story.data.title,
+      description: story.data.dek,
+      inLanguage: 'en',
+      dateModified: story.data.reviewedAt,
+      url: `${SITE_URL}${paths.story(locale, story.slug)}`,
+      isPartOf: {'@type': 'WebSite', name: PRODUCT.name, url: `${SITE_URL}${paths.home(locale)}`},
+      about: story.data.objectIds.map(id => ({'@type': 'Thing', name: catalog.nameOf(id), url: `${SITE_URL}${paths.object(locale, catalog.object(id)?.slug ?? id)}`})),
+      citation: model.citations.ids.map(id => catalog.claims.get(id)?.sourceUrl).filter(Boolean),
+    }
+  : undefined;
 ---
 
 <Base locale={locale} title={`${story.data.title} · ${PRODUCT.name}`} description={story.data.dek} path={paths.story(locale, story.slug)} current="stories" ogType="article" jsonLd={jsonLd} evaluationDate={date}>

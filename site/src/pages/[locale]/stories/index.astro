@@ -3,17 +3,19 @@
 import Base from '../../../layouts/Base.astro';
 import {StoryCard} from '../../../views/Story.tsx';
 import {Crumbs} from '../../../views/Editorial.tsx';
-import {isLocale, PRODUCT} from '../../../config.ts';
+import {LOCALES, PRODUCT, type Locale} from '../../../config.ts';
 import {COLLECTION_IDS} from '../../../content/vocab.ts';
 import {messages} from '../../../i18n/index.ts';
-import {catalog, evaluationDateFor} from '../../../server/site.ts';
+import {catalog, EVALUATION_DATE} from '../../../server/site.ts';
 import {paths} from '../../../model/urls.ts';
 
-const {locale} = Astro.params;
-if (!isLocale(locale)) return Astro.rewrite('/404');
+export function getStaticPaths() {
+  return LOCALES.map(locale => ({params: {locale}}));
+}
 
+const locale = Astro.params.locale as Locale;
 const m = messages(locale);
-const date = evaluationDateFor();
+const date = EVALUATION_DATE;
 const env = {locale, m, date};
 const groups = COLLECTION_IDS.map(id => ({id, collection: catalog.collections.get(id), stories: catalog.stories.filter(story => story.data.collections.includes(id))})).filter(group => group.stories.length);
 const contentLang = locale === 'en' ? undefined : 'en';

@@ -2,6 +2,7 @@
  * The directory's result area: other matching groups, the object rows and
  * the pager. Shared by the server render and the island.
  */
+import {PAGE_SIZE} from '../config.ts';
 import type {Messages} from '../i18n/en.ts';
 import {fmt} from '../i18n/format.ts';
 import type {DirectoryResult} from '../model/directory.ts';
@@ -31,8 +32,8 @@ function pageList(page: number, pages: number): (number | null)[] {
 export function Pager({result, ctx}: {result: Pick<DirectoryResult, 'page' | 'pages' | 'total'>; ctx: BodyContext}) {
   if (result.pages <= 1) return null;
   const {m} = ctx;
-  const from = (result.page - 1) * 30 + 1;
-  const to = Math.min(result.total, result.page * 30);
+  const from = (result.page - 1) * PAGE_SIZE + 1;
+  const to = Math.min(result.total, result.page * PAGE_SIZE);
   return (
     <nav className="pager" aria-label={m.directory.pagination}>
       <p className="pager-status">{fmt(m.directory.showing, {from, to, total: result.total})}</p>

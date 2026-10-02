@@ -6,6 +6,7 @@ import {PRODUCT} from '../config.ts';
 import {fmt} from '../i18n/format.ts';
 import {AGENT_FILES, EXPORTS, paths} from '../model/urls.ts';
 import {SCHEMA_VERSION} from '../server/exports.ts';
+import {SITE_URL} from '../server/origin.ts';
 import {catalog} from '../server/site.ts';
 import {Crumbs, type PageEnv} from './Editorial.tsx';
 
@@ -70,7 +71,8 @@ export function DataPage({env}: {env: PageEnv}) {
           {([
             ['llms', AGENT_FILES.llms],
             ['agentsMd', AGENT_FILES.agents],
-            ['sitemap', AGENT_FILES.sitemap],
+            // Sitemaps are built only when the public address is known (server/origin.ts).
+            ...(SITE_URL ? [['sitemap', AGENT_FILES.sitemap] as const] : []),
           ] as const).map(([key, href]) => {
             const [title, description] = d.agentsItems[key];
             return (

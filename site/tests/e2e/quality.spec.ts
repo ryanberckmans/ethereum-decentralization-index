@@ -4,15 +4,35 @@
  */
 import AxeBuilder from '@axe-core/playwright';
 import {gzipSync} from 'node:zlib';
-import {expect, test} from '@playwright/test';
+import {expect, test, type Page} from '@playwright/test';
 
-const A11Y_PAGES = ['/en/', '/en/?q=uniswap', '/en/objects/uniswap-v4', '/en/objects/usdc', '/en/stories/dollars-on-ethereum', '/en/collections/d0', '/en/compare?ids=usdc,weth9', '/en/methodology', '/en/changes', '/en/data', '/ja/', '/de/objects/weth9'];
+const A11Y_PAGES = [
+  '/en/',
+  '/en/?q=uniswap',
+  '/en/objects/uniswap-v4/',
+  '/en/objects/usdc/',
+  '/en/stories/dollars-on-ethereum/',
+  '/en/collections/d0/',
+  '/en/compare/?ids=usdc,weth9',
+  '/en/methodology/',
+  '/en/changes/',
+  '/en/data/',
+  '/en/objects/uniswap-v9/',
+  '/ja/',
+  '/de/objects/weth9/',
+];
+
+/** Waits until the islands and the not-found script have shown what the address asks for. */
+async function settled(page: Page): Promise<void> {
+  await page.waitForFunction(() => !document.documentElement.hasAttribute('data-query') && !document.querySelector('[data-not-found][data-pending], [aria-busy="true"]'));
+}
 
 for (const scheme of ['light', 'dark'] as const) {
   for (const path of A11Y_PAGES) {
     test(`axe finds no WCAG 2.2 AA violations on ${path} (${scheme})`, async ({page}) => {
       await page.emulateMedia({colorScheme: scheme});
       await page.goto(path);
+      await settled(page);
       const results = await new AxeBuilder({page}).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa']).analyze();
       const summary = results.violations.map(v => `${v.id} (${v.impact}): ${v.nodes.slice(0, 3).map(n => n.target.join(' ')).join(' | ')}`);
       expect(summary).toEqual([]);
@@ -40,7 +60,7 @@ test.describe('budgets on a 390-pixel phone', () => {
   });
 
   test('layout shift stays under 0.1 while the page loads', async ({page}) => {
-    await page.goto('/en/objects/usdc', {waitUntil: 'networkidle'});
+    await page.goto('/en/objects/usdc/', {waitUntil: 'networkidle'});
     const cls = await page.evaluate(
       () =>
         new Promise<number>(resolve => {
@@ -80,16 +100,29 @@ test.describe('budgets on a 390-pixel phone', () => {
 });
 
 test.describe('security in the browser', () => {
-  test('pages carry a strict CSP and the frame, referrer and sniffing protections', async ({request}) => {
-    const response = await request.get('/en/objects/weth9');
-    const headers = response.headers();
-    expect(headers['content-security-policy']).toMatch(/script-src 'self'/);
-    expect(headers['content-security-policy']).not.toMatch(/unsafe-inline|unsafe-eval/);
-    expect(headers['content-security-policy']).toMatch(/frame-ancestors 'none'/);
-    expect(headers['x-content-type-options']).toBe('nosniff');
-    expect(headers['x-frame-options']).toBe('DENY');
-    expect(headers['referrer-policy']).toBe('strict-origin-when-cross-origin');
-    expect(headers['content-type']).toBe('text/html; charset=utf-8');
+  test('pages carry a strict CSP and a referrer policy of their own, without help from the host', async ({request}) => {
+    for (const path of ['/en/objects/weth9/', '/', '/en/?q=uniswap', '/en/compare/', '/en/objects/uniswap-v9/']) {
+      const html = await (await request.get(path)).text();
+      const policy = /<meta http-equiv="content-security-policy" content="([^"]+)"/.exec(html)?.[1] ?? '';
+      expect(policy, path).toMatch(/script-src 'self'/);
+      expect(policy, path).toMatch(/object-src 'none'/);
+      expect(policy, path).toMatch(/base-uri 'none'/);
+      expect(policy, path).toMatch(/connect-src 'self'/);
+      expect(policy, path).not.toMatch(/unsafe-inline|unsafe-eval/);
+      expect(html, path).toContain('<meta name="referrer" content="strict-origin-when-cross-origin">');
+    }
+  });
+
+  test('nothing on the visitor path breaks the policy', async ({page}) => {
+    await page.addInitScript(() => {
+      (window as unknown as {violations: string[]}).violations = [];
+      document.addEventListener('securitypolicyviolation', event => (window as unknown as {violations: string[]}).violations.push(`${event.violatedDirective} ${event.blockedURI}`));
+    });
+    for (const path of ['/en/?q=uniswap', '/en/compare/?ids=usdc,weth9', '/en/objects/usdc/', '/en/stories/dollars-on-ethereum/', '/en/objects/uniswap-v9/', '/de/objects/uniswap-v9/']) {
+      await page.goto(path);
+      await settled(page);
+      expect(await page.evaluate(() => (window as unknown as {violations: string[]}).violations), path).toEqual([]);
+    }
   });
 
   test('no request leaves the site on the visitor path', async ({page}) => {
@@ -97,14 +130,14 @@ test.describe('security in the browser', () => {
     page.on('request', request => {
       if (!request.url().startsWith('http://127.0.0.1') && !request.url().startsWith('data:')) outside.push(request.url());
     });
-    for (const path of ['/en/', '/en/stories/dollars-on-ethereum', '/en/compare?ids=usdc,weth9', '/en/objects/usdc']) await page.goto(path, {waitUntil: 'networkidle'});
+    for (const path of ['/', '/en/?q=usdc', '/en/stories/dollars-on-ethereum/', '/en/compare/?ids=usdc,weth9', '/en/objects/uniswap-v9/', '/en/objects/usdc/']) await page.goto(path, {waitUntil: 'networkidle'});
     await page.locator('button[data-guide]').first().click();
     await page.waitForTimeout(500);
     expect(outside).toEqual([]);
   });
 
   test('external links are https, open safely and say they leave the site', async ({page}) => {
-    for (const path of ['/en/objects/usdc', '/en/stories/dollars-on-ethereum', '/en/objects/uniswap-v4']) {
+    for (const path of ['/en/objects/usdc/', '/en/stories/dollars-on-ethereum/', '/en/objects/uniswap-v4/']) {
       await page.goto(path);
       const links = await page.locator('a[href^="http"]').evaluateAll(anchors =>
         anchors.filter(a => new URL((a as HTMLAnchorElement).href).origin !== location.origin).map(a => ({href: (a as HTMLAnchorElement).href, rel: a.getAttribute('rel') ?? ''})),
@@ -117,14 +150,12 @@ test.describe('security in the browser', () => {
     }
   });
 
-  test('exports are typed, cross-origin readable and spreadsheet-safe', async ({request}) => {
+  test('exports are files whose names give their type, and spreadsheet-safe', async ({request}) => {
     const json = await request.get('/data/v1/directory.json');
     expect(json.headers()['content-type']).toMatch(/^application\/json/);
-    expect(json.headers()['access-control-allow-origin']).toBe('*');
     expect((await json.json()).schemaVersion).toBe(1);
     const csv = await request.get('/data/v1/directory.csv');
     expect(csv.headers()['content-type']).toMatch(/^text\/csv/);
-    expect(csv.headers()['content-disposition']).toMatch(/attachment/);
     const body = await csv.text();
     expect(body.startsWith('\ufeff')).toBe(true);
     for (const line of body.split('\r\n')) expect(line).not.toMatch(/(^|,)"?[=+@]/);

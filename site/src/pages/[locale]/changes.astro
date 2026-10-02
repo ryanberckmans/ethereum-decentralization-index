@@ -2,15 +2,18 @@
 /** Dated editorial changes, the EDI edition in use, and the grade changes its review dates will make. */
 import Base from '../../layouts/Base.astro';
 import {ChangesPage} from '../../views/Changes.tsx';
-import {isLocale, PRODUCT} from '../../config.ts';
+import {LOCALES, PRODUCT, type Locale} from '../../config.ts';
 import {messages} from '../../i18n/index.ts';
 import {paths} from '../../model/urls.ts';
-import {evaluationDateFor} from '../../server/site.ts';
+import {EVALUATION_DATE} from '../../server/site.ts';
 
-const {locale} = Astro.params;
-if (!isLocale(locale)) return Astro.rewrite('/404');
+export function getStaticPaths() {
+  return LOCALES.map(locale => ({params: {locale}}));
+}
+
+const locale = Astro.params.locale as Locale;
 const m = messages(locale);
-const date = evaluationDateFor();
+const date = EVALUATION_DATE;
 ---
 
 <Base locale={locale} title={`${m.changes.title} · ${PRODUCT.name}`} description={m.changes.intro} path={paths.changes(locale)} current="changes" evaluationDate={date}>

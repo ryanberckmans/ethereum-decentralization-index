@@ -290,6 +290,32 @@ html:not(.js) .js-only {
   display: none !important;
 }
 
+/*
+ * The built directory and compare pages show the editor's order and suggested
+ * comparisons. When the address carries a search or a comparison
+ * (client/theme-init.js), that content stays hidden until the island has read
+ * the address; it shows after a few seconds if scripts never run. The
+ * not-found page and the bare root likewise decide where to go first.
+ */
+@keyframes edi-reveal {
+  to {
+    visibility: visible;
+  }
+}
+
+html[data-query] .results-area,
+html[data-query] .directory .option-count,
+html[data-query] .compare-start {
+  visibility: hidden;
+  animation: edi-reveal 0s 5s forwards;
+}
+
+.js [data-not-found][data-pending],
+.js [data-root] {
+  visibility: hidden;
+  animation: edi-reveal 0s 3s forwards;
+}
+
 /* ---------------------------------------------------------- masthead */
 
 .masthead {
@@ -950,7 +976,18 @@ html:not(.js) .js-only {
   }
 }
 
-/* Filters: a sidebar on wide screens, a sheet on phones (CSS :target without JavaScript). */
+/* Without scripts there are no filters: the full list takes the width. */
+html:not(.js) .workspace {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: 'results';
+}
+
+/* Counts for a search the island is still loading the index for would be the built page's. */
+.directory[data-pending] .option-count {
+  visibility: hidden;
+}
+
+/* Filters: a sidebar on wide screens, a sheet on phones (CSS :target until the island has loaded). */
 .filters-toggle {
   display: inline-flex;
 }
@@ -3932,6 +3969,59 @@ html:not(.js) .js-only {
 .lang-note {
   font-size: 0.8125rem;
   color: var(--muted);
+}
+
+.compare-loading {
+  padding-block: 24px;
+  color: var(--muted);
+}
+
+/* ---------------------------------------------------------- the bare root: language choice */
+
+.root-choose {
+  display: grid;
+  gap: 24px;
+  max-width: 52rem;
+  padding-block: 56px;
+}
+
+.root-languages {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+@media (min-width: 720px) {
+  .root-languages {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.root-languages a {
+  display: grid;
+  gap: 2px;
+  min-height: 44px;
+  padding: 12px 14px;
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.root-languages a:hover {
+  border-color: var(--rule-strong);
+  background: var(--paper-2);
+}
+
+.root-language {
+  font: 600 1.0625rem/1.3 var(--sans);
+}
+
+.root-tagline {
+  font-size: 0.875rem;
+  color: var(--ink-2);
 }
 
 @media (prefers-reduced-motion: no-preference) {

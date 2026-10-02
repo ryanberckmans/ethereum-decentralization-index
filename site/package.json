@@ -11,7 +11,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview",
+    "preview": "node scripts/serve.ts",
     "content:check": "node scripts/check-content.ts",
     "typecheck": "tsc --noEmit -p tsconfig.json && astro check",
     "test": "node --import ./tests/setup.ts --test tests/*.test.ts",
@@ -19,7 +19,6 @@
     "social-cards": "node scripts/social-cards.ts"
   },
   "dependencies": {
-    "@astrojs/cloudflare": "14.3.3",
     "@astrojs/react": "7.0.0",
     "@fontsource-variable/newsreader": "5.3.0",
     "@fontsource-variable/schibsted-grotesk": "5.3.0",
@@ -31,7 +30,6 @@
     "radix-ui": "1.6.7",
     "react": "19.3.0",
     "react-dom": "19.3.0",
-    "wrangler": "4.146.0",
     "yaml": "2.9.1",
     "zod": "4.6.5"
   },

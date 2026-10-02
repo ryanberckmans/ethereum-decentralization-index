@@ -4,7 +4,7 @@
  * editorial dataset, only what a page or the directory index carries.
  */
 import type {Locale} from '../config.ts';
-import type {CollectionId, Role, SubjectKind} from '../content/vocab.ts';
+import type {CollectionId, Measure, Role, SubjectKind} from '../content/vocab.ts';
 
 export type DLevel = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 export const D_LEVELS: readonly DLevel[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -58,6 +58,23 @@ export function segmentAt<T>(segments: readonly Segment<T>[], date: string): T {
   let current = segments[0].value;
   for (const segment of segments) if (segment.from <= date) current = segment.value;
   return current;
+}
+
+/** One editorial figure, formatted for the page language. */
+export interface ObservationView {
+  id: string;
+  metric: string;
+  definition: string;
+  /** Formatted value with comparator, unit and rate period. */
+  value: string;
+  /** The exact reported value with grouping, for accessible descriptions. */
+  exact: string;
+  when: string;
+  /** Chain scope in words. */
+  chains: string;
+  multichain: boolean;
+  scope: string;
+  measure: Measure;
 }
 
 export interface FeaturedObservation {

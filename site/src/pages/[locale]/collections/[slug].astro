@@ -1,21 +1,28 @@
 ---
-/** The two collections: /collections/d0 and /collections/global-economy. Collection IDs redirect to their slugs. */
+/** The two collections: /collections/d0/ and /collections/global-economy/. Collection IDs get a page that redirects to the slug. */
 import Base from '../../../layouts/Base.astro';
 import {CollectionPage} from '../../../views/Collection.tsx';
-import {isLocale, PRODUCT} from '../../../config.ts';
+import {LOCALES, PRODUCT, type Locale} from '../../../config.ts';
 import {COLLECTION_IDS, type CollectionId} from '../../../content/vocab.ts';
 import {messages} from '../../../i18n/index.ts';
-import {catalog, evaluationDateFor} from '../../../server/site.ts';
-import {COLLECTION_BY_SLUG, paths} from '../../../model/urls.ts';
+import {catalog, EVALUATION_DATE} from '../../../server/site.ts';
+import {COLLECTION_SLUGS, paths} from '../../../model/urls.ts';
 
-const {locale, slug} = Astro.params;
-if (!isLocale(locale) || !slug) return Astro.rewrite('/404');
-if ((COLLECTION_IDS as readonly string[]).includes(slug) && !COLLECTION_BY_SLUG[slug]) return Astro.redirect(paths.collection(locale, slug as CollectionId), 301);
-const id = COLLECTION_BY_SLUG[slug];
-if (!id) return Astro.rewrite('/404');
+export function getStaticPaths() {
+  return LOCALES.flatMap(locale =>
+    COLLECTION_IDS.flatMap(id => [
+      {params: {locale, slug: COLLECTION_SLUGS[id]}, props: {id, redirect: false}},
+      ...(COLLECTION_SLUGS[id] === id ? [] : [{params: {locale, slug: id}, props: {id, redirect: true}}]),
+    ]),
+  );
+}
+
+const locale = Astro.params.locale as Locale;
+const {id, redirect} = Astro.props as {id: CollectionId; redirect: boolean};
+if (redirect) return Astro.redirect(paths.collection(locale, id), 301);
 
 const m = messages(locale);
-const date = evaluationDateFor();
+const date = EVALUATION_DATE;
 const collection = catalog.collections.get(id);
 const title = collection?.title ?? m.collections[id];
 ---

@@ -14,7 +14,7 @@ import {catalog} from '../src/server/site.ts';
 
 const ORIGIN = 'https://edi.example';
 const DATE = registry.lastUpdatedAt;
-const PRIVATE = /\/home\/|\/root\/|file:|\.scratch|Agent-Spec|SKILL\.md|node_modules|\bsrc\/|astro|vite|wrangler/i;
+const PRIVATE = /\/home\/|\/root\/|file:|\.scratch|Agent-Spec|SKILL\.md|node_modules|\bsrc\/|astro|vite|wrangler|cloudflare/i;
 
 describe('exports', () => {
   const directory = directoryExport(DATE, ORIGIN);
@@ -76,10 +76,16 @@ describe('exports', () => {
 });
 
 describe('crawler and agent files', () => {
-  test('robots.txt points at the sitemap index and keeps the search index out', () => {
+  test('robots.txt points at the sitemap index and keeps the data files for pages out', () => {
     const robots = robotsTxt(ORIGIN);
     assert.match(robots, /^Sitemap: https:\/\/edi\.example\/sitemap\.xml$/m);
     assert.match(robots, /^Disallow: \/\*\/directory-index\.json$/m);
+    assert.match(robots, /^Disallow: \/\*\/compare-data\.json$/m);
+  });
+
+  test('without the public address, robots.txt names no sitemap and links stay relative', () => {
+    assert.doesNotMatch(robotsTxt(''), /Sitemap/);
+    assert.match(llmsTxt('', DATE), /\]\(\/en\/stories\//);
   });
 
   test('the sitemap lists every page in every language with alternates', () => {
@@ -90,7 +96,7 @@ describe('crawler and agent files', () => {
     assert.equal(pages.length, 8 + catalog.stories.length + catalog.objects.length);
     const ja = localeSitemap(ORIGIN, 'ja');
     assert.equal(ja.match(/<url>/g)?.length, pages.length);
-    assert.ok(ja.includes(`<loc>${ORIGIN}/ja/objects/weth9</loc>`));
+    assert.ok(ja.includes(`<loc>${ORIGIN}/ja/objects/weth9/</loc>`));
     const first = ja.slice(ja.indexOf('<url>'), ja.indexOf('</url>'));
     assert.equal(first.match(/hreflang=/g)?.length, LOCALES.length + 1);
     assert.ok(pages.every(page => /^\d{4}-\d{2}-\d{2}$/.test(page.lastmod)), 'lastmod is a date');

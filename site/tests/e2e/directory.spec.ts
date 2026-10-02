@@ -38,14 +38,17 @@ test('what a reader types, ticks or chooses while scripts load is kept', async (
   await expect(page.locator('input[name="kind"][value="protocol"]')).toBeChecked();
 });
 
-test('the server renders the same results without scripts', async ({browser}) => {
+test('without scripts the directory lists every record, and says search needs them', async ({browser}) => {
   const context = await browser.newContext({javaScriptEnabled: false});
   const page = await context.newPage();
   await page.goto('/en/?q=uniswap&kind=protocol');
-  const found = await ids(page);
-  expect(found).toContain('uniswap-v4');
-  expect(found).not.toContain('token:uniswap');
-  await expect(page.locator('input[name="kind"][value="protocol"]')).toBeChecked();
+  const total = Number((await page.locator('#results-title').innerText()).replace(/\D/g, ''));
+  expect(total).toBeGreaterThan(100);
+  await expect(page.locator('li.row[data-id]:visible')).toHaveCount(total);
+  // getByText skips <noscript>, whose content is the page here.
+  await expect(page.locator('p.notice', {hasText: 'Search and filters need JavaScript'})).toBeVisible();
+  await expect(page.locator('#directory-q')).toBeHidden();
+  await expect(page.locator('li.row[data-id="uniswap-v4"] a').first()).toHaveAttribute('href', '/en/objects/uniswap-v4/');
   await context.close();
 });
 
@@ -56,17 +59,23 @@ test('choosing the default order again takes it out of the link', async ({page})
   await expect(page).toHaveURL(/\/en\/\?q=dollar$/);
 });
 
-test('a search sent without scripts is sorted by best match', async ({browser}) => {
-  const context = await browser.newContext({javaScriptEnabled: false});
-  const page = await context.newPage();
+test('a search link opens with the results of typing the same search, by best match', async ({page}) => {
   await page.goto('/en/?q=dollar');
-  const bestMatch = await ids(page);
+  await expect(page.locator('#directory-q')).toHaveValue('dollar');
+  await expect(page).toHaveTitle(/^dollar · /);
+  await expect(rows(page).first()).toBeVisible();
+  const fromLink = await ids(page);
   await page.goto('/en/');
   await page.locator('#directory-q').fill('dollar');
   await page.locator('#directory-q').press('Enter');
   await expect(page).toHaveURL(/\/en\/\?q=dollar$/);
-  expect(await ids(page)).toEqual(bestMatch);
-  await context.close();
+  await expect.poll(() => ids(page)).toEqual(fromLink);
+});
+
+test('a link in another order or past the last page is put in its canonical form', async ({page}) => {
+  await page.goto('/en/?kind=protocol&q=uniswap&page=40');
+  await expect(page).toHaveURL(/\/en\/\?q=uniswap&kind=protocol$/);
+  await expect(rows(page).first()).toBeVisible();
 });
 
 test('Browse, open, Back, refresh and new tab restore the query, filters and selection', async ({page, context}) => {
@@ -80,7 +89,7 @@ test('Browse, open, Back, refresh and new tab restore the query, filters and sel
   const url = page.url();
 
   await page.locator('li.row[data-id="usdc"] a').first().click();
-  await expect(page).toHaveURL(/\/en\/objects\/usdc$/);
+  await expect(page).toHaveURL(/\/en\/objects\/usdc\/$/);
   await page.goBack();
   await expect(page.locator('#directory-q')).toHaveValue('dollar');
   await expect(page.locator('input[name="kind"][value="asset"]')).toBeChecked();
@@ -115,31 +124,38 @@ test('an unrecognized link setting is reported, and the rest still applies', asy
 });
 
 test('Open Uniswap v4: D0 for the core, D? for positions', async ({page}) => {
-  await page.goto('/en/objects/uniswap-v4');
+  await page.goto('/en/objects/uniswap-v4/');
   await expect(page.locator('h1')).toHaveText('Uniswap v4');
   await expect(page.locator('.grade[data-grade]').filter({hasText: 'Mechanism'}).first()).toHaveAttribute('data-grade', 'D0');
   await expect(page.locator('.grade[data-grade]').filter({hasText: 'Position'}).first()).toHaveAttribute('data-grade', 'D?');
 });
 
 test('Open WETH: the exact L1 deployment and a permanent D0', async ({page}) => {
-  await page.goto('/en/objects/weth9');
+  await page.goto('/en/objects/weth9/');
   await expect(page.getByText('0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2').first()).toBeVisible();
   await expect(page.getByText('Permanent D0').first()).toBeVisible();
 });
 
-test('raw EDI IDs and capitalized slugs redirect to the profile', async ({page}) => {
-  await page.goto('/en/objects/token:uniswap');
-  await expect(page).toHaveURL(/\/en\/objects\/token--uniswap$/);
-  await page.goto('/en/objects/token%3Auniswap');
-  await expect(page).toHaveURL(/\/en\/objects\/token--uniswap$/);
-  await page.goto('/en/objects/WETH9');
-  await expect(page).toHaveURL(/\/en\/objects\/weth9$/);
+test('raw EDI IDs, capitalized slugs and locale-less addresses lead to the profile', async ({page}) => {
+  for (const [from, to] of [
+    ['/en/objects/token:uniswap', '/en/objects/token--uniswap/'],
+    ['/en/objects/token%3Auniswap', '/en/objects/token--uniswap/'],
+    ['/en/objects/WETH9', '/en/objects/weth9/'],
+    ['/EN/objects/weth9/', '/en/objects/weth9/'],
+    ['/objects/weth9', '/en/objects/weth9/'],
+    ['/en/objects/seaport-v1.6/', '/en/objects/seaport-v1-6/'],
+    ['/en/collections/d0-in-use/', '/en/collections/d0/'],
+  ]) {
+    await page.goto(from);
+    await expect(page, from).toHaveURL(new RegExp(`${to.replace(/[.]/g, '\\.')}$`));
+    await expect(page.locator('h1')).not.toHaveText('Not in the directory');
+  }
 });
 
 test('EDI’s guide opens from a grade, closes with Escape and returns focus', async ({page}) => {
   const errors: string[] = [];
   page.on('console', message => message.type() === 'error' && errors.push(message.text()));
-  await page.goto('/en/objects/weth9');
+  await page.goto('/en/objects/weth9/');
   const explain = page.locator('button[data-guide]').first();
   await explain.click();
   const dialog = page.getByRole('dialog');
@@ -152,7 +168,7 @@ test('EDI’s guide opens from a grade, closes with Escape and returns focus', a
 });
 
 test('Compare USDC and a D0 core: both legible, no overall score', async ({page}) => {
-  await page.goto('/en/compare?ids=usdc,weth9');
+  await page.goto('/en/compare/?ids=usdc,weth9');
   await expect(page.locator('h1')).toHaveText('Compare');
   const body = page.locator('.compare-body');
   await expect(body).toContainText('USDC');
@@ -163,15 +179,59 @@ test('Compare USDC and a D0 core: both legible, no overall score', async ({page}
 });
 
 test('compare links are canonical, and unknown names are reported rather than guessed', async ({page}) => {
-  await page.goto('/en/compare?ids=weth9,usdc,Circle');
+  await page.goto('/en/compare/?ids=weth9,usdc,Circle');
   await expect(page.getByText(/Not EDI records, so left out: Circle/)).toBeVisible();
-  await page.goto('/en/compare?ids=weth9&ids=usdc');
-  await expect(page).toHaveURL(/\/en\/compare\?ids=weth9,usdc$/);
+  await page.goto('/en/compare/?ids=weth9&ids=usdc');
+  await expect(page).toHaveURL(/\/en\/compare\/\?ids=weth9,usdc$/);
+  await expect(page).toHaveTitle(/^Compare: WETH and USDC · /);
+});
+
+test('the comparison follows its own links and forms in place, and Back restores it', async ({page}) => {
+  await page.goto('/en/compare/');
+  await page.locator('.suggestions a').first().click();
+  await expect(page).toHaveURL(/\/en\/compare\/\?ids=usdc,weth9$/);
+  await expect(page.locator('.compare-body')).toContainText('USDC');
+  await page.locator('#compare-add').selectOption('morpho-blue');
+  await page.locator('.compare-add button[type="submit"]').click();
+  await expect(page).toHaveURL(/\/en\/compare\/\?ids=usdc,weth9,morpho-blue$/);
+  await page.locator('.chip-remove').first().click();
+  await expect(page).toHaveURL(/\/en\/compare\/\?ids=weth9,morpho-blue$/);
+  await page.goBack();
+  await expect(page).toHaveURL(/\/en\/compare\/\?ids=usdc,weth9,morpho-blue$/);
+  await expect(page.locator('.compare-body th[scope="col"]')).toHaveCount(3);
+  await page.reload();
+  await expect(page.locator('.compare-body th[scope="col"]')).toHaveCount(3);
+});
+
+test('without scripts the compare page says comparing needs them', async ({browser}) => {
+  const context = await browser.newContext({javaScriptEnabled: false});
+  const page = await context.newPage();
+  await page.goto('/en/compare/?ids=usdc,weth9');
+  await expect(page.getByText(/Comparing needs JavaScript/)).toBeVisible();
+  await expect(page.locator('.suggestions')).toBeHidden();
+  await context.close();
 });
 
 test('a missing page offers close matches and a search', async ({page}) => {
-  const response = await page.goto('/en/objects/uniswap-v9');
+  const response = await page.goto('/en/objects/uniswap-v9/');
   expect(response?.status()).toBe(404);
   await expect(page.locator('h1')).toContainText('Not in the directory');
   await expect(page.locator('main a[href^="/en/objects/uniswap"]').first()).toBeVisible();
+  await expect(page.locator('#nf-q')).toHaveValue('uniswap v9');
+});
+
+test('a missing page in another language is explained in that language', async ({page}) => {
+  await page.goto('/de/objects/uniswap-v9/');
+  await expect(page).toHaveURL(/\/de\/not-found\/\?path=%2Fde%2Fobjects%2Funiswap-v9%2F$/);
+  await expect(page.locator('html')).toHaveAttribute('lang', 'de');
+  await expect(page.locator('main a[href^="/de/objects/uniswap"]').first()).toBeVisible();
+});
+
+test('without scripts a missing page still explains itself', async ({browser}) => {
+  const context = await browser.newContext({javaScriptEnabled: false});
+  const page = await context.newPage();
+  const response = await page.goto('/en/objects/uniswap-v9/');
+  expect(response?.status()).toBe(404);
+  await expect(page.locator('h1')).toBeVisible();
+  await context.close();
 });

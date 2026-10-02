@@ -1,4 +1,8 @@
-/** Route paths. Every page lives under a locale; exports and agent files are locale-free. */
+/**
+ * Route paths. Every page lives under a locale and ends with a slash, the
+ * address static hosts give a directory's index.html; exports and agent files
+ * are locale-free files.
+ */
 import type {Locale} from '../config.ts';
 import type {CollectionId} from '../content/vocab.ts';
 
@@ -7,15 +11,20 @@ export const COLLECTION_BY_SLUG: Record<string, CollectionId> = {d0: 'd0-in-use'
 
 export const paths = {
   home: (locale: Locale) => `/${locale}/`,
-  object: (locale: Locale, slug: string) => `/${locale}/objects/${slug}`,
-  stories: (locale: Locale) => `/${locale}/stories`,
-  story: (locale: Locale, slug: string) => `/${locale}/stories/${slug}`,
-  collection: (locale: Locale, id: CollectionId) => `/${locale}/collections/${COLLECTION_SLUGS[id]}`,
-  compare: (locale: Locale, ids: readonly string[] = []) => `/${locale}/compare${ids.length ? `?ids=${ids.join(',')}` : ''}`,
-  methodology: (locale: Locale) => `/${locale}/methodology`,
-  changes: (locale: Locale) => `/${locale}/changes`,
-  data: (locale: Locale) => `/${locale}/data`,
+  object: (locale: Locale, slug: string) => `/${locale}/objects/${slug}/`,
+  stories: (locale: Locale) => `/${locale}/stories/`,
+  story: (locale: Locale, slug: string) => `/${locale}/stories/${slug}/`,
+  collection: (locale: Locale, id: CollectionId) => `/${locale}/collections/${COLLECTION_SLUGS[id]}/`,
+  compare: (locale: Locale, ids: readonly string[] = []) => `/${locale}/compare/${ids.length ? `?ids=${ids.join(',')}` : ''}`,
+  methodology: (locale: Locale) => `/${locale}/methodology/`,
+  changes: (locale: Locale) => `/${locale}/changes/`,
+  data: (locale: Locale) => `/${locale}/data/`,
+  /** Where an address that matches no page is explained in the reader's language. */
+  notFound: (locale: Locale, missing?: string) => `/${locale}/not-found/${missing ? `?path=${encodeURIComponent(missing)}` : ''}`,
+  /** The compact directory index the directory, compare and not-found pages load. */
   index: (locale: Locale, edition: string) => `/${locale}/directory-index.json?v=${encodeURIComponent(edition)}`,
+  /** What the compare page needs besides the index: limits, figures and their comparison fields. */
+  compareData: (locale: Locale, edition: string) => `/${locale}/compare-data.json?v=${encodeURIComponent(edition)}`,
 };
 
 export const EXPORTS = {

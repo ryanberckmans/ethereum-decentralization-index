@@ -12,9 +12,27 @@
  * never sums, averages, ranks or computes growth from observations, and
  * grades are never combined into a score.
  */
+import type {Locale} from '../config.ts';
 import type {Observation} from '../content/schema.ts';
 import {daysBetween} from './dates.ts';
 import {cleanText} from './query.ts';
+import type {ObservationView} from './view-types.ts';
+
+/** The fields of a figure the comparison rules read. */
+export type Comparable = Pick<Observation, 'id' | 'subjectId' | 'metric' | 'unit' | 'measure' | 'chainIds' | 'ratePeriod' | 'interval' | 'asOf' | 'comparisonGroup'>;
+
+/** A figure as the compare page receives it: what the rules read, and its line in the page language. */
+export type CompareObservation = Comparable & {view: Pick<ObservationView, 'metric' | 'value' | 'exact' | 'when' | 'multichain'>};
+
+/** What the compare page loads besides the directory index: /{locale}/compare-data.json. */
+export interface CompareData {
+  version: 1;
+  edition: string;
+  locale: Locale;
+  /** Per record: the limits EDI records, then why positions are reviewed separately. */
+  limits: Record<string, string[]>;
+  observations: CompareObservation[];
+}
 
 export type Reason =
   | {kind: 'group'}
@@ -26,32 +44,32 @@ export type Reason =
   | {kind: 'multichain'}
   | {kind: 'rate'};
 
-export interface ComparedGroup {
+export interface ComparedGroup<T extends Comparable = Observation> {
   group: string;
   /** Per object, in object order: its latest observations in the group (more than one when it has several on that date). */
-  cells: Observation[][];
+  cells: T[][];
   /** The metric, when every observation in the row has the same one. */
   metric?: string;
   comparable: boolean;
   reasons: Reason[];
 }
 
-export interface ObservationComparison {
-  groups: ComparedGroup[];
+export interface ObservationComparison<T extends Comparable = Observation> {
+  groups: ComparedGroup<T>[];
   /** Per object, observations outside any shared group (shown on their own). */
-  separate: Observation[][];
+  separate: T[][];
 }
 
-function timeBasis(observation: Observation): string {
+function timeBasis(observation: Comparable): string {
   return observation.interval ? `interval:${observation.interval.start}/${observation.interval.end}` : `asOf:${observation.asOf ?? ''}`;
 }
 
-function chains(observation: Observation): string {
+function chains(observation: Comparable): string {
   return Array.isArray(observation.chainIds) ? [...observation.chainIds].sort((a, b) => a - b).join(',') : observation.chainIds;
 }
 
 /** Why two observations cannot be compared directly; empty when they can. */
-export function incompatibility(a: Observation, b: Observation): Reason[] {
+export function incompatibility(a: Comparable, b: Comparable): Reason[] {
   const reasons: Reason[] = [];
   if (!a.comparisonGroup || a.comparisonGroup !== b.comparisonGroup) reasons.push({kind: 'group'});
   if (a.unit !== b.unit) reasons.push({kind: 'unit'});
@@ -67,7 +85,7 @@ export function incompatibility(a: Observation, b: Observation): Reason[] {
   return reasons;
 }
 
-const dateOf = (observation: Observation) => observation.asOf ?? observation.interval?.end ?? '';
+const dateOf = (observation: Comparable) => observation.asOf ?? observation.interval?.end ?? '';
 
 /**
  * Lines up observations about the compared objects. A group appears when at
@@ -75,10 +93,10 @@ const dateOf = (observation: Observation) => observation.asOf ?? observation.int
  * latest observations in the group. Everything else is listed per object,
  * newest first.
  */
-export function compareObservations(objectIds: readonly string[], observations: readonly Observation[]): ObservationComparison {
+export function compareObservations<T extends Comparable>(objectIds: readonly string[], observations: readonly T[]): ObservationComparison<T> {
   const about = objectIds.map(id => observations.filter(o => o.subjectId === id));
   const groupIds = [...new Set(about.flat().flatMap(o => (o.comparisonGroup ? [o.comparisonGroup] : [])))];
-  const groups: ComparedGroup[] = [];
+  const groups: ComparedGroup<T>[] = [];
   const used = new Set<string>();
   for (const group of groupIds) {
     const cells = about.map(list => {
@@ -94,7 +112,7 @@ export function compareObservations(objectIds: readonly string[], observations: 
     const metrics = new Set(all.map(o => o.metric));
     groups.push({group, cells, ...(metrics.size === 1 ? {metric: all[0].metric} : {}), comparable: reasons.size === 0, reasons: [...reasons.values()]});
   }
-  const newestFirst = (a: Observation, b: Observation) => dateOf(b).localeCompare(dateOf(a));
+  const newestFirst = (a: T, b: T) => dateOf(b).localeCompare(dateOf(a));
   return {groups, separate: about.map(list => list.filter(o => !used.has(o.id)).sort(newestFirst))};
 }
 
@@ -107,7 +125,7 @@ export interface CompareParams {
   /** True when more objects were asked for than can be compared. */
   truncated: boolean;
   view: CompareView | null;
-  /** Set when the request should be redirected to its canonical form. */
+  /** The canonical query string, which the page puts in the address bar. */
   canonical: string;
 }
 

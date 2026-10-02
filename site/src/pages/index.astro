@@ -1,0 +1,61 @@
+---
+/**
+ * The language-neutral root. A static host serves it as it is, so its script
+ * (client/root.ts) picks the reader's language, a choice remembered on this
+ * site first and then the browser's languages, and goes to that directory.
+ * Without scripts it lists the languages.
+ */
+import {Font} from 'astro:assets';
+import '../styles/global.css';
+import {LOCALES, LOCALE_NAMES, PRODUCT} from '../config.ts';
+import {messages} from '../i18n/index.ts';
+import {paths} from '../model/urls.ts';
+import {SITE_URL} from '../server/origin.ts';
+import {Glyph} from '../components/Icons.tsx';
+
+const en = messages('en');
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{PRODUCT.name}</title>
+    <meta name="description" content={en.meta.tagline} />
+    <link rel="canonical" href={`${SITE_URL}/`} />
+    {LOCALES.map(code => <link rel="alternate" hreflang={code} href={`${SITE_URL}${paths.home(code)}`} />)}
+    <link rel="alternate" hreflang="x-default" href={`${SITE_URL}/`} />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#f7f5ef" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0c1016" media="(prefers-color-scheme: dark)" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script is:inline set:html={__THEME_INIT__} />
+    <Font cssVariable="--font-schibsted" preload={[{subset: 'latin', weight: '400 900', style: 'normal'}]} />
+    <Font cssVariable="--font-newsreader" preload={[{subset: 'latin', weight: '200 800', style: 'normal'}]} />
+  </head>
+  <body>
+    <main id="main" class="shell root-choose" data-root>
+      <h1 class="wordmark">
+        <Glyph />
+        <span class="wordmark-name">{PRODUCT.name}</span>
+      </h1>
+      <ul class="root-languages">
+        {
+          LOCALES.map(code => (
+            <li>
+              <a href={paths.home(code)} hreflang={code} lang={code} data-lang={code}>
+                <span class="root-language">{LOCALE_NAMES[code]}</span>
+                <span class="root-tagline">{messages(code).meta.tagline}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </main>
+    <script>
+      import '../client/root.ts';
+    </script>
+  </body>
+</html>

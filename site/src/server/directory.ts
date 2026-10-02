@@ -5,7 +5,7 @@ import type {BodyContext, ResultsMessages} from '../components/ResultsBody.tsx';
 import type {DirectoryAppMessages} from '../islands/DirectoryApp.tsx';
 import {serializeDirectoryQuery, type DirectoryQuery} from '../model/query.ts';
 import {CHAIN_IDS, entity} from '../model/registry.ts';
-import {prepareIndex, type PreparedIndex} from '../model/search.ts';
+import {labelsFor, prepareIndex, type PreparedIndex} from '../model/search.ts';
 import {paths} from '../model/urls.ts';
 import {directoryIndex} from '../model/views.ts';
 import type {DirectoryIndex} from '../model/view-types.ts';
@@ -20,16 +20,8 @@ export function indexFor(locale: Locale): DirectoryIndex {
 export function preparedFor(locale: Locale): PreparedIndex {
   let value = prepared.get(locale);
   if (!value) {
-    const m = messages(locale);
     const index = indexFor(locale);
-    const networkNames = new Map(index.networks.map(network => [network.id, network.name]));
-    value = prepareIndex(index, {
-      role: role => m.roles[role as keyof typeof m.roles] ?? role,
-      kind: kind => m.kinds[kind as keyof typeof m.kinds] ?? kind,
-      network: id => networkNames.get(id) ?? id,
-      story: id => catalog.story(id)?.data.title ?? id,
-      object: id => catalog.object(id)?.name ?? id,
-    });
+    value = prepareIndex(index, labelsFor(index, messages(locale)));
     prepared.set(locale, value);
   }
   return value;
