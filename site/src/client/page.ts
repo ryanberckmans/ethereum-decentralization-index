@@ -33,6 +33,13 @@ function applyDates(today: string): void {
     element.prepend(chosen.content.cloneNode(true));
     element.dataset.applied = target;
   }
+  // Inside SVG figures each result is a group; show the one that applies today.
+  for (const group of document.querySelectorAll<SVGGElement>('g[data-dated-svg]')) {
+    const options = [...group.children].filter((child): child is SVGGElement => child instanceof SVGGElement && child.dataset.from !== undefined);
+    let chosen = options[0];
+    for (const option of options) if ((option.dataset.from ?? '') <= today) chosen = option;
+    for (const option of options) option.setAttribute('visibility', option === chosen ? 'visible' : 'hidden');
+  }
   // The directory island re-renders its rows itself and announces when it has (edi:evaluated).
   const changes = (root.dataset.changeDates ?? '').split(',').filter(Boolean);
   const crossed = changes.some(date => date > evaluated && date <= today);

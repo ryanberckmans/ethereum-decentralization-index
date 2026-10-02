@@ -1,0 +1,42 @@
+---
+/** Every story, grouped by collection in the editor's order. */
+import Base from '../../../layouts/Base.astro';
+import {StoryCard} from '../../../views/Story.tsx';
+import {Crumbs} from '../../../views/Editorial.tsx';
+import {isLocale, PRODUCT} from '../../../config.ts';
+import {COLLECTION_IDS} from '../../../content/vocab.ts';
+import {messages} from '../../../i18n/index.ts';
+import {catalog, evaluationDateFor} from '../../../server/site.ts';
+import {paths} from '../../../model/urls.ts';
+
+const {locale} = Astro.params;
+if (!isLocale(locale)) return Astro.rewrite('/404');
+
+const m = messages(locale);
+const date = evaluationDateFor();
+const env = {locale, m, date};
+const groups = COLLECTION_IDS.map(id => ({id, collection: catalog.collections.get(id), stories: catalog.stories.filter(story => story.data.collections.includes(id))})).filter(group => group.stories.length);
+const contentLang = locale === 'en' ? undefined : 'en';
+---
+
+<Base locale={locale} title={`${m.stories.title} · ${PRODUCT.name}`} description={m.stories.intro} path={paths.stories(locale)} current="stories" evaluationDate={date}>
+  <div class="shell">
+    <header class="page-head">
+      <Crumbs env={env} items={[{label: m.nav.directory, href: paths.home(locale)}, {label: m.stories.title}]} />
+      <h1>{m.stories.title}</h1>
+      <p class="lede">{m.stories.intro}</p>
+    </header>
+    {catalog.stories.length === 0 ? <p class="muted">{m.stories.none}</p> : null}
+    {
+      groups.map(group => (
+        <section class="section" aria-labelledby={`group-${group.id}`}>
+          <h2 id={`group-${group.id}`}><a href={paths.collection(locale, group.id)}>{group.collection?.title ?? m.collections[group.id]}</a></h2>
+          {group.collection ? <p class="section-note" lang={contentLang}>{group.collection.dek}</p> : null}
+          <ul class="cards cards-3">
+            {group.stories.map(story => <StoryCard storyId={story.id} env={env} />)}
+          </ul>
+        </section>
+      ))
+    }
+  </div>
+</Base>
