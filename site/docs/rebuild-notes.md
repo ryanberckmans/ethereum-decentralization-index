@@ -27,8 +27,7 @@ together and what it guarantees.
   ignores articles and particles.
 - **CSP:** strict, hashed, no inline styles. EDI's guide dialog needed a
   `react-style-singleton` replacement that uses constructable stylesheets.
-- **Deployment:** secrets-gated workflow; nothing deploys until the
-  Cloudflare secrets exist. Owner steps are in the README.
+- **Deployment:** none is set up; the site's host has not been chosen.
 
 ## Findings worth keeping
 

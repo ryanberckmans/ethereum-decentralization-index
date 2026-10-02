@@ -55,24 +55,7 @@ languages translate the interface and mark English text with `lang="en"`.
 
 ## Deploying
 
-The site is one Cloudflare Worker (`edi-directory`, configured in
-[`wrangler.jsonc`](wrangler.jsonc)) that renders pages on request, so EDI
-results are always evaluated for the visitor's UTC date, and serves
-`dist/client` as static assets. The
-[Deploy site workflow](../.github/workflows/site-deploy.yml) deploys each
-commit on `main` that passed the Site workflow, or on demand. It needs:
-
-- repository secrets `CLOUDFLARE_API_TOKEN` (with the "Edit Cloudflare
-  Workers" permission) and `CLOUDFLARE_ACCOUNT_ID`; until both exist the
-  workflow deploys nothing and says so;
-- optionally a repository variable `SITE_URL` with the public address (for
-  example `https://directory.example.org`), used for canonical links,
-  sitemaps and social cards; without it pages use the address they were
-  requested at;
-- a route or custom domain for the Worker, added in the Cloudflare dashboard
-  if the `workers.dev` address is not enough.
-
-To deploy by hand: `npm run build && npx wrangler deploy`.
+No deployment is set up, and nothing in this repository publishes the site.
 
 ## More
 

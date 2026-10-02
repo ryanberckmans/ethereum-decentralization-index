@@ -3,7 +3,7 @@
 # (search and saved state, review dates, accessibility in both themes, phone
 # budgets, security headers, and all eight languages on phone widths).
 # It runs when the site, the EDI package it reads, or this workflow changes,
-# and it deploys nothing; see site-deploy.yml.
+# and it deploys nothing: no deployment is set up.
 name: Site
 
 on:
