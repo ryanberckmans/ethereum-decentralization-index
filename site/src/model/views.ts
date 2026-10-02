@@ -93,7 +93,7 @@ export function observationView(observation: Observation, locale: Locale, m: Mes
       ? m.observation.multichain
       : observation.chainIds === 'not-applicable'
         ? m.observation.notApplicable
-        : observation.chainIds.map(chainName).join(', ');
+        : observation.chainIds.map(chainName).join(m.common.listSeparator);
   return {
     id: observation.id,
     metric: observation.metric,

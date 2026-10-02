@@ -9,7 +9,7 @@ import {ResultsBody} from '../../components/ResultsBody.tsx';
 import {GradeBadge} from '../../components/Grade.tsx';
 import {isLocale, PRODUCT} from '../../config.ts';
 import {messages} from '../../i18n/index.ts';
-import {fmt, formatCount} from '../../i18n/format.ts';
+import {fmt, formatCount, plural} from '../../i18n/format.ts';
 import {catalog, evaluationDateFor} from '../../server/site.ts';
 import {bodyContext, CHAIN_NAMES, directoryMessages, indexFor, preparedFor} from '../../server/directory.ts';
 import {parseDirectoryQuery, serializeDirectoryQuery} from '../../model/query.ts';
@@ -104,7 +104,7 @@ const jsonLd = {
                 <p class="entrance-line">{d0?.entrance.line ?? d0Story.data.dek}</p>
               </>
             ) : (
-              <h2 class="entrance-title"><a href={paths.collection(locale, 'd0-in-use')}>{fmt(m.collections.d0Count, {count: d0Count})}</a></h2>
+              <h2 class="entrance-title"><a href={paths.collection(locale, 'd0-in-use')}>{plural(d0Count, locale, m.collections.d0Count)}</a></h2>
             )
           }
         </article>

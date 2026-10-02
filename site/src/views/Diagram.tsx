@@ -4,7 +4,7 @@
  * follows it, which is the accessible and phone-friendly form.
  */
 import type {Relationship} from '../content/schema.ts';
-import {fmt} from '../i18n/format.ts';
+import {plural} from '../i18n/format.ts';
 import {gradeClass} from '../components/Grade.tsx';
 import {paths} from '../model/urls.ts';
 import {layoutDiagram, NODE_H, NODE_W, type DiagramInputEdge} from '../server/diagram.ts';
@@ -41,9 +41,9 @@ export function RelationshipDiagram({id, relationships, objectIds, env}: {id: st
   return (
     <figure className={`diagram cols-${Math.min(diagram.columns, 6)}`}>
       <div className="diagram-scroll">
-        <svg width={diagram.width} height={diagram.height} viewBox={`0 0 ${diagram.width} ${diagram.height}`} role="img" aria-labelledby={`${titleId} ${descId}`}>
+        <svg width={diagram.width} height={diagram.height} viewBox={`0 0 ${diagram.width} ${diagram.height}`} role="group" aria-labelledby={titleId} aria-describedby={descId}>
           <title id={titleId}>{m.story.diagram}</title>
-          <desc id={descId}>{fmt(m.story.diagramDesc, {count: diagram.edges.length})}</desc>
+          <desc id={descId}>{plural(diagram.edges.length, locale, m.story.diagramDesc)}</desc>
           <defs>
             <marker id={`${id}-arrow`} viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
               <path d="M0,0 L10,5 L0,10 z" className="d-arrow" />

@@ -1171,7 +1171,11 @@ html:not(.js) .js-only {
 }
 
 .grade-toggle.is-empty .grade {
-  opacity: 0.45;
+  border-style: dashed;
+  border-color: var(--rule-strong);
+  background: transparent;
+  box-shadow: none;
+  color: var(--muted);
 }
 
 .filters-actions {
@@ -1206,6 +1210,7 @@ html:not(.js) .js-only {
 .sort-label {
   font-size: 0.875rem;
   color: var(--muted);
+  white-space: nowrap;
 }
 
 .sort-select {
@@ -1742,8 +1747,19 @@ html:not(.js) .js-only {
 }
 
 .cite a {
+  padding: 0 1px;
   text-decoration: none;
+}
+
+/* Outside running text, each number is a 24-pixel target (WCAG 2.5.8) that does not open up its line. */
+.cite-standalone a {
+  display: inline-block;
+  min-width: 24px;
+  min-height: 24px;
+  margin-block: -9px;
   padding: 0 2px;
+  line-height: 24px;
+  text-align: center;
 }
 
 .token-object {
@@ -3952,4 +3968,47 @@ html:not(.js) .js-only {
     background: #fff;
     color: #000;
   }
+}
+
+/* ---------------------------------------------------------------- Languages */
+
+/*
+ * Chinese, Japanese and Korean use system faces made for each language, after
+ * the site's Latin faces, so names and figures keep their shapes. English
+ * editorial text inside these pages keeps the Latin faces it starts with.
+ */
+:root:lang(zh) {
+  --cjk: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans CJK SC', 'Noto Sans SC', 'Source Han Sans SC';
+}
+
+:root:lang(ja) {
+  --cjk: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic UI', 'Yu Gothic', Meiryo, 'Noto Sans CJK JP', 'Noto Sans JP';
+}
+
+:root:lang(ko) {
+  --cjk: 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans CJK KR', 'Noto Sans KR', 'Source Han Sans K';
+  word-break: keep-all;
+}
+
+:root:is(:lang(zh), :lang(ja), :lang(ko)) {
+  --sans: var(--font-schibsted), var(--cjk), system-ui, sans-serif;
+  --serif: var(--font-newsreader), var(--cjk), serif;
+}
+
+:root:is(:lang(zh), :lang(ja), :lang(ko)) body {
+  line-height: 1.7;
+}
+
+/* Japanese headings break between phrases, not inside words, where supported. */
+:lang(ja):is(h1, h2, h3, .lede, .entrance-title, .card-title) {
+  word-break: auto-phrase;
+}
+
+/* No synthesized italics or wide tracking on CJK characters. */
+:is(:lang(zh), :lang(ja), :lang(ko)):is(.relation-type, em, i) {
+  font-style: normal;
+}
+
+:is(:lang(zh), :lang(ja), :lang(ko)):is(.eyebrow, .edition dt, .grade-scope, .directory-title, .entrance-kicker, .side-group h2, .compare-tools-title, .compare-field-title, .method-toc .aside-title, .error-page h2) {
+  letter-spacing: 0.02em;
 }
