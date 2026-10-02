@@ -11,8 +11,9 @@ import {messages} from '../i18n/index.ts';
 import type {Catalog, ObjectRecord} from './catalog.ts';
 import type {RawState, Segment} from './edition-types.ts';
 import {entity, networkChoices, CHAIN_IDS} from './registry.ts';
-import type {DatedView, DirectoryEntry, DirectoryIndex, FeaturedObservation, GradeView} from './view-types.ts';
+import type {DatedView, DirectoryEntry, DirectoryIndex, FeaturedObservation, GradeView, SearchConcept} from './view-types.ts';
 import {ROLES} from '../content/vocab.ts';
+import {normalize} from './search.ts';
 
 export type GradeSubject = 'mechanism' | 'position' | 'ethereum-l1';
 
@@ -182,7 +183,19 @@ export function directoryIndex(catalog: Catalog, locale: Locale): DirectoryIndex
       .map(chain => ({id: chain.id, name: chain.name, ...(CHAIN_IDS[chain.id] ? {chainId: CHAIN_IDS[chain.id]} : {})})),
     roles: ROLES.filter(role => catalog.objects.some(object => object.role === role)),
     roleCoverage: catalog.objects.length ? classified / catalog.objects.length : 0,
+    vocabulary: searchVocabulary(m),
+    stopWords: normalize(m.searchStopWords).split(' ').filter(Boolean),
   };
   indexMemo.set(key, index);
   return index;
+}
+
+/** Each idea's words in the page language and in English, with the English words records use for it. */
+function searchVocabulary(m: Messages): SearchConcept[] {
+  const english = messages('en').searchTerms;
+  const words = (text: string) => normalize(text).split(' ').filter(Boolean);
+  return (Object.keys(english) as (keyof typeof english)[]).map(key => ({
+    words: [...new Set([...words(m.searchTerms[key]), ...words(english[key])])],
+    english: words(english[key]),
+  }));
 }

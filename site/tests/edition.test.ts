@@ -19,6 +19,8 @@ import {observationView} from '../src/model/views.ts';
 import {layoutDiagram} from '../src/server/diagram.ts';
 import {preparedFor} from '../src/server/directory.ts';
 import {catalog} from '../src/server/site.ts';
+import {LOCALES, type Locale} from '../src/config.ts';
+import {messages} from '../src/i18n/index.ts';
 
 const REGISTRY_DATE = registry.lastUpdatedAt;
 const addDays = (date: string, days: number) => new Date(Date.parse(`${date}T00:00:00Z`) + days * 86_400_000).toISOString().slice(0, 10);
@@ -192,6 +194,13 @@ describe('invalid content never publishes', () => {
     assert.throws(build, (error: Error) => error instanceof EditionError && /sourceUrl/.test(error.message));
   });
 
+  test('an editorial relationship posing as a control dependency fails the build', () => {
+    const build = withContent(dir =>
+      append(dir, 'relationships.yaml', '\n- id: fake-control-edge\n  from: weth9\n  to: usdc\n  type: edi-dependency\n  state: capability\n  sourceClaimIds: [circle-usdc-terms]\n'),
+    );
+    assert.throws(build, (error: Error) => error instanceof EditionError && /fake-control-edge\.type/.test(error.message));
+  });
+
   test('a claim about something that is not an EDI record or known subject fails the build', () => {
     const build = withContent(dir =>
       append(dir, 'claims.yaml', '\n- id: stray-claim\n  statement: x\n  sourceUrl: https://example.com/x\n  publisher: x\n  title: x\n  retrievedAt: 2026-10-01\n  state: capability\n  subjects: [not-a-record]\n'),
@@ -217,6 +226,49 @@ describe('editorial Markdown is inert', () => {
     const parsed = parseMarkdown('Some *emphasis* and a [link](https://ethereum.org/wrapped-eth/) about {{object:weth9}}.');
     assert.deepEqual(parsed.errors, []);
     assert.deepEqual(parsed.tokens, [{kind: 'object', id: 'weth9'}]);
+  });
+});
+
+describe('search in every language', () => {
+  const find = (locale: Locale, q: string) => runDirectory(preparedFor(locale), {...EMPTY_QUERY, q}, REGISTRY_DATE, locale);
+  const ids = (locale: Locale, q: string) => find(locale, q).objects.map(hit => hit.entry.id);
+
+  test('each language’s suggested task search finds the dollar and lending records', () => {
+    for (const locale of LOCALES) {
+      const hint = messages(locale).directory.noResultsHint;
+      const example = /[“«„「]\s*([^”»“」]+?)\s*[”»“」]/u.exec(hint)?.[1];
+      assert.ok(example, `${locale}: the hint quotes an example`);
+      const found = ids(locale, example!);
+      assert.ok(found.includes('usdc'), `${locale}: “${example}” finds USDC (found ${found.join(', ') || 'nothing'})`);
+      assert.ok(found.includes('morpho-blue'), `${locale}: “${example}” finds Morpho Blue`);
+    }
+  });
+
+  test('a word in the page language finds the English records for the same idea', () => {
+    const english = ids('en', 'lending');
+    assert.ok(english.length > 1);
+    for (const [locale, word] of [['es', 'préstamos'], ['pt-BR', 'empréstimo'], ['fr', 'prêt'], ['de', 'Kreditvergabe'], ['zh-CN', '借贷'], ['ja', 'レンディング'], ['ko', '대출']] as const)
+      for (const id of english) assert.ok(ids(locale, word).includes(id), `${locale} “${word}” finds ${id}`);
+  });
+
+  test('unspaced Chinese and Japanese are split at known words, and particles and articles are ignored', () => {
+    assert.deepEqual(ids('zh-CN', '借贷美元'), ids('zh-CN', '借贷 美元'));
+    assert.deepEqual(ids('ja', 'ドルを貸す'), ids('ja', 'ドル 貸す'));
+    assert.deepEqual(ids('fr', 'prêter des dollars'), ids('fr', 'prêter dollars'));
+    assert.deepEqual(ids('de', 'die Dollar verleihen'), ids('de', 'Dollar verleihen'));
+  });
+
+  test('names still match exactly, and vocabulary never turns a name into a topic', () => {
+    for (const locale of LOCALES) {
+      assert.equal(ids(locale, 'weth9')[0], 'weth9', locale);
+      assert.ok(ids(locale, 'uniswap v4').includes('uniswap-v4'), locale);
+    }
+  });
+
+  test('vocabulary words are long enough to split text safely', () => {
+    for (const locale of LOCALES)
+      for (const words of Object.values(messages(locale).searchTerms))
+        for (const word of words.split(' ')) assert.ok(!/[\u3040-\u30ff\u3400-\u9fff\uac00-\ud7af]/u.test(word) || [...word].length >= 2, `${locale}: “${word}” is a single character`);
   });
 });
 

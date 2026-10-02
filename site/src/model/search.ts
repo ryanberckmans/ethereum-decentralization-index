@@ -8,12 +8,16 @@
  * with the matched context shown. Within a tier, more important fields win,
  * then the editor's order. There is no paid or opaque ranking.
  *
+ * Records are written in English. A word the reader types that the page
+ * language's search vocabulary knows (`searchTerms` in the dictionaries) also
+ * matches the English words for the same idea, so "préstamos" finds lending.
+ *
  * @cc [label:product] exact-deployment-identity
  * An address only matches the deployments EDI records for it, each shown
  * with its chain. A ticker or brand match never stands in for an identity.
  */
 import {parseAddressQuery} from './address.ts';
-import type {DirectoryEntry, DirectoryIndex, StoryEntry, SubjectEntry} from './view-types.ts';
+import type {DirectoryEntry, DirectoryIndex, SearchConcept, StoryEntry, SubjectEntry} from './view-types.ts';
 
 export type FieldKey =
   | 'name'
@@ -96,9 +100,13 @@ export interface PreparedIndex {
   objects: Prepared<DirectoryEntry>[];
   stories: Prepared<StoryEntry>[];
   subjects: Prepared<SubjectEntry>[];
+  vocabulary: readonly SearchConcept[];
+  /** The vocabulary's Chinese, Japanese and Korean words, longest first, for splitting unspaced text. */
+  cjkWords: readonly string[];
+  stopWords: ReadonlySet<string>;
 }
 
-const CJK = /[぀-ヿ㐀-鿿가-힯豈-﫿]/;
+const CJK = /[\u3040-\u30ff\u3400-\u9fff\uac00-\ud7af\uf900-\ufaff]/;
 const MAX_TOKENS = 12;
 
 /** Lowercase, strip diacritics, and turn punctuation into spaces. */
@@ -113,6 +121,45 @@ export function normalize(text: string): string {
 
 export function tokenize(query: string): string[] {
   return [...new Set(normalize(query).split(' ').filter(Boolean))].slice(0, MAX_TOKENS);
+}
+
+/**
+ * Splits a run of Chinese, Japanese or Korean text at the vocabulary's words,
+ * so "借贷美元" searches for lending and dollars. Text between known words is
+ * kept, except a single character such as a particle.
+ */
+function segment(token: string, words: readonly string[]): string[] {
+  const parts: string[] = [];
+  let rest = '';
+  for (let index = 0; index < token.length; ) {
+    const found = words.find(word => token.startsWith(word, index));
+    if (found) {
+      if (rest) parts.push(rest);
+      rest = '';
+      parts.push(found);
+      index += found.length;
+    } else {
+      rest += token[index];
+      index += 1;
+    }
+  }
+  if (rest) parts.push(rest);
+  return parts.length === 1 ? parts : parts.filter(part => part.length > 1 || !CJK.test(part));
+}
+
+/** A vocabulary word the reader typed, or is typing (at least four letters, or two CJK characters, of it). */
+function mentions(token: string, word: string): boolean {
+  return token === word || (word.startsWith(token) && token.length >= (CJK.test(token) ? 2 : 4));
+}
+
+/** For each query word, the words that satisfy it: itself and the English words for the same idea. */
+export function queryGroups(tokens: readonly string[], index: Pick<PreparedIndex, 'vocabulary' | 'cjkWords'>): string[][] {
+  const words = [...new Set(tokens.flatMap(token => (CJK.test(token) ? segment(token, index.cjkWords) : [token])))].slice(0, MAX_TOKENS);
+  return words.map(token => {
+    const alternatives = new Set([token]);
+    for (const concept of index.vocabulary) if (concept.words.some(word => mentions(token, word))) for (const english of concept.english) alternatives.add(english);
+    return [...alternatives];
+  });
 }
 
 function field(key: FieldKey, text: string): Field {
@@ -202,34 +249,39 @@ export function prepareIndex(index: DirectoryIndex, labels: SearchLabels): Prepa
     identities: new Set([normalize(subject.name), ...subject.aliases.map(normalize)].filter(Boolean)),
     rank,
   }));
-  return {objects, stories, subjects};
+  const vocabulary = index.vocabulary ?? [];
+  const cjkWords = [...new Set(vocabulary.flatMap(concept => concept.words).filter(word => CJK.test(word)))].sort((a, b) => b.length - a.length);
+  return {objects, stories, subjects, vocabulary, cjkWords, stopWords: new Set(index.stopWords ?? [])};
 }
 
-function matchPrepared<T>(prepared: Prepared<T>, raw: string, tokens: readonly string[]): Match | null {
+/** Every group must be satisfied by some field; a group is satisfied by any of its words. */
+function matchPrepared<T>(prepared: Prepared<T>, raw: string, tokens: readonly string[], groups: readonly (readonly string[])[]): Match | null {
   const lowered = raw.trim().toLowerCase();
   if (prepared.exact.has(lowered)) return {tier: 0, score: 100};
-  if (!tokens.length) return null;
+  if (!groups.length) return null;
   const whole = tokens.join(' ');
   if (prepared.identities.has(whole)) return {tier: 1, score: 50};
 
   let score = 0;
   let identityOnly = true;
   let best: Field | undefined;
-  for (const token of tokens) {
-    let tokenBest: Field | undefined;
-    for (const target of prepared.fields) {
-      if (tokenBest && WEIGHTS[target.key] <= WEIGHTS[tokenBest.key]) continue;
-      if (tokenMatches(token, target)) tokenBest = target;
+  for (const group of groups) {
+    let groupBest: Field | undefined;
+    for (const word of group) {
+      for (const target of prepared.fields) {
+        if (groupBest && WEIGHTS[target.key] <= WEIGHTS[groupBest.key]) continue;
+        if (tokenMatches(word, target)) groupBest = target;
+      }
     }
-    if (!tokenBest) return null;
-    score += WEIGHTS[tokenBest.key];
-    if (!IDENTITY_FIELDS.has(tokenBest.key)) {
+    if (!groupBest) return null;
+    score += WEIGHTS[groupBest.key];
+    if (!IDENTITY_FIELDS.has(groupBest.key)) {
       identityOnly = false;
-      if (!best || WEIGHTS[tokenBest.key] > WEIGHTS[best.key]) best = tokenBest;
+      if (!best || WEIGHTS[groupBest.key] > WEIGHTS[best.key]) best = groupBest;
     }
   }
   if (identityOnly) return {tier: 2, score};
-  return {tier: 3, score, snippet: snippetFor(best!, tokens.filter(token => tokenMatches(token, best!)))};
+  return {tier: 3, score, snippet: snippetFor(best!, groups.flat().filter(word => tokenMatches(word, best!)))};
 }
 
 export interface Hit<T> {
@@ -265,13 +317,15 @@ export function search(index: PreparedIndex, query: string): SearchResults {
     return {objects, stories: [], subjects};
   }
   const tokens = tokenize(query);
+  const meaningful = tokens.filter(token => !index.stopWords.has(token));
+  const groups = queryGroups(meaningful.length ? meaningful : tokens, index);
   for (const prepared of index.objects) {
-    const match = matchPrepared(prepared, query, tokens);
+    const match = matchPrepared(prepared, query, tokens, groups);
     if (match) objects.set(prepared.item.id, match);
   }
   const collect = <T>(list: Prepared<T>[]): Hit<T>[] =>
     list
-      .map(prepared => ({item: prepared.item, rank: prepared.rank, match: matchPrepared(prepared, query, tokens)}))
+      .map(prepared => ({item: prepared.item, rank: prepared.rank, match: matchPrepared(prepared, query, tokens, groups)}))
       .filter((hit): hit is Hit<T> => hit.match !== null)
       .sort(byRelevance);
   return {objects, stories: collect(index.stories), subjects: collect(index.subjects)};

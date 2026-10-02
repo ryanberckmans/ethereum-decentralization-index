@@ -130,4 +130,13 @@ export interface DirectoryIndex {
   roles: Role[];
   /** Share of records with an editorial role; the role facet is shown only when most are classified. */
   roleCoverage: number;
+  /** Search vocabulary: per idea, words a reader may type (normalized) and the English words records use. */
+  vocabulary: SearchConcept[];
+  /** Normalized words a search ignores, such as articles, unless they are all the reader typed. */
+  stopWords: string[];
+}
+
+export interface SearchConcept {
+  words: string[];
+  english: string[];
 }
