@@ -93,6 +93,10 @@ The palette is fixed by grade: radiant cyan D0, green D1, then lime, gold and wa
 
 See `examples/WalletPosition.tsx` for a wallet integration. It uses illustrative inputs and makes their incomplete review visible.
 
+## Directory site
+
+[`site/`](site) holds the directory website built on this index. It is a separate project with its own package, lockfile and checks, run from `site/` as [its README](site/README.md) describes, and it is not part of the npm package. The [Site workflow](.github/workflows/site.yml) checks it whenever `site/` changes.
+
 ## Develop and package
 
 ```sh
