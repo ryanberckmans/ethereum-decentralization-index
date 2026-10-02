@@ -18,7 +18,7 @@ proxy, add `NODE_USE_ENV_PROXY=1`.
 Long scans use `LOG_RPC_URL_<chainId>` when it is set, for example `LOG_RPC_URL_1=https://mainnet.gateway.tenderly.co`,
 and otherwise the chain's own URL. Some providers cap `eth_getLogs` ranges; set `LOG_WINDOW` to a smaller window of
 blocks. `BATCH` (default 10) sets how many requests go in one JSON-RPC batch and `WORKERS` (default 4) how many run at
-once; lower both for a rate-limited node. The largest scans, a month of Uniswap v2 or v3 swaps, take about an hour.
+once; lower both for a rate-limited node. The largest scans, a month of Uniswap v2 or v3 swaps, take an hour or more.
 
 ## How reads are pinned
 

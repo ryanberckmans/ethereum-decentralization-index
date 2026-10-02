@@ -789,7 +789,14 @@
     "fromBlock": 25878705,
     "toBlock": 26093737
    },
-   "note": "Swap events in September 2026 (UTC) from pairs that the Uniswap v2 factory created. Forks emit the same event; their pairs are counted separately as other contracts."
+   "note": "Swap events in September 2026 (UTC) from pairs that the Uniswap v2 factory created. Forks emit the same event; their pairs are counted separately as other contracts.",
+   "result": {
+    "events": 1615715,
+    "pools": 26390,
+    "otherEvents": 494673,
+    "otherContracts": 2996,
+    "logsFingerprintSha256": "a0ef6c6d2fa730e89d37a23e00dfd6cd7421b4dd020c52eca136b39be3670481"
+   }
   },
   {
    "id": "uniswap-v3-swaps-2026-09",
