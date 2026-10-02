@@ -1,14 +1,14 @@
 /**
  * Product identity and locale configuration, in one place.
  *
- * The site is the directory of the Ethereum Decentralization Index (EDI). EDI,
- * at the root of this repository, is its only assessment authority.
+ * The site is the Ethereum Decentralization Index's own website. EDI, the
+ * package at the root of this repository, is its only assessment authority.
  */
 export const PRODUCT = {
-  /** Short product name: masthead, titles, social cards. */
-  name: 'EDI Directory',
-  /** The index this directory belongs to. */
-  indexName: 'Ethereum Decentralization Index',
+  /** The site's name, kept in English in every language: masthead, titles, social cards, data files. */
+  name: 'Ethereum Decentralization Index',
+  /** Its abbreviation, which the interface text uses for the index and its grades. */
+  shortName: 'EDI',
   repository: 'https://github.com/ryanberckmans/ethereum-decentralization-index',
 } as const;
 

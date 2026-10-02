@@ -6,10 +6,10 @@ import type {Messages} from './en.ts';
 
 export const ptBR: Messages = {
   meta: {
-    tagline: 'O diretório do Índice de Descentralização do Ethereum',
+    tagline: 'Os objetos econômicos do Ethereum e quem os controla',
     description:
       'Encontre os objetos econômicos do Ethereum, veja o que eles possibilitam e quem pode mudar suas regras: perfis, histórias e avaliações do EDI de {count} registros.',
-    homeTitle: 'EDI Directory: os objetos econômicos do Ethereum e quem os controla',
+    homeTitle: '{name}: os objetos econômicos do Ethereum e quem os controla',
   },
   nav: {
     skip: 'Pular para o conteúdo',
@@ -26,7 +26,7 @@ export const ptBR: Messages = {
     themeSystem: 'Sistema',
     themeLight: 'Claro',
     themeDark: 'Escuro',
-    home: 'Página inicial do EDI Directory',
+    home: 'Página inicial do {name}',
     breadcrumb: 'Trilha de navegação',
   },
   edition: {
@@ -440,7 +440,7 @@ export const ptBR: Messages = {
   },
   methodology: {
     title: 'Metodologia',
-    lede: 'Como este diretório usa o Índice de Descentralização do Ethereum, o que ele lista, o que considera sucesso e como ler seus números e datas.',
+    lede: 'O que as classificações do EDI medem, o que este site lista, o que considera sucesso e como ler seus números e datas.',
     contents: 'Nesta página',
     sections: {
       meaning: 'O que o D mede',
@@ -455,7 +455,7 @@ export const ptBR: Messages = {
     },
     fromEdi: 'Nas palavras do próprio EDI',
     authority:
-      'O EDI é a única fonte de classificações neste site. Cada classificação é calculada para o dia em que você lê, com as funções do próprio EDI, que levam a data em conta; o diretório nunca edita, armazena nem substitui uma classificação.',
+      'O EDI é a única fonte de classificações neste site. Cada classificação é calculada para o dia em que você lê, com as funções do próprio EDI, que levam a data em conta; o site nunca edita, armazena nem substitui uma classificação.',
     spectrumNote: 'As contagens se referem a registros do EDI cuja classificação de mecanismo mostra esse nível em {date}.',
     levelComplete: {one: '{count} completo', other: '{count} completos'},
     levelFloor: {one: '{count} pelo menos neste nível', other: '{count} pelo menos neste nível'},
@@ -467,7 +467,7 @@ export const ptBR: Messages = {
     scopes: [
       'A classificação de um mecanismo abrange os contratos ou a rede analisados e as dependências que o EDI registra para eles: quem pode mudar as regras para manter ou retirar ativos.',
       'A classificação de uma posição, quando o EDI faz essa análise, abrange o que um detentor de fato tem dentro de um mecanismo, como uma posição de liquidez ou um mercado de empréstimos, cujos tokens, oráculos ou hooks podem acrescentar controle próprio.',
-      'Quando o EDI não analisou as posições separadamente, o diretório informa isso e não mostra classificação de posição. A classificação de um mecanismo nunca se estende aos tokens, posições, empresas ou aplicações construídos sobre ele.',
+      'Quando o EDI não analisou as posições separadamente, o site informa isso e não mostra classificação de posição. A classificação de um mecanismo nunca se estende aos tokens, posições, empresas ou aplicações construídos sobre ele.',
     ],
     inclusion: [
       'Todo registro do cadastro do EDI está listado: redes, ativos e protocolos. Uma listagem não é um endosso, uma auditoria de segurança nem uma recomendação de investimento, e não certifica que algo seja seguro ou bem-sucedido.',
@@ -496,7 +496,7 @@ export const ptBR: Messages = {
     coverageClaims: {one: '{count} afirmação com fonte', other: '{count} afirmações com fonte'},
     coverageOn: 'Avaliações conforme calculadas em {date}.',
     coverageNote: 'Estas contagens são de registros, não de empresas, usuários ou capital, e incluem redes, ativos e protocolos.',
-    clocks: 'O diretório mantém três relógios separados e mostra a data pertinente ao lado de cada informação, em vez de uma única data de “atualizado em”:',
+    clocks: 'O site mantém três relógios separados e mostra a data pertinente ao lado de cada informação, em vez de uma única data de “atualizado em”:',
     datesEdi: 'Datas de análise do EDI: quando cada registro foi analisado pela última vez e quando vence o prazo da sua análise mensal. O D0 permanente não expira com o tempo; as demais classificações passam a ser parciais ou desconhecidas quando uma análise está atrasada, conforme o EDI determina.',
     datesObservations: 'Datas das observações: cada número traz sua própria data ou intervalo.',
     datesEditorial: 'Datas editoriais: quando cada perfil e cada história foram revisados pela última vez.',
@@ -510,8 +510,8 @@ export const ptBR: Messages = {
     observedThrough: 'Observações até',
     evaluated: 'Classificações calculadas para',
     corrections: [
-      'As classificações são corrigidas dentro do próprio EDI, por meio do seu processo de pesquisa. O diretório mostra a mudança assim que o EDI a publica.',
-      'Erros editoriais, como um número, uma data ou uma fonte errados, são corrigidos no conteúdo do diretório, e cada correção é listada com sua data.',
+      'As classificações são corrigidas dentro do próprio EDI, por meio do seu processo de pesquisa. O site mostra a mudança assim que o EDI a publica.',
+      'Erros editoriais, como um número, uma data ou uma fonte errados, são corrigidos no conteúdo do site, e cada correção é listada com sua data.',
     ],
     compareLink: 'Comparar objetos',
     reportIssue: 'Relatar um erro no GitHub',
@@ -519,7 +519,7 @@ export const ptBR: Messages = {
   },
   changes: {
     title: 'Alterações',
-    intro: 'Alterações datadas no conteúdo do diretório e na edição do EDI que ele usa, e as próximas alterações que as datas de análise do EDI vão provocar.',
+    intro: 'Alterações datadas no conteúdo do site e na edição do EDI que ele usa, e as próximas alterações que as datas de análise do EDI vão provocar.',
     upcoming: 'Próximas alterações',
     upcomingNote: 'Calculadas a partir das datas de análise desta edição, com as próprias funções do EDI. Uma nova análise do EDI antes dessas datas substitui qualquer uma delas.',
     upcomingNone: 'Esta edição não prevê mudanças de classificação.',
@@ -566,7 +566,7 @@ export const ptBR: Messages = {
     agents: 'Para agentes e rastreadores',
     agentsItems: {
       llms: ['llms.txt', 'Um índice curto do site e de seus dados para modelos de linguagem.'],
-      agentsMd: ['agents.md', 'O que o diretório abrange, como ler suas datas e classificações e como citá-lo.'],
+      agentsMd: ['agents.md', 'O que o site abrange, como ler suas datas e classificações e como citá-lo.'],
       sitemap: ['sitemap.xml', 'Todas as páginas em todos os idiomas, com suas versões alternativas.'],
     },
     upstream: 'O próprio EDI, com sua rubrica, seu cadastro e suas funções, é de código aberto:',
@@ -578,7 +578,7 @@ export const ptBR: Messages = {
     suggestions: 'Resultados parecidos',
   },
   footer: {
-    about: 'Um diretório editorial construído sobre o Índice de Descentralização do Ethereum. Estar listado não é endosso, auditoria de segurança nem recomendação de investimento.',
+    about: 'Perfis, números e histórias são editoriais; todas as classificações vêm do EDI. Estar listado não é endosso, auditoria de segurança nem recomendação de investimento.',
     source: 'EDI no GitHub',
     agents: 'Para agentes',
   },

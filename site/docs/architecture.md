@@ -1,7 +1,8 @@
 # Architecture
 
-The directory is an Astro site built into plain static files: every page in
-every language, the data files the pages load, and the exports. Any static
+The Ethereum Decentralization Index website is an Astro site built into
+plain static files: every page in every language, the data files the pages
+load, and the exports. Any static
 host can serve them ([hosting](hosting.md)). Three sources meet in it, each
 with one owner:
 

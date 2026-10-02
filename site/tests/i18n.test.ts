@@ -15,7 +15,7 @@ const only = process.env.I18N_LOCALE;
 const targets = LOCALES.filter(locale => locale !== 'en' && (!only || locale === only));
 
 /** Terms that stay exactly as written in every language. */
-const PROTECTED = /EDI Directory|EDI|D0–D9|D\d|D\?|≥|SHA-256|JSON|CSV|GitHub|Sourcify|llms\.txt|agents\.md|sitemap\.xml/g;
+const PROTECTED = /Ethereum Decentralization Index|EDI|D0–D9|D\d|D\?|≥|SHA-256|JSON|CSV|GitHub|Sourcify|llms\.txt|agents\.md|sitemap\.xml/g;
 /** Characters that could hide or reorder text. No-break spaces are allowed. */
 const FORBIDDEN = /[\u0000-\u0008\u000b-\u001f\u007f-\u009f\u00ad\u200b-\u200f\u202a-\u202e\u2060-\u2064\u2066-\u2069\ufeff]/;
 const CJK = /[\u3040-\u30ff\u3400-\u9fff\uac00-\ud7af]/;

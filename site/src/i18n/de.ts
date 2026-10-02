@@ -5,10 +5,10 @@ import type {Messages} from './en.ts';
 
 export const de: Messages = {
   meta: {
-    tagline: 'Verzeichnis des Ethereum-Dezentralisierungsindex',
+    tagline: 'Ethereums wirtschaftliche Objekte und wer sie kontrolliert',
     description:
       'Finde Ethereums wirtschaftliche Objekte und erfahre, was sie ermöglichen und wer ihre Regeln ändern kann: Profile, Fallstudien und EDI-Bewertungen für {count} Einträge.',
-    homeTitle: 'EDI Directory: Wer kontrolliert Ethereums wirtschaftliche Objekte?',
+    homeTitle: '{name}: Wer kontrolliert Ethereums wirtschaftliche Objekte?',
   },
   nav: {
     skip: 'Zum Inhalt springen',
@@ -25,7 +25,7 @@ export const de: Messages = {
     themeSystem: 'System',
     themeLight: 'Hell',
     themeDark: 'Dunkel',
-    home: 'Startseite des EDI Directory',
+    home: 'Startseite des {name}',
     breadcrumb: 'Navigationspfad',
   },
   edition: {
@@ -442,7 +442,7 @@ export const de: Messages = {
   },
   methodology: {
     title: 'Methodik',
-    lede: 'Wie dieses Verzeichnis den Ethereum-Dezentralisierungsindex nutzt, was es aufführt, was es als Erfolg wertet und wie seine Zahlen und Datumsangaben zu lesen sind.',
+    lede: 'Was die Einstufungen von EDI messen, was diese Website aufführt, was sie als Erfolg wertet und wie ihre Zahlen und Datumsangaben zu lesen sind.',
     contents: 'Auf dieser Seite',
     sections: {
       meaning: 'Was D misst',
@@ -457,7 +457,7 @@ export const de: Messages = {
     },
     fromEdi: 'Im Wortlaut von EDI',
     authority:
-      'EDI ist die einzige Quelle für Einstufungen auf dieser Website. Jede Einstufung wird mit den eigenen datumsabhängigen Funktionen von EDI für den Tag berechnet, an dem du liest; das Verzeichnis bearbeitet, speichert oder überschreibt niemals eine Einstufung.',
+      'EDI ist die einzige Quelle für Einstufungen auf dieser Website. Jede Einstufung wird mit den eigenen datumsabhängigen Funktionen von EDI für den Tag berechnet, an dem du liest; die Website bearbeitet, speichert oder überschreibt niemals eine Einstufung.',
     spectrumNote: 'Gezählt werden EDI-Einträge, deren Mechanismus-Einstufung am {date} diese Stufe zeigt.',
     levelComplete: {one: '{count} vollständig', other: '{count} vollständig'},
     levelFloor: {one: '{count} mindestens auf dieser Stufe', other: '{count} mindestens auf dieser Stufe'},
@@ -469,7 +469,7 @@ export const de: Messages = {
     scopes: [
       'Eine Mechanismus-Einstufung erfasst die geprüften Smart Contracts oder das geprüfte Netzwerk sowie die Abhängigkeiten, die EDI dafür verzeichnet: wer die Regeln für das Halten von Vermögenswerten und für den Ausstieg ändern kann.',
       'Eine Positions-Einstufung, sofern EDI eine solche prüft, erfasst, was man innerhalb eines Mechanismus tatsächlich hält, etwa eine Liquiditätsposition oder einen Kreditmarkt, deren Token, Orakel oder Hooks eigene Kontrolle hinzufügen können.',
-      'Wo EDI Positionen nicht gesondert geprüft hat, sagt das Verzeichnis dies und zeigt keine Positions-Einstufung. Eine Mechanismus-Einstufung überträgt sich nie auf die Token, Positionen, Unternehmen oder Anwendungen, die darauf aufbauen.',
+      'Wo EDI Positionen nicht gesondert geprüft hat, sagt die Website dies und zeigt keine Positions-Einstufung. Eine Mechanismus-Einstufung überträgt sich nie auf die Token, Positionen, Unternehmen oder Anwendungen, die darauf aufbauen.',
     ],
     inclusion: [
       'Jeder Eintrag im EDI-Register wird aufgeführt: Netzwerke, Vermögenswerte und Protokolle. Eine Aufnahme ist keine Empfehlung, kein Sicherheitsaudit und keine Anlageberatung, und sie bescheinigt nicht, dass etwas sicher oder erfolgreich ist.',
@@ -498,7 +498,7 @@ export const de: Messages = {
     coverageClaims: {one: '{count} quellengestützte Aussage', other: '{count} quellengestützte Aussagen'},
     coverageOn: 'Bewertungen ausgewertet zum {date}.',
     coverageNote: 'Gezählt werden Einträge, nicht Unternehmen, Nutzer oder Kapital; darunter sind Netzwerke, Vermögenswerte und Protokolle.',
-    clocks: 'Das Verzeichnis hält drei Zeitachsen auseinander und zeigt neben jeder Angabe das jeweils maßgebliche Datum statt eines einzigen Aktualisierungsdatums:',
+    clocks: 'Die Website hält drei Zeitachsen auseinander und zeigt neben jeder Angabe das jeweils maßgebliche Datum statt eines einzigen Aktualisierungsdatums:',
     datesEdi: 'EDI-Prüfdatum: wann jeder Eintrag zuletzt geprüft wurde und wann seine monatliche Prüfung fällig wird. Eine dauerhafte D0-Einstufung verfällt nicht mit der Zeit; andere Einstufungen werden teilweise oder unbekannt, wenn eine Prüfung überfällig ist, wie EDI es festlegt.',
     datesObservations: 'Beobachtungsdatum: Jede Zahl trägt ihr eigenes Datum oder Intervall.',
     datesEditorial: 'Redaktionsdatum: wann jedes Profil und jede Fallstudie zuletzt redaktionell geprüft wurde.',
@@ -512,8 +512,8 @@ export const de: Messages = {
     observedThrough: 'Beobachtungen bis',
     evaluated: 'Einstufungen ausgewertet zum',
     corrections: [
-      'Einstufungen werden in EDI selbst korrigiert, im Rahmen seines eigenen Rechercheprozesses. Das Verzeichnis zeigt die Änderung, sobald EDI sie veröffentlicht.',
-      'Redaktionelle Fehler, etwa eine falsche Zahl, ein falsches Datum oder eine falsche Quelle, werden im Inhalt des Verzeichnisses korrigiert, und jede Korrektur wird mit ihrem Datum aufgeführt.',
+      'Einstufungen werden in EDI selbst korrigiert, im Rahmen seines eigenen Rechercheprozesses. Die Website zeigt die Änderung, sobald EDI sie veröffentlicht.',
+      'Redaktionelle Fehler, etwa eine falsche Zahl, ein falsches Datum oder eine falsche Quelle, werden im Inhalt der Website korrigiert, und jede Korrektur wird mit ihrem Datum aufgeführt.',
     ],
     compareLink: 'Objekte vergleichen',
     reportIssue: 'Fehler auf GitHub melden',
@@ -521,7 +521,7 @@ export const de: Messages = {
   },
   changes: {
     title: 'Änderungen',
-    intro: 'Datierte Änderungen am Inhalt des Verzeichnisses und an der verwendeten EDI-Ausgabe sowie die Änderungen, die sich als Nächstes aus den Prüfterminen von EDI ergeben.',
+    intro: 'Datierte Änderungen am Inhalt der Website und an der verwendeten EDI-Ausgabe sowie die Änderungen, die sich als Nächstes aus den Prüfterminen von EDI ergeben.',
     upcoming: 'Demnächst',
     upcomingNote: 'Mit den eigenen Funktionen von EDI aus den Prüfterminen dieser Ausgabe berechnet. Eine neue EDI-Prüfung vor diesem Zeitpunkt ersetzt die betreffenden Angaben.',
     upcomingNone: 'Diese Ausgabe sieht keine Änderungen von Einstufungen vor.',
@@ -568,7 +568,7 @@ export const de: Messages = {
     agents: 'Für KI-Agenten und Crawler',
     agentsItems: {
       llms: ['llms.txt', 'Eine kurze Übersicht über die Website und ihre Daten für Sprachmodelle.'],
-      agentsMd: ['agents.md', 'Was das Verzeichnis abdeckt, wie seine Datumsangaben und Einstufungen zu lesen sind und wie man es zitiert.'],
+      agentsMd: ['agents.md', 'Was die Website abdeckt, wie ihre Datumsangaben und Einstufungen zu lesen sind und wie man sie zitiert.'],
       sitemap: ['sitemap.xml', 'Jede Seite in jeder Sprache, mit Sprachvarianten.'],
     },
     upstream: 'EDI selbst ist mit Bewertungsraster, Register und Funktionen quelloffen:',
@@ -580,7 +580,7 @@ export const de: Messages = {
     suggestions: 'Ähnliche Treffer',
   },
   footer: {
-    about: 'Ein redaktionelles Verzeichnis auf Grundlage des Ethereum-Dezentralisierungsindex. Die Aufnahme ist keine Empfehlung, kein Sicherheitsaudit und keine Anlageberatung.',
+    about: 'Profile, Zahlen und Fallstudien sind redaktionell; jede Einstufung stammt von EDI. Die Aufnahme ist keine Empfehlung, kein Sicherheitsaudit und keine Anlageberatung.',
     source: 'EDI auf GitHub',
     agents: 'Für KI-Agenten',
   },

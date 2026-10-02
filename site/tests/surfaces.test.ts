@@ -105,7 +105,7 @@ describe('crawler and agent files', () => {
   test('llms.txt and agents.md describe the edition, its dates and how to cite, and nothing private', () => {
     const llms = llmsTxt(ORIGIN, DATE);
     const agents = agentsMd(ORIGIN, DATE);
-    assert.match(llms, /^# EDI Directory/);
+    assert.match(llms, /^# Ethereum Decentralization Index\n/);
     assert.ok(llms.includes(catalog.edition.id));
     assert.ok(llms.includes(`evaluated for ${DATE} (UTC)`));
     for (const story of catalog.stories) assert.ok(llms.includes(`${ORIGIN}/en/stories/${story.slug}`), story.slug);

@@ -1,8 +1,9 @@
-# EDI Directory
+# Ethereum Decentralization Index website
 
-The directory of the [Ethereum Decentralization Index](../README.md): what
-Ethereum's economic objects let people do, who can change their rules, and
-how they connect, in eight languages.
+The website of the [Ethereum Decentralization Index](../README.md) (EDI):
+what Ethereum's economic objects let people do, who can change their rules,
+and how they connect, in eight languages. The name is `PRODUCT.name` in
+[`src/config.ts`](src/config.ts) and stays in English in every language.
 
 EDI, the package at the root of this repository, is the only assessment
 authority. Every grade, floor, partial or unknown status, control and review

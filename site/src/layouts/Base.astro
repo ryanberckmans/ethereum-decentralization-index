@@ -103,10 +103,10 @@ const ld = jsonLd ? JSON.stringify(jsonLd).replace(/</g, '\\u003c') : undefined;
     <a class="skip" href="#main">{m.nav.skip}</a>
     <header class="masthead">
       <div class="shell masthead-inner">
-        <a class="wordmark" href={paths.home(locale)} aria-label={m.nav.home}>
+        <a class="wordmark" href={paths.home(locale)} aria-label={fmt(m.nav.home, {name: PRODUCT.name})}>
           <Glyph />
           <span class="wordmark-text">
-            <span class="wordmark-name">{PRODUCT.name}</span>
+            <span class="wordmark-name">{PRODUCT.name.split(' ').map(word => <span class="wordmark-word">{word} </span>)}</span>
             <span class="wordmark-sub">{m.meta.tagline}</span>
           </span>
         </a>

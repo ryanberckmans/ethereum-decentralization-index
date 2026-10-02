@@ -1,6 +1,6 @@
-# Directory content
+# Editorial content
 
-Editorial content for the directory of the Ethereum Decentralization Index: profiles, stories, sources, dated
+Editorial content for the Ethereum Decentralization Index website: profiles, stories, sources, dated
 observations and relationships. EDI, at the repository root, is the only assessment authority. Nothing here states a
 grade; prose uses `{{grade:…}}` tokens that render EDI's live result. The schema and its rules are in
 [`../docs/content-schema.md`](../docs/content-schema.md) and [`../src/content/schema.ts`](../src/content/schema.ts).
