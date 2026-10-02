@@ -1,10 +1,10 @@
 /**
  * The directory island: search, filters, sort, paging and the comparison
- * selection, all reflected in the URL. The server renders the same controls
- * and results, so the page works without JavaScript (a native GET form, links
- * for paging, and a CSS :target sheet for filters on phones). Once the small
- * same-origin index has loaded, every change is computed locally with the same
- * code the server uses.
+ * selection, all reflected in the URL. The built page shows the editor's
+ * order; once mounted, the island reads the search, filters and selection a
+ * link carries and computes the results in the browser from the small
+ * same-origin index, with the same code the build uses. Without scripts the
+ * page lists every record instead (pages/[locale]/index.astro).
  *
  * @cc [label:product] restoration-without-side-effects
  * Enter commits a history entry and continuous typing coalesces into one.
@@ -12,11 +12,12 @@
  * phone filter sheet closes on Back without losing what was chosen. Nothing
  * here performs a financial action or contacts a third party.
  */
-import {useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent, type SubmitEvent, type KeyboardEvent, type MouseEvent, type ReactNode} from 'react';
-import {LIMITS, type Locale} from '../config.ts';
+import {useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ChangeEvent, type SubmitEvent, type KeyboardEvent, type MouseEvent, type ReactNode} from 'react';
+import {LIMITS, PRODUCT, type Locale} from '../config.ts';
 import type {Role} from '../content/vocab.ts';
 import {andList, fmt, formatDate, plural} from '../i18n/format.ts';
 import type {Messages} from '../i18n/en.ts';
+import {fetchSiteJson} from '../client/fetch.ts';
 import {runDirectory, type DirectoryResult, type Facets} from '../model/directory.ts';
 import {
   defaultSort,
@@ -26,6 +27,7 @@ import {
   NETWORK_NONE,
   parseDirectoryQuery,
   REVIEW_FILTERS,
+  sameQuery,
   serializeDirectoryQuery,
   SORTS,
   toggled,
@@ -34,30 +36,30 @@ import {
   type QueryValidators,
   type Sort,
 } from '../model/query.ts';
-import {prepareIndex, type PreparedIndex} from '../model/search.ts';
+import {labelsFor, prepareIndex, type PreparedIndex} from '../model/search.ts';
+import {paths} from '../model/urls.ts';
 import {D_LEVELS, KINDS, type DirectoryIndex, type DLevel} from '../model/view-types.ts';
-import {utcToday, msUntilUtcMidnight} from '../model/dates.ts';
 import {CloseIcon, FilterIcon, SearchIcon} from '../components/Icons.tsx';
 import {ResultsBody, type BodyContext, type ResultsMessages} from '../components/ResultsBody.tsx';
+import {useUtcDate} from './use-utc-date.ts';
 
 export type DirectoryAppMessages = ResultsMessages & Pick<Messages, 'edition'>;
 
 export interface DirectoryAppProps {
   locale: Locale;
   m: DirectoryAppMessages;
-  query: DirectoryQuery;
-  invalid: QueryParam[];
-  /** The UTC date the server evaluated EDI for. */
-  serverDate: string;
+  /** The page title when no search is shown. */
+  title: string;
+  /** The UTC date the build evaluated EDI for. */
+  evaluatedFor: string;
   /** Dates on which some EDI result changes. */
   changeDates: string[];
+  /** The built page's results: every record in the editor's order. */
   summary: Pick<DirectoryResult, 'total' | 'page' | 'pages' | 'sort'> & {facets: Facets};
   networks: {id: string; name: string}[];
   roles: Role[];
   showRoles: boolean;
   chainNames: Record<number, string>;
-  /** Names of the objects in the comparison selection, for the tray before the index loads. */
-  compareNames: Record<string, string>;
   indexUrl: string;
   entrances?: ReactNode;
   children?: ReactNode;
@@ -77,7 +79,7 @@ const FORM_FIELDS = ['role', 'kind', 'network', 'grade', 'atleast', 'review', 's
 /**
  * The query with what the reader changed in the form before the island
  * hydrated, or null if nothing changed. A control has changed when it no
- * longer shows what the server rendered.
+ * longer shows what the built page rendered.
  */
 function changedBeforeHydration(form: HTMLFormElement, query: DirectoryQuery, validators: QueryValidators): DirectoryQuery | null {
   const changed = new Set<string>();
@@ -106,12 +108,16 @@ function changedBeforeHydration(form: HTMLFormElement, query: DirectoryQuery, va
 
 export default function DirectoryApp(props: DirectoryAppProps) {
   const {locale, m} = props;
-  const home = `/${locale}/`;
-  const [query, setQuery] = useState<DirectoryQuery>(props.query);
+  const home = paths.home(locale);
+  const [query, setQuery] = useState<DirectoryQuery>(EMPTY_QUERY);
+  const [invalid, setInvalid] = useState<QueryParam[]>([]);
   const [index, setIndex] = useState<{raw: DirectoryIndex; prepared: PreparedIndex} | null>(null);
   const [indexFailed, setIndexFailed] = useState(false);
+  /** Whether the results shown are computed here rather than the built page's. */
   const [taken, setTaken] = useState(false);
-  const [today, setToday] = useState(props.serverDate);
+  /** False until the island has read the address, so its first render matches the built page. */
+  const [mounted, setMounted] = useState(false);
+  const today = useUtcDate(props.evaluatedFor);
   const [sheetOpen, setSheetOpen] = useState(false);
   const [announcement, setAnnouncement] = useState('');
 
@@ -136,6 +142,7 @@ export default function DirectoryApp(props: DirectoryAppProps) {
   const validators = useMemo<QueryValidators>(
     () => ({
       network: id => props.networks.some(network => network.id === id),
+      // Checked again once the index has loaded.
       object: id => !indexRef.current || indexRef.current.raw.entries.some(entry => entry.id === id),
     }),
     [props.networks],
@@ -143,35 +150,15 @@ export default function DirectoryApp(props: DirectoryAppProps) {
 
   // ---------------------------------------------------------------- index
 
-  /**
-   * @cc [label:security] bounded-external-work
-   * The directory's only network request after page load: the active
-   * locale's compact index, from the same origin, fetched once per page,
-   * shared by concurrent callers, abandoned after 15 seconds and rejected
-   * unless it has the expected version. There are no third-party calls on
-   * the visitor path (the CSP's connect-src is 'self').
-   */
+  /** The active locale's index, loaded once per page (see client/fetch.ts) and shared by concurrent callers. */
   const ensureIndex = useCallback((): Promise<void> => {
     if (indexRef.current) return Promise.resolve();
     if (loading.current) return loading.current;
-    loading.current = fetch(props.indexUrl, {credentials: 'same-origin', signal: AbortSignal.timeout(15_000)})
-      .then(response => {
-        if (!response.ok) throw new Error(`Index request failed: ${response.status}`);
-        return response.json() as Promise<DirectoryIndex>;
-      })
+    setIndexFailed(false);
+    loading.current = fetchSiteJson<DirectoryIndex>(props.indexUrl)
       .then(raw => {
-        if (raw.version !== 1 || !Array.isArray(raw.entries)) throw new Error('Unexpected index format');
-        const networkNames = new Map(raw.networks.map(network => [network.id, network.name]));
-        const storyTitles = new Map(raw.stories.map(story => [story.id, story.title]));
-        const objectNames = new Map(raw.entries.map(entry => [entry.id, entry.name]));
-        const prepared = prepareIndex(raw, {
-          role: role => m.roles[role as Role] ?? role,
-          kind: kind => m.kinds[kind as keyof typeof m.kinds] ?? kind,
-          network: id => networkNames.get(id) ?? id,
-          story: id => storyTitles.get(id) ?? id,
-          object: id => objectNames.get(id) ?? id,
-        });
-        setIndex({raw, prepared});
+        if (!Array.isArray(raw.entries)) throw new Error('Unexpected index format');
+        setIndex({raw, prepared: prepareIndex(raw, labelsFor(raw, m))});
       })
       .catch(() => {
         loading.current = null;
@@ -184,33 +171,49 @@ export default function DirectoryApp(props: DirectoryAppProps) {
     void ensureIndex();
   }, [ensureIndex]);
 
-  // EDI results for today, when the server evaluated an earlier date and a review fell due since.
+  // Once the index is here, records in the selection it does not know are dropped and reported.
   useEffect(() => {
-    if (!index || today === props.serverDate) return;
-    if (changedBetween(props.changeDates, props.serverDate, today)) setTaken(true);
-    document.dispatchEvent(new CustomEvent('edi:evaluated', {detail: today}));
-  }, [index, today, props.changeDates, props.serverDate]);
+    if (!index) return;
+    const current = queryRef.current;
+    const known = current.compare.filter(id => index.raw.entries.some(entry => entry.id === id));
+    if (known.length < current.compare.length) {
+      setInvalid(list => (list.includes('compare') ? list : [...list, 'compare']));
+      setQuery({...current, compare: known});
+    }
+  }, [index]);
 
+  // EDI results for today, when the build evaluated an earlier date and a review fell due since.
   useEffect(() => {
-    const now = utcToday();
-    if (now !== today) setToday(now);
-    let timer = window.setTimeout(function tick() {
-      setToday(utcToday());
-      timer = window.setTimeout(tick, msUntilUtcMidnight() + 1000);
-    }, msUntilUtcMidnight() + 1000);
-    const onVisible = () => {
-      if (document.visibilityState === 'visible') setToday(utcToday());
-    };
-    document.addEventListener('visibilitychange', onVisible);
-    return () => {
-      window.clearTimeout(timer);
-      document.removeEventListener('visibilitychange', onVisible);
-    };
-  }, []);
+    if (!index || today === props.evaluatedFor) return;
+    if (changedBetween(props.changeDates, props.evaluatedFor, today)) setTaken(true);
+    document.dispatchEvent(new CustomEvent('edi:evaluated', {detail: today}));
+  }, [index, today, props.changeDates, props.evaluatedFor]);
 
   const live = useMemo(() => (index && taken ? runDirectory(index.prepared, query, today, locale) : null), [index, taken, query, today, locale]);
+  /** The address asks for results the island cannot compute until the index arrives. */
+  const pending = mounted && taken && !live && !indexFailed;
   const summary = live ?? props.summary;
   const facets = live?.facets ?? props.summary.facets;
+
+  // The page hides its built results while it reads a search from the address (client/theme-init.js); from here the island shows its own state.
+  useLayoutEffect(() => {
+    if (mounted) document.documentElement.removeAttribute('data-query');
+  }, [mounted]);
+
+  // The tab title names the search, and a search is not a page to index.
+  useEffect(() => {
+    if (!mounted) return;
+    document.title = query.q ? `${query.q} · ${PRODUCT.name}` : props.title;
+    let robots = document.head.querySelector<HTMLMetaElement>('meta[name="robots"]');
+    if (serializeDirectoryQuery(query)) {
+      if (!robots) {
+        robots = document.createElement('meta');
+        robots.name = 'robots';
+        robots.content = 'noindex';
+        document.head.append(robots);
+      }
+    } else robots?.remove();
+  }, [mounted, query, props.title]);
 
   // ---------------------------------------------------------------- history
 
@@ -218,6 +221,7 @@ export default function DirectoryApp(props: DirectoryAppProps) {
     (next: DirectoryQuery, mode: HistoryMode) => {
       historyMode.current = mode;
       setQuery(next);
+      setInvalid([]);
       setTaken(true);
       void ensureIndex();
     },
@@ -249,30 +253,52 @@ export default function DirectoryApp(props: DirectoryAppProps) {
         toggleRef.current?.focus();
         return;
       }
-      const {query: next} = parseDirectoryQuery(new URLSearchParams(location.search), validators);
-      if (serializeDirectoryQuery(next) === serializeDirectoryQuery(queryRef.current)) return;
+      const {query: next, invalid: unknown} = parseDirectoryQuery(new URLSearchParams(location.search), validators);
+      if (sameQuery(next, queryRef.current)) return;
       typing.current = false;
       historyMode.current = null;
-      if (!indexRef.current) {
-        location.reload();
-        return;
-      }
       setQuery(next);
+      setInvalid(unknown);
       setTaken(true);
+      void ensureIndex();
     };
     window.addEventListener('popstate', onPop);
     return () => window.removeEventListener('popstate', onPop);
-  }, [validators, urlFor]);
+  }, [validators, urlFor, ensureIndex]);
 
-  // Text typed, boxes ticked or options chosen while the page's scripts were
-  // still loading stay on screen, but React hydrates without reading them and
-  // its next render would undo them. Apply them as if they were made now.
+  // The two effects below set historyMode for the history effect above, so
+  // they are declared after it: effects run in order, and one declared
+  // earlier would hand its mode to the history effect in the same pass,
+  // before the query it sets has rendered.
+
+  // The address's search, filters and selection, with anything the reader
+  // typed, ticked or chose while the page's scripts were still loading: that
+  // stays on screen, but React hydrates without reading it and its next
+  // render would undo it, so it is applied as if it were done now.
   useEffect(() => {
-    const next = formRef.current ? changedBeforeHydration(formRef.current, queryRef.current, validators) : null;
-    if (!next) return;
-    typing.current = next.q !== queryRef.current.q;
-    update(next, 'push');
+    const parsed = parseDirectoryQuery(new URLSearchParams(location.search), validators);
+    const typed = formRef.current ? changedBeforeHydration(formRef.current, parsed.query, validators) : null;
+    setMounted(true);
+    if (typed) {
+      typing.current = typed.q !== parsed.query.q;
+      update(typed, 'push');
+      return;
+    }
+    if (sameQuery(parsed.query, EMPTY_QUERY) && !parsed.invalid.length) return;
+    setInvalid(parsed.invalid);
+    setQuery(parsed.query);
+    setTaken(true);
+    const canonical = urlFor(parsed.query);
+    if (!parsed.invalid.length && `${location.pathname}${location.search}` !== canonical) history.replaceState(history.state, '', canonical);
   }, []);
+
+  // A page past the end of the results shows the last one.
+  useEffect(() => {
+    if (live && live.page !== query.page) {
+      historyMode.current = 'replace';
+      setQuery({...query, page: live.page});
+    }
+  }, [live, query]);
 
   // Back from an object page returns focus to the row that was opened.
   useEffect(() => {
@@ -358,7 +384,7 @@ export default function DirectoryApp(props: DirectoryAppProps) {
     update({...queryRef.current, q: value.trim() ? value : '', page: 1}, mode);
   };
   const onSubmit = (event: SubmitEvent<HTMLFormElement>) => {
-    if (!index && indexFailed) return; // Let the browser submit the form.
+    if (!index && indexFailed) return; // Let the browser load the page again, which tries the index again.
     event.preventDefault();
     typing.current = false;
     update({...queryRef.current, q: queryRef.current.q.trim().replace(/\s+/g, ' ')}, 'replace');
@@ -383,6 +409,10 @@ export default function DirectoryApp(props: DirectoryAppProps) {
     historyMode.current = 'replace';
     setQuery({...queryRef.current, compare: next});
     setTaken(true);
+  };
+  const clearCompare = () => {
+    historyMode.current = 'replace';
+    setQuery({...queryRef.current, compare: []});
   };
 
   const onResultsClick = (event: MouseEvent<HTMLDivElement>) => {
@@ -421,17 +451,14 @@ export default function DirectoryApp(props: DirectoryAppProps) {
   // ---------------------------------------------------------------- render
 
   const networkNames = useMemo(() => Object.fromEntries(props.networks.map(network => [network.id, network.name])), [props.networks]);
-  const names = useMemo(() => {
-    if (!index) return props.compareNames;
-    return Object.fromEntries(index.raw.entries.map(entry => [entry.id, entry.name]));
-  }, [index, props.compareNames]);
+  const names = useMemo<Record<string, string>>(() => (index ? Object.fromEntries(index.raw.entries.map(entry => [entry.id, entry.name])) : {}), [index]);
   const ctx: BodyContext = {
     locale,
     m,
     networkNames,
     chainNames: props.chainNames,
-    objectHref: slug => `/${locale}/objects/${slug}`,
-    storyHref: slug => `/${locale}/stories/${slug}`,
+    objectHref: slug => paths.object(locale, slug),
+    storyHref: slug => paths.story(locale, slug),
     pageHref: page => urlFor({...query, page}),
     clearHref: urlFor({...EMPTY_QUERY, compare: query.compare}),
     objectName: id => names[id] ?? id,
@@ -442,8 +469,8 @@ export default function DirectoryApp(props: DirectoryAppProps) {
   const sort = effectiveSort(query);
   const activeFilters = filterCount(query);
   const count = plural(summary.total, locale, m.directory.results);
-  const stale = !live && changedBetween(props.changeDates, props.serverDate, today);
-  const nextChange = props.changeDates.find(date => date > props.serverDate);
+  const stale = !live && changedBetween(props.changeDates, props.evaluatedFor, today);
+  const nextChange = props.changeDates.find(date => date > props.evaluatedFor);
 
   const chip = (label: string, next: DirectoryQuery, key: string) => (
     <li key={key}>
@@ -487,9 +514,19 @@ export default function DirectoryApp(props: DirectoryAppProps) {
   );
 
   return (
-    <form ref={formRef} method="get" action={home} className="directory" onSubmit={onSubmit} noValidate data-directory="">
+    <form
+      ref={formRef}
+      method="get"
+      action={home}
+      className="directory"
+      onSubmit={onSubmit}
+      noValidate
+      autoComplete="off"
+      data-directory=""
+      data-pending={pending ? '' : undefined}
+    >
       <div className="directory-top">
-        <div className="search" role="search">
+        <div className="search js-only" role="search">
           <label htmlFor="directory-q" className="sr-only">
             {m.directory.searchLabel}
           </label>
@@ -514,14 +551,20 @@ export default function DirectoryApp(props: DirectoryAppProps) {
           </button>
         </div>
         {props.entrances}
-        {props.invalid.length ? (
+        {invalid.length ? (
           <p className="notice notice-warn" role="note">
-            {fmt(m.directory.invalidParams, {names: props.invalid.join(m.common.listSeparator)})}
+            {fmt(m.directory.invalidParams, {names: invalid.join(m.common.listSeparator)})}
+          </p>
+        ) : null}
+        {indexFailed && taken ? (
+          <p className="notice notice-warn" role="alert">
+            {m.directory.indexFailed}{' '}
+            <a href={urlFor(query)}>{m.common.retry}</a>
           </p>
         ) : null}
         {stale && indexFailed && nextChange ? (
           <p className="notice notice-warn">
-            {fmt(m.edition.stale, {evaluated: formatDate(props.serverDate, locale), due: formatDate(nextChange, locale)})}{' '}
+            {fmt(m.edition.stale, {evaluated: formatDate(props.evaluatedFor, locale), due: formatDate(nextChange, locale)})}{' '}
             <a href={urlFor(query)}>{m.edition.reload}</a>
           </p>
         ) : null}
@@ -531,7 +574,7 @@ export default function DirectoryApp(props: DirectoryAppProps) {
         <div
           ref={sheetElement}
           id="filters"
-          className="filters"
+          className="filters js-only"
           data-open={sheetOpen ? 'true' : undefined}
           role={sheetOpen ? 'dialog' : undefined}
           aria-modal={sheetOpen ? true : undefined}
@@ -623,11 +666,6 @@ export default function DirectoryApp(props: DirectoryAppProps) {
                 <span className="option-count">{facets.story}</span>
               </label>
             </fieldset>
-            <div className="filters-actions no-js-only">
-              <button type="submit" className="button">
-                {m.directory.searchButton}
-              </button>
-            </div>
           </div>
           <div className="filters-foot">
             <a className="button button-quiet" href={urlFor({...query, role: [], kind: [], network: [], grade: [], atleast: null, review: [], story: false, page: 1})} onClick={clearFilters}>
@@ -648,12 +686,12 @@ export default function DirectoryApp(props: DirectoryAppProps) {
         </div>
         {sheetOpen ? <div className="scrim" onClick={closeSheet} aria-hidden="true" /> : null}
 
-        <section className="results-area" aria-labelledby="results-title">
+        <section className="results-area" aria-labelledby="results-title" aria-busy={pending ? true : undefined}>
           <div className="results-head" ref={resultsRef}>
             <h2 id="results-title" className="results-count" tabIndex={-1}>
-              {count}
+              {pending ? m.directory.loadingIndex : count}
             </h2>
-            <div className="results-tools">
+            <div className="results-tools js-only">
               <a ref={toggleRef} href="#filters" className="button button-quiet filters-toggle" onClick={openSheet} aria-haspopup="dialog">
                 <FilterIcon />
                 {activeFilters ? fmt(m.directory.filtersCount, {count: activeFilters}) : m.directory.filters}
@@ -661,7 +699,7 @@ export default function DirectoryApp(props: DirectoryAppProps) {
               <label htmlFor="directory-sort" className="sort-label">
                 {m.directory.sort}
               </label>
-              {/* The default order submits no value, so a search sent without scripts is sorted by best match. */}
+              {/* The default order is the one without a value, so it stays out of the link. */}
               <select
                 id="directory-sort"
                 className="sort-select"
@@ -676,8 +714,8 @@ export default function DirectoryApp(props: DirectoryAppProps) {
                 ))}
               </select>
             </div>
-            {sort === 'editorial' ? <p className="sort-note">{m.directory.sortEditorialNote}</p> : null}
-            {sort === 'grade-asc' || sort === 'grade-desc' ? <p className="sort-note">{m.directory.sortGradeNote}</p> : null}
+            {!pending && sort === 'editorial' ? <p className="sort-note">{m.directory.sortEditorialNote}</p> : null}
+            {!pending && (sort === 'grade-asc' || sort === 'grade-desc') ? <p className="sort-note">{m.directory.sortGradeNote}</p> : null}
           </div>
           {chips.length ? (
             <ul className="active-filters" aria-label={m.directory.filters}>
@@ -692,7 +730,7 @@ export default function DirectoryApp(props: DirectoryAppProps) {
             </ul>
           ) : null}
           <div id="directory-results" className="results-body" onClick={onResultsClick}>
-            {live ? <ResultsBody result={live} ctx={ctx} /> : props.children}
+            {live ? <ResultsBody result={live} ctx={ctx} /> : pending ? null : props.children}
           </div>
           <p className="sr-only" role="status" aria-live="polite">
             {announcement}
@@ -700,7 +738,7 @@ export default function DirectoryApp(props: DirectoryAppProps) {
           {query.compare.map(id => (
             <input key={id} type="hidden" name="compare" value={id} />
           ))}
-          {query.compare.length ? (
+          {query.compare.length && !pending ? (
             <div className="tray" role="region" aria-label={fmt(m.directory.compareTray, {count: query.compare.length, max: LIMITS.compare})}>
               <p className="tray-names">
                 <strong>{fmt(m.directory.compareTray, {count: query.compare.length, max: LIMITS.compare})}</strong>
@@ -710,10 +748,10 @@ export default function DirectoryApp(props: DirectoryAppProps) {
                   locale,
                 )}
               </p>
-              <button type="button" className="button tray-clear" onClick={() => void toggleCompareClear()}>
+              <button type="button" className="button tray-clear" onClick={clearCompare}>
                 {m.directory.clear}
               </button>
-              <a className="button" href={`/${locale}/compare?ids=${query.compare.join(',')}`}>
+              <a className="button" href={paths.compare(locale, query.compare)}>
                 {m.directory.compareGo}
               </a>
             </div>
@@ -722,11 +760,6 @@ export default function DirectoryApp(props: DirectoryAppProps) {
       </div>
     </form>
   );
-
-  function toggleCompareClear() {
-    historyMode.current = 'replace';
-    setQuery({...queryRef.current, compare: []});
-  }
 }
 
 function reviewLabel(review: (typeof REVIEW_FILTERS)[number], m: DirectoryAppMessages): string {

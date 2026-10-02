@@ -6,7 +6,19 @@
 import {expect, test} from '@playwright/test';
 
 const LOCALES = ['en', 'es', 'pt-BR', 'fr', 'de', 'zh-CN', 'ja', 'ko'] as const;
-const PAGES = ['/', '/objects/weth9', '/objects/usdc', '/objects/uniswap-v4', '/stories', '/stories/dollars-on-ethereum', '/collections/d0', '/compare?ids=usdc,weth9,uniswap-v4', '/methodology', '/changes', '/data'];
+const PAGES = [
+  '/',
+  '/objects/weth9/',
+  '/objects/usdc/',
+  '/objects/uniswap-v4/',
+  '/stories/',
+  '/stories/dollars-on-ethereum/',
+  '/collections/d0/',
+  '/compare/?ids=usdc,weth9,uniswap-v4',
+  '/methodology/',
+  '/changes/',
+  '/data/',
+];
 const WIDTHS = [360, 390, 430];
 
 for (const locale of LOCALES) {
@@ -16,6 +28,7 @@ for (const locale of LOCALES) {
     for (const path of PAGES) {
       const response = await page.goto(`/${locale}${path}`);
       expect(response?.status(), path).toBe(200);
+      await page.waitForFunction(() => !document.documentElement.hasAttribute('data-query') && !document.querySelector('[aria-busy="true"]'));
       await expect(page.locator('html')).toHaveAttribute('lang', locale);
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
       expect(overflow, `${locale}${path} scrolls sideways by ${overflow}px`).toBeLessThanOrEqual(0);
@@ -30,10 +43,10 @@ for (const width of WIDTHS) {
   test(`switching language and theme on a ${width}-pixel phone`, async ({browser}) => {
     const context = await browser.newContext({viewport: {width, height: 844}, isMobile: true, hasTouch: true});
     const page = await context.newPage();
-    await page.goto('/en/objects/weth9');
+    await page.goto('/en/objects/weth9/');
     await page.locator('.menu-lang > summary').click();
     await page.locator('.menu-lang a[data-lang="ja"]').click();
-    await expect(page).toHaveURL(/\/ja\/objects\/weth9$/);
+    await expect(page).toHaveURL(/\/ja\/objects\/weth9\/$/);
     await expect(page.locator('html')).toHaveAttribute('lang', 'ja');
     // The choice is remembered for the language-neutral root.
     await page.goto('/');
@@ -43,7 +56,7 @@ for (const width of WIDTHS) {
     await page.locator('.menu-nav select[data-theme-select]').selectOption('dark');
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
     // The theme is applied before first paint on the next page.
-    await page.goto('/ja/objects/usdc', {waitUntil: 'commit'});
+    await page.goto('/ja/objects/usdc/', {waitUntil: 'commit'});
     await page.waitForFunction(() => document.documentElement.getAttribute('data-theme') === 'dark' && document.body !== null);
     const background = await page.evaluate(() => getComputedStyle(document.body).backgroundColor);
     expect(background).toBe('rgb(12, 16, 22)');
@@ -51,34 +64,46 @@ for (const width of WIDTHS) {
   });
 }
 
-test('the bare root follows Accept-Language and never sends Traditional Chinese readers to Simplified', async ({request}) => {
-  for (const [header, expected] of [
-    ['de-DE,de;q=0.9,en;q=0.5', '/de/'],
+test('the bare root opens the directory in the browser’s language, and never sends Traditional Chinese readers to Simplified', async ({browser}) => {
+  for (const [language, expected] of [
+    ['de-DE', '/de/'],
     ['pt-PT', '/pt-BR/'],
     ['fr-CA', '/fr/'],
-    ['zh-TW,zh;q=0.9', '/zh-CN/'],
+    ['ko-KR', '/ko/'],
     ['zh-TW', '/en/'],
-    ['', '/en/'],
+    ['nl-NL', '/en/'],
   ] as const) {
-    const response = await request.get('/', {headers: {'accept-language': header}, maxRedirects: 0});
-    expect(response.status(), header).toBe(302);
-    expect(new URL(response.headers()['location'], 'http://localhost').pathname, header).toBe(expected);
+    const context = await browser.newContext({locale: language});
+    const page = await context.newPage();
+    await page.goto('/?q=usdc#results');
+    await expect(page, language).toHaveURL(new RegExp(`${expected}\\?q=usdc#results$`));
+    await context.close();
   }
 });
 
-test('a browser set to Korean lands on the Korean directory', async ({browser}) => {
-  const context = await browser.newContext({locale: 'ko-KR'});
+test('a language switch keeps the search', async ({page}) => {
+  await page.goto('/en/?q=usdc');
+  await expect(page.locator('#directory-q')).toHaveValue('usdc');
+  await page.locator('.menu-lang > summary').click();
+  await page.locator('.menu-lang a[data-lang="fr"]').click();
+  await expect(page).toHaveURL(/\/fr\/\?q=usdc$/);
+  await expect(page.locator('#directory-q')).toHaveValue('usdc');
+});
+
+test('without scripts the bare root lists every language', async ({browser}) => {
+  const context = await browser.newContext({javaScriptEnabled: false});
   const page = await context.newPage();
   await page.goto('/');
-  expect(new URL(page.url()).pathname).toBe('/ko/');
+  await expect(page.locator('a[data-lang]')).toHaveCount(LOCALES.length);
+  await expect(page.locator('a[data-lang="ja"]')).toHaveAttribute('href', '/ja/');
   await context.close();
 });
 
 test('every page names its language alternates', async ({page}) => {
-  await page.goto('/fr/objects/weth9');
+  await page.goto('/fr/objects/weth9/');
   const alternates = await page.locator('link[rel="alternate"][hreflang]').evaluateAll(links => links.map(link => link.getAttribute('hreflang')));
   expect(alternates.sort()).toEqual([...LOCALES, 'x-default'].sort());
-  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', /\/fr\/objects\/weth9$/);
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', /\/fr\/objects\/weth9\/$/);
 });
 
 test('searching in Spanish or Japanese finds the English records for the same task', async ({page}) => {

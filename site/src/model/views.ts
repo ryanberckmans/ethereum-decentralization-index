@@ -11,7 +11,7 @@ import {messages} from '../i18n/index.ts';
 import type {Catalog, ObjectRecord} from './catalog.ts';
 import type {RawState, Segment} from './edition-types.ts';
 import {entity, networkChoices, CHAIN_IDS} from './registry.ts';
-import type {DatedView, DirectoryEntry, DirectoryIndex, FeaturedObservation, GradeView, SearchConcept} from './view-types.ts';
+import type {DatedView, DirectoryEntry, DirectoryIndex, FeaturedObservation, GradeView, ObservationView, SearchConcept} from './view-types.ts';
 import {ROLES} from '../content/vocab.ts';
 import {normalize} from './search.ts';
 
@@ -56,22 +56,6 @@ export function datedTimeline(id: string, segments: readonly Segment<RawState>[]
 export function chainName(chainId: number): string {
   const id = Object.entries(CHAIN_IDS).find(([, value]) => value === chainId)?.[0];
   return (id && entity(id)?.name) || `Chain ${chainId}`;
-}
-
-export interface ObservationView {
-  id: string;
-  metric: string;
-  definition: string;
-  /** Formatted value with comparator, unit and rate period. */
-  value: string;
-  /** The exact reported value with grouping, for accessible descriptions. */
-  exact: string;
-  when: string;
-  /** Chain scope in words. */
-  chains: string;
-  multichain: boolean;
-  scope: string;
-  measure: Observation['measure'];
 }
 
 export function observationView(observation: Observation, locale: Locale, m: Messages = messages(locale)): ObservationView {

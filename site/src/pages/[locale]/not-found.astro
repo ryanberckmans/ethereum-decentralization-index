@@ -1,0 +1,24 @@
+---
+/**
+ * The not-found page in each language, for an address the host could not
+ * serve (?path=/the/address). The English 404 page sends readers here when
+ * the address or their browser names another language.
+ */
+import Base from '../../layouts/Base.astro';
+import NotFound from '../../components/NotFound.astro';
+import {LOCALES, PRODUCT, type Locale} from '../../config.ts';
+import {messages} from '../../i18n/index.ts';
+import {paths} from '../../model/urls.ts';
+import {EVALUATION_DATE} from '../../server/site.ts';
+
+export function getStaticPaths() {
+  return LOCALES.map(locale => ({params: {locale}}));
+}
+
+const locale = Astro.params.locale as Locale;
+const m = messages(locale);
+---
+
+<Base locale={locale} title={`${m.errors.notFound} · ${PRODUCT.name}`} description={m.errors.notFoundBody} path={paths.notFound(locale)} noindex evaluationDate={EVALUATION_DATE}>
+  <NotFound locale={locale} localized />
+</Base>

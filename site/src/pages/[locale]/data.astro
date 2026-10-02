@@ -2,15 +2,18 @@
 /** The exports, the rules for using them, and the files for agents and crawlers. */
 import Base from '../../layouts/Base.astro';
 import {DataPage} from '../../views/Data.tsx';
-import {isLocale, PRODUCT} from '../../config.ts';
+import {LOCALES, PRODUCT, type Locale} from '../../config.ts';
 import {messages} from '../../i18n/index.ts';
 import {paths} from '../../model/urls.ts';
-import {evaluationDateFor} from '../../server/site.ts';
+import {EVALUATION_DATE} from '../../server/site.ts';
 
-const {locale} = Astro.params;
-if (!isLocale(locale)) return Astro.rewrite('/404');
+export function getStaticPaths() {
+  return LOCALES.map(locale => ({params: {locale}}));
+}
+
+const locale = Astro.params.locale as Locale;
 const m = messages(locale);
-const date = evaluationDateFor();
+const date = EVALUATION_DATE;
 ---
 
 <Base locale={locale} title={`${m.data.title} · ${PRODUCT.name}`} description={m.data.intro} path={paths.data(locale)} current="data" evaluationDate={date}>

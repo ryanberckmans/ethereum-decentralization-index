@@ -1,4 +1,4 @@
-/** Serializable shapes passed from the build-time importer to the Worker. Types only. */
+/** Serializable shapes passed from the build-time importer to the pages. Types only. */
 import type {Assessment} from 'ethereum-decentralization-index';
 import type {Block, Section, TokenRef} from '../content/markdown.ts';
 import type {

@@ -1,38 +1,38 @@
 ---
 /**
  * The directory: search, filters and populated results in the first
- * viewport, with the two editorial entrances inside the working layout.
+ * viewport, with the two editorial entrances inside the working layout. The
+ * built page shows the editor's order; the island reads a search, filters or
+ * a comparison selection from the address and computes the results in the
+ * browser. Without scripts the page lists every record.
  */
 import Base from '../../layouts/Base.astro';
 import DirectoryApp from '../../islands/DirectoryApp.tsx';
 import {ResultsBody} from '../../components/ResultsBody.tsx';
 import {GradeBadge} from '../../components/Grade.tsx';
-import {isLocale, PRODUCT} from '../../config.ts';
+import {LOCALES, PRODUCT, type Locale} from '../../config.ts';
 import {messages} from '../../i18n/index.ts';
 import {fmt, formatCount, plural} from '../../i18n/format.ts';
-import {catalog, evaluationDateFor} from '../../server/site.ts';
+import {SITE_URL} from '../../server/origin.ts';
+import {catalog, EVALUATION_DATE} from '../../server/site.ts';
 import {bodyContext, CHAIN_NAMES, directoryMessages, indexFor, preparedFor} from '../../server/directory.ts';
-import {parseDirectoryQuery, serializeDirectoryQuery} from '../../model/query.ts';
+import {EMPTY_QUERY} from '../../model/query.ts';
 import {runDirectory} from '../../model/directory.ts';
 import {paths} from '../../model/urls.ts';
 import {datedView} from '../../model/views.ts';
 
-const {locale} = Astro.params;
-if (!isLocale(locale)) return Astro.rewrite('/404');
-
-const m = messages(locale);
-const date = evaluationDateFor();
-const index = indexFor(locale);
-const {query, invalid} = parseDirectoryQuery(Astro.url.searchParams, {
-  network: id => index.networks.some(network => network.id === id),
-  object: id => catalog.object(id) !== undefined,
-});
-const canonicalSearch = serializeDirectoryQuery(query);
-const result = runDirectory(preparedFor(locale), query, date, locale);
-if (!invalid.length && (Astro.url.search.slice(1) !== canonicalSearch || result.page !== query.page)) {
-  const search = serializeDirectoryQuery({...query, page: result.page});
-  return Astro.redirect(`${paths.home(locale)}${search ? `?${search}` : ''}`, 302);
+export function getStaticPaths() {
+  return LOCALES.map(locale => ({params: {locale}}));
 }
+
+const locale = Astro.params.locale as Locale;
+const m = messages(locale);
+const date = EVALUATION_DATE;
+const index = indexFor(locale);
+const query = EMPTY_QUERY;
+const result = runDirectory(preparedFor(locale), query, date, locale);
+/** Every record on one page, for readers without scripts. */
+const everything = runDirectory(preparedFor(locale), query, date, locale, catalog.objects.length);
 
 const dm = directoryMessages(locale);
 const ctx = bodyContext(locale, query, dm);
@@ -50,47 +50,34 @@ const d0Count = catalog.objects.filter(object => {
 const d0Badge = datedView('weth9', catalog.rawOn('weth9', date), locale).mechanism;
 
 const showRoles = index.roleCoverage >= 0.5;
-const compareNames = Object.fromEntries(query.compare.map(id => [id, catalog.object(id)?.name ?? id]));
-const title = query.q ? `${query.q} · ${PRODUCT.name}` : m.meta.homeTitle;
 const description = fmt(m.meta.description, {count: formatCount(catalog.objects.length, locale)});
-const origin = Astro.url.origin;
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'WebSite',
-  name: PRODUCT.name,
-  url: `${origin}${paths.home(locale)}`,
-  inLanguage: locale,
-  potentialAction: {'@type': 'SearchAction', target: `${origin}${paths.home(locale)}?q={search_term_string}`, 'query-input': 'required name=search_term_string'},
-};
+const jsonLd = SITE_URL
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      name: PRODUCT.name,
+      url: `${SITE_URL}${paths.home(locale)}`,
+      inLanguage: locale,
+      potentialAction: {'@type': 'SearchAction', target: `${SITE_URL}${paths.home(locale)}?q={search_term_string}`, 'query-input': 'required name=search_term_string'},
+    }
+  : undefined;
 ---
 
-<Base
-  locale={locale}
-  title={title}
-  description={description}
-  path={paths.home(locale)}
-  query={canonicalSearch || undefined}
-  current="directory"
-  noindex={canonicalSearch.length > 0}
-  jsonLd={canonicalSearch ? undefined : jsonLd}
-  evaluationDate={date}
->
+<Base locale={locale} title={m.meta.homeTitle} description={description} path={paths.home(locale)} current="directory" jsonLd={jsonLd} evaluationDate={date}>
   <div class="shell">
     <h1 class="home-title">{m.directory.heading}</h1>
     <DirectoryApp
       client:load
       locale={locale}
       m={dm}
-      query={query}
-      invalid={invalid}
-      serverDate={date}
+      title={m.meta.homeTitle}
+      evaluatedFor={date}
       changeDates={[...catalog.changeDates]}
       summary={{total: result.total, page: result.page, pages: result.pages, sort: result.sort, facets: result.facets}}
       networks={index.networks.map(({id, name}) => ({id, name}))}
       roles={index.roles}
       showRoles={showRoles}
       chainNames={CHAIN_NAMES}
-      compareNames={compareNames}
       indexUrl={paths.index(locale, catalog.edition.id)}
     >
       <div slot="entrances" class="entrances">
@@ -125,7 +112,11 @@ const jsonLd = {
           }
         </article>
       </div>
-      <ResultsBody result={result} ctx={ctx} />
+      <div class="js-only"><ResultsBody result={result} ctx={ctx} /></div>
+      <noscript>
+        <p class="notice">{m.directory.noScript}</p>
+        <ResultsBody result={everything} ctx={ctx} />
+      </noscript>
     </DirectoryApp>
   </div>
 </Base>

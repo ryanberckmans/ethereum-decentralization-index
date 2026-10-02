@@ -1,1 +1,1 @@
-(function(){var d=document.documentElement;d.classList.add('js');try{var t=localStorage.getItem('edi-theme');if(t==='light'||t==='dark')d.setAttribute('data-theme',t)}catch(e){}})();
+(function(){var d=document.documentElement;d.classList.add('js');if(/[?&](q|role|kind|network|grade|atleast|review|story|sort|page|compare|ids|add)=/.test(location.search))d.setAttribute('data-query','');try{var t=localStorage.getItem('edi-theme');if(t==='light'||t==='dark')d.setAttribute('data-theme',t)}catch(e){}})();

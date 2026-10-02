@@ -1,7 +1,7 @@
 /**
  * Evaluates EDI for every record on every date where its result can change.
- * Runs at build time (and in tests); the Worker only selects the segment that
- * applies on the request's UTC date, so no grade is stored, edited or
+ * Runs at build time (and in tests); pages and the browser only select the
+ * segment that applies on a UTC date, so no grade is stored, edited or
  * re-derived by directory code.
  *
  * @cc [label:product] edi-is-the-assessment-authority

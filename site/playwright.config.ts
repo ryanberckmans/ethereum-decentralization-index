@@ -1,6 +1,7 @@
 /**
- * End-to-end tests against the production build served by the Workers
- * runtime (`npm run build` first). Run with `npm run test:e2e`.
+ * End-to-end tests against the production build, served as plain static
+ * files the way any static host serves them (scripts/serve.ts). Build first
+ * (`npm run build`), then run `npm run test:e2e`.
  */
 import {defineConfig, devices} from '@playwright/test';
 
@@ -22,7 +23,7 @@ export default defineConfig({
   },
   projects: [{name: 'chromium', use: {...devices['Desktop Chrome'], viewport: {width: 1280, height: 900}}}],
   webServer: {
-    command: `npx astro preview --port ${PORT} --host 127.0.0.1 --ignore-lock`,
+    command: `node scripts/serve.ts --port ${PORT} --host 127.0.0.1`,
     url: `http://127.0.0.1:${PORT}/robots.txt`,
     reuseExistingServer: !process.env.CI,
     timeout: 60_000,

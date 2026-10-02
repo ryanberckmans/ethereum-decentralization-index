@@ -2,13 +2,16 @@
 /**
  * Every page's frame: head metadata, the masthead, the edition footer and the
  * small page script. Pages pass their own title, description and canonical
- * path; hreflang alternates point at the same path in every locale.
+ * path; hreflang alternates point at the same path in every locale. Links are
+ * absolute when the build knows the public address (PUBLIC_SITE_URL), and
+ * relative to the serving host otherwise; social card links need it.
  */
 import {Font} from 'astro:assets';
 import '../styles/global.css';
 import {DEFAULT_LOCALE, LOCALES, LOCALE_NAMES, PRODUCT, type Locale} from '../config.ts';
 import {messages} from '../i18n/index.ts';
 import {fmt, formatDate} from '../i18n/format.ts';
+import {SITE_URL} from '../server/origin.ts';
 import {catalog} from '../server/site.ts';
 import {EXPORTS, localizedPath, paths} from '../model/urls.ts';
 import {Glyph} from '../components/Icons.tsx';
@@ -19,10 +22,8 @@ interface Props {
   locale: Locale;
   title: string;
   description: string;
-  /** Canonical path without query, e.g. /en/objects/weth9. */
+  /** Canonical path, e.g. /en/objects/weth9/. */
   path: string;
-  /** Canonical query string (without ?) for pages whose content depends on it. */
-  query?: string;
   current?: NavKey;
   alternates?: boolean;
   noindex?: boolean;
@@ -31,10 +32,10 @@ interface Props {
   evaluationDate: string;
 }
 
-const {locale, title, description, path, query, current, alternates = true, noindex = false, ogType = 'website', jsonLd, evaluationDate} = Astro.props;
+const {locale, title, description, path, current, alternates = true, noindex = false, ogType = 'website', jsonLd, evaluationDate} = Astro.props;
 const m = messages(locale);
-const origin = (import.meta.env.PUBLIC_SITE_URL as string | undefined)?.replace(/\/$/, '') || Astro.url.origin;
-const canonical = `${origin}${path}${query ? `?${query}` : ''}`;
+const origin = SITE_URL;
+const canonical = `${origin}${path}`;
 const edition = catalog.edition;
 const shortCommit = edition.ediCommit === 'unknown' ? edition.ediCommit : edition.ediCommit.slice(0, 12);
 const commitUrl = edition.ediCommit === 'unknown' ? undefined : `${PRODUCT.repository}/tree/${edition.ediCommit}`;
@@ -48,7 +49,7 @@ const more: {key: NavKey; href: string; label: string}[] = [
   {key: 'changes', href: paths.changes(locale), label: m.nav.changes},
   {key: 'data', href: paths.data(locale), label: m.nav.data},
 ];
-const socialImage = `${origin}/social/${locale}.png`;
+const socialImage = origin ? `${origin}/social/${locale}.png` : undefined;
 const ogLocale = locale.replace('-', '_');
 const ld = jsonLd ? JSON.stringify(jsonLd).replace(/</g, '\\u003c') : undefined;
 ---
@@ -65,11 +66,12 @@ const ld = jsonLd ? JSON.stringify(jsonLd).replace(/</g, '\\u003c') : undefined;
     {
       alternates && !noindex
         ? [
-            ...LOCALES.map(code => <link rel="alternate" hreflang={code} href={`${origin}${localizedPath(path, code)}${query ? `?${query}` : ''}`} />),
-            <link rel="alternate" hreflang="x-default" href={`${origin}${localizedPath(path, DEFAULT_LOCALE)}${query ? `?${query}` : ''}`} />,
+            ...LOCALES.map(code => <link rel="alternate" hreflang={code} href={`${origin}${localizedPath(path, code)}`} />),
+            <link rel="alternate" hreflang="x-default" href={`${origin}${localizedPath(path, DEFAULT_LOCALE)}`} />,
           ]
         : null
     }
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
     <meta name="color-scheme" content="light dark" />
     <meta name="theme-color" content="#f7f5ef" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#0c1016" media="(prefers-color-scheme: dark)" />
@@ -77,13 +79,19 @@ const ld = jsonLd ? JSON.stringify(jsonLd).replace(/</g, '\\u003c') : undefined;
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content={ogType} />
-    <meta property="og:url" content={canonical} />
+    {origin ? <meta property="og:url" content={canonical} /> : null}
     <meta property="og:locale" content={ogLocale} />
-    <meta property="og:image" content={socialImage} />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content={`${PRODUCT.name}${m.common.labelSeparator}${m.meta.tagline}`} />
-    <meta name="twitter:card" content="summary_large_image" />
+    {
+      socialImage
+        ? [
+            <meta property="og:image" content={socialImage} />,
+            <meta property="og:image:width" content="1200" />,
+            <meta property="og:image:height" content="630" />,
+            <meta property="og:image:alt" content={`${PRODUCT.name}${m.common.labelSeparator}${m.meta.tagline}`} />,
+            <meta name="twitter:card" content="summary_large_image" />,
+          ]
+        : <meta name="twitter:card" content="summary" />
+    }
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="alternate" type="application/json" href={EXPORTS.directoryJson} title={m.data.items.directory[0]} />
     <script is:inline set:html={__THEME_INIT__} />
@@ -117,7 +125,7 @@ const ld = jsonLd ? JSON.stringify(jsonLd).replace(/</g, '\\u003c') : undefined;
               <p class="menu-label eyebrow">{m.nav.language}</p>
               {
                 LOCALES.map(code => (
-                  <a href={`${localizedPath(path, code)}${query ? `?${query}` : ''}`} hreflang={code} lang={code} aria-current={code === locale ? 'true' : undefined} data-lang={code}>
+                  <a href={localizedPath(path, code)} hreflang={code} lang={code} aria-current={code === locale ? 'true' : undefined} data-lang={code}>
                     {LOCALE_NAMES[code]}
                   </a>
                 ))

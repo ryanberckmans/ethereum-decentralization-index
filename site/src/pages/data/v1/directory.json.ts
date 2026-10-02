@@ -1,7 +1,8 @@
-/** Every EDI record with its EDI results for today's UTC date. */
+/** Every EDI record with its EDI results for the build's evaluation date, and the later results EDI's review dates bring. */
 import type {APIRoute} from 'astro';
 import {directoryExport} from '../../../server/exports.ts';
-import {jsonResponse, siteOrigin} from '../../../server/http.ts';
-import {evaluationDateFor} from '../../../server/site.ts';
+import {jsonFile} from '../../../server/http.ts';
+import {SITE_URL} from '../../../server/origin.ts';
+import {EVALUATION_DATE} from '../../../server/site.ts';
 
-export const GET: APIRoute = ({url}) => jsonResponse(directoryExport(evaluationDateFor(), siteOrigin(url)));
+export const GET: APIRoute = () => jsonFile(directoryExport(EVALUATION_DATE, SITE_URL));

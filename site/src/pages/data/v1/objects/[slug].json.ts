@@ -1,14 +1,12 @@
-/** One record in full. Old slugs and raw EDI IDs redirect to the current slug. */
+/** One record in full, at its current slug. */
 import type {APIRoute} from 'astro';
-import {EXPORTS} from '../../../../model/urls.ts';
-import {objectExport, SCHEMA_VERSION} from '../../../../server/exports.ts';
-import {jsonResponse, siteOrigin} from '../../../../server/http.ts';
-import {catalog, evaluationDateFor} from '../../../../server/site.ts';
+import {objectExport} from '../../../../server/exports.ts';
+import {jsonFile} from '../../../../server/http.ts';
+import {SITE_URL} from '../../../../server/origin.ts';
+import {catalog, EVALUATION_DATE} from '../../../../server/site.ts';
 
-export const GET: APIRoute = ({params, url, redirect}) => {
-  const slug = params.slug ?? '';
-  const resolved = slug.length <= 256 ? catalog.resolveObject(slug) : ({kind: 'missing'} as const);
-  if (resolved.kind === 'redirect') return redirect(EXPORTS.object(resolved.slug), 301);
-  if (resolved.kind === 'missing') return jsonResponse({schemaVersion: SCHEMA_VERSION, error: 'not-found', message: 'No EDI record has this slug.'}, {status: 404, maxAge: 300});
-  return jsonResponse(objectExport(resolved.value, evaluationDateFor(), siteOrigin(url)));
-};
+export function getStaticPaths() {
+  return catalog.objects.map(object => ({params: {slug: object.slug}, props: {id: object.id}}));
+}
+
+export const GET: APIRoute = ({props}) => jsonFile(objectExport(catalog.object((props as {id: string}).id)!, EVALUATION_DATE, SITE_URL));

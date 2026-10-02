@@ -8,7 +8,7 @@ import type {Observation} from '../src/content/schema.ts';
 import {compareObservations, incompatibility, parseCompareParams} from '../src/model/compare.ts';
 import {csvCell, toCsv} from '../src/model/csv.ts';
 import {cleanText, EMPTY_QUERY, parseDirectoryQuery, serializeDirectoryQuery} from '../src/model/query.ts';
-import {localeForTag, negotiateLocale, routeRedirect} from '../src/server/routing.ts';
+import {findObject, localeForTag, localeOfPath, negotiateLocale, resolveMissing, wordsOfPath, type KnownPages} from '../src/model/routing.ts';
 
 const validators = {network: (id: string) => ['ethereum', 'base'].includes(id), object: (id: string) => ['usdc', 'weth9', 'uniswap-v4', 'token:uniswap'].includes(id)};
 const parse = (search: string) => parseDirectoryQuery(new URLSearchParams(search), validators);
@@ -205,22 +205,55 @@ describe('language choice', () => {
   });
 });
 
-describe('redirects', () => {
-  const at = (path: string) => routeRedirect(new URL(`https://edi.example${path}`), () => 'fr');
+describe('missing addresses', () => {
+  const known: KnownPages = {
+    objects: [
+      {id: 'weth9', slug: 'weth9'},
+      {id: 'token:uniswap', slug: 'token--uniswap'},
+      {id: 'seaport-v1.6', slug: 'seaport-v1-6'},
+    ],
+    stories: [{id: 'dollars', slug: 'dollars-on-ethereum'}],
+  };
+  const at = (path: string) => resolveMissing(path, 'fr', known);
 
-  test('the root and locale-less pages go to the reader’s language, uncached', () => {
-    assert.deepEqual(at('/'), {location: '/fr/', status: 302, negotiated: true});
-    assert.deepEqual(at('/objects/weth9?x=1'), {location: '/fr/objects/weth9?x=1', status: 302, negotiated: true});
-    assert.deepEqual(at('/compare/'), {location: '/fr/compare', status: 302, negotiated: true});
+  test('locale-less pages take the reader’s language; the bare section names lead to their pages', () => {
+    assert.deepEqual(at('/objects/weth9'), {locale: 'fr', path: '/fr/objects/weth9/'});
+    assert.deepEqual(at('/compare'), {locale: 'fr', path: '/fr/compare/'});
+    assert.deepEqual(at('/stories/dollars-on-ethereum'), {locale: 'fr', path: '/fr/stories/dollars-on-ethereum/'});
   });
 
-  test('locale casing and trailing slashes are fixed permanently', () => {
-    assert.deepEqual(at('/EN/objects/weth9/'), {location: '/en/objects/weth9', status: 301, negotiated: false});
-    assert.deepEqual(at('/pt-br'), {location: '/pt-BR/', status: 301, negotiated: false});
-    assert.deepEqual(at('/zh-cn/stories/?q=1'), {location: '/zh-CN/stories?q=1', status: 301, negotiated: false});
+  test('locale casing and a missing trailing slash lead to the canonical page', () => {
+    assert.deepEqual(at('/EN/objects/weth9/'), {locale: 'en', path: '/en/objects/weth9/'});
+    assert.deepEqual(at('/pt-br'), {locale: 'pt-BR', path: '/pt-BR/'});
+    assert.deepEqual(at('/zh-cn/stories'), {locale: 'zh-CN', path: '/zh-CN/stories/'});
+    assert.deepEqual(at('/de/collections/d0-in-use'), {locale: 'de', path: '/de/collections/d0/'});
   });
 
-  test('canonical pages, exports and agent files are served as they are', () => {
-    for (const path of ['/en/', '/ja/objects/weth9', '/data/v1/edition.json', '/data/v1/objects/weth9.json', '/llms.txt', '/robots.txt', '/sitemaps/en.xml']) assert.equal(at(path), null, path);
+  test('raw EDI IDs, the earlier -- form and capitalized slugs lead to the profile', () => {
+    assert.deepEqual(at('/en/objects/token:uniswap'), {locale: 'en', path: '/en/objects/token--uniswap/'});
+    assert.deepEqual(at('/en/objects/token%3Auniswap/'), {locale: 'en', path: '/en/objects/token--uniswap/'});
+    assert.deepEqual(at('/en/objects/WETH9'), {locale: 'en', path: '/en/objects/weth9/'});
+    assert.deepEqual(at('/ja/objects/seaport-v1.6'), {locale: 'ja', path: '/ja/objects/seaport-v1-6/'});
+    assert.deepEqual(at('/en/stories/dollars'), {locale: 'en', path: '/en/stories/dollars-on-ethereum/'});
+  });
+
+  test('anything else is missing, in the language of the address or else the reader’s', () => {
+    assert.deepEqual(at('/en/objects/uniswap-v9'), {locale: 'en'});
+    assert.deepEqual(at('/de/objects/weth9/extra'), {locale: 'de'});
+    assert.deepEqual(at('/wp-admin'), {locale: 'fr'});
+    assert.equal(localeOfPath('/KO/stories/'), 'ko');
+    assert.equal(localeOfPath('/nl/'), undefined);
+  });
+
+  test('names and tickers are not identities', () => {
+    assert.equal(findObject('Wrapped Ether', known.objects), undefined);
+    assert.equal(findObject('TOKEN--UNISWAP', known.objects)?.id, 'token:uniswap');
+  });
+
+  test('the words of a missing address become a search', () => {
+    assert.equal(wordsOfPath('/en/objects/uniswap-v9/', 120), 'uniswap v9');
+    assert.equal(wordsOfPath('/en/objects/token%3Auniswap', 120), 'token uniswap');
+    assert.equal(wordsOfPath('/de/', 120), '');
+    assert.equal(wordsOfPath('/en/stories/', 120), '');
   });
 });

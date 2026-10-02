@@ -1,41 +1,49 @@
 ---
 /**
- * One canonical EDI object. Old slugs, raw EDI IDs and the earlier `--`
- * form redirect permanently to the current slug.
+ * One canonical EDI object. Old slugs and raw EDI IDs that a file name can
+ * hold get a page that redirects to the current slug (server/redirects.ts).
  */
 import Base from '../../../layouts/Base.astro';
 import {ProfilePage} from '../../../views/Profile.tsx';
-import {isLocale, PRODUCT} from '../../../config.ts';
+import {LOCALES, PRODUCT, type Locale} from '../../../config.ts';
 import {messages} from '../../../i18n/index.ts';
-import {catalog, evaluationDateFor} from '../../../server/site.ts';
+import {SITE_URL} from '../../../server/origin.ts';
+import {objectRedirects} from '../../../server/redirects.ts';
+import {catalog, EVALUATION_DATE} from '../../../server/site.ts';
 import {profileModel} from '../../../server/profile.ts';
 import {paths} from '../../../model/urls.ts';
 
-const {locale, slug} = Astro.params;
-if (!isLocale(locale) || !slug) return Astro.rewrite('/404');
+export function getStaticPaths() {
+  const redirects = [...objectRedirects()];
+  return LOCALES.flatMap(locale => [
+    ...catalog.objects.map(object => ({params: {locale, slug: object.slug}, props: {id: object.id}})),
+    ...redirects.map(([slug, to]) => ({params: {locale, slug}, props: {redirectTo: to}})),
+  ]);
+}
 
-const resolved = catalog.resolveObject(slug);
-if (resolved.kind === 'redirect') return Astro.redirect(paths.object(locale, resolved.slug), 301);
-if (resolved.kind === 'missing') return Astro.rewrite('/404');
+const locale = Astro.params.locale as Locale;
+const {id, redirectTo} = Astro.props as {id?: string; redirectTo?: string};
+if (redirectTo) return Astro.redirect(paths.object(locale, redirectTo), 301);
 
-const object = resolved.value;
+const object = catalog.object(id!)!;
 const m = messages(locale);
-const date = evaluationDateFor();
+const date = EVALUATION_DATE;
 const model = profileModel(object, date);
 const role = object.role ? m.roles[object.role] : m.kinds[object.kind];
 const title = `${object.name} · ${role} · ${PRODUCT.name}`;
 const summary = object.summary ?? object.entity.scope;
 const description = summary.length > 200 ? `${summary.slice(0, 197)}…` : summary;
-const origin = Astro.url.origin;
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'BreadcrumbList',
-  itemListElement: [
-    {'@type': 'ListItem', position: 1, name: m.nav.directory, item: `${origin}${paths.home(locale)}`},
-    {'@type': 'ListItem', position: 2, name: m.kindsPlural[object.kind], item: `${origin}${paths.home(locale)}?kind=${object.kind}`},
-    {'@type': 'ListItem', position: 3, name: object.name, item: `${origin}${paths.object(locale, object.slug)}`},
-  ],
-};
+const jsonLd = SITE_URL
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {'@type': 'ListItem', position: 1, name: m.nav.directory, item: `${SITE_URL}${paths.home(locale)}`},
+        {'@type': 'ListItem', position: 2, name: m.kindsPlural[object.kind], item: `${SITE_URL}${paths.home(locale)}?kind=${object.kind}`},
+        {'@type': 'ListItem', position: 3, name: object.name, item: `${SITE_URL}${paths.object(locale, object.slug)}`},
+      ],
+    }
+  : undefined;
 ---
 
 <Base locale={locale} title={title} description={description} path={paths.object(locale, object.slug)} ogType="article" jsonLd={jsonLd} evaluationDate={date}>

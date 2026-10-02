@@ -1,7 +1,9 @@
 # Architecture
 
-The directory is an Astro site rendered on request by one Cloudflare Worker.
-Three sources meet in it, each with one owner:
+The directory is an Astro site built into plain static files: every page in
+every language, the data files the pages load, and the exports. Any static
+host can serve them ([hosting](hosting.md)). Three sources meet in it, each
+with one owner:
 
 | Source | Owner | Holds |
 | --- | --- | --- |
@@ -12,7 +14,7 @@ Three sources meet in it, each with one owner:
 ## Build: the edition
 
 `src/build/edition.ts` runs in Node during `astro build` and `astro dev`,
-never in the Worker or the browser. It:
+never in the browser. It:
 
 1. loads and validates `content/` against `src/content/schema.ts` and
    cross-checks every reference against the EDI registry
@@ -25,53 +27,75 @@ never in the Worker or the browser. It:
    describes every future date exactly.
 
 The result is the edition bundle, a virtual module (`virtual:edi-edition`)
-compiled into the Worker. Any error fails the build, so a broken import never
-replaces the last valid edition.
+that the pages are built from. Any error fails the build, so a broken import
+never replaces the last valid edition.
 
-## Request: the Worker
+## Pages: built once, right on any later date
 
-`src/middleware.ts` normalizes URLs (language choice at the bare root,
-canonical slugs, old IDs), then the page renders with React views
-(`src/views/`) on the server. Each request is evaluated for its UTC date:
-`src/model/catalog.ts` picks the edition segment that applies, so grades,
-overdue reviews and D0 lists are right on the day they change without a new
-build. Pages carry a 5-minute cache, data exports at most an hour and never
-past UTC midnight.
+Astro writes one `index.html` per page with React views (`src/views/`)
+rendered at build time. Each page is evaluated for the build's UTC date
+(`EVALUATION_DATE` in `src/server/site.ts`) and carries every later EDI
+result in inert `<template>` elements (`src/components/Dated.tsx`), so a
+page served or left open after a review deadline shows EDI's result for the
+reader's date without a rebuild and without evaluating anything.
 
-The middleware adds the security headers; Astro adds a hashed
-Content-Security-Policy (`script-src 'self'` plus the theme script's hash,
-`style-src 'self'`, `connect-src 'self'`, `frame-ancestors 'none'`). No page
-uses inline styles or third-party resources; fonts are self-hosted.
+Addresses end with a slash (`/en/objects/weth9/`), the form static hosts give
+a directory's `index.html`. Other names for a page are kept working in two
+ways. Old slugs, raw EDI IDs that are safe file names (`seaport-v1.6`) and
+collection IDs get small redirect pages at build time
+(`src/server/redirects.ts`). Everything else that misses, such as a raw ID
+with a colon, other capitalizations or an address without a language, lands
+on `404.html`, whose script resolves it with `src/model/routing.ts`.
 
-## Browser: three small scripts
+Every page carries a hashed Content-Security-Policy in a `<meta>` tag
+(`script-src 'self'` plus the hashes of Astro's and the theme script's inline
+code, `style-src 'self'`, `connect-src 'self'`) and a referrer policy. No
+page uses inline styles or third-party resources; fonts are self-hosted. The
+headers a host should add are in [hosting](hosting.md).
 
-- `src/client/page.ts` on every page: applies the theme and language choice,
-  wires the menus and copy buttons, and swaps in the result for the reader's
-  UTC date. Dated markup (`src/components/Dated.tsx`) ships later results in
-  inert `<template>` elements, so a cached page or a tab left open past a
-  deadline shows EDI's result for today without evaluating anything.
-- `src/islands/DirectoryApp.tsx` on the directory only: live search, filters,
-  sort, paging and the compare tray. The server renders the same results
-  first, so the page works without scripts; the island fetches the active
-  language's compact index (`/<locale>/directory-index.json`) once.
+## Browser: small scripts and two islands
+
+- `src/client/theme-init.js`, inline in every page's head: applies the saved
+  theme before first paint, and marks the page when its address carries a
+  search or a comparison so the built results it would replace stay hidden.
+- `src/client/page.ts` on every page: wires the menus, theme and copy
+  buttons, remembers a language chosen in the menu (in this browser only)
+  and keeps the search when switching, and swaps in the result for the
+  reader's UTC date.
+- `src/islands/DirectoryApp.tsx` on the directory: search, filters, sort,
+  paging and the compare tray, all in the URL. The built page shows the
+  editor's order; the island reads a link's search from the address and
+  computes results from the active language's compact index
+  (`/<locale>/directory-index.json`), loaded once. Without scripts the page
+  lists every record.
+- `src/islands/CompareApp.tsx` on the compare page: reads `?ids=` from the
+  address, loads the index and `/<locale>/compare-data.json` (limits and
+  figures), and draws the comparison (`src/components/Comparison.tsx`) for
+  the reader's date. Its links and forms stay ordinary GET links and forms
+  that the island follows in place.
+- `src/client/not-found.ts` on the not-found pages and `src/client/root.ts`
+  on the bare root: the address resolution and language choice described
+  above.
 - `src/client/guide.tsx`, loaded on first click: EDI's own
   `DecentralizationGuide` dialog. Its scroll lock uses a constructable
   stylesheet (`src/client/style-singleton.ts`) because the CSP forbids
   `<style>` elements.
 
-The first load of the directory stays under 200 KiB of compressed script and
-carries only the active language's strings; EDI's guide, loaded on click,
-brings EDI's own translations.
+Scripts load only the site's own files (`src/client/fetch.ts`). The first
+load of the directory stays under 200 KiB of compressed script and carries
+only the active language's strings; EDI's guide, loaded on click, brings
+EDI's own translations.
 
 ## Read model
 
-`src/model/` is shared by the server, the island and the tests:
+`src/model/` is shared by the build, the islands and the tests:
 
 - `registry.ts` and `catalog.ts`: EDI records joined with editorial records,
   with exact deployment identity (chain and address) and slug handling.
 - `search.ts`, `directory.ts`, `query.ts`: ranked search with match context,
   facets and URL state that restores exactly through Back, refresh and links.
 - `compare.ts`: which observations may stand side by side, and why not.
+- `routing.ts`: language choice and what a missing address means.
 - `views.ts`, `view-types.ts`: localized view data for grades, observations
   and rows.
 
@@ -87,8 +111,9 @@ it. EDI's grade labels and explanations come from EDI's own translations.
 ## Tests
 
 - `tests/*.test.ts` (Node's test runner): EDI timelines against daily
-  evaluation, search identity, exports and crawler files, dictionaries, and a
-  scan for hidden characters.
-- `tests/e2e/*.spec.ts` (Playwright, against the built Worker): the spec's
-  acceptance cases in a browser, accessibility in both themes, phone budgets,
-  security headers and every language on phone widths.
+  evaluation, search identity, address resolution, exports and crawler
+  files, dictionaries, and a scan for hidden characters.
+- `tests/e2e/*.spec.ts` (Playwright, against `dist/` served as plain files
+  by `scripts/serve.ts`): the spec's acceptance cases in a browser, the
+  no-script pages, missing addresses, accessibility in both themes, phone
+  budgets, the CSP and every language on phone widths.

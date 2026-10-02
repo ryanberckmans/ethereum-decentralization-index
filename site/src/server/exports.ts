@@ -72,6 +72,7 @@ function assessmentOf(object: ObjectRecord, date: string) {
   };
 }
 
+/** An address on the site: absolute when the build knows the public address, else relative to the file's host. */
 const absolute = (origin: string, path: string) => `${origin}${path}`;
 
 export function directoryRecord(object: ObjectRecord, date: string, origin: string) {
@@ -125,7 +126,7 @@ export function editionManifest(date: string, origin: string) {
   return {
     schemaVersion: SCHEMA_VERSION,
     kind: 'edition',
-    product: {name: PRODUCT.name, index: PRODUCT.indexName, repository: PRODUCT.repository, site: origin},
+    product: {name: PRODUCT.name, index: PRODUCT.indexName, repository: PRODUCT.repository, site: origin || null},
     edition: edition(),
     evaluationDate: date,
     changeDates: catalog.changeDates,
@@ -141,7 +142,7 @@ export function editionManifest(date: string, origin: string) {
       {url: absolute(origin, EXPORTS.object('{slug}')), format: 'json' as const, description: 'One record in full: EDI fields, results, editorial text, figures, claims and connections.'},
     ],
     notes: [
-      'EDI is the only assessment authority. Results are computed with EDI’s date-aware functions for evaluationDate (UTC) and change on the dates in changeDates without a new edition.',
+      'EDI is the only assessment authority. Results are computed with EDI’s date-aware functions for evaluationDate (UTC), the day this edition was built, and change on the dates in changeDates; each record lists its later results under scheduled.',
       'Figures are never summed, averaged or ranked. Compare them only within one comparisonGroup with the same unit, time basis and chain scope.',
     ],
   };

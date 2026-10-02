@@ -1,10 +1,8 @@
 /** The directory as CSV, one row per EDI record, formula-safe. */
 import type {APIRoute} from 'astro';
 import {directoryCsv} from '../../../server/exports.ts';
-import {csvResponse, siteOrigin} from '../../../server/http.ts';
-import {evaluationDateFor} from '../../../server/site.ts';
+import {textFile} from '../../../server/http.ts';
+import {SITE_URL} from '../../../server/origin.ts';
+import {EVALUATION_DATE} from '../../../server/site.ts';
 
-export const GET: APIRoute = ({url}) => {
-  const date = evaluationDateFor();
-  return csvResponse(directoryCsv(date, siteOrigin(url)), `edi-directory-${date}.csv`);
-};
+export const GET: APIRoute = () => textFile(directoryCsv(EVALUATION_DATE, SITE_URL), 'text/csv; charset=utf-8; header=present');

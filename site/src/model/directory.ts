@@ -141,8 +141,8 @@ function sorter(sort: Sort, collator: Intl.Collator): (a: ObjectHit, b: ObjectHi
   }
 }
 
-/** Run a directory query for the given UTC date. */
-export function runDirectory(index: PreparedIndex, query: DirectoryQuery, date: string, locale: string): DirectoryResult {
+/** Run a directory query for the given UTC date, `pageSize` objects to a page. */
+export function runDirectory(index: PreparedIndex, query: DirectoryQuery, date: string, locale: string, pageSize: number = PAGE_SIZE): DirectoryResult {
   const searched = query.q ? search(index, query.q) : null;
   const all: ObjectHit[] = [];
   for (const {item: entry} of index.objects) {
@@ -156,9 +156,9 @@ export function runDirectory(index: PreparedIndex, query: DirectoryQuery, date: 
   filtered.sort(sorter(sort, new Intl.Collator(locale, {sensitivity: 'base', numeric: true})));
 
   const total = filtered.length;
-  const pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  const pages = Math.max(1, Math.ceil(total / pageSize));
   const page = Math.min(Math.max(1, query.page), pages);
-  const objects = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  const objects = filtered.slice((page - 1) * pageSize, page * pageSize);
   const groups: DirectoryResult['groups'] = [];
   if (sort === 'grade-asc' || sort === 'grade-desc') {
     let previous: GradeGroup | undefined;

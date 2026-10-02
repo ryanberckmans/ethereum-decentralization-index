@@ -7,27 +7,36 @@ together and what it guarantees.
 
 ## Decisions taken
 
-- **Rendering:** Astro 7 server rendering on Cloudflare Workers, not static
-  generation. EDI results change on review due dates, so every response is
-  evaluated for its own UTC date, and later results ride along in inert
-  templates for cached pages and long-open tabs.
+- **Rendering:** Astro 7 static generation: plain files any static host can
+  serve, with no server code ([hosting](hosting.md)). EDI results change on
+  review due dates, so pages are evaluated for the build date and carry every
+  later result in inert templates that the browser switches to on the day it
+  applies. Search, filters and comparisons run in the browser from small
+  same-origin data files; without scripts the directory lists every record
+  and the compare page says it needs them.
 - **EDI dependency:** `"ethereum-decentralization-index": "file:.."`. The
   repository commit is the edition's EDI pin. Vite dedupes `react`,
   `react-dom` and `radix-ui` because the linked package resolves its peers
   from the repository root.
 - **Name:** the product is "EDI Directory", the directory of the Ethereum
   Decentralization Index (`PRODUCT` in `src/config.ts`).
-- **Slugs:** `:` becomes `--` and `.` becomes `-` (`token--uniswap`,
-  `seaport-v1-6`). Raw EDI IDs, percent-encoded IDs and other capitalizations
-  redirect to the canonical slug.
+- **Slugs and addresses:** `:` becomes `--` and `.` becomes `-`
+  (`token--uniswap`, `seaport-v1-6`), and every address ends with a slash.
+  Old slugs and raw IDs that are safe file names get redirect pages at build
+  time; raw IDs with a colon, percent-encoded IDs, other capitalizations and
+  addresses without a language are resolved by the not-found page's script.
 - **Languages:** the interface is translated into all eight languages;
   editorial content is English and marked `lang="en"`. Search maps words in
   the page language to the English words records use (`searchTerms` in each
   dictionary), splits unspaced Chinese and Japanese at known words and
   ignores articles and particles.
-- **CSP:** strict, hashed, no inline styles. EDI's guide dialog needed a
-  `react-style-singleton` replacement that uses constructable stylesheets.
-- **Deployment:** none is set up; the site's host has not been chosen.
+- **CSP:** strict, hashed, no inline styles, delivered in a `<meta>` tag so
+  it holds on any host. EDI's guide dialog needed a `react-style-singleton`
+  replacement that uses constructable stylesheets. Framing protection needs a
+  host header ([hosting](hosting.md)).
+- **Deployment:** none is set up; the site's host has not been chosen. The
+  build assumes none: [hosting](hosting.md) lists what any host must do and
+  the headers worth adding.
 
 ## Findings worth keeping
 
@@ -47,11 +56,9 @@ together and what it guarantees.
 
 ## Open work
 
-- **Content.** This edition has two profiles (WETH, USDC) and two stories.
-  The content thread owns the rest of the twelve priority profiles, the
-  remaining stories (including Morpho on Base and BUIDL with UniswapX), roles
-  for every record and methodology copy. Records without a profile are honest
-  basic records from EDI's own text.
+- **Content.** This edition has twelve edited profiles and six stories;
+  records without a profile are honest basic records from EDI's own text.
+  Stories still to write include Morpho on Base and BUIDL with UniswapX.
 - **Acceptance tests waiting on content:** Morpho story scopes and the BUIDL
   integration (see [contracts](contracts.md)).
 - **Translated editorial content:** not started; the schema has no locale
