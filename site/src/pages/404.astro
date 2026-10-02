@@ -1,0 +1,25 @@
+---
+import Base from '../layouts/Base.astro';
+import {DEFAULT_LOCALE, isLocale} from '../config.ts';
+import {messages} from '../i18n/index.ts';
+import {evaluationDateFor} from '../server/site.ts';
+import {paths} from '../model/urls.ts';
+
+const segment = Astro.url.pathname.split('/')[1];
+const locale = isLocale(segment) ? segment : DEFAULT_LOCALE;
+const m = messages(locale);
+Astro.response.status = 404;
+---
+
+<Base locale={locale} title={`${m.errors.notFound} · EDI Directory`} description={m.errors.notFoundBody} path={paths.home(locale)} noindex evaluationDate={evaluationDateFor()}>
+  <div class="shell error-page">
+    <h1>{m.errors.notFound}</h1>
+    <p class="lede">{m.errors.notFoundBody}</p>
+    <form method="get" action={paths.home(locale)} class="search" role="search">
+      <label for="nf-q" class="sr-only">{m.directory.searchLabel}</label>
+      <div class="search-field"><input id="nf-q" type="search" name="q" placeholder={m.directory.searchPlaceholder} maxlength="120" /></div>
+      <button class="button" type="submit">{m.directory.searchButton}</button>
+    </form>
+    <p><a href={paths.home(locale)}>{m.errors.backToDirectory}</a></p>
+  </div>
+</Base>

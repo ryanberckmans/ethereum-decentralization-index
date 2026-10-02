@@ -237,3 +237,38 @@ export function blocksText(blocks: readonly Block[], label?: (token: TokenRef) =
     .filter(Boolean)
     .join('\n');
 }
+
+/** Tokens in document order within some blocks (for citation numbering in display order). */
+export function blockTokens(blocks: readonly Block[]): TokenRef[] {
+  const out: TokenRef[] = [];
+  const inline = (nodes: readonly Inline[]) => {
+    for (const node of nodes) {
+      if (node.t === 'token') out.push(node.scope ? {kind: node.kind, id: node.id, scope: node.scope} : {kind: node.kind, id: node.id});
+      else if (node.t === 'em' || node.t === 'strong' || node.t === 'del' || node.t === 'link') inline(node.c);
+    }
+  };
+  const walk = (list: readonly Block[]) => {
+    for (const block of list) {
+      switch (block.t) {
+        case 'p':
+        case 'h3':
+          inline(block.c);
+          break;
+        case 'ul':
+        case 'ol':
+          for (const item of block.items) walk(item);
+          break;
+        case 'quote':
+          walk(block.c);
+          break;
+        case 'table':
+          for (const cell of [...block.head, ...block.rows.flat()]) inline(cell);
+          break;
+        default:
+          break;
+      }
+    }
+  };
+  walk(blocks);
+  return out;
+}

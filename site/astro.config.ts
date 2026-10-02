@@ -1,11 +1,117 @@
-import {defineConfig} from 'astro/config';
+import {createHash} from 'node:crypto';
+import {readFileSync} from 'node:fs';
+import {defineConfig, fontProviders} from 'astro/config';
 import react from '@astrojs/react';
 import cloudflare from '@astrojs/cloudflare';
+import {editionPlugin} from './src/build/vite-plugin.ts';
+
+/** The only inline script: it applies the saved theme before first paint. CSP allows it by hash. */
+const themeInit = readFileSync(new URL('./src/client/theme-init.js', import.meta.url), 'utf8').trim();
+const themeInitHash = `sha256-${createHash('sha256').update(themeInit).digest('base64')}` as const;
+
+const LATIN = [
+  'U+0000-00FF',
+  'U+0131',
+  'U+0152-0153',
+  'U+02BB-02BC',
+  'U+02C6',
+  'U+02DA',
+  'U+02DC',
+  'U+0304',
+  'U+0308',
+  'U+0329',
+  'U+2000-206F',
+  'U+20AC',
+  'U+2122',
+  'U+2191',
+  'U+2193',
+  'U+2212',
+  'U+2215',
+  'U+FEFF',
+  'U+FFFD',
+] as [string, ...string[]];
+const LATIN_EXT = [
+  'U+0100-02BA',
+  'U+02BD-02C5',
+  'U+02C7-02CC',
+  'U+02CE-02D7',
+  'U+02DD-02FF',
+  'U+0304',
+  'U+0308',
+  'U+0329',
+  'U+1D00-1DBF',
+  'U+1E00-1E9F',
+  'U+1EF2-1EFF',
+  'U+2020',
+  'U+20A0-20AB',
+  'U+20AD-20C0',
+  'U+2113',
+  'U+2C60-2C7F',
+  'U+A720-A7FF',
+] as [string, ...string[]];
+
+const fontsource = (pkg: string, file: string) => `./node_modules/@fontsource-variable/${pkg}/files/${file}`;
 
 export default defineConfig({
   output: 'server',
+  // No session storage: the directory has no accounts and keeps no visitor state on the server.
   session: false,
+  trailingSlash: 'ignore',
+  devToolbar: {enabled: false},
   adapter: cloudflare({imageService: 'passthrough'}),
   integrations: [react()],
-  vite: {resolve: {dedupe: ['react', 'react-dom', 'radix-ui']}},
+  build: {inlineStylesheets: 'never'},
+  security: {
+    checkOrigin: true,
+    csp: {
+      algorithm: 'SHA-256',
+      directives: [
+        "default-src 'self'",
+        "img-src 'self' data:",
+        "font-src 'self'",
+        "connect-src 'self'",
+        "object-src 'none'",
+        "base-uri 'none'",
+        "form-action 'self'",
+        "manifest-src 'self'",
+        "worker-src 'none'",
+        "frame-src 'none'",
+      ],
+      scriptDirective: {resources: ["'self'"], hashes: [themeInitHash]},
+      styleDirective: {resources: ["'self'"]},
+    },
+  },
+  fonts: [
+    {
+      provider: fontProviders.local(),
+      name: 'Newsreader',
+      cssVariable: '--font-newsreader',
+      fallbacks: ['Georgia', 'serif'],
+      options: {
+        variants: [
+          {src: [fontsource('newsreader', 'newsreader-latin-wght-normal.woff2')], weight: '200 800', style: 'normal', unicodeRange: LATIN},
+          {src: [fontsource('newsreader', 'newsreader-latin-ext-wght-normal.woff2')], weight: '200 800', style: 'normal', unicodeRange: LATIN_EXT},
+          {src: [fontsource('newsreader', 'newsreader-latin-wght-italic.woff2')], weight: '200 800', style: 'italic', unicodeRange: LATIN},
+          {src: [fontsource('newsreader', 'newsreader-latin-ext-wght-italic.woff2')], weight: '200 800', style: 'italic', unicodeRange: LATIN_EXT},
+        ],
+      },
+    },
+    {
+      provider: fontProviders.local(),
+      name: 'Schibsted Grotesk',
+      cssVariable: '--font-schibsted',
+      fallbacks: ['Arial', 'sans-serif'],
+      options: {
+        variants: [
+          {src: [fontsource('schibsted-grotesk', 'schibsted-grotesk-latin-wght-normal.woff2')], weight: '400 900', style: 'normal', unicodeRange: LATIN},
+          {src: [fontsource('schibsted-grotesk', 'schibsted-grotesk-latin-ext-wght-normal.woff2')], weight: '400 900', style: 'normal', unicodeRange: LATIN_EXT},
+        ],
+      },
+    },
+  ],
+  vite: {
+    plugins: [editionPlugin()],
+    resolve: {dedupe: ['react', 'react-dom', 'radix-ui']},
+    define: {__THEME_INIT__: JSON.stringify(themeInit)},
+  },
 });
