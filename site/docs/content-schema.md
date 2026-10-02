@@ -24,6 +24,8 @@ The types and rules live in [`src/content/schema.ts`](../src/content/schema.ts).
 
 Every file is optional while content is being written. An EDI record without an `objects/` file is listed as an honest basic record using EDI's own scope, reason and controls.
 
+The directory's role filter is only shown when most records carry a role, so give every EDI record a role: a `basic-record` file with `ediId`, `contentStatus: basic-record`, `role` and `editorialReviewedAt` is enough for records without a profile.
+
 ## Identity rules
 
 - `ediId` and `objectIds` are EDI registry IDs exactly as written in `data/control-registry.json` (`weth9`, `token:uniswap`, `seaport-v1.6`). Tickers and brands are never IDs.
@@ -46,11 +48,15 @@ The body has exactly these H2 sections in order: `## Before` (the prior limitati
 
 Outcome mechanisms: `distribution`, `programmable-settlement`, `asset-mobility`, `collateral`, `liquidity-access`, `coordination`, `reusable-infrastructure`.
 
+## Contextual subjects
+
+`subjects.yaml` entries need `id`, `kind`, `name` and `description`. A `network:` subject also needs `ethereumRelation`: `ethereum-settled` only when its settlement on Ethereum is verified (EVM compatibility is not enough), otherwise `outside-ethereum`; activity there is shown as scoped context, never as Ethereum activity. Other kinds omit it.
+
 ## Evidence
 
 Evidence states, shown as short labels: `capability`, `announced`, `pilot`, `live`, `reported-adoption`, `reproduced-observation`, `forecast`. A story's outcome state must be supported by at least one of its claims with that state or a stronger one; announcements and forecasts are never shown as achieved.
 
-Observations keep stocks, flows, counts, rates and durations apart. A stock needs `asOf`; a flow needs `interval`; others need one of the two. `value` is an exact decimal string; a missing number is omitted, never zero. `comparator` records "more than", "at least" or "about". `chainIds` is a list, `multichain-unsplit` (the source does not split chains, so the number is never shown as Ethereum activity) or `not-applicable`. Observations are compared only within one `comparisonGroup` with the same unit and time basis; nothing is summed.
+Observations keep stocks, flows, counts, rates and durations apart. A stock needs `asOf`; a flow needs `interval`; others need one of the two. `value` is an exact decimal string; a missing number is omitted, never zero. `comparator` records "more than", "at least" or "about". `chainIds` is a list, `multichain-unsplit` (the source does not split chains, so the number is never shown as Ethereum activity) or `not-applicable`. A `rate` needs `ratePeriod` (`day`, `week`, `month` or `year`; an annualized run rate is `year`). Observations are compared only within one `comparisonGroup` with the same unit and time basis; nothing is summed.
 
 Relationship types: `settles-on`, `issues`, `interface-to`, `integrates-with`, `collateral-for`, `economic-reference`. Each needs at least one source claim. EDI dependency edges are generated from the registry and cannot be written here; an editorial relationship never changes an assessment.
 

@@ -325,6 +325,8 @@ export const ObservationSchema = z
     measure: z.enum(MEASURES),
     /** Observations are compared only within one comparison group with the same unit and time basis. */
     comparisonGroup: RecordId.optional(),
+    /** For rates only: the period the rate is expressed over, e.g. an annualized run rate is `year`. */
+    ratePeriod: z.enum(['day', 'week', 'month', 'year']).optional(),
     derivation: z
       .strictObject({method: text(300), inputObservationIds: z.array(RecordId).min(1).max(16)})
       .optional(),
@@ -338,6 +340,10 @@ export const ObservationSchema = z
       ctx.addIssue({code: 'custom', path: ['interval'], message: 'A flow needs the interval it covers'});
     if ((value.measure === 'count' || value.measure === 'rate' || value.measure === 'duration') && !value.asOf && !value.interval)
       ctx.addIssue({code: 'custom', path: ['asOf'], message: 'Give asOf or an interval'});
+    if (value.measure === 'rate' && !value.ratePeriod)
+      ctx.addIssue({code: 'custom', path: ['ratePeriod'], message: 'A rate needs ratePeriod (day, week, month or year)'});
+    if (value.measure !== 'rate' && value.ratePeriod)
+      ctx.addIssue({code: 'custom', path: ['ratePeriod'], message: 'Only a rate has a ratePeriod'});
   });
 export type Observation = z.infer<typeof ObservationSchema>;
 
@@ -377,10 +383,20 @@ export const ContextSubjectSchema = z
     address: Address.optional(),
     /** For a deployment or product related to an EDI record it does NOT inherit, e.g. Morpho on Base → morpho-blue. */
     relatedEdiId: EdiId.optional(),
+    /**
+     * Required for networks: how the network relates to Ethereum. `ethereum-settled` needs a
+     * verified settlement path, not EVM compatibility; activity on an `outside-ethereum` network
+     * is shown only as scoped context, never as Ethereum activity.
+     */
+    ethereumRelation: z.enum(['ethereum-settled', 'outside-ethereum']).optional(),
   })
   .refine(value => value.id.startsWith(SUBJECT_PREFIX[value.kind]), {
     message: 'The ID prefix must match the kind (org:, product:, deployment:, network:, ref:)',
     path: ['id'],
+  })
+  .refine(value => (value.kind === 'network') === (value.ethereumRelation !== undefined), {
+    message: 'Networks need ethereumRelation (ethereum-settled or outside-ethereum); other kinds must omit it',
+    path: ['ethereumRelation'],
   });
 export type ContextSubject = z.infer<typeof ContextSubjectSchema>;
 
