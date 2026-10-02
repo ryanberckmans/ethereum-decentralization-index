@@ -1,0 +1,5 @@
+# Example only.
+- date: 2026-10-02
+  kind: editorial
+  summary: Published the first edited profiles and stories.
+  subjects: [uniswap-v2, example-story]

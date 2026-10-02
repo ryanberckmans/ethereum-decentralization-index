@@ -1,0 +1,4 @@
+# Example only: an old slug that must keep working.
+objects:
+  uniswap-2: uniswap-v2
+stories: {}

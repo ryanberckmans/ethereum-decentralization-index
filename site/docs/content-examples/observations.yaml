@@ -1,0 +1,13 @@
+# Example only. Verify every fact before publishing.
+- id: v2-flash-swaps-2020
+  subjectId: uniswap-v2
+  metric: Flash-swap volume
+  metricDefinition: Cumulative value of Uniswap v2 flash swaps reported by Uniswap Labs.
+  value: "4800000000"
+  unit: USD
+  interval: {start: 2020-05-18, end: 2020-12-31}
+  chainIds: [1]
+  scope: Uniswap v2 flash swaps on Ethereum mainnet, as reported by Uniswap Labs.
+  sourceClaimIds: [uniswap-2020-review]
+  measure: flow
+  comparisonGroup: dex-flow-usd
