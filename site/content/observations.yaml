@@ -662,6 +662,20 @@
   measure: count
   comparisonGroup: uniswap-swap-events-ethereum-2026-09
 
+- id: uniswap-v4-unhooked-swaps-2026-09
+  subjectId: uniswap-v4
+  metric: Swap events in pools without a hook
+  metricDefinition: Swap events emitted by the Uniswap v4 PoolManager for pools whose pool key names no hook contract.
+  value: "2743172"
+  unit: swap events
+  interval: {start: 2026-09-01, end: 2026-09-30}
+  chainIds: [1]
+  deploymentAddresses:
+    - {chainId: 1, address: "0x000000000004444c5dc75cB358380D2e3dE08A90"}
+  scope: Every v4 pool without a hook on Ethereum mainnet, blocks 25,878,705 to 26,093,737.
+  sourceClaimIds: [onchain-uniswap-v4-swaps-2026-09]
+  measure: count
+
 - id: uniswap-v4-hooked-swaps-2026-09
   subjectId: uniswap-v4
   metric: Swap events in pools with a hook
