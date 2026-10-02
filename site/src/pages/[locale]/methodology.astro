@@ -1,0 +1,18 @@
+---
+/** How the directory uses EDI, what it lists and counts as success, coverage, dates and corrections. */
+import Base from '../../layouts/Base.astro';
+import {MethodologyPage} from '../../views/Methodology.tsx';
+import {isLocale, PRODUCT} from '../../config.ts';
+import {messages} from '../../i18n/index.ts';
+import {paths} from '../../model/urls.ts';
+import {evaluationDateFor} from '../../server/site.ts';
+
+const {locale} = Astro.params;
+if (!isLocale(locale)) return Astro.rewrite('/404');
+const m = messages(locale);
+const date = evaluationDateFor();
+---
+
+<Base locale={locale} title={`${m.methodology.title} · ${PRODUCT.name}`} description={m.methodology.lede} path={paths.methodology(locale)} current="methodology" evaluationDate={date}>
+  <MethodologyPage env={{locale, m, date}} />
+</Base>
