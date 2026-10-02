@@ -30,6 +30,9 @@ for (const locale of LOCALES) {
       expect(response?.status(), path).toBe(200);
       await page.waitForFunction(() => !document.documentElement.hasAttribute('data-query') && !document.querySelector('[aria-busy="true"]'));
       await expect(page.locator('html')).toHaveAttribute('lang', locale);
+      // The site's name stays in English in every language.
+      await expect(page.locator('.wordmark-name')).toHaveText('Ethereum Decentralization Index');
+      if (path === '/') await expect(page).toHaveTitle(/^Ethereum Decentralization Index\s?[:：]/);
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
       expect(overflow, `${locale}${path} scrolls sideways by ${overflow}px`).toBeLessThanOrEqual(0);
       const text = await page.locator('body').innerText();

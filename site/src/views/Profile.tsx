@@ -581,7 +581,7 @@ export function ProfilePage({model, env}: {model: ProfileModel; env: PageEnv}) {
       </section>
 
       <IdentitySection model={model} env={env} />
-      <p className="sr-only">{PRODUCT.indexName}</p>
+      <p className="sr-only">{PRODUCT.name}</p>
     </article>
   );
 }

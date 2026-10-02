@@ -5,10 +5,10 @@ import type {Messages} from './en.ts';
 
 export const es: Messages = {
   meta: {
-    tagline: 'El directorio del Índice de Descentralización de Ethereum',
+    tagline: 'Los objetos económicos de Ethereum y quién los controla',
     description:
       'Encuentra los objetos económicos de Ethereum, descubre qué hacen posible y quién puede cambiar sus reglas: perfiles, historias y evaluaciones de EDI para {count} registros.',
-    homeTitle: 'EDI Directory: objetos económicos de Ethereum y quién los controla',
+    homeTitle: '{name}: objetos económicos de Ethereum y quién los controla',
   },
   nav: {
     skip: 'Saltar al contenido',
@@ -25,7 +25,7 @@ export const es: Messages = {
     themeSystem: 'Sistema',
     themeLight: 'Claro',
     themeDark: 'Oscuro',
-    home: 'Inicio de EDI Directory',
+    home: 'Inicio de {name}',
     breadcrumb: 'Ruta de navegación',
   },
   edition: {
@@ -439,7 +439,7 @@ export const es: Messages = {
   },
   methodology: {
     title: 'Metodología',
-    lede: 'Cómo usa este directorio el Índice de Descentralización de Ethereum, qué incluye, qué considera un éxito y cómo leer sus cifras y fechas.',
+    lede: 'Qué miden las categorías de EDI, qué incluye este sitio, qué considera un éxito y cómo leer sus cifras y fechas.',
     contents: 'En esta página',
     sections: {
       meaning: 'Qué mide D',
@@ -454,7 +454,7 @@ export const es: Messages = {
     },
     fromEdi: 'En las propias palabras de EDI',
     authority:
-      'EDI es la única fuente de categorías de este sitio. Cada categoría se calcula para el día en que se consulta la página con las propias funciones de EDI, que tienen en cuenta la fecha; el directorio nunca edita, almacena ni sustituye ninguna.',
+      'EDI es la única fuente de categorías de este sitio. Cada categoría se calcula para el día en que se consulta la página con las propias funciones de EDI, que tienen en cuenta la fecha; el sitio nunca edita, almacena ni sustituye ninguna.',
     spectrumNote: 'Los recuentos corresponden a registros de EDI cuya categoría de mecanismo indica ese nivel el {date}.',
     levelComplete: {one: '{count} con evaluación completa', other: '{count} con evaluación completa'},
     levelFloor: {one: '{count} al menos en este nivel', other: '{count} al menos en este nivel'},
@@ -466,7 +466,7 @@ export const es: Messages = {
     scopes: [
       'La categoría de un mecanismo abarca los contratos o la red revisados y las dependencias que EDI registra para ellos: quién puede cambiar las reglas para mantener o retirar activos.',
       'La categoría de una posición, cuando EDI la revisa, abarca lo que un titular tiene realmente dentro de un mecanismo, como una posición de liquidez o un mercado de préstamos, cuyos tokens, oráculos o hooks pueden añadir su propio control.',
-      'Cuando EDI no ha revisado las posiciones por separado, el directorio lo indica y no muestra ninguna categoría de posición. La categoría de un mecanismo nunca se traslada a los tokens, posiciones, empresas o aplicaciones construidos sobre él.',
+      'Cuando EDI no ha revisado las posiciones por separado, el sitio lo indica y no muestra ninguna categoría de posición. La categoría de un mecanismo nunca se traslada a los tokens, posiciones, empresas o aplicaciones construidos sobre él.',
     ],
     inclusion: [
       'Se incluyen todos los registros de la base de datos de EDI: redes, activos y protocolos. Figurar en la lista no es un aval, ni una auditoría de seguridad, ni asesoramiento de inversión, y no certifica que algo sea seguro ni que tenga éxito.',
@@ -495,7 +495,7 @@ export const es: Messages = {
     coverageClaims: {one: '{count} afirmación con fuentes', other: '{count} afirmaciones con fuentes'},
     coverageOn: 'Evaluaciones calculadas para el {date}.',
     coverageNote: 'Estas cifras cuentan registros, no empresas, usuarios ni capital, e incluyen redes, activos y protocolos.',
-    clocks: 'El directorio mantiene separados tres relojes y muestra la fecha pertinente junto a cada dato, en lugar de una única fecha de «actualizado»:',
+    clocks: 'El sitio mantiene separados tres relojes y muestra la fecha pertinente junto a cada dato, en lugar de una única fecha de «actualizado»:',
     datesEdi: 'Fechas de revisión de EDI: cuándo se revisó cada registro por última vez y cuándo vence su revisión mensual. El D0 permanente no caduca con el tiempo; las demás categorías pasan a ser parciales o desconocidas cuando una revisión está atrasada, según lo determine EDI.',
     datesObservations: 'Fechas de las observaciones: cada cifra lleva su propia fecha o intervalo.',
     datesEditorial: 'Fechas editoriales: cuándo se revisó por última vez cada perfil y cada historia.',
@@ -509,8 +509,8 @@ export const es: Messages = {
     observedThrough: 'Observaciones hasta',
     evaluated: 'Categorías calculadas para',
     corrections: [
-      'Las categorías se corrigen dentro de EDI, mediante su propio proceso de investigación. El directorio muestra el cambio en cuanto EDI lo publica.',
-      'Los errores editoriales, como una cifra, una fecha o una fuente incorrectas, se corrigen en el contenido del directorio, y cada corrección aparece con su fecha.',
+      'Las categorías se corrigen dentro de EDI, mediante su propio proceso de investigación. El sitio muestra el cambio en cuanto EDI lo publica.',
+      'Los errores editoriales, como una cifra, una fecha o una fuente incorrectas, se corrigen en el contenido del sitio, y cada corrección aparece con su fecha.',
     ],
     compareLink: 'Comparar objetos',
     reportIssue: 'Comunicar un error en GitHub',
@@ -518,7 +518,7 @@ export const es: Messages = {
   },
   changes: {
     title: 'Cambios',
-    intro: 'Cambios fechados en el contenido del directorio y en la edición de EDI que utiliza, y los próximos cambios que producirán las fechas de revisión de EDI.',
+    intro: 'Cambios fechados en el contenido del sitio y en la edición de EDI que utiliza, y los próximos cambios que producirán las fechas de revisión de EDI.',
     upcoming: 'Próximamente',
     upcomingNote: 'Calculados a partir de las fechas de revisión de esta edición con las propias funciones de EDI. Una nueva revisión de EDI anterior a esa fecha sustituye cualquiera de estos cambios.',
     upcomingNone: 'Esta edición no prevé cambios de categoría.',
@@ -565,7 +565,7 @@ export const es: Messages = {
     agents: 'Para agentes y rastreadores',
     agentsItems: {
       llms: ['llms.txt', 'Un índice breve del sitio y de sus datos para modelos de lenguaje.'],
-      agentsMd: ['agents.md', 'Qué abarca el directorio, cómo leer sus fechas y categorías, y cómo citarlo.'],
+      agentsMd: ['agents.md', 'Qué abarca el sitio, cómo leer sus fechas y categorías, y cómo citarlo.'],
       sitemap: ['sitemap.xml', 'Todas las páginas en todos los idiomas, con sus versiones alternativas.'],
     },
     upstream: 'EDI, con su rúbrica, su base de datos y sus funciones, es de código abierto:',
@@ -577,7 +577,7 @@ export const es: Messages = {
     suggestions: 'Coincidencias cercanas',
   },
   footer: {
-    about: 'Un directorio editorial basado en el Índice de Descentralización de Ethereum. Figurar en él no constituye un aval, ni una auditoría de seguridad, ni asesoramiento de inversión.',
+    about: 'Los perfiles, las cifras y las historias son editoriales; todas las categorías proceden de EDI. Figurar aquí no constituye un aval, ni una auditoría de seguridad, ni asesoramiento de inversión.',
     source: 'EDI en GitHub',
     agents: 'Para agentes',
   },

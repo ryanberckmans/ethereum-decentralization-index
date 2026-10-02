@@ -9,10 +9,10 @@ import {frenchSpacing, mapStrings} from './typography.ts';
 export const fr: Messages = mapStrings<Messages>(
   {
     meta: {
-      tagline: 'L’annuaire de l’Indice de décentralisation d’Ethereum',
+      tagline: 'Les objets économiques d’Ethereum et qui les contrôle',
       description:
         'Trouvez les objets économiques d’Ethereum, voyez ce qu’ils rendent possible et qui peut en changer les règles : profils, récits et évaluations EDI pour {count} fiches.',
-      homeTitle: 'EDI Directory : les objets économiques d’Ethereum et qui les contrôle',
+      homeTitle: '{name} : les objets économiques d’Ethereum et qui les contrôle',
     },
     nav: {
       skip: 'Aller au contenu',
@@ -29,7 +29,7 @@ export const fr: Messages = mapStrings<Messages>(
       themeSystem: 'Système',
       themeLight: 'Clair',
       themeDark: 'Sombre',
-      home: 'Accueil d’EDI Directory',
+      home: 'Accueil d’{name}',
       breadcrumb: 'Fil d’Ariane',
     },
     edition: {
@@ -443,7 +443,7 @@ export const fr: Messages = mapStrings<Messages>(
     },
     methodology: {
       title: 'Méthodologie',
-      lede: 'Comment cet annuaire utilise l’Indice de décentralisation d’Ethereum, ce qu’il répertorie, ce qu’il considère comme un succès, et comment lire ses chiffres et ses dates.',
+      lede: 'Ce que mesurent les niveaux de l’EDI, ce que ce site répertorie, ce qu’il considère comme un succès, et comment lire ses chiffres et ses dates.',
       contents: 'Sur cette page',
       sections: {
         meaning: 'Ce que mesure D',
@@ -458,7 +458,7 @@ export const fr: Messages = mapStrings<Messages>(
       },
       fromEdi: 'Selon les termes mêmes de l’EDI',
       authority:
-        'L’EDI est la seule source des niveaux sur ce site. Chaque niveau est calculé pour le jour où vous lisez, avec les propres fonctions de l’EDI, qui tiennent compte de la date ; l’annuaire ne modifie, ne stocke ni ne remplace jamais aucun niveau.',
+        'L’EDI est la seule source des niveaux sur ce site. Chaque niveau est calculé pour le jour où vous lisez, avec les propres fonctions de l’EDI, qui tiennent compte de la date ; le site ne modifie, ne stocke ni ne remplace jamais aucun niveau.',
       spectrumNote: 'Les décomptes portent sur les fiches EDI dont le mécanisme est classé à ce niveau au {date}.',
       levelComplete: {one: '{count} évaluation complète', other: '{count} évaluations complètes'},
       levelFloor: {one: '{count} évaluation partielle d’au moins ce niveau', other: '{count} évaluations partielles d’au moins ce niveau'},
@@ -470,7 +470,7 @@ export const fr: Messages = mapStrings<Messages>(
       scopes: [
         'Le niveau d’un mécanisme couvre les contrats ou le réseau examinés, ainsi que les dépendances que l’EDI enregistre pour eux : qui peut changer les règles de détention ou de sortie des actifs.',
         'Le niveau d’une position, lorsque l’EDI en examine une, couvre ce qu’un détenteur possède réellement au sein d’un mécanisme, comme une position de liquidité ou un marché de prêt, dont les jetons, les oracles ou les hooks peuvent ajouter leur propre contrôle.',
-        'Lorsque l’EDI n’a pas examiné les positions séparément, l’annuaire l’indique et n’affiche aucun niveau de position. Le niveau d’un mécanisme ne s’étend jamais aux jetons, aux positions, aux entreprises ou aux applications qui reposent sur lui.',
+        'Lorsque l’EDI n’a pas examiné les positions séparément, le site l’indique et n’affiche aucun niveau de position. Le niveau d’un mécanisme ne s’étend jamais aux jetons, aux positions, aux entreprises ou aux applications qui reposent sur lui.',
       ],
       inclusion: [
         'Chaque fiche du registre EDI est répertoriée : réseaux, actifs et protocoles. Figurer dans l’annuaire ne vaut ni approbation, ni audit de sécurité, ni conseil en investissement, et ne certifie ni la sécurité ni la réussite de quoi que ce soit.',
@@ -499,7 +499,7 @@ export const fr: Messages = mapStrings<Messages>(
       coverageClaims: {one: '{count} affirmation sourcée', other: '{count} affirmations sourcées'},
       coverageOn: 'Évaluations telles que calculées le {date}.',
       coverageNote: 'Ces nombres portent sur des fiches, non sur des entreprises, des utilisateurs ou des capitaux, et incluent réseaux, actifs et protocoles.',
-      clocks: 'L’annuaire distingue trois horloges et affiche la date pertinente à côté de chaque énoncé, plutôt qu’une date unique de « mise à jour » :',
+      clocks: 'Le site distingue trois horloges et affiche la date pertinente à côté de chaque énoncé, plutôt qu’une date unique de « mise à jour » :',
       datesEdi: 'Dates d’examen de l’EDI : date du dernier examen de chaque fiche et échéance de son examen mensuel. Le D0 permanent n’expire pas avec le temps ; les autres niveaux deviennent partiels ou inconnus lorsqu’un examen est en retard, comme le détermine l’EDI.',
       datesObservations: 'Dates des observations : chaque chiffre porte sa propre date ou son propre intervalle.',
       datesEditorial: 'Dates éditoriales : date de la dernière relecture de chaque profil et de chaque récit.',
@@ -513,8 +513,8 @@ export const fr: Messages = mapStrings<Messages>(
       observedThrough: 'Date de fin des observations',
       evaluated: 'Date de calcul des niveaux',
       corrections: [
-        'Les niveaux sont corrigés dans l’EDI lui-même, selon son propre processus de recherche. L’annuaire affiche la modification dès que l’EDI la publie.',
-        'Les erreurs éditoriales, comme un chiffre, une date ou une source erronés, sont corrigées dans le contenu de l’annuaire, et chaque correction est répertoriée avec sa date.',
+        'Les niveaux sont corrigés dans l’EDI lui-même, selon son propre processus de recherche. Le site affiche la modification dès que l’EDI la publie.',
+        'Les erreurs éditoriales, comme un chiffre, une date ou une source erronés, sont corrigées dans le contenu du site, et chaque correction est répertoriée avec sa date.',
       ],
       compareLink: 'Comparer des objets',
       reportIssue: 'Signaler une erreur sur GitHub',
@@ -522,7 +522,7 @@ export const fr: Messages = mapStrings<Messages>(
     },
     changes: {
       title: 'Changements',
-      intro: 'Les changements datés du contenu de l’annuaire et de l’édition EDI qu’il utilise, ainsi que ceux que les dates d’examen de l’EDI vont prochainement entraîner.',
+      intro: 'Les changements datés du contenu du site et de l’édition EDI qu’il utilise, ainsi que ceux que les dates d’examen de l’EDI vont prochainement entraîner.',
       upcoming: 'À venir',
       upcomingNote: 'Changements calculés à partir des dates d’examen de cette édition, avec les propres fonctions de l’EDI. Un nouvel examen de l’EDI intervenant d’ici là remplace les changements concernés.',
       upcomingNone: 'Cette édition ne prévoit aucun changement de niveau.',
@@ -569,7 +569,7 @@ export const fr: Messages = mapStrings<Messages>(
       agents: 'Pour les agents et les robots d’indexation',
       agentsItems: {
         llms: ['llms.txt', 'Un index succinct du site et de ses données, destiné aux modèles de langage.'],
-        agentsMd: ['agents.md', 'Ce que couvre l’annuaire, comment lire ses dates et ses niveaux, et comment le citer.'],
+        agentsMd: ['agents.md', 'Ce que couvre le site, comment lire ses dates et ses niveaux, et comment le citer.'],
         sitemap: ['sitemap.xml', 'Toutes les pages dans toutes les langues, avec leurs versions alternatives.'],
       },
       upstream: 'L’EDI lui-même, avec sa grille d’évaluation, son registre et ses fonctions, est open source :',
@@ -581,7 +581,7 @@ export const fr: Messages = mapStrings<Messages>(
       suggestions: 'Résultats proches',
     },
     footer: {
-      about: 'Un annuaire éditorial fondé sur l’Indice de décentralisation d’Ethereum. Figurer dans l’annuaire ne vaut ni approbation, ni audit de sécurité, ni conseil en investissement.',
+      about: 'Les profils, les chiffres et les récits sont éditoriaux ; tous les niveaux viennent de l’EDI. Figurer sur ce site ne vaut ni approbation, ni audit de sécurité, ni conseil en investissement.',
       source: 'EDI sur GitHub',
       agents: 'Pour les agents',
     },

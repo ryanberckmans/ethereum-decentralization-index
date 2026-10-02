@@ -51,11 +51,13 @@ const d0Badge = datedView('weth9', catalog.rawOn('weth9', date), locale).mechani
 
 const showRoles = index.roleCoverage >= 0.5;
 const description = fmt(m.meta.description, {count: formatCount(catalog.objects.length, locale)});
+const title = fmt(m.meta.homeTitle, {name: PRODUCT.name});
 const jsonLd = SITE_URL
   ? {
       '@context': 'https://schema.org',
       '@type': 'WebSite',
       name: PRODUCT.name,
+      alternateName: PRODUCT.shortName,
       url: `${SITE_URL}${paths.home(locale)}`,
       inLanguage: locale,
       potentialAction: {'@type': 'SearchAction', target: `${SITE_URL}${paths.home(locale)}?q={search_term_string}`, 'query-input': 'required name=search_term_string'},
@@ -63,14 +65,14 @@ const jsonLd = SITE_URL
   : undefined;
 ---
 
-<Base locale={locale} title={m.meta.homeTitle} description={description} path={paths.home(locale)} current="directory" jsonLd={jsonLd} evaluationDate={date}>
+<Base locale={locale} title={title} description={description} path={paths.home(locale)} current="directory" jsonLd={jsonLd} evaluationDate={date}>
   <div class="shell">
     <h1 class="home-title">{m.directory.heading}</h1>
     <DirectoryApp
       client:load
       locale={locale}
       m={dm}
-      title={m.meta.homeTitle}
+      title={title}
       evaluatedFor={date}
       changeDates={[...catalog.changeDates]}
       summary={{total: result.total, page: result.page, pages: result.pages, sort: result.sort, facets: result.facets}}

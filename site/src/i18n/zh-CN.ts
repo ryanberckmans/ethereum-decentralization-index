@@ -6,10 +6,10 @@ import type {Messages} from './en.ts';
 
 export const zhCN: Messages = {
   meta: {
-    tagline: '以太坊去中心化指数的目录',
+    tagline: '以太坊的经济对象及其控制者',
     description:
       '查找以太坊的经济对象，了解它们能实现什么、谁能改变其规则：涵盖 {count} 条记录的档案、案例和 EDI 评估。',
-    homeTitle: 'EDI Directory：以太坊的经济对象及其控制者',
+    homeTitle: '{name}：以太坊的经济对象及其控制者',
   },
   nav: {
     skip: '跳至正文',
@@ -26,7 +26,7 @@ export const zhCN: Messages = {
     themeSystem: '跟随系统',
     themeLight: '浅色',
     themeDark: '深色',
-    home: 'EDI Directory 首页',
+    home: '{name} 首页',
     breadcrumb: '面包屑导航',
   },
   edition: {
@@ -440,7 +440,7 @@ export const zhCN: Messages = {
   },
   methodology: {
     title: '方法论',
-    lede: '本目录如何使用以太坊去中心化指数、收录哪些内容、以什么作为成功的标准，以及如何解读其中的数值和日期。',
+    lede: 'EDI 的评级衡量什么、本网站收录哪些内容、以什么作为成功的标准，以及如何解读其中的数值和日期。',
     contents: '本页内容',
     sections: {
       meaning: 'D 值衡量什么',
@@ -455,7 +455,7 @@ export const zhCN: Messages = {
     },
     fromEdi: 'EDI 自身的表述',
     authority:
-      'EDI 是本网站评级的唯一来源。每个评级都由 EDI 自身的日期感知函数按阅读当日计算；本目录从不编辑、存储或覆盖任何评级。',
+      'EDI 是本网站评级的唯一来源。每个评级都由 EDI 自身的日期感知函数按阅读当日计算；本网站从不编辑、存储或覆盖任何评级。',
     spectrumNote: '计数指 {date}当日机制评级显示为该等级的 EDI 记录数量。',
     levelComplete: {one: '{count} 个完整评估', other: '{count} 个完整评估'},
     levelFloor: {one: '{count} 个至少为此等级', other: '{count} 个至少为此等级'},
@@ -467,7 +467,7 @@ export const zhCN: Messages = {
     scopes: [
       '机制评级涵盖经评估的合约或网络，以及 EDI 为其记录的依赖，即谁能改变资产持有或退出的规则。',
       '头寸评级（如 EDI 有评估）涵盖持有者在机制内实际持有的内容，例如流动性头寸或借贷市场，其中涉及的代币、预言机或钩子可能各自增加控制权。',
-      '如果 EDI 未单独评估头寸，本目录会注明这一点，并且不显示头寸评级。机制评级从不延及构建于其上的代币、头寸、企业或应用。',
+      '如果 EDI 未单独评估头寸，本网站会注明这一点，并且不显示头寸评级。机制评级从不延及构建于其上的代币、头寸、企业或应用。',
     ],
     inclusion: [
       'EDI 登记册中的每条记录都会列出，包括网络、资产和协议。列入不代表背书，不构成安全审计或投资建议，也不证明任何对象安全或成功。',
@@ -496,7 +496,7 @@ export const zhCN: Messages = {
     coverageClaims: {one: '{count} 条有来源的陈述', other: '{count} 条有来源的陈述'},
     coverageOn: '评估结果按 {date}计算。',
     coverageNote: '以上统计的是记录，而非企业、用户或资本；其中包括网络、资产和协议。',
-    clocks: '本目录区分三类日期，并在每项陈述旁显示相应的日期，而不是统一显示一个“更新”日期：',
+    clocks: '本网站区分三类日期，并在每项陈述旁显示相应的日期，而不是统一显示一个“更新”日期：',
     datesEdi: 'EDI 评估日期：每条记录最近一次评估的时间，以及其每月评估的到期时间。永久 D0 不会随时间过期；其他评级在评估逾期时会变为部分评估或评级未知，具体由 EDI 决定。',
     datesObservations: '观测日期：每个数值都带有各自的日期或区间。',
     datesEditorial: '编辑日期：每份档案和每个案例最近一次审阅的时间。',
@@ -510,8 +510,8 @@ export const zhCN: Messages = {
     observedThrough: '观测数据截至',
     evaluated: '评级计算日期',
     corrections: [
-      '评级在 EDI 内部通过其自身的研究流程更正。EDI 一经发布，本目录即显示相应变更。',
-      '编辑错误（如数值、日期或来源有误）会在本目录的内容中更正，每项更正都会连同日期一并列出。',
+      '评级在 EDI 内部通过其自身的研究流程更正。EDI 一经发布，本网站即显示相应变更。',
+      '编辑错误（如数值、日期或来源有误）会在本网站的内容中更正，每项更正都会连同日期一并列出。',
     ],
     compareLink: '比较对象',
     reportIssue: '在 GitHub 上报告错误',
@@ -519,7 +519,7 @@ export const zhCN: Messages = {
   },
   changes: {
     title: '变更',
-    intro: '本目录内容及其所用 EDI 版本的带日期变更，以及 EDI 评估日期接下来将带来的变更。',
+    intro: '本网站内容及其所用 EDI 版本的带日期变更，以及 EDI 评估日期接下来将带来的变更。',
     upcoming: '即将发生的变更',
     upcomingNote: '根据本版的评估日期，使用 EDI 自身的函数推算得出。在此之前若有新的 EDI 评估，将取代其中任何一项。',
     upcomingNone: '本版没有排定的评级变更。',
@@ -566,7 +566,7 @@ export const zhCN: Messages = {
     agents: '面向智能体和爬虫',
     agentsItems: {
       llms: ['llms.txt', '面向语言模型的网站及数据简要索引。'],
-      agentsMd: ['agents.md', '本目录涵盖的内容、如何解读其日期和评级，以及如何引用。'],
+      agentsMd: ['agents.md', '本网站涵盖的内容、如何解读其日期和评级，以及如何引用。'],
       sitemap: ['sitemap.xml', '所有语言的每个页面，并附有其他语言版本的链接。'],
     },
     upstream: 'EDI 本身（包括其评估准则、登记册和函数）是开源的：',
@@ -578,7 +578,7 @@ export const zhCN: Messages = {
     suggestions: '相近结果',
   },
   footer: {
-    about: '基于以太坊去中心化指数、由编辑维护的目录。收录不代表背书，也不构成安全审计或投资建议。',
+    about: '档案、数值和案例由编辑撰写；所有评级均来自 EDI。收录不代表背书，也不构成安全审计或投资建议。',
     source: 'GitHub 上的 EDI',
     agents: '面向智能体',
   },

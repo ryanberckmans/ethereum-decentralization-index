@@ -183,7 +183,7 @@ export function MethodologyPage({env}: {env: PageEnv}) {
               ))}
             </ul>
             <p className="section-note">
-              {m.methodology.fromEdi} · <a href={PRODUCT.repository}>{PRODUCT.indexName}</a>
+              {m.methodology.fromEdi} · <a href={PRODUCT.repository}>{PRODUCT.name}</a>
             </p>
             <div className="prose">
               <p>{m.methodology.authority}</p>

@@ -79,7 +79,7 @@ export function llmsTxt(origin: string, date: string): string {
   return [
     `# ${PRODUCT.name}`,
     '',
-    `> The directory of the ${PRODUCT.indexName} (EDI): Ethereum's economic objects, what they make possible, and who can change their rules. Grades come only from EDI and are evaluated for a UTC date. Listing is not endorsement, a security audit or investment advice.`,
+    `> Ethereum's economic objects, what they make possible, and who can change their rules. Every grade comes from EDI's own rubric, registry and functions and is evaluated for a UTC date; profiles, figures and stories are editorial. Listing is not endorsement, a security audit or investment advice.`,
     '',
     ...editionLines(date),
     `- Read [agents.md](${origin}${AGENT_FILES.agents}) before citing a grade or a figure.`,
@@ -117,7 +117,7 @@ export function llmsTxt(origin: string, date: string): string {
     '## Optional',
     '',
     ...(origin ? [link('Sitemap', AGENT_FILES.sitemap, 'every page in every language')] : []),
-    `- [${PRODUCT.indexName} repository](${PRODUCT.repository}): EDI's rubric, registry and functions`,
+    `- [${PRODUCT.shortName} on GitHub](${PRODUCT.repository}): EDI's rubric, registry and functions`,
     '',
   ].join('\n');
 }
@@ -130,17 +130,17 @@ export function agentsMd(origin: string, date: string): string {
   return [
     `# ${PRODUCT.name}: notes for agents`,
     '',
-    `${PRODUCT.name} is the public directory of the ${PRODUCT.indexName} (EDI). It lists every record in the EDI registry, explains what some of them make possible with sourced evidence, and shows who can change their rules using EDI's grades. Site: ${origin}${paths.home(en)}`,
+    `The ${PRODUCT.name} (${PRODUCT.shortName}) site lists every record in the EDI registry, explains what some of them make possible with sourced evidence, and shows who can change their rules using EDI's grades. Site: ${origin}${paths.home(en)}`,
     '',
     ...editionLines(date),
     '',
     '## Grades',
     '',
-    '- EDI is the only source of grades. The directory computes each grade with EDI’s own functions for a UTC date and never edits, stores or overrides one.',
+    '- EDI is the only source of grades. The site computes each grade with EDI’s own functions for a UTC date and never edits, stores or overrides one.',
     '- D0 to D9 answer one question: who can change the rules for holding or withdrawing assets in this exact mechanism. D0 starts with Ethereum L1; higher numbers add control by administrators, councils, operators or issuers. The methodology page has EDI’s definition of each level.',
     '- “≥ D3” is a partial assessment: at least D3, and an unreviewed part may add more control. “D?” means the review is missing or incomplete. Neither is D0, and neither means safe or unsafe.',
     '- A mechanism grade covers the reviewed contracts or network. A position grade, where EDI has one, covers what a holder has inside it. A grade never carries over to tokens, positions, businesses or applications built on the mechanism.',
-    '- Grades are not safety scores, return forecasts or rankings, and the directory computes no overall score.',
+    '- Grades are not safety scores, return forecasts or rankings, and the site computes no overall score.',
     '- Monthly reviews fall due on a date. When a review is overdue, EDI’s functions may turn a complete grade into a partial one. Always state the evaluation date with a grade.',
     '',
     '## Citing',

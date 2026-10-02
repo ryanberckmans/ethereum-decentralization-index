@@ -126,7 +126,7 @@ export function editionManifest(date: string, origin: string) {
   return {
     schemaVersion: SCHEMA_VERSION,
     kind: 'edition',
-    product: {name: PRODUCT.name, index: PRODUCT.indexName, repository: PRODUCT.repository, site: origin || null},
+    product: {name: PRODUCT.name, repository: PRODUCT.repository, site: origin || null},
     edition: edition(),
     evaluationDate: date,
     changeDates: catalog.changeDates,

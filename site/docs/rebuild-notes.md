@@ -18,8 +18,11 @@ together and what it guarantees.
   repository commit is the edition's EDI pin. Vite dedupes `react`,
   `react-dom` and `radix-ui` because the linked package resolves its peers
   from the repository root.
-- **Name:** the product is "EDI Directory", the directory of the Ethereum
-  Decentralization Index (`PRODUCT` in `src/config.ts`).
+- **Name:** the site is the "Ethereum Decentralization Index" (Ryan, 2
+  October 2026), kept in English as a proper name in every language, with
+  "EDI" as its short form. It is `PRODUCT.name` in `src/config.ts`, and the
+  dictionaries take it through a `{name}` placeholder. The site's listing
+  page is still called the directory.
 - **Slugs and addresses:** `:` becomes `--` and `.` becomes `-`
   (`token--uniswap`, `seaport-v1-6`), and every address ends with a slash.
   Old slugs and raw IDs that are safe file names get redirect pages at build

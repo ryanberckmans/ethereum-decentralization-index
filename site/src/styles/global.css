@@ -1,5 +1,5 @@
 /*
- * EDI Directory design system.
+ * The site's design system.
  * An almanac of Ethereum's economy: warm paper, black ink, hairline rules and
  * aligned columns, with EDI's luminous badges as the only saturated colour.
  * Every colour has a light and a dark value; the theme script sets
@@ -379,6 +379,18 @@ html[data-query] .compare-start {
   letter-spacing: -0.01em;
 }
 
+/* On phones the name does not fit on one line beside the menus, so it stands as a stack of its words. */
+@media (max-width: 559.98px) {
+  .wordmark-name {
+    font-size: 0.875rem;
+    line-height: 1.02;
+  }
+
+  .wordmark-word {
+    display: block;
+  }
+}
+
 .wordmark-sub {
   display: none;
   font: 500 0.6875rem/1.2 var(--sans);
@@ -463,6 +475,7 @@ html[data-query] .compare-start {
 
 .menu > summary {
   list-style: none;
+  white-space: nowrap;
   display: inline-flex;
   align-items: center;
   gap: 6px;

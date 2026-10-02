@@ -10,10 +10,10 @@
  */
 export const en = {
   meta: {
-    tagline: 'The directory of the Ethereum Decentralization Index',
+    tagline: 'Ethereum’s economic objects and who controls them',
     description:
       'Find Ethereum’s economic objects, see what they enable and who can change their rules: profiles, stories and EDI assessments for {count} records.',
-    homeTitle: 'EDI Directory: Ethereum’s economic objects and who controls them',
+    homeTitle: '{name}: Ethereum’s economic objects and who controls them',
   },
   nav: {
     skip: 'Skip to content',
@@ -30,7 +30,7 @@ export const en = {
     themeSystem: 'System',
     themeLight: 'Light',
     themeDark: 'Dark',
-    home: 'EDI Directory home',
+    home: '{name} home',
     breadcrumb: 'Breadcrumb',
   },
   edition: {
@@ -444,7 +444,7 @@ export const en = {
   },
   methodology: {
     title: 'Methodology',
-    lede: 'How this directory uses the Ethereum Decentralization Index, what it lists, what it counts as success, and how to read its figures and dates.',
+    lede: 'What EDI’s grades measure, what this site lists, what it counts as success, and how to read its figures and dates.',
     contents: 'On this page',
     sections: {
       meaning: 'What D measures',
@@ -459,7 +459,7 @@ export const en = {
     },
     fromEdi: 'In EDI’s own words',
     authority:
-      'EDI is the only source of grades on this site. Every grade is computed with EDI’s own date-aware functions for the date you are reading; the directory never edits, stores or overrides one.',
+      'EDI is the only source of grades on this site. Every grade is computed with EDI’s own date-aware functions for the date you are reading; the site never edits, stores or overrides one.',
     spectrumNote: 'Counts are EDI records whose mechanism grade shows that level on {date}.',
     levelComplete: {one: '{count} complete', other: '{count} complete'},
     levelFloor: {one: '{count} at least this level', other: '{count} at least this level'},
@@ -471,7 +471,7 @@ export const en = {
     scopes: [
       'A mechanism grade covers the reviewed contracts or network and the dependencies EDI records for them: who can change the rules for holding or withdrawing assets.',
       'A position grade, where EDI reviews one, covers what a holder actually has inside a mechanism, such as a liquidity position or a lending market, whose tokens, oracles or hooks can add control of their own.',
-      'Where EDI has not reviewed positions separately, the directory says so and shows no position grade. A mechanism grade never carries over to the tokens, positions, businesses or applications built on it.',
+      'Where EDI has not reviewed positions separately, the site says so and shows no position grade. A mechanism grade never carries over to the tokens, positions, businesses or applications built on it.',
     ],
     inclusion: [
       'Every record in the EDI registry is listed: networks, assets and protocols. A listing is not an endorsement, a security audit or investment advice, and it does not certify that anything is safe or successful.',
@@ -500,7 +500,7 @@ export const en = {
     coverageClaims: {one: '{count} sourced claim', other: '{count} sourced claims'},
     coverageOn: 'Assessments as evaluated on {date}.',
     coverageNote: 'These count records, not businesses, users or capital, and they include networks, assets and protocols.',
-    clocks: 'The directory keeps three clocks apart, and shows the relevant date next to each statement rather than one “updated” date:',
+    clocks: 'The site keeps three clocks apart, and shows the relevant date next to each statement rather than one “updated” date:',
     datesEdi: 'EDI review dates: when each record was last reviewed and when its monthly review falls due. Permanent D0 does not expire with age; other grades become partial or unknown when a review is overdue, as EDI decides.',
     datesObservations: 'Observation dates: each figure carries its own date or interval.',
     datesEditorial: 'Editorial dates: when each profile and story was last reviewed.',
@@ -514,8 +514,8 @@ export const en = {
     observedThrough: 'Observations through',
     evaluated: 'Grades evaluated for',
     corrections: [
-      'Grades are corrected in EDI itself, through its own research process. The directory shows the change as soon as EDI publishes it.',
-      'Editorial errors, such as a wrong figure, date or source, are corrected in the directory’s content, and every correction is listed with its date.',
+      'Grades are corrected in EDI itself, through its own research process. The site shows the change as soon as EDI publishes it.',
+      'Editorial errors, such as a wrong figure, date or source, are corrected in the site’s content, and every correction is listed with its date.',
     ],
     compareLink: 'Compare objects',
     reportIssue: 'Report an error on GitHub',
@@ -523,7 +523,7 @@ export const en = {
   },
   changes: {
     title: 'Changes',
-    intro: 'Dated changes to the directory’s content and to the EDI edition it uses, and the changes EDI’s review dates will make next.',
+    intro: 'Dated changes to the site’s content and to the EDI edition it uses, and the changes EDI’s review dates will make next.',
     upcoming: 'Coming up',
     upcomingNote: 'Worked out from this edition’s review dates with EDI’s own functions. A new EDI review before then replaces any of these.',
     upcomingNone: 'This edition schedules no grade changes.',
@@ -570,7 +570,7 @@ export const en = {
     agents: 'For agents and crawlers',
     agentsItems: {
       llms: ['llms.txt', 'A short index of the site and its data for language models.'],
-      agentsMd: ['agents.md', 'What the directory covers, how to read its dates and grades, and how to cite it.'],
+      agentsMd: ['agents.md', 'What the site covers, how to read its dates and grades, and how to cite it.'],
       sitemap: ['sitemap.xml', 'Every page in every language, with alternates.'],
     },
     upstream: 'EDI itself, with its rubric, registry and functions, is open source:',
@@ -582,7 +582,7 @@ export const en = {
     suggestions: 'Close matches',
   },
   footer: {
-    about: 'An editorial directory built on the Ethereum Decentralization Index. Listing is not endorsement, a security audit or investment advice.',
+    about: 'Profiles, figures and stories are editorial; every grade comes from EDI. Listing is not endorsement, a security audit or investment advice.',
     source: 'EDI on GitHub',
     agents: 'For agents',
   },
