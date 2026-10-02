@@ -18,6 +18,26 @@ test('Search Uniswap: separate versions, the token and the unversioned identity,
   await expect(page.locator('li.row[data-id="uniswap-v4"] .row-grade .grade').first()).toHaveAttribute('data-grade', 'D0');
 });
 
+test('what a reader types, ticks or chooses while scripts load is kept', async ({page}) => {
+  // Hold the page's scripts until the reader is done, as on a slow phone.
+  let release = () => {};
+  const held = new Promise<void>(resolve => (release = resolve));
+  await page.route(/\/_astro\/.+\.js$/, async route => {
+    await held;
+    await route.continue();
+  });
+  await page.goto('/en/', {waitUntil: 'commit'});
+  await page.locator('#directory-q').fill('uniswap');
+  await page.locator('input[name="kind"][value="protocol"]').check();
+  await page.locator('#directory-sort').selectOption('name');
+  release();
+  await expect(page).toHaveURL(/\?q=uniswap&kind=protocol&sort=name$/);
+  await expect(page.locator('li.row[data-id="token:uniswap"]')).toHaveCount(0);
+  await expect(rows(page).first()).toHaveAttribute('data-id', 'uniswap-v1');
+  await expect(page.locator('#directory-q')).toHaveValue('uniswap');
+  await expect(page.locator('input[name="kind"][value="protocol"]')).toBeChecked();
+});
+
 test('the server renders the same results without scripts', async ({browser}) => {
   const context = await browser.newContext({javaScriptEnabled: false});
   const page = await context.newPage();
