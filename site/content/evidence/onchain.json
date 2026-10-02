@@ -379,6 +379,37 @@
    }
   },
   {
+   "id": "uniswap-v1-exchanges-2026-10-01",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "call",
+    "to": "0xc0a47dfe034b400b47bdad5fecda2621de6c4d95",
+    "signature": "tokenCount()",
+    "data": "0x9f181b5e",
+    "returns": "uint256"
+   },
+   "note": "Exchanges created by the Uniswap v1 factory, one per token, since it was deployed.",
+   "result": {
+    "raw": "0x0000000000000000000000000000000000000000000000000000000000000fc3",
+    "value": "4035"
+   }
+  },
+  {
+   "id": "uniswap-v1-first-code-block",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "code.firstBlock",
+    "address": "0xc0a47dfe034b400b47bdad5fecda2621de6c4d95"
+   },
+   "note": "First block in which the Uniswap v1 factory has code.",
+   "result": {
+    "block": 6627917,
+    "timestamp": "2018-11-02T05:37:22Z"
+   }
+  },
+  {
    "id": "uniswap-v2-factory-first-code-block",
    "chainId": 1,
    "block": 26093737,
@@ -717,6 +748,30 @@
    }
   },
   {
+   "id": "uniswap-v1-swaps-2026-09",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "uniswap.pairSwaps",
+    "version": 1,
+    "factory": "0xc0a47dfe034b400b47bdad5fecda2621de6c4d95",
+    "swapTopics": [
+     "0xcd60aa75dea3072fbc07ae6d7d856b5dc5f4eee88854f5b4abf7b680ef8bc50f",
+     "0x7f4091b46c33e918a0f3aa42307641d17bb67029427a5369e54b353984238705"
+    ],
+    "fromBlock": 25878705,
+    "toBlock": 26093737
+   },
+   "note": "TokenPurchase and EthPurchase events, the two kinds of swap, in September 2026 (UTC) from exchanges that the Uniswap v1 factory created. A swap between two tokens emits one of each. Contracts that only copy the events are counted separately as other contracts.",
+   "result": {
+    "events": 13763,
+    "pools": 187,
+    "otherEvents": 1012,
+    "otherContracts": 8,
+    "logsFingerprintSha256": "15311dcae1f8b94aaf16e2df9aa867cde65e7a17a2e4117e19f7830f39115d0b"
+   }
+  },
+  {
    "id": "uniswap-v2-swaps-2026-09",
    "chainId": 1,
    "block": 26093737,
@@ -1008,6 +1063,52 @@
     "burnEvents": 16,
     "burned": "562994006.600011",
     "logsFingerprintSha256": "4f21907cf809ca14d6d9cebe9eb5886bdf83691029705234080065669a1f42ab"
+   }
+  },
+  {
+   "id": "buidl-holder-transfer-calls-2026-09",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "erc20.holderTransferCalls",
+    "token": "0x7712c34205737192402172409a8f7ccef8aa2aec",
+    "fromBlock": 25878705,
+    "toBlock": 26093737
+   },
+   "note": "BUIDL transfers between holders in September 2026, by the contract each transaction called.",
+   "result": {
+    "transferEvents": 33,
+    "transactions": 33,
+    "senders": 8,
+    "receivers": 5,
+    "byCalledContract": {
+     "0x7712c34205737192402172409a8f7ccef8aa2aec": 33
+    },
+    "logsFingerprintSha256": "424302b5b00dd1c0abe997ff060bd95c585c18b5f927fee41013eebb2a6810ae"
+   }
+  },
+  {
+   "id": "buidl-i-holder-transfer-calls-2026-09",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "erc20.holderTransferCalls",
+    "token": "0x6a9da2d710bb9b700acde7cb81f10f1ff8c89041",
+    "fromBlock": 25878705,
+    "toBlock": 26093737
+   },
+   "note": "BUIDL-I transfers between holders in September 2026, by the contract each transaction called.",
+   "result": {
+    "transferEvents": 18,
+    "transactions": 17,
+    "senders": 3,
+    "receivers": 3,
+    "byCalledContract": {
+     "0x5f9479cb9d9ae2f37ca5dca94951c46a223252cd": 2,
+     "0x6a9da2d710bb9b700acde7cb81f10f1ff8c89041": 1,
+     "0x9187807e07112359c481870feb58f0c117a29179": 15
+    },
+    "logsFingerprintSha256": "24b16154ceedb86068679d12730b4d3e4ffadaf6c7ca0e3d7dbfff8857de27b8"
    }
   },
   {
@@ -1407,6 +1508,117 @@
     "raw": "8944788405981167225560721",
     "decimals": 18,
     "value": "8944788.405981167225560721"
+   }
+  },
+  {
+   "id": "permissioned-pool-2026-09",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "uniswap.v4Pool",
+    "address": "0x000000000004444c5dc75cb358380d2e3de08a90",
+    "poolId": "0xd77958033105428f2f5035cabb40ea2db5a4a3ff9f0b166de939de554caf7210",
+    "deployBlock": 21688329,
+    "fromBlock": 25878705,
+    "toBlock": 26093737,
+    "initializeWindow": 1000000,
+    "swapWindow": 1000000
+   },
+   "note": "The one Uniswap v4 pool on Ethereum whose hook is Uniswap's shared PermissionedHooks contract, as counted by uniswap-v4-swaps-2026-09: its key from its Initialize event, and its Swap events in September 2026 (UTC).",
+   "result": {
+    "currency0": "0x2033081e89b481e25d19c319d7622bdf6e0c6295",
+    "currency1": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+    "fee": 3000,
+    "tickSpacing": 60,
+    "hooks": "0x499a724ab630549f14c995ec41a8e04fa3fd28c0",
+    "initializedBlock": 26052832,
+    "swapEvents": 2,
+    "swapFingerprintSha256": "05410c42dbc9e1754c1f586216c549150da1465183ea0fdfca5d54664963857b"
+   }
+  },
+  {
+   "id": "permissioned-pool-adapter-name-2026-10-01",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "call",
+    "to": "0x2033081e89b481e25d19c319d7622bdf6e0c6295",
+    "signature": "name()",
+    "data": "0x06fdde03",
+    "returns": "string"
+   },
+   "note": "Name of the pool's currency0, a PermissionsAdapter: the token that stands in a Permissioned Pool for the permissioned token it wraps.",
+   "result": {
+    "raw": "0x00000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000010556e6973776170207634205448494e4700000000000000000000000000000000",
+    "value": "Uniswap v4 THING"
+   }
+  },
+  {
+   "id": "permissioned-pool-adapter-token-2026-10-01",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "call",
+    "to": "0x2033081e89b481e25d19c319d7622bdf6e0c6295",
+    "signature": "PERMISSIONED_TOKEN()",
+    "data": "0xfb137ce3",
+    "returns": "address"
+   },
+   "note": "The permissioned token that the adapter wraps.",
+   "result": {
+    "raw": "0x00000000000000000000000024bf4314daec542414554156dd757d93f79e66eb",
+    "value": "0x24bf4314daec542414554156dd757d93f79e66eb"
+   }
+  },
+  {
+   "id": "permissioned-pool-token-name-2026-10-01",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "call",
+    "to": "0x24bf4314daec542414554156dd757d93f79e66eb",
+    "signature": "name()",
+    "data": "0x06fdde03",
+    "returns": "string"
+   },
+   "note": "Name of the permissioned token that the adapter wraps.",
+   "result": {
+    "raw": "0x000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000055448494e47000000000000000000000000000000000000000000000000000000",
+    "value": "THING"
+   }
+  },
+  {
+   "id": "permissioned-pool-adapter-owner-2026-10-01",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "call",
+    "to": "0x2033081e89b481e25d19c319d7622bdf6e0c6295",
+    "signature": "owner()",
+    "data": "0x8da5cb5b",
+    "returns": "address"
+   },
+   "note": "The adapter's owner, the issuer's account in Uniswap's documentation: it can replace the allowlist checker and turn swapping off.",
+   "result": {
+    "raw": "0x000000000000000000000000384b944fd6c98465d685d198fab7bfac2e381f75",
+    "value": "0x384b944fd6c98465d685d198fab7bfac2e381f75"
+   }
+  },
+  {
+   "id": "permissioned-pool-adapter-swapping-2026-10-01",
+   "chainId": 1,
+   "block": 26093737,
+   "read": {
+    "kind": "call",
+    "to": "0x2033081e89b481e25d19c319d7622bdf6e0c6295",
+    "signature": "swappingEnabled()",
+    "data": "0xaeb55569",
+    "returns": "bool"
+   },
+   "note": "Whether the adapter's owner had swapping turned on.",
+   "result": {
+    "raw": "0x0000000000000000000000000000000000000000000000000000000000000001",
+    "value": true
    }
   }
  ]
