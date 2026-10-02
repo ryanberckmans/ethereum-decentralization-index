@@ -32,6 +32,18 @@
  * Raw HTML is not allowed in Markdown. Links must be https:// or a token.
  */
 import {z} from 'zod';
+import {
+  COLLECTION_IDS,
+  ECONOMIC_MECHANISMS,
+  EVIDENCE_STATES,
+  MEASURES,
+  RELATIONSHIP_TYPES,
+  ROLES,
+  SUBJECT_KINDS,
+  type SubjectKind,
+} from './vocab.ts';
+
+export * from './vocab.ts';
 
 // ---------------------------------------------------------------------------
 // Primitives
@@ -52,16 +64,9 @@ export const RecordId = z.string().max(80).regex(KEBAB, 'Use lowercase kebab-cas
 export const SLUG = /^[a-z0-9]+(?:-{1,2}[a-z0-9]+)*$/;
 export const Slug = z.string().max(120).regex(SLUG, 'Use lowercase kebab-case');
 
-/** The default object slug: `:` becomes `--` and `.` becomes `-` (token:uniswap → token--uniswap, seaport-v1.6 → seaport-v1-6). */
-export function defaultObjectSlug(ediId: string): string {
-  return ediId.replace(/:/g, '--').replace(/\./g, '-').replace(/_/g, '-');
-}
-
 /** An EDI registry ID exactly as it appears in data/control-registry.json (for example `token:uniswap`, `seaport-v1.6`). */
 export const EdiId = z.string().min(1).max(256).regex(/^[a-z0-9][a-z0-9:._-]{0,255}$/, 'Not an EDI registry ID');
 
-export const SUBJECT_KINDS = ['organization', 'product', 'deployment', 'network', 'reference'] as const;
-export type SubjectKind = (typeof SUBJECT_KINDS)[number];
 /** ID prefix for each contextual subject kind. Contextual subjects are never graded. */
 export const SUBJECT_PREFIX: Record<SubjectKind, string> = {
   organization: 'org:',
@@ -74,6 +79,8 @@ export const SUBJECT_PREFIX: Record<SubjectKind, string> = {
 export const ContextSubjectId = z.string().max(96).regex(/^(org|product|deployment|network|ref):[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Use a contextual ID such as org:circle');
 /** Anything a claim, observation or relationship can be about: an EDI object or a contextual subject. */
 export const SubjectId = z.union([ContextSubjectId, EdiId]);
+
+export const EvidenceStateSchema = z.enum(EVIDENCE_STATES);
 
 /** Absolute https URL without credentials, IP-literal hosts or local names. */
 export function isSafeHttpsUrl(value: string): boolean {
@@ -102,78 +109,7 @@ const text = (max: number) =>
   z.string().trim().min(1).max(max).refine(value => !/<[a-zA-Z/!?]/.test(value), 'Raw HTML is not allowed');
 
 // ---------------------------------------------------------------------------
-// Vocabularies (labels live in the UI dictionaries so they can be translated)
-
-/** How far a source supports a statement. Shown as a short evidence label. */
-export const EVIDENCE_STATES = [
-  'capability', // documented capability: documentation shows it can be done
-  'announced', // an announcement or launch statement
-  'pilot', // a limited pilot or test
-  'live', // live and available, without a usage measurement
-  'reported-adoption', // the operator or a participant reports use (first-party numbers)
-  'reproduced-observation', // independently reproduced from data
-  'forecast', // a projection; never shown as achieved
-] as const;
-export type EvidenceState = (typeof EVIDENCE_STATES)[number];
-export const EvidenceStateSchema = z.enum(EVIDENCE_STATES);
-
-/**
- * Economic role of an object, used for browsing and filters. Choose the
- * closest; ask the site owner to add a role rather than overloading one.
- */
-export const ROLES = [
-  'native-asset',
-  'wrapper',
-  'dollar-token',
-  'fund-shares',
-  'commodity-claim',
-  'bitcoin-representation',
-  'staking',
-  'restaking',
-  'exchange',
-  'lending',
-  'settlement',
-  'yield',
-  'payment-streams',
-  'network',
-  'bridge',
-  'governance-token',
-  'infrastructure',
-] as const;
-export type Role = (typeof ROLES)[number];
-
-/** Editorial relationship types. `edi-dependency` edges come only from EDI and are rejected here. */
-export const RELATIONSHIP_TYPES = [
-  'settles-on', // from settles on to (an asset or product on a network)
-  'issues', // from issues to (an issuer and its asset)
-  'interface-to', // from provides an interface to to (an app or product over a mechanism)
-  'integrates-with', // from integrates with to
-  'collateral-for', // from is used as collateral in to
-  'economic-reference', // from economically references to (for example gold or US dollars)
-] as const;
-export type RelationshipType = (typeof RELATIONSHIP_TYPES)[number] | 'edi-dependency';
-
-export const COLLECTION_IDS = ['d0-in-use', 'global-economy'] as const;
-export type CollectionId = (typeof COLLECTION_IDS)[number];
-
-/**
- * How a story's outcome connects economic activity to Ethereum. The first six
- * are the spec's ways of bringing the global economy into Ethereum.
- */
-export const ECONOMIC_MECHANISMS = [
-  'distribution', // reaching new users through another product or institution
-  'programmable-settlement',
-  'asset-mobility', // assets that can now move, settle or trade more broadly
-  'collateral',
-  'liquidity-access',
-  'coordination', // coordination across organizations
-  'reusable-infrastructure', // a mechanism other programs build on
-] as const;
-export const MEASURES = ['stock', 'flow', 'count', 'rate', 'duration'] as const;
-export type Measure = (typeof MEASURES)[number];
-
-// ---------------------------------------------------------------------------
-// Records
+// Records (vocabularies are in vocab.ts)
 
 export const OfficialLink = z.strictObject({
   label: text(80),

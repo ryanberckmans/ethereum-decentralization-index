@@ -17,7 +17,10 @@
     "test": "node --test tests/*.test.ts"
   },
   "dependencies": {
+    "@astrojs/cloudflare": "14.3.3",
     "@astrojs/react": "7.0.0",
+    "@fontsource-variable/newsreader": "5.3.0",
+    "@fontsource-variable/schibsted-grotesk": "5.3.0",
     "astro": "7.3.5",
     "ethereum-decentralization-index": "file:..",
     "mdast-util-from-markdown": "2.0.3",
@@ -26,10 +29,13 @@
     "radix-ui": "1.6.7",
     "react": "19.3.0",
     "react-dom": "19.3.0",
+    "wrangler": "4.146.0",
     "yaml": "2.9.1",
     "zod": "4.6.5"
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
+    "@playwright/test": "1.56.1",
     "@types/mdast": "4.0.4",
     "@types/node": "22.19.19",
     "@types/react": "19.3.0",
