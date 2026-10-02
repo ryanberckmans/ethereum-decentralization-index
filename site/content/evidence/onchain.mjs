@@ -44,6 +44,8 @@ const SEL = {
   token1: '0xd21220a7', // token1()
   fee: '0xddca3f43', // fee()
   getPair: '0xe6a43905', // getPair(address,address)
+  tokenAddress: '0x9d76ea58', // tokenAddress(), on a Uniswap v1 exchange
+  getExchange: '0x06f2bf62', // getExchange(address), on the Uniswap v1 factory
   getPool: '0x1698ee82', // getPool(address,address,uint24)
   morphoMarket: '0x5c60e39a', // market(bytes32)
   morphoIdToMarketParams: '0x2c3c9157', // idToMarketParams(bytes32)
@@ -247,13 +249,19 @@ class LogSet {
   }
 }
 
-// Decodes a static return value: address, uint256 or address[].
+// Decodes a return value: address, uint256, bool, address[] or string.
 const decode = (data, type) => {
   const w = data.slice(2).match(/.{64}/g) ?? [];
   const address = word => '0x' + word.slice(24);
   if (type === 'address') return address(w[0]);
   if (type === 'uint256') return BigInt('0x' + w[0]).toString();
+  if (type === 'bool') return BigInt('0x' + w[0]) !== 0n;
   if (type === 'address[]') return w.slice(2, 2 + Number(BigInt('0x' + w[1]))).map(address);
+  if (type === 'string') {
+    const at = Number(BigInt('0x' + w[0])) / 32;
+    const length = Number(BigInt('0x' + w[at]));
+    return Buffer.from(w.slice(at + 1).join('').slice(0, length * 2), 'hex').toString('utf8');
+  }
   throw new Error(`Unknown return type ${type}`);
 };
 
@@ -349,6 +357,36 @@ const READS = {
       logsFingerprintSha256: set.fingerprint(),
     };
   },
+  async 'erc20.holderTransferCalls'({chainId, read}) {
+    // Transfers between holders of one token (neither side the zero address) in the block
+    // range, counted by the contract each transaction called: the token itself for a direct
+    // transfer, or a router, settlement or other contract that moved the tokens.
+    const set = new LogSet();
+    const logs = [];
+    await scanLogs(chainId, read.token, [TOPIC.transfer], read.fromBlock, read.toBlock, batch => {
+      for (const log of batch) {
+        if (BigInt(log.topics[1]) === 0n || BigInt(log.topics[2]) === 0n) continue;
+        set.add(log);
+        logs.push(log);
+      }
+    }, read.window);
+    const hashes = [...new Set(logs.map(log => log.transactionHash))].sort();
+    const txs = await inChunks(hashes, BATCH, chunk => rpcBatch(rpcUrl[chainId], chunk.map(hash => ['eth_getTransactionByHash', [hash]])));
+    const called = new Map(hashes.map((hash, i) => [hash, txs[i].result.to.toLowerCase()]));
+    const byCalledContract = {};
+    for (const log of logs) {
+      const to = called.get(log.transactionHash);
+      byCalledContract[to] = (byCalledContract[to] ?? 0) + 1;
+    }
+    return {
+      transferEvents: logs.length,
+      transactions: hashes.length,
+      senders: new Set(logs.map(log => log.topics[1])).size,
+      receivers: new Set(logs.map(log => log.topics[2])).size,
+      byCalledContract: Object.fromEntries(Object.entries(byCalledContract).sort(([a], [b]) => (a < b ? -1 : 1))),
+      logsFingerprintSha256: set.fingerprint(),
+    };
+  },
   async 'token.frozen'({chainId, block, read}) {
     // Addresses a token's issuer froze (or blocklisted) from fromBlock to `block`, and how
     // many of them the token's own check function still reports as frozen at `block`.
@@ -419,13 +457,14 @@ const READS = {
     };
   },
   async 'uniswap.pairSwaps'({chainId, read}) {
-    // Swap events with this topic from any contract in the block range, kept only when the
-    // emitting contract is the factory's own pool for its tokens at toBlock: for version 2,
+    // Swap events with this topic (or any of swapTopics) from any contract in the block range,
+    // kept only when the emitting contract is the factory's own pool for its tokens at toBlock:
+    // for version 1, factory.getExchange(tokenAddress); for version 2,
     // factory.getPair(token0, token1); for version 3, factory.getPool(token0, token1, fee).
     const set = new LogSet();
     const emitters = [];
     const tagOf = new Map();
-    await scanLogs(chainId, null, [read.swapTopic], read.fromBlock, read.toBlock, logs => {
+    await scanLogs(chainId, null, [read.swapTopics ?? read.swapTopic], read.fromBlock, read.toBlock, logs => {
       for (const log of logs) {
         const address = log.address.toLowerCase();
         if (!tagOf.has(address)) {
@@ -435,14 +474,21 @@ const READS = {
         set.add(log, tagOf.get(address));
       }
     }, read.window);
+    const v1 = read.version === 1;
     const v3 = read.version === 3;
-    const getters = v3 ? [SEL.token0, SEL.token1, SEL.fee] : [SEL.token0, SEL.token1];
+    const getters = v1 ? [SEL.tokenAddress] : v3 ? [SEL.token0, SEL.token1, SEL.fee] : [SEL.token0, SEL.token1];
     const answers = await inChunks(emitters, BATCH, chunk =>
       rpcBatch(rpcUrl[chainId], chunk.flatMap(address => getters.map(data => ['eth_call', [{to: address, data}, hex(read.toBlock)]])), {allowReverts: true}),
     );
     const candidates = [];
     emitters.forEach((address, i) => {
       const [token0, token1, fee] = getters.map((_, g) => answers[i * getters.length + g].result);
+      if (v1) {
+        // v1 exchanges, compiled with an early Vyper, pad this return far past one word.
+        const token = fits(typeof token0 === 'string' ? token0.slice(0, 66) : token0, 160);
+        if (token !== null) candidates.push({tag: i, data: SEL.getExchange + word(token)});
+        return;
+      }
       const a = fits(token0, 160);
       const b = fits(token1, 160);
       const f = v3 ? fits(fee, 24) : 0n;
@@ -517,6 +563,30 @@ const READS = {
       initializeFingerprintSha256: initialized.fingerprint(),
       swapFingerprintSha256: swaps.fingerprint(),
     };
+  },
+  async 'uniswap.v4Pool'({chainId, read}) {
+    // One pool's key, from its Initialize event in the PoolManager between deployBlock and
+    // toBlock, and its Swap events from fromBlock to toBlock.
+    const keys = [];
+    await scanLogs(chainId, read.address, [TOPIC.v4Initialize, read.poolId], read.deployBlock, read.toBlock, logs => {
+      for (const log of logs) {
+        const [fee, tickSpacing, hooks] = words(log.data);
+        keys.push({
+          currency0: asAddress(log.topics[2]),
+          currency1: asAddress(log.topics[3]),
+          fee: Number(fee),
+          tickSpacing: Number(BigInt.asIntN(24, tickSpacing)),
+          hooks: asAddress(hooks),
+          initializedBlock: Number(BigInt(log.blockNumber)),
+        });
+      }
+    }, read.initializeWindow);
+    if (keys.length !== 1) throw new Error(`Pool ${read.poolId} was initialized ${keys.length} times in range`);
+    const swaps = new LogSet();
+    await scanLogs(chainId, read.address, [TOPIC.v4Swap, read.poolId], read.fromBlock, read.toBlock, logs => {
+      for (const log of logs) swaps.add(log);
+    }, read.swapWindow);
+    return {...keys[0], swapEvents: swaps.size, swapFingerprintSha256: swaps.fingerprint()};
   },
   async 'morpho.market'({chainId, block, read}) {
     // One Morpho Blue market at a block: its parameters and its supplied and borrowed
