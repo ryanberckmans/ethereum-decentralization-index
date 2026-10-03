@@ -54,7 +54,7 @@ D is an ordinal taxonomy of documented authority, not equal intervals, a probabi
 
 ## Data and refresh
 
-The current registry contains 118 scoped records, including Uniswap v1–v4 cores, major L1 applications, chain controls and separately identified tokens. Verified immutable D0 is permanent for its exact mechanism. Every other assessment and unresolved position dependency is fully restudied monthly; overdue results retain a floor while losing complete status.
+The current registry contains 120 scoped records, including Uniswap v1–v4 cores, major L1 applications, chain controls and separately identified tokens. Verified immutable D0 is permanent for its exact mechanism. Every other assessment and unresolved position dependency is fully restudied monthly; overdue results retain a floor while losing complete status.
 
 ```ts
 import {registryAssessment, reviewQueue} from 'ethereum-decentralization-index/registry';

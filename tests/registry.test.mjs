@@ -27,7 +27,7 @@ test('exact Uniswap deployments are D0 forever; brand and unresolved v4 position
 test('monthly expiry preserves established restrictions and wrappers inherit their backing',()=>{
  const before=registryAssessment('usdc',registry.lastUpdatedAt),after=registryAssessment('usdc','2026-11-01');
  assert.equal(before.effectiveLevel,9);assert.equal(after.effectiveLevel,null);assert.equal(after.knownFloor,9);assert.equal(after.status,'partial');
- assert.equal(findReview('usdc').reviewedAt,registry.lastUpdatedAt);
+ assert.equal(addReviewMonth(findReview('usdc').reviewedAt),'2026-11-01');
  const wrapper=findReview('wsteth');assert.equal(reviewTiming(wrapper,registry.lastUpdatedAt).permanent,false);assert.ok(registryAssessment('wsteth',registry.lastUpdatedAt).knownFloor>=3);
  assert.equal(registryAssessment('token:aerodrome-finance',registry.lastUpdatedAt).knownFloor,6);
  assert.equal(registryAssessment('token:optimism',registry.lastUpdatedAt).knownFloor,5);
