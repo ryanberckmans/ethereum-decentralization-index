@@ -3,7 +3,7 @@
  * what it achieves and who retains authority), then what it enables, control
  * and dependencies, observed use, connections, and sources and identity.
  */
-import {safeEvidenceUrl} from 'ethereum-decentralization-index';
+import {l2beatProjectUrl, locales as ediLocales, safeEvidenceUrl} from 'ethereum-decentralization-index';
 import {EDI_LOCALE, PRODUCT} from '../config.ts';
 import {andList, fmt, formatDate} from '../i18n/format.ts';
 import {Dated} from '../components/Dated.tsx';
@@ -50,6 +50,8 @@ function AssessmentPanel({model, env}: {model: ProfileModel; env: PageEnv}) {
   const {object, raw} = model;
   const {m, locale} = env;
   const subject = mechanismSubject(object.id);
+  /** Where L2BEAT, the authority on scientific risk assessment in EDI's view, details this record's risks. */
+  const l2beatPage = l2beatProjectUrl(object.entity.evidenceUrls);
   const segments = raw.map(segment => ({from: segment.from, value: {raw: segment.value, view: datedView(object.id, segment.value, locale)}}));
   return (
     <aside className="assessment-panel" aria-labelledby="assessment-title">
@@ -111,6 +113,13 @@ function AssessmentPanel({model, env}: {model: ProfileModel; env: PageEnv}) {
           {m.profile.gradesExplained}
         </a>
         <a href="#sources">{m.profile.evidenceLink}</a>
+        {l2beatPage ? (
+          <a className="external-link" href={l2beatPage} rel="noopener noreferrer">
+            {ediLocales[EDI_LOCALE[locale]].l2beatProject}
+            <ExternalIcon />
+            <span className="sr-only"> ({m.common.external})</span>
+          </a>
+        ) : null}
         <a href={paths.compare(locale, [object.id])}>{m.profile.compareThis}</a>
       </p>
     </aside>

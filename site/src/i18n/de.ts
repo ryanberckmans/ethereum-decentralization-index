@@ -515,6 +515,7 @@ export const de: Messages = {
       'Einstufungen werden in EDI selbst korrigiert, im Rahmen seines eigenen Rechercheprozesses. Die Website zeigt die Änderung, sobald EDI sie veröffentlicht.',
       'Redaktionelle Fehler, etwa eine falsche Zahl, ein falsches Datum oder eine falsche Quelle, werden im Inhalt der Website korrigiert, und jede Korrektur wird mit ihrem Datum aufgeführt.',
     ],
+    l2beatProfiles: 'Nennt EDI eine Projektseite von L2BEAT als Beleg für einen Eintrag, verlinkt die Seite dieses Eintrags auf die detaillierte Bewertung von L2BEAT.',
     compareLink: 'Objekte vergleichen',
     reportIssue: 'Fehler auf GitHub melden',
     changesLink: 'Datierte Änderungen ansehen',

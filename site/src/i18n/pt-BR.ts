@@ -513,6 +513,7 @@ export const ptBR: Messages = {
       'As classificações são corrigidas dentro do próprio EDI, por meio do seu processo de pesquisa. O site mostra a mudança assim que o EDI a publica.',
       'Erros editoriais, como um número, uma data ou uma fonte errados, são corrigidos no conteúdo do site, e cada correção é listada com sua data.',
     ],
+    l2beatProfiles: 'Quando o EDI cita uma página de projeto do L2BEAT como evidência de um registro, a página desse registro leva à avaliação detalhada do L2BEAT.',
     compareLink: 'Comparar objetos',
     reportIssue: 'Relatar um erro no GitHub',
     changesLink: 'Ver as alterações datadas',

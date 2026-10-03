@@ -4,6 +4,14 @@
 
 **EDI** helps explain who can change the rules of an Ethereum app or token, and who controls your ability to withdraw. It ships a shared D0–D9 scale, a canonical deployment-specific research database, a reproducible refresh pipeline and accessible React components. It was extracted from Map of Ethereum.
 
+## EDI and L2BEAT
+
+EDI regards [L2BEAT](https://l2beat.com/) as the authority on scientific risk assessment. EDI complements that work by prioritizing accuracy and storytelling over fine-grained precision: it distills complex decentralization and control considerations into a single, accessible D0–D9 rating.
+
+The goal is faithful simplification: D0–D9 is an ordinal summary of documented control, not a complete risk model or a mechanical conversion of L2BEAT’s assessments. This is EDI’s own stance, not an endorsement of its ratings by L2BEAT. For a project’s detailed risk assessment, go to [L2BEAT](https://l2beat.com/); where EDI cites an L2BEAT project page as evidence for a record, the guide and the website link to that page.
+
+The library carries this account in all eight locales, so the guide, the website and every other consumer tell it the same way: see [`describeL2beat`](#core-model) and [`DecentralizationL2beat`](#react-components).
+
 ## The spectrum
 
 | Grade | Meaning |
@@ -52,6 +60,15 @@ Use `normalizeAssessment(untrustedValue)` when loading a saved assessment. Publi
 
 D is an ordinal taxonomy of documented authority, not equal intervals, a probability of loss or a financial recommendation. D4 is not “twice” D2. Wallet custody is a separate assessment. Immutable code alone does not prove D0. The bundled records are cited editorial research with explicit scope, uncertainty and real review dates. The package is not a live oracle; financial updates cannot automatically renew ratings.
 
+`describeL2beat(locale, evidence?)` returns EDI’s account of how it complements L2BEAT: a title, a one-sentence summary, the full stance, its scope and a link. The link goes to the first https L2BEAT project page among the evidence links (`l2beatProjectUrl(evidence)`), or else to L2BEAT itself (`l2beat.url`).
+
+```ts
+import {describeL2beat} from 'ethereum-decentralization-index';
+import {findReview} from 'ethereum-decentralization-index/registry';
+const about = describeL2beat('ja', findReview('base')?.evidenceUrls);
+// about.link.href → 'https://l2beat.com/layer2s/projects/base'
+```
+
 ## Data and refresh
 
 The current registry contains 120 scoped records, including Uniswap v1–v4 cores, major L1 applications, chain controls and separately identified tokens. Verified immutable D0 is permanent for its exact mechanism. Every other assessment and unresolved position dependency is fully restudied monthly; overdue results retain a floor while losing complete status.
@@ -73,7 +90,8 @@ Canonical JSON has one complete entity per line; the generated latest snapshot i
 | `DecentralizationBadge` | D label, partial/unknown state, explanatory tooltip and keyboard/touch guide trigger |
 | `DecentralizationSpectrum` | Compact interactive set of all ten grades |
 | `DecentralizationLegend` | Responsive table of color, grade and meaning, with an optional first-row aside |
-| `DecentralizationGuide` | Large plain-language guide, scope and dependency explanations, selected grade and safe evidence links |
+| `DecentralizationGuide` | Large plain-language guide: how EDI complements L2BEAT, scope and dependency explanations, selected grade and safe evidence links |
+| `DecentralizationL2beat` | How EDI complements L2BEAT and why it uses one D rating, linking the subject’s L2BEAT project page when its `evidence` has one and L2BEAT otherwise |
 | `DecentralizationCard` | Position-level explanation suitable for a wallet |
 | `DecentralizationPath` | A readable sequence of the reviewed control dependencies |
 

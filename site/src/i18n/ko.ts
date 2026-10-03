@@ -512,6 +512,7 @@ export const ko: Messages = {
       '등급은 EDI 자체의 연구 절차를 거쳐 EDI 안에서 정정됩니다. 이 사이트는 EDI가 변경 사항을 공개하는 즉시 이를 반영합니다.',
       '잘못된 수치, 날짜, 출처 같은 편집상 오류는 이 사이트의 콘텐츠에서 정정되며, 모든 정정 내역은 날짜와 함께 공개됩니다.',
     ],
+    l2beatProfiles: 'EDI가 어떤 항목의 근거로 L2BEAT 프로젝트 페이지를 제시하면, 그 항목의 페이지에서 L2BEAT의 상세 평가로 연결됩니다.',
     compareLink: '대상 비교하기',
     reportIssue: 'GitHub에서 오류 신고하기',
     changesLink: '날짜별 변경 내역 보기',

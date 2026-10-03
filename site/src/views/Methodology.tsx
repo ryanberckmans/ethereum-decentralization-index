@@ -1,12 +1,12 @@
 /**
- * The methodology: EDI's own explanation of its grades (in EDI's words and
- * translations), the directory's editorial rules, coverage counts computed
- * from EDI for the reading date, the three clocks and the correction route.
- * Editorial prose from content/methodology.md replaces the built-in text of a
- * section when present.
+ * The methodology: EDI's own explanation of its grades and of how it
+ * complements L2BEAT (in EDI's words and translations), the directory's
+ * editorial rules, coverage counts computed from EDI for the reading date, the
+ * three clocks and the correction route. Editorial prose from
+ * content/methodology.md replaces the built-in text of a section when present.
  */
 import type {ReactNode} from 'react';
-import {assessment, displayedLevel, locales as ediLocales, type DLevel} from 'ethereum-decentralization-index';
+import {assessment, describeL2beat, displayedLevel, locales as ediLocales, type DLevel} from 'ethereum-decentralization-index';
 import {EDI_LOCALE, PRODUCT} from '../config.ts';
 import {METHODOLOGY_SECTIONS} from '../content/schema.ts';
 import {EVIDENCE_STATES} from '../content/vocab.ts';
@@ -15,6 +15,7 @@ import {fmt, formatCount, formatDate, plural, type Plural} from '../i18n/format.
 import {Blocks} from '../components/Markdown.tsx';
 import {Dated} from '../components/Dated.tsx';
 import {GradeBadge} from '../components/Grade.tsx';
+import {ExternalIcon} from '../components/Icons.tsx';
 import {paths} from '../model/urls.ts';
 import {gradeView} from '../model/views.ts';
 import {Citations} from '../server/citations.ts';
@@ -84,6 +85,7 @@ function Paragraphs({items}: {items: readonly string[]}) {
 export function MethodologyPage({env}: {env: PageEnv}) {
   const {m, locale, date} = env;
   const edi = ediLocales[EDI_LOCALE[locale]] ?? ediLocales.en;
+  const l2beat = describeL2beat(EDI_LOCALE[locale]);
   const lang = contentLang(env);
   const editorial = editorialSections();
   const citations = new Citations();
@@ -102,6 +104,7 @@ export function MethodologyPage({env}: {env: PageEnv}) {
   const s = m.methodology.sections;
   const toc: [string, string][] = [
     ['meaning', s.meaning],
+    ['l2beat', l2beat.title],
     ['spectrum', s.spectrum],
     ['scopes', s.scopes],
     ['inclusion', s.inclusion],
@@ -183,12 +186,27 @@ export function MethodologyPage({env}: {env: PageEnv}) {
               ))}
             </ul>
             <p className="section-note">
-              {m.methodology.fromEdi} · <a href={PRODUCT.repository}>{PRODUCT.name}</a>
+              {m.methodology.fromEdi} · <a href={PRODUCT.repository} rel="noopener noreferrer">{PRODUCT.name}</a>
             </p>
             <div className="prose">
               <p>{m.methodology.authority}</p>
             </div>
             {editorial.meaning ? prose(editorial.meaning, []) : null}
+          </Section>
+
+          <Section id="l2beat" title={l2beat.title}>
+            <div className="prose">
+              <p>{l2beat.body}</p>
+              <p>{l2beat.scope}</p>
+            </div>
+            <p className="method-link">
+              <a className="external-link" href={l2beat.link.href} rel="noopener noreferrer">
+                {l2beat.link.label}
+                <ExternalIcon />
+                <span className="sr-only"> ({m.common.external})</span>
+              </a>
+            </p>
+            <p className="section-note">{m.methodology.l2beatProfiles}</p>
           </Section>
 
           <Section id="spectrum" title={s.spectrum}>
@@ -327,7 +345,7 @@ export function MethodologyPage({env}: {env: PageEnv}) {
                   {edition.ediCommit === 'unknown' ? (
                     <code>{edition.ediCommit}</code>
                   ) : (
-                    <a href={`${PRODUCT.repository}/tree/${edition.ediCommit}`}>
+                    <a href={`${PRODUCT.repository}/tree/${edition.ediCommit}`} rel="noopener noreferrer">
                       <code>{edition.ediCommit.slice(0, 12)}</code>
                     </a>
                   )}
@@ -350,7 +368,7 @@ export function MethodologyPage({env}: {env: PageEnv}) {
             {prose(editorial.corrections, m.methodology.corrections)}
             <ul className="link-list">
               <li>
-                <a href={`${PRODUCT.repository}/issues`}>{m.methodology.reportIssue}</a>
+                <a href={`${PRODUCT.repository}/issues`} rel="noopener noreferrer">{m.methodology.reportIssue}</a>
               </li>
               <li>
                 <a href={paths.changes(locale)}>{m.methodology.changesLink}</a>

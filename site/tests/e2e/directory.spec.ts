@@ -199,6 +199,37 @@ test('EDI’s guide opens from a grade, closes with Escape and returns focus', a
   expect(errors).toEqual([]);
 });
 
+test('the introduction says how EDI complements L2BEAT, linking L2BEAT and the full explanation', async ({page}) => {
+  await page.goto('/en/');
+  const intro = page.locator('.home-intro');
+  await expect(intro).toContainText('EDI regards L2BEAT as the authority on scientific risk assessment');
+  await expect(intro.getByRole('link', {name: /Explore L2BEAT’s detailed risk assessments/})).toHaveAttribute('href', 'https://l2beat.com/');
+  await intro.getByRole('link', {name: 'How EDI complements L2BEAT'}).click();
+  await expect(page).toHaveURL(/\/en\/methodology\/#l2beat$/);
+  const section = page.locator('#l2beat');
+  await expect(section.getByRole('heading', {name: 'How EDI complements L2BEAT'})).toBeInViewport();
+  for (const text of ['prioritizing accuracy and storytelling over fine-grained precision', 'not a complete risk model or a mechanical conversion of L2BEAT’s assessments', 'not an endorsement of its ratings by L2BEAT'])
+    await expect(section).toContainText(text);
+  await expect(section.getByRole('link', {name: /Explore L2BEAT’s detailed risk assessments/})).toHaveAttribute('href', 'https://l2beat.com/');
+  await expect(page.locator('.method-toc a[href="#l2beat"]')).toHaveText('How EDI complements L2BEAT');
+});
+
+test('EDI’s guide explains L2BEAT’s role, and a network links its detailed L2BEAT assessment', async ({page}) => {
+  const base = 'https://l2beat.com/layer2s/projects/base';
+  await page.goto('/en/objects/base/');
+  await expect(page.locator(`.assessment-panel a[href="${base}"]`)).toContainText('Read L2BEAT’s detailed assessment');
+  await page.locator('button[data-guide]').first().click();
+  const dialog = page.getByRole('dialog');
+  await expect(dialog.getByRole('heading', {name: 'How EDI complements L2BEAT'})).toBeVisible();
+  await expect(dialog).toContainText('a single, accessible D0–D9 rating');
+  await expect(dialog.getByRole('link', {name: 'Read L2BEAT’s detailed assessment'})).toHaveAttribute('href', base);
+  // L2BEAT does not assess WETH, so its guide links L2BEAT itself and its profile adds no L2BEAT link.
+  await page.goto('/en/objects/weth9/');
+  await expect(page.locator('.assessment-panel a[href*="l2beat.com"]')).toHaveCount(0);
+  await page.locator('button[data-guide]').first().click();
+  await expect(page.getByRole('dialog').getByRole('link', {name: 'Explore L2BEAT’s detailed risk assessments'})).toHaveAttribute('href', 'https://l2beat.com/');
+});
+
 test('Compare USDC and a D0 core: both legible, no overall score', async ({page}) => {
   await page.goto('/en/compare/?ids=usdc,weth9');
   await expect(page.locator('h1')).toHaveText('Compare');

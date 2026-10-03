@@ -193,6 +193,30 @@
 .edi-primer p {
   font-size: 14px;
 }
+.edi-l2beat {
+  padding: 18px 20px;
+  border: 1px solid var(--edi-line);
+  border-left: 3px solid var(--edi-accent);
+  border-radius: 10px;
+  background: var(--edi-panel);
+  color: var(--edi-fg);
+}
+.edi-l2beat h3 {
+  margin: 0 0 8px;
+  font-size: 16px;
+}
+.edi-l2beat p {
+  margin: 0 0 8px;
+  color: var(--edi-muted);
+  font-size: 14px;
+  line-height: 1.55;
+}
+.edi-l2beat-link {
+  display: inline-block;
+  margin-top: 2px;
+  font-size: 14px;
+  font-weight: 600;
+}
 .edi-grade-list {
   display: grid;
   gap: 10px;
@@ -314,6 +338,9 @@
   }
   .edi-primer {
     grid-template-columns: 1fr;
+  }
+  .edi-l2beat {
+    padding: 14px 16px;
   }
   .edi-grade-list>section {
     gap: 12px;

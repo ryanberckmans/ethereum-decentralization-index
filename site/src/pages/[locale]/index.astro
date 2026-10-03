@@ -1,16 +1,19 @@
 ---
 /**
- * The directory: search, filters and populated results in the first
- * viewport, with the two editorial entrances inside the working layout. The
- * built page shows the editor's order; the island reads a search, filters or
- * a comparison selection from the address and computes the results in the
- * browser. Without scripts the page lists every record.
+ * The directory: EDI's one-sentence account of how it complements L2BEAT,
+ * then search, filters and populated results in the first viewport, with the
+ * two editorial entrances inside the working layout. The built page shows the
+ * editor's order; the island reads a search, filters or a comparison
+ * selection from the address and computes the results in the browser.
+ * Without scripts the page lists every record.
  */
 import Base from '../../layouts/Base.astro';
 import DirectoryApp from '../../islands/DirectoryApp.tsx';
 import {ResultsBody} from '../../components/ResultsBody.tsx';
+import {describeL2beat} from 'ethereum-decentralization-index';
 import {GradeBadge} from '../../components/Grade.tsx';
-import {LOCALES, PRODUCT, type Locale} from '../../config.ts';
+import {ExternalIcon} from '../../components/Icons.tsx';
+import {EDI_LOCALE, LOCALES, PRODUCT, type Locale} from '../../config.ts';
 import {messages} from '../../i18n/index.ts';
 import {fmt, formatCount, plural} from '../../i18n/format.ts';
 import {SITE_URL} from '../../server/origin.ts';
@@ -48,6 +51,8 @@ const d0Count = catalog.objects.filter(object => {
   return state.status === 'assessed' && state.effectiveLevel === 0;
 }).length;
 const d0Badge = datedView('weth9', catalog.rawOn('weth9', date), locale).mechanism;
+/** EDI's own words on how it complements L2BEAT, the authority on scientific risk assessment. */
+const l2beat = describeL2beat(EDI_LOCALE[locale]);
 
 const showRoles = index.roleCoverage >= 0.5;
 const description = fmt(m.meta.description, {count: formatCount(catalog.objects.length, locale)});
@@ -68,6 +73,13 @@ const jsonLd = SITE_URL
 <Base locale={locale} title={title} description={description} path={paths.home(locale)} current="directory" jsonLd={jsonLd} evaluationDate={date}>
   <div class="shell">
     <h1 class="home-title">{m.directory.heading}</h1>
+    <div class="home-intro">
+      <p>{l2beat.summary}</p>
+      <p class="home-intro-links">
+        <a href={`${paths.methodology(locale)}#l2beat`}>{l2beat.title}</a>
+        <a class="external-link" href={l2beat.link.href} rel="noopener noreferrer">{l2beat.link.label}<ExternalIcon /><span class="sr-only"> ({m.common.external})</span></a>
+      </p>
+    </div>
     <DirectoryApp
       client:load
       locale={locale}

@@ -41,6 +41,14 @@ export interface GuideProps {
     openerRef?: RefObject<HTMLElement | null>;
 }
 export declare function DecentralizationGuide({ open, onOpenChange, request, locale, theme, returnFocusRef, openerRef }: GuideProps): import("react/jsx-runtime").JSX.Element;
+export interface L2beatProps {
+    locale?: Locale;
+    /** The subject's evidence links; an L2BEAT project page among them becomes the link. */
+    evidence?: readonly string[];
+    className?: string;
+}
+/** How EDI complements L2BEAT, why it uses one D rating, and a link to L2BEAT's detailed assessments; the guide shows the same. */
+export declare function DecentralizationL2beat({ locale: override, evidence, className }: L2beatProps): import("react/jsx-runtime").JSX.Element;
 export declare function DecentralizationLegend({ locale: override, aside, className }: {
     locale?: Locale;
     aside?: ReactNode;

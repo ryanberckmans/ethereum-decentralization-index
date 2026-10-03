@@ -513,6 +513,7 @@ export const zhCN: Messages = {
       '评级在 EDI 内部通过其自身的研究流程更正。EDI 一经发布，本网站即显示相应变更。',
       '编辑错误（如数值、日期或来源有误）会在本网站的内容中更正，每项更正都会连同日期一并列出。',
     ],
+    l2beatProfiles: '如果 EDI 将 L2BEAT 的项目页面列为某条记录的证据，该记录的页面会链接到 L2BEAT 的详细评估。',
     compareLink: '比较对象',
     reportIssue: '在 GitHub 上报告错误',
     changesLink: '查看带日期的变更',

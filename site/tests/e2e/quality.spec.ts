@@ -137,7 +137,7 @@ test.describe('security in the browser', () => {
   });
 
   test('external links are https, open safely and say they leave the site', async ({page}) => {
-    for (const path of ['/en/objects/usdc/', '/en/stories/dollars-on-ethereum/', '/en/objects/uniswap-v4/']) {
+    for (const path of ['/en/', '/en/methodology/', '/en/data/', '/en/objects/base/', '/en/objects/usdc/', '/en/stories/dollars-on-ethereum/', '/en/objects/uniswap-v4/']) {
       await page.goto(path);
       const links = await page.locator('a[href^="http"]').evaluateAll(anchors =>
         anchors.filter(a => new URL((a as HTMLAnchorElement).href).origin !== location.origin).map(a => ({href: (a as HTMLAnchorElement).href, rel: a.getAttribute('rel') ?? ''})),

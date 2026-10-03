@@ -60,6 +60,29 @@ export function describeAssessment(value, locale = 'en', subject = 'mechanism') 
     return { label: levelLabel(normalized), color: levelColor(level), short: level === null ? c.unknownTitle : c.tiers[level].legend, definition: level === null ? c.unknownBody : level === 0 && subject === 'ethereum-l1' ? c.l1 : c.tiers[level].definition, uncertainty: normalized.status === 'assessed' ? null : c.unknownBody };
 }
 /**
+ * L2BEAT, which EDI regards as the authority on scientific risk assessment.
+ * EDI complements that work with one D0–D9 rating; `describeL2beat` gives the
+ * explanation in every locale. This is EDI's stance, not an endorsement of
+ * EDI's ratings by L2BEAT.
+ */
+export const l2beat = Object.freeze({ name: 'L2BEAT', url: 'https://l2beat.com/' });
+/** The first L2BEAT project page among evidence links, where L2BEAT details that project's risks; null when there is none. */
+export function l2beatProjectUrl(evidence) {
+    if (!Array.isArray(evidence))
+        return null;
+    for (const value of evidence) {
+        const url = typeof value === 'string' ? safeEvidenceUrl(value) : null, parsed = url ? new URL(url) : null;
+        if (parsed && (parsed.hostname === 'l2beat.com' || parsed.hostname.endsWith('.l2beat.com')) && parsed.pathname.includes('/projects/'))
+            return parsed.href;
+    }
+    return null;
+}
+/** EDI's relationship with L2BEAT in one locale, linking L2BEAT's page for the subject when its evidence has one. */
+export function describeL2beat(locale = 'en', evidence) {
+    const c = Object.hasOwn(locales, locale) ? locales[locale] : locales.en, project = l2beatProjectUrl(evidence);
+    return { name: l2beat.name, title: c.l2beatTitle, summary: c.l2beatSummary, body: c.l2beatBody, scope: c.l2beatScope, link: project ? { href: project, label: c.l2beatProject } : { href: l2beat.url, label: c.l2beatLink } };
+}
+/**
  * Pure, bounded graph evaluation. IDs denote actual control dependencies, never
  * ticker or brand similarity. Cycles and oversized graphs are rejected explicitly.
  */

@@ -5,11 +5,18 @@ what Ethereum's economic objects let people do, who can change their rules,
 and how they connect, in eight languages. The name is `PRODUCT.name` in
 [`src/config.ts`](src/config.ts) and stays in English in every language.
 
-EDI, the package at the root of this repository, is the only assessment
-authority. Every grade, floor, partial or unknown status, control and review
+EDI, the package at the root of this repository, is the site's only source
+of grades. Every grade, floor, partial or unknown status, control and review
 date on the site comes from EDI's own date-aware functions; editorial content
 in [`content/`](content) adds what objects enable, dated observations,
 sources and relationships, and can never change a grade.
+
+EDI regards L2BEAT as the authority on scientific risk assessment and
+complements it with one D0–D9 rating
+([EDI and L2BEAT](../README.md#edi-and-l2beat)). The directory's
+introduction, the guide to D0–D9 and the methodology page say so in EDI's
+own translated words from the library and link to L2BEAT; a profile whose
+record cites an L2BEAT project page links to that page too.
 
 ## Working on the site
 

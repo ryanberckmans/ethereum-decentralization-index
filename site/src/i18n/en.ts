@@ -517,6 +517,7 @@ export const en = {
       'Grades are corrected in EDI itself, through its own research process. The site shows the change as soon as EDI publishes it.',
       'Editorial errors, such as a wrong figure, date or source, are corrected in the site’s content, and every correction is listed with its date.',
     ],
+    l2beatProfiles: 'Where EDI cites an L2BEAT project page as evidence for a record, that record’s page links to L2BEAT’s detailed assessment.',
     compareLink: 'Compare objects',
     reportIssue: 'Report an error on GitHub',
     changesLink: 'See the dated changes',

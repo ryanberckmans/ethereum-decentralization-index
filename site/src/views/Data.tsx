@@ -86,7 +86,7 @@ export function DataPage({env}: {env: PageEnv}) {
           })}
         </ul>
         <p className="section-note">
-          {d.upstream} <a href={PRODUCT.repository}>{m.footer.source}</a>
+          {d.upstream} <a href={PRODUCT.repository} rel="noopener noreferrer">{m.footer.source}</a>
         </p>
       </section>
     </div>

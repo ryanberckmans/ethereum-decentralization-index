@@ -69,7 +69,13 @@ export const locales = {
     "spectrum": "Explore the spectrum",
     "evidence": "Evidence and limits",
     "l1": "Open ground for everyone. Even the tallest institutions stand stronger on a shared foundation.",
-    "colorMeaning": "Objects shown in this color are rated {level}."
+    "colorMeaning": "Objects shown in this color are rated {level}.",
+    "l2beatTitle": "How EDI complements L2BEAT",
+    "l2beatSummary": "EDI regards L2BEAT as the authority on scientific risk assessment, and complements that work with a single, accessible D0–D9 rating.",
+    "l2beatBody": "EDI regards L2BEAT as the authority on scientific risk assessment. EDI complements that work by prioritizing accuracy and storytelling over fine-grained precision: it distills complex decentralization and control considerations into a single, accessible D0–D9 rating.",
+    "l2beatScope": "The goal is faithful simplification: D0–D9 is an ordinal summary of documented control, not a complete risk model or a mechanical conversion of L2BEAT’s assessments. This is EDI’s own stance, not an endorsement of its ratings by L2BEAT.",
+    "l2beatLink": "Explore L2BEAT’s detailed risk assessments",
+    "l2beatProject": "Read L2BEAT’s detailed assessment"
   },
   "zh": {
     "tiers": [
@@ -141,7 +147,13 @@ export const locales = {
     "spectrum": "查看完整光谱",
     "evidence": "证据与局限",
     "l1": "人人共享的开放地基。再高的机构，也因共同的基础而更加稳固。",
-    "colorMeaning": "显示为此颜色的对象被评为 {level}。"
+    "colorMeaning": "显示为此颜色的对象被评为 {level}。",
+    "l2beatTitle": "EDI 如何补充 L2BEAT",
+    "l2beatSummary": "EDI 将 L2BEAT 视为科学风险评估的权威，并以单一、易懂的 D0–D9 评级补充其工作。",
+    "l2beatBody": "EDI 将 L2BEAT 视为科学风险评估的权威。EDI 以准确性和叙事为先，而不追求细粒度的精确，以此补充 L2BEAT 的工作：它把复杂的去中心化与控制权考量提炼为单一、易懂的 D0–D9 评级。",
+    "l2beatScope": "目标是忠实的简化：D0–D9 是对有据可查的控制权的序数概括，既不是完整的风险模型，也不是对 L2BEAT 评估的机械换算。这是 EDI 自己的立场，并不代表 L2BEAT 认可 EDI 的评级。",
+    "l2beatLink": "查看 L2BEAT 的详细风险评估",
+    "l2beatProject": "阅读 L2BEAT 的详细评估"
   },
   "es": {
     "tiers": [
@@ -213,7 +225,13 @@ export const locales = {
     "spectrum": "Explora el espectro",
     "evidence": "Pruebas y límites",
     "l1": "Terreno abierto para todos. Incluso las instituciones más altas se sostienen mejor sobre cimientos compartidos.",
-    "colorMeaning": "Los objetos de este color tienen el nivel {level}."
+    "colorMeaning": "Los objetos de este color tienen el nivel {level}.",
+    "l2beatTitle": "Cómo complementa EDI a L2BEAT",
+    "l2beatSummary": "EDI considera a L2BEAT la autoridad en evaluación científica de riesgos y complementa ese trabajo con una única calificación D0–D9, clara y accesible.",
+    "l2beatBody": "EDI considera a L2BEAT la autoridad en evaluación científica de riesgos. EDI complementa ese trabajo dando prioridad a la exactitud y al relato sobre la precisión minuciosa: condensa consideraciones complejas de descentralización y control en una única calificación D0–D9, clara y accesible.",
+    "l2beatScope": "El objetivo es una simplificación fiel: D0–D9 es un resumen ordinal del control documentado, no un modelo de riesgo completo ni una conversión mecánica de las evaluaciones de L2BEAT. Es la postura propia de EDI, no un aval de L2BEAT a sus calificaciones.",
+    "l2beatLink": "Consulta las evaluaciones de riesgo detalladas de L2BEAT",
+    "l2beatProject": "Lee la evaluación detallada de L2BEAT"
   },
   "ja": {
     "tiers": [
@@ -285,7 +303,13 @@ export const locales = {
     "spectrum": "全体を見る",
     "evidence": "根拠と限界",
     "l1": "誰にでも開かれた大地。大きな組織も、共有の土台でいっそう強く立てます。",
-    "colorMeaning": "この色で表示される対象の評価は {level} です。"
+    "colorMeaning": "この色で表示される対象の評価は {level} です。",
+    "l2beatTitle": "EDI と L2BEAT の関係",
+    "l2beatSummary": "EDI は L2BEAT を科学的なリスク評価の権威とみなし、わかりやすい単一の D0–D9 評価でその取り組みを補完します。",
+    "l2beatBody": "EDI は L2BEAT を科学的なリスク評価の権威とみなしています。EDI は細かな精密さよりも正確さとストーリーを重視して、その取り組みを補完します。分散性と管理権限をめぐる複雑な論点を、わかりやすい単一の D0–D9 評価に凝縮します。",
+    "l2beatScope": "目指すのは忠実な単純化です。D0–D9 は文書で確認された管理権限を順序で要約したものであり、完全なリスクモデルでも、L2BEAT の評価を機械的に換算したものでもありません。これは EDI 独自の立場であり、L2BEAT が EDI の評価を支持していることを意味しません。",
+    "l2beatLink": "L2BEAT の詳細なリスク評価を見る",
+    "l2beatProject": "L2BEAT の詳細な評価を読む"
   },
   "ko": {
     "tiers": [
@@ -357,7 +381,13 @@ export const locales = {
     "spectrum": "전체 스펙트럼 보기",
     "evidence": "근거와 한계",
     "l1": "모두에게 열린 땅. 아무리 큰 기관도 함께 쓰는 기반 위에서 더 단단히 섭니다.",
-    "colorMeaning": "이 색으로 표시된 대상의 등급은 {level}입니다."
+    "colorMeaning": "이 색으로 표시된 대상의 등급은 {level}입니다.",
+    "l2beatTitle": "EDI가 L2BEAT를 보완하는 방식",
+    "l2beatSummary": "EDI는 L2BEAT를 과학적 위험 평가의 권위로 여기며, 이해하기 쉬운 단일 D0–D9 등급으로 그 작업을 보완합니다.",
+    "l2beatBody": "EDI는 L2BEAT를 과학적 위험 평가의 권위로 여깁니다. EDI는 세밀한 정밀성보다 정확성과 스토리텔링을 우선해 그 작업을 보완합니다. 탈중앙화와 통제에 관한 복잡한 고려 사항을 이해하기 쉬운 단일 D0–D9 등급으로 압축합니다.",
+    "l2beatScope": "목표는 충실한 단순화입니다. D0–D9 등급은 문서로 확인된 통제를 서열로 요약한 것으로, 완전한 위험 모델도 아니고 L2BEAT 평가를 기계적으로 환산한 것도 아닙니다. 이는 EDI 자체의 입장이며, L2BEAT가 EDI의 등급을 보증한다는 뜻이 아닙니다.",
+    "l2beatLink": "L2BEAT의 상세한 위험 평가 보기",
+    "l2beatProject": "L2BEAT의 상세 평가 읽기"
   },
   "fr": {
     "tiers": [
@@ -429,7 +459,13 @@ export const locales = {
     "spectrum": "Explorer le spectre",
     "evidence": "Preuves et limites",
     "l1": "Un terrain ouvert à tous. Même les plus grandes institutions tiennent mieux sur des fondations communes.",
-    "colorMeaning": "Les objets de cette couleur sont classés {level}."
+    "colorMeaning": "Les objets de cette couleur sont classés {level}.",
+    "l2beatTitle": "Comment l’EDI complète L2BEAT",
+    "l2beatSummary": "L’EDI considère L2BEAT comme l’autorité en matière d’évaluation scientifique des risques, et complète ce travail par une note D0–D9 unique et accessible.",
+    "l2beatBody": "L’EDI considère L2BEAT comme l’autorité en matière d’évaluation scientifique des risques. L’EDI complète ce travail en privilégiant l’exactitude et le récit plutôt que la précision fine, et condense des considérations complexes de décentralisation et de contrôle en une note D0–D9 unique et accessible.",
+    "l2beatScope": "L’objectif est une simplification fidèle. D0–D9 est un résumé ordinal du contrôle documenté, et non un modèle de risque complet ni une conversion mécanique des évaluations de L2BEAT. C’est la position propre de l’EDI, et non une approbation de ses notes par L2BEAT.",
+    "l2beatLink": "Consultez les évaluations détaillées des risques de L2BEAT",
+    "l2beatProject": "Lisez l’évaluation détaillée de L2BEAT"
   },
   "pt": {
     "tiers": [
@@ -501,7 +537,13 @@ export const locales = {
     "spectrum": "Explore o espectro",
     "evidence": "Evidências e limites",
     "l1": "Terreno aberto para todos. Até as maiores instituições ficam mais firmes sobre uma base compartilhada.",
-    "colorMeaning": "Os objetos desta cor têm nível {level}."
+    "colorMeaning": "Os objetos desta cor têm nível {level}.",
+    "l2beatTitle": "Como o EDI complementa o L2BEAT",
+    "l2beatSummary": "O EDI considera o L2BEAT a autoridade em avaliação científica de riscos e complementa esse trabalho com uma classificação D0–D9 única, clara e acessível.",
+    "l2beatBody": "O EDI considera o L2BEAT a autoridade em avaliação científica de riscos. O EDI complementa esse trabalho priorizando a exatidão e a narrativa em vez da precisão minuciosa: condensa considerações complexas de descentralização e controle numa única classificação D0–D9, clara e acessível.",
+    "l2beatScope": "O objetivo é uma simplificação fiel: D0–D9 é um resumo ordinal do controle documentado, não um modelo de risco completo nem uma conversão mecânica das avaliações do L2BEAT. Esta é a posição do próprio EDI, não um endosso do L2BEAT às suas classificações.",
+    "l2beatLink": "Veja as avaliações de risco detalhadas do L2BEAT",
+    "l2beatProject": "Leia a avaliação detalhada do L2BEAT"
   },
   "de": {
     "tiers": [
@@ -573,7 +615,13 @@ export const locales = {
     "spectrum": "Spektrum erkunden",
     "evidence": "Belege und Grenzen",
     "l1": "Offener Grund für alle. Auch die größten Institutionen stehen stärker auf einem gemeinsamen Fundament.",
-    "colorMeaning": "Objekte in dieser Farbe sind mit {level} eingestuft."
+    "colorMeaning": "Objekte in dieser Farbe sind mit {level} eingestuft.",
+    "l2beatTitle": "Wie EDI L2BEAT ergänzt",
+    "l2beatSummary": "EDI betrachtet L2BEAT als die Autorität für wissenschaftliche Risikobewertung und ergänzt diese Arbeit um eine einzige, leicht verständliche D0–D9-Einstufung.",
+    "l2beatBody": "EDI betrachtet L2BEAT als die Autorität für wissenschaftliche Risikobewertung. EDI ergänzt diese Arbeit, indem es Genauigkeit und Storytelling über feinkörnige Präzision stellt: Es verdichtet komplexe Fragen von Dezentralisierung und Kontrolle zu einer einzigen, leicht verständlichen D0–D9-Einstufung.",
+    "l2beatScope": "Das Ziel ist eine getreue Vereinfachung: D0–D9 ist eine ordinale Zusammenfassung dokumentierter Kontrolle, kein vollständiges Risikomodell und keine mechanische Umrechnung der Bewertungen von L2BEAT. Dies ist die eigene Haltung von EDI, keine Billigung seiner Einstufungen durch L2BEAT.",
+    "l2beatLink": "Detaillierte Risikobewertungen von L2BEAT ansehen",
+    "l2beatProject": "Detaillierte Bewertung von L2BEAT lesen"
   }
 } as const;
 export type Locale = keyof typeof locales;
