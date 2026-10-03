@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {registry} from '../dist/registry/index.js';
+import {registry,addReviewMonth} from '../dist/registry/index.js';
 import {applyCandidate} from '../scripts/apply-reviews.mjs';
 import {collectContractEvidence,contractEvidenceUrl,evidenceCacheUrl} from '../scripts/fetch-contract-evidence.mjs';
 import {withRegistryLock} from '../scripts/registry-files.mjs';
@@ -25,7 +25,7 @@ test('concurrent writers are refused and a failed acceptance releases its lock',
  }finally{await rm(directory,{recursive:true,force:true});}
 });
 test('accepted research requires every check; stale or incomplete candidates cannot mutate data',()=>{
- const db=structuredClone(registry),before=JSON.stringify(db),record={...db.entities.find(e=>e.id==='usdc'),reviewedAt:asOf,nextReviewAt:'2026-10-01',reviewChecks:checks};
+ const db=structuredClone(registry),before=JSON.stringify(db),record={...db.entities.find(e=>e.id==='usdc'),reviewedAt:asOf,nextReviewAt:addReviewMonth(asOf),reviewChecks:checks};
  const candidate={schemaVersion:1,baseRegistrySha256:'base',asOf,records:[record]};
  assert.throws(()=>applyCandidate(db,candidate,'changed'),/stale/);
  assert.throws(()=>applyCandidate(db,{...candidate,records:[{...record,reviewChecks:['identity']}]},'base'),/attestation/);
@@ -40,16 +40,16 @@ test('permanent D0 is changed only through a named evidence correction',()=>{
 });
 test('position dependency research advances without renewing its permanent D0 core',()=>{
  const db=structuredClone(registry),prior=db.entities.find(e=>e.id==='morpho-blue');
- const positionReview={...prior.positionReview,reviewedAt:'2026-10-01',nextReviewAt:'2026-11-01'};
- const candidate={schemaVersion:1,baseRegistrySha256:'base',asOf:'2026-10-01',records:[],positionReviews:[{id:prior.id,positionReview,reviewChecks:checks}]};
+ const positionReview={...prior.positionReview,reviewedAt:asOf,nextReviewAt:addReviewMonth(asOf)};
+ const candidate={schemaVersion:1,baseRegistrySha256:'base',asOf,records:[],positionReviews:[{id:prior.id,positionReview,reviewChecks:checks}]};
  assert.throws(()=>applyCandidate(db,{...candidate,positionReviews:[{id:prior.id,positionReview,reviewChecks:['identity']}]},'base'),/position research attestation/);
  const next=applyCandidate(db,candidate,'base').entities.find(e=>e.id===prior.id);
- assert.equal(next.reviewedAt,prior.reviewedAt);assert.equal(next.positionReview.reviewedAt,'2026-10-01');assert.equal(next.positionReview.status,'unresolved');
+ assert.equal(next.reviewedAt,prior.reviewedAt);assert.equal(next.positionReview.reviewedAt,asOf);assert.equal(next.positionReview.status,'unresolved');
 });
 test('an incomplete restudy preserves its old review date, due date and known restriction',()=>{
  const db=structuredClone(registry),prior=db.entities.find(e=>e.id==='usdc');
- const record={...prior,assessment:'lower-bound',tierBound:true,researchAttemptedAt:'2026-10-02',reviewChecks:['identity']};
- const candidate={schemaVersion:1,baseRegistrySha256:'base',asOf:'2026-10-02',records:[record]};
+ const record={...prior,assessment:'lower-bound',tierBound:true,researchAttemptedAt:asOf,reviewChecks:['identity']};
+ const candidate={schemaVersion:1,baseRegistrySha256:'base',asOf,records:[record]};
  const next=applyCandidate(db,candidate,'base').entities.find(e=>e.id==='usdc');
  assert.equal(next.reviewedAt,prior.reviewedAt);assert.equal(next.nextReviewAt,prior.nextReviewAt);assert.equal(next.proposedTier,9);
  assert.throws(()=>applyCandidate(db,{...candidate,records:[{...record,proposedTier:0,knownFloor:0}]},'base'),/weakens/);

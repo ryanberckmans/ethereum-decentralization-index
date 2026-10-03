@@ -189,6 +189,14 @@
     ],
     "aave-v4": [
       "Identify all live Hubs and Spokes and complete their material controller/dependency paths."
+    ],
+    "tornado-cash": [
+      "Core D0 is permanent for the listed pool addresses only. Retired pools with a live operator, TORN governance with its router and registries, Nova and any new pool need their own identities; never refresh the immutable pool date to renew an aggregate position."
+    ],
+    "railgun": [
+      "Read Delegator GrantPermission and RevokePermission events on Ethereum and Arbitrum from each Delegator deployment with a log-capable source; deployer-era grants are what keeps the D3-D7 range open.",
+      "Recheck the implementation, proxy admin, paused slot, safety vectors and each verification-key helper state and owner on both chains; a pending proposal or task that calls stateToCommitting() needs the staged keys compared before execution.",
+      "The Polygon and BSC deployments and the Base executor that OPStackSender reaches need their own records."
     ]
   }
 }
