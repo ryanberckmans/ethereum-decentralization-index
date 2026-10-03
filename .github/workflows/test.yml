@@ -1,0 +1,40 @@
+# Runs the package's own checks on every pull request and every push to main:
+# it compiles the registry, runs the unit tests, and fails when the committed
+# build (dist/ and the generated summaries) no longer matches the source, since
+# the map installs this repository's committed files as they are. It deploys
+# nothing.
+name: Test
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: test-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Compile and test the package
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+          package-manager-cache: false
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+      - name: Compile and run the unit tests
+        run: npm test
+      - name: Check the committed build matches the source
+        run: git diff --exit-code -- dist data/latest.json data/mapped-l1-coverage.json
