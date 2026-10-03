@@ -4,6 +4,8 @@
  * that already has the chosen theme.
  */
 import {expect, test} from '@playwright/test';
+import {locales as ediLocales} from 'ethereum-decentralization-index';
+import {EDI_LOCALE} from '../../src/config.ts';
 
 const LOCALES = ['en', 'es', 'pt-BR', 'fr', 'de', 'zh-CN', 'ja', 'ko'] as const;
 const PAGES = [
@@ -32,7 +34,12 @@ for (const locale of LOCALES) {
       await expect(page.locator('html')).toHaveAttribute('lang', locale);
       // The site's name stays in English in every language.
       await expect(page.locator('.wordmark-name')).toHaveText('Ethereum Decentralization Index');
-      if (path === '/') await expect(page).toHaveTitle(/^Ethereum Decentralization Index\s?[:：]/);
+      if (path === '/') {
+        await expect(page).toHaveTitle(/^Ethereum Decentralization Index\s?[:：]/);
+        // The introduction gives EDI’s own translation of how it complements L2BEAT, with a direct link to L2BEAT.
+        await expect(page.locator('.home-intro p').first()).toHaveText(ediLocales[EDI_LOCALE[locale]].l2beatSummary);
+        await expect(page.locator('.home-intro a[href="https://l2beat.com/"]')).toBeVisible();
+      }
       // A phone zooms out to show what overflows, which widens window.innerWidth with it; the layout width does not change.
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
       expect(overflow, `${locale}${path} scrolls sideways by ${overflow}px`).toBeLessThanOrEqual(0);

@@ -33,6 +33,8 @@ Every result is saved immediately under ignored `work/latest-evidence/`. Resume 
 
 Read `data/refresh-hints.json` and complete all six checks for each record: `identity`, `implementation`, `authorities`, `timing`, `exits`, `dependencies`. Review matched source and inherited code, current admin/owner/role state, reachable controllers, upgrade routes, delays/bypasses/emergency powers, custody/withdrawal paths and material offchain backing. Identify current hooks/oracles/vaults and bridge origin individually. Use current primary documents and contract state; do not copy a prior conclusion and advance its date.
 
+EDI regards L2BEAT as the authority on scientific risk assessment ([EDI and L2BEAT](../README.md#edi-and-l2beat)). For a project L2BEAT tracks, read its current L2BEAT project page alongside the primary sources and cite that page among the evidence when it informs the review: consumers link readers to it for the detailed assessment. Never convert an L2BEAT stage or risk rating into a grade mechanically. D0–D9 remains EDI's own ordinal summary of documented control, reached through the six checks.
+
 Retain lower bounds and named gaps when closure fails. A partial investigation may record an attempt but cannot renew a prior full `reviewedAt`. Newly discovered controls can strengthen a floor without pretending the entire path is complete. Keep evidence and the immutable deployment scope concise.
 
 Create an explicit candidate in ignored `work/`, using the base hash from the plan and full replacement records:

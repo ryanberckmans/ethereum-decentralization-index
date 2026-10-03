@@ -1,7 +1,7 @@
 'use client';
 import { createContext, useContext, useEffect, useRef, useState, type CSSProperties, type ReactNode, type RefObject } from 'react';
 import { Dialog, Tooltip } from 'radix-ui';
-import { assessment, describeAssessment, displayedLevel, isDLevel, levelColor, levelLabel, locales, normalizeAssessment, rubric, safeEvidenceUrl, type Assessment, type DLevel, type Locale, type SubjectKind } from '../core/index.js';
+import { assessment, describeAssessment, describeL2beat, displayedLevel, isDLevel, levelColor, levelLabel, locales, normalizeAssessment, rubric, safeEvidenceUrl, type Assessment, type DLevel, type Locale, type SubjectKind } from '../core/index.js';
 export interface GuideRequest {
     value: Assessment;
     subject?: SubjectKind;
@@ -74,10 +74,27 @@ export function DecentralizationGuide({ open, onOpenChange, request, locale = 'e
         openerRef.current = null; }}>
   <Dialog.Close className="edi-close" aria-label={c.close}>×</Dialog.Close><div className="edi-eyebrow">ETHEREUM DECENTRALIZATION INDEX · D0–D9</div><Dialog.Title>{c.guideTitle}</Dialog.Title><Dialog.Description>{c.guideQuestion}</Dialog.Description>
   {request?.name && <div className="edi-subject" style={tint(level)}><strong>{request.name}</strong><span>{levelLabel(request.value)}</span></div>}
-  <p className="edi-intro">{c.guideIntro}</p><div className="edi-primer">{(['foundation', 'dependency', 'unknown', 'judgment'] as const).map((key, i) => <section key={key}><span className="edi-primer-mark" aria-hidden="true">{['D0', '≥ D5', 'D?', '↗'][i]}</span><h3>{c[`${key}Title`]}</h3><p>{c[`${key}Body`]}</p></section>)}</div>
+  <p className="edi-intro">{c.guideIntro}</p><L2beatNote locale={locale} evidence={request?.evidence}/><div className="edi-primer">{(['foundation', 'dependency', 'unknown', 'judgment'] as const).map((key, i) => <section key={key}><span className="edi-primer-mark" aria-hidden="true">{['D0', '≥ D5', 'D?', '↗'][i]}</span><h3>{c[`${key}Title`]}</h3><p>{c[`${key}Body`]}</p></section>)}</div>
   <h3>{c.spectrum}</h3><div className="edi-grade-list">{c.tiers.map((g, i) => <section key={i} className={level === i ? 'edi-selected' : ''} style={tint(i)}><span className={`edi-grade-mark ${i === 0 ? 'edi-zero' : ''}`}>D{i}</span><div><h4>{g.label}</h4><p>{i === 0 && request?.subject === 'ethereum-l1' ? c.l1 : g.definition}</p></div></section>)}</div>
   {links.length > 0 && <section className="edi-evidence"><h3>{c.evidence}</h3><ul>{links.map(url => <li key={url}><a href={url} target="_blank" rel="noreferrer">{new URL(url).hostname} ↗</a></li>)}</ul></section>}
  </Dialog.Content></Dialog.Portal></Dialog.Root>;
+}
+export interface L2beatProps {
+    locale?: Locale;
+    /** The subject's evidence links; an L2BEAT project page among them becomes the link. */
+    evidence?: readonly string[];
+    className?: string;
+}
+function L2beatNote({ locale, evidence, className = '' }: L2beatProps & { locale: Locale }) {
+    const about = describeL2beat(locale, evidence);
+    return <section className={`edi-l2beat ${className}`}><h3>{about.title}</h3><p>{about.body}</p><p>{about.scope}</p><a className="edi-l2beat-link" href={about.link.href} target="_blank" rel="noopener noreferrer">{about.link.label}<span aria-hidden="true"> ↗</span></a></section>;
+}
+/** How EDI complements L2BEAT, why it uses one D rating, and a link to L2BEAT's detailed assessments; the guide shows the same. */
+export function DecentralizationL2beat({ locale: override, evidence, className }: L2beatProps) {
+    const context = useContext(Context), locale = override ?? context?.locale ?? 'en';
+    if (!context)
+        return <DecentralizationProvider locale={locale}><DecentralizationL2beat locale={locale} evidence={evidence} className={className}/></DecentralizationProvider>;
+    return <L2beatNote locale={locale} evidence={evidence} className={className}/>;
 }
 export function DecentralizationLegend({ locale: override, aside, className = '' }: {
     locale?: Locale;

@@ -107,7 +107,8 @@ exact shape of `en.ts` (enforced by `tests/i18n.test.ts`). Counts use plural
 rules, lists use each language's conjunction, punctuation comes from the
 dictionary, and French marks get no-break spaces. Editorial content is
 English in this edition and is marked `lang="en"` on the elements that hold
-it. EDI's grade labels and explanations come from EDI's own translations.
+it. EDI's grade labels and explanations, and its account of how it
+complements L2BEAT, come from EDI's own translations.
 
 ## Tests
 

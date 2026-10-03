@@ -23,6 +23,15 @@ together and what it guarantees.
   "EDI" as its short form. It is `PRODUCT.name` in `src/config.ts`, and the
   dictionaries take it through a `{name}` placeholder. The site's listing
   page is still called the directory.
+- **L2BEAT:** EDI regards L2BEAT as the authority on scientific risk
+  assessment and complements it with one D0–D9 rating (Ryan, issue #16, 3
+  October 2026). EDI's account of it and the L2BEAT links come from the
+  library (`describeL2beat`, `l2beatProjectUrl`), not the site's
+  dictionaries, so the site, the guide and other consumers of the library
+  say the same thing in every language: a sentence under the directory's
+  title, a section on the methodology page and in the guide, and a link on
+  each profile whose record cites an L2BEAT project page. No grade is
+  derived from L2BEAT's.
 - **Slugs and addresses:** `:` becomes `--` and `.` becomes `-`
   (`token--uniswap`, `seaport-v1-6`), and every address ends with a slash.
   Old slugs and raw IDs that are safe file names get redirect pages at build

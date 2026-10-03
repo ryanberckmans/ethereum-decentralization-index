@@ -104,6 +104,34 @@ export declare function describeAssessment(value: Assessment, locale?: Locale, s
     uncertainty: "D? means a review is missing or incomplete. ≥ D5 means at least D5: a part that has not been reviewed may add more control. Neither label means safe or unsafe." | "D? 表示评估未完成。≥D5 表示至少为 D5，未确定的依赖可能增加控制权。两者都不是安全结论。" | "D? indica una evaluación incompleta. ≥D5 significa al menos D5: otra dependencia puede añadir autoridad. No es un juicio de seguridad." | "D? は評価未完了。≥D5 は少なくとも D5 で、未確認の依存先が権限を加える可能性があります。安全性の判定ではありません。" | "D?는 검토 미완료입니다. ≥D5는 최소 D5이며 미확인 의존 관계가 권한을 더할 수 있습니다. 안전성 판정은 아닙니다." | "D? signifie que l’examen est incomplet. ≥D5 veut dire au moins D5 : une dépendance non résolue peut ajouter des pouvoirs. Ce n’est pas un verdict de sécurité." | "D? indica análise incompleta. ≥D5 significa pelo menos D5: uma dependência pendente pode acrescentar autoridade. Não é um veredito de segurança." | "D? bedeutet unvollständige Prüfung. ≥D5 bedeutet mindestens D5: ungeprüfte Abhängigkeiten können weitere Macht hinzufügen. Beides ist kein Sicherheitsurteil." | null;
 };
 /**
+ * L2BEAT, which EDI regards as the authority on scientific risk assessment.
+ * EDI complements that work with one D0–D9 rating; `describeL2beat` gives the
+ * explanation in every locale. This is EDI's stance, not an endorsement of
+ * EDI's ratings by L2BEAT.
+ */
+export declare const l2beat: Readonly<{
+    readonly name: "L2BEAT";
+    readonly url: "https://l2beat.com/";
+}>;
+/** The first L2BEAT project page among evidence links, where L2BEAT details that project's risks; null when there is none. */
+export declare function l2beatProjectUrl(evidence: readonly string[] | null | undefined): string | null;
+export interface L2beatExplanation {
+    name: string;
+    title: string;
+    /** One sentence, for introductions and other compact places. */
+    summary: string;
+    /** EDI's full positioning. */
+    body: string;
+    /** What a D rating is and is not, and that this is EDI's stance alone. */
+    scope: string;
+    link: {
+        href: string;
+        label: string;
+    };
+}
+/** EDI's relationship with L2BEAT in one locale, linking L2BEAT's page for the subject when its evidence has one. */
+export declare function describeL2beat(locale?: Locale, evidence?: readonly string[] | null): L2beatExplanation;
+/**
  * Pure, bounded graph evaluation. IDs denote actual control dependencies, never
  * ticker or brand similarity. Cycles and oversized graphs are rejected explicitly.
  */

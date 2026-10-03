@@ -761,6 +761,29 @@ html[data-query] .compare-start {
   max-width: 34em;
 }
 
+.home-intro {
+  max-width: 46rem;
+  margin-top: 6px;
+  color: var(--ink-2);
+  font: 400 1rem/1.45 var(--serif);
+}
+
+.home-intro-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 18px;
+  margin-top: 2px;
+  font: 600 0.875rem/1.5 var(--sans);
+}
+
+/* A link that leaves the site: its icon follows the last word, even when the text wraps. */
+.external-link .icon {
+  width: 1.125em;
+  height: 1.125em;
+  margin-left: 0.25em;
+  vertical-align: -0.2em;
+}
+
 .dated {
   display: contents;
 }

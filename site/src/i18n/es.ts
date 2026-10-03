@@ -512,6 +512,7 @@ export const es: Messages = {
       'Las categorías se corrigen dentro de EDI, mediante su propio proceso de investigación. El sitio muestra el cambio en cuanto EDI lo publica.',
       'Los errores editoriales, como una cifra, una fecha o una fuente incorrectas, se corrigen en el contenido del sitio, y cada corrección aparece con su fecha.',
     ],
+    l2beatProfiles: 'Cuando EDI cita una página de proyecto de L2BEAT como prueba de un registro, la página de ese registro enlaza con la evaluación detallada de L2BEAT.',
     compareLink: 'Comparar objetos',
     reportIssue: 'Comunicar un error en GitHub',
     changesLink: 'Ver los cambios fechados',

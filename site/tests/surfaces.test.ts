@@ -6,6 +6,7 @@
  */
 import assert from 'node:assert/strict';
 import {describe, test} from 'node:test';
+import {locales as ediLocales} from 'ethereum-decentralization-index';
 import {registry} from 'ethereum-decentralization-index/registry';
 import {LOCALES} from '../src/config.ts';
 import {agentsMd, llmsTxt, localeSitemap, robotsTxt, sitemapIndex, sitemapPages} from '../src/server/agents.ts';
@@ -111,6 +112,9 @@ describe('crawler and agent files', () => {
     for (const story of catalog.stories) assert.ok(llms.includes(`${ORIGIN}/en/stories/${story.slug}`), story.slug);
     assert.match(agents, /≥ D3/);
     assert.match(agents, /never edits, stores or overrides/);
+    // EDI's own words on L2BEAT, with the link, for anyone citing a grade.
+    assert.ok(agents.includes(ediLocales.en.l2beatBody) && agents.includes(ediLocales.en.l2beatScope) && agents.includes('https://l2beat.com/'));
+    assert.ok(llms.includes(ediLocales.en.l2beatSummary));
     assert.match(agents, /weth9/);
     for (const text of [llms, agents]) {
       assert.doesNotMatch(text, PRIVATE);

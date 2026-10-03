@@ -516,6 +516,7 @@ export const fr: Messages = mapStrings<Messages>(
         'Les niveaux sont corrigés dans l’EDI lui-même, selon son propre processus de recherche. Le site affiche la modification dès que l’EDI la publie.',
         'Les erreurs éditoriales, comme un chiffre, une date ou une source erronés, sont corrigées dans le contenu du site, et chaque correction est répertoriée avec sa date.',
       ],
+      l2beatProfiles: 'Lorsque l’EDI cite une page de projet de L2BEAT comme preuve pour une fiche, la page de cette fiche renvoie à l’évaluation détaillée de L2BEAT.',
       compareLink: 'Comparer des objets',
       reportIssue: 'Signaler une erreur sur GitHub',
       changesLink: 'Voir les changements datés',

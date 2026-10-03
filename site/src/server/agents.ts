@@ -6,6 +6,7 @@
  * the build does not know it: links are then relative, and nothing points at
  * the sitemaps, which are not built.
  */
+import {l2beat, locales as ediLocales} from 'ethereum-decentralization-index';
 import {DEFAULT_LOCALE, LOCALES, LOCALE_NAMES, PRODUCT, type Locale} from '../config.ts';
 import {AGENT_FILES, EXPORTS, localizedPath, paths} from '../model/urls.ts';
 import {catalog} from './site.ts';
@@ -79,7 +80,7 @@ export function llmsTxt(origin: string, date: string): string {
   return [
     `# ${PRODUCT.name}`,
     '',
-    `> Ethereum's economic objects, what they make possible, and who can change their rules. Every grade comes from EDI's own rubric, registry and functions and is evaluated for a UTC date; profiles, figures and stories are editorial. Listing is not endorsement, a security audit or investment advice.`,
+    `> Ethereum's economic objects, what they make possible, and who can change their rules. ${ediLocales.en.l2beatSummary} Every grade comes from EDI's own rubric, registry and functions and is evaluated for a UTC date; profiles, figures and stories are editorial. Listing is not endorsement, a security audit or investment advice.`,
     '',
     ...editionLines(date),
     `- Read [agents.md](${origin}${AGENT_FILES.agents}) before citing a grade or a figure.`,
@@ -137,6 +138,7 @@ export function agentsMd(origin: string, date: string): string {
     '## Grades',
     '',
     '- EDI is the only source of grades. The site computes each grade with EDI’s own functions for a UTC date and never edits, stores or overrides one.',
+    `- ${ediLocales.en.l2beatBody} ${ediLocales.en.l2beatScope} L2BEAT’s detailed risk assessments: ${l2beat.url}. Where EDI cites an L2BEAT project page for a record, the record’s evidence links include it.`,
     '- D0 to D9 answer one question: who can change the rules for holding or withdrawing assets in this exact mechanism. D0 starts with Ethereum L1; higher numbers add control by administrators, councils, operators or issuers. The methodology page has EDI’s definition of each level.',
     '- “≥ D3” is a partial assessment: at least D3, and an unreviewed part may add more control. “D?” means the review is missing or incomplete. Neither is D0, and neither means safe or unsafe.',
     '- A mechanism grade covers the reviewed contracts or network. A position grade, where EDI has one, covers what a holder has inside it. A grade never carries over to tokens, positions, businesses or applications built on the mechanism.',
