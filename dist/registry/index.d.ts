@@ -1,6 +1,8 @@
 import { type Assessment } from '../core/index.js';
 import type { ControlEntity, ControlRegistry } from './types.js';
 export type { ControlEntity, ControlRegistry, PositionReview } from './types.js';
+export { validateInventory, reconcileInventory } from './inventory.js';
+export type { ConsumerInventory, InventoryObject, InventoryCoverage, CoverageReason } from './inventory.js';
 /** The bundled scientific data is immutable in memory. */
 export declare const registry: ControlRegistry;
 export declare function assertReviewDate(value: string): void;

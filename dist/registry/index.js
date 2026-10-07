@@ -1,5 +1,6 @@
 import { assessment, assessControlGraph, composeAssessments, isDLevel, safeEvidenceUrl } from '../core/index.js';
 import { registry as data } from './data.js';
+export { validateInventory, reconcileInventory } from './inventory.js';
 function freeze(value) {
     if (value && typeof value === 'object' && !Object.isFrozen(value)) {
         for (const child of Object.values(value))

@@ -1,5 +1,7 @@
 # Ethereum Decentralization Index
 
+Consumer applications can reconcile their full supported universe against EDI with the [consumer coverage API and research procedure](docs/consumer-coverage.md), including objects that have no registry record yet.
+
 [![Ethereum's D0–D9 control spectrum, from maximum decentralization to issuer-controlled backing or redemption.](docs/images/decentralization-spectrum.png)](docs/images/decentralization-spectrum.png)
 
 **EDI** helps explain who can change the rules of an Ethereum app or token, and who controls your ability to withdraw. It ships a shared D0–D9 scale, a canonical deployment-specific research database, a reproducible refresh pipeline and accessible React components. EDI is used by [Map of Ethereum](https://github.com/ryanberckmans/map-of-ethereum).

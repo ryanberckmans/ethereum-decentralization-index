@@ -2,6 +2,8 @@ import {assessment, assessControlGraph, composeAssessments, isDLevel, safeEviden
 import {registry as data} from './data.js';
 import type {ControlEntity, ControlRegistry} from './types.js';
 export type {ControlEntity, ControlRegistry, PositionReview} from './types.js';
+export {validateInventory, reconcileInventory} from './inventory.js';
+export type {ConsumerInventory, InventoryObject, InventoryCoverage, CoverageReason} from './inventory.js';
 
 function freeze<T>(value: T): T {
   if (value && typeof value === 'object' && !Object.isFrozen(value)) {
