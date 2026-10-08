@@ -5,15 +5,16 @@ import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {execFileSync} from 'node:child_process';
 import {registry, findReview, reconcileInventory, validateInventory} from '../dist/registry/index.js';
-const date = '2026-10-07';
+const date = registry.lastUpdatedAt;
 const object = (entityId, kind = 'protocol', extra = {}) => ({id: entityId, entityId, kind, name: entityId, scope: 'mechanism', sources: [], dependencies: [], ...extra});
 const inventory = (...objects) => ({schemaVersion: 1, consumer: 'example', objects});
 
-test('missing Lighter chain cannot borrow a similarly named product review', () => {
-  const input = inventory(object('lighter', 'chain'), object('lighter-robinhood-perps', 'chain'));
+test('an absent chain cannot borrow a similarly named product review', () => {
+  const input = inventory(object('unreviewed-rollup', 'chain'), object('lighter-robinhood-perps', 'chain'));
   const before = JSON.stringify(registry), result = reconcileInventory(input, date);
   assert.deepEqual(result.coverage.map(r => r.canonicalId), [null, null]);
-  assert.deepEqual(result.tasks.map(r => r.reasons), [['missing-review'], ['kind-mismatch']]);
+  assert.deepEqual(result.tasks.find(r=>r.entityId==='unreviewed-rollup').reasons,['missing-review']);
+  assert.deepEqual(result.tasks.find(r=>r.entityId==='lighter-robinhood-perps').reasons,['kind-mismatch']);
   assert.equal(JSON.stringify(registry), before);
 });
 test('permanent D0 is scoped to the exact deployment; catch-up never transfers it across chains', () => {
@@ -51,11 +52,20 @@ test('invalid inventory or ambiguous registry identities fail closed', () => {
 test('CLI includes absent consumer objects and binds the report to both inputs', async () => {
   const dir = await mkdtemp(join(tmpdir(), 'edi-inventory-'));
   try {
-    const path = join(dir, 'inventory.json'); await writeFile(path, JSON.stringify(inventory(object('lighter', 'chain'))));
+    const path = join(dir, 'inventory.json'); await writeFile(path, JSON.stringify(inventory(object('unreviewed-rollup', 'chain'))));
     const output = JSON.parse(execFileSync(process.execPath, ['scripts/plan-reviews.mjs', '--as-of=' + date, '--inventory=' + path], {encoding: 'utf8'}));
     assert.match(output.baseRegistrySha256, /^[a-f0-9]{64}$/); assert.match(output.consumer.inventorySha256, /^[a-f0-9]{64}$/);
-    assert.equal(output.consumer.tasks[0].entityId, 'lighter');
+    assert.equal(output.consumer.tasks[0].entityId, 'unreviewed-rollup');
     await writeFile(path, ' '.repeat(4 * 1024 * 1024 + 1));
     assert.throws(() => execFileSync(process.execPath, ['scripts/plan-reviews.mjs', '--inventory=' + path], {stdio: 'pipe'}), /4 MiB/);
   } finally { await rm(dir, {recursive: true, force: true}); }
+});
+
+test('Lighter mainnet and its exact Ethereum escrow are assessed separately from the Robinhood product', () => {
+  const result = reconcileInventory(inventory(object('lighter','chain'), object('lighter-core','protocol',{deployment:{chain:'ethereum',chainId:1,address:'0x3b4d794a66304f130a4db8f2551b0070dfcf5ca7'}})),date);
+  assert.deepEqual(result.coverage.map(r=>r.canonicalId),['lighter','lighter-core']);
+  assert.equal(result.tasks.length,0);
+  assert.equal(findReview('lighter').proposedTier,7);
+  assert.deepEqual(findReview('lighter-core').dependencies,['lighter']);
+  assert.deepEqual(findReview('lighter-robinhood-perps').dependencies,['robinhood']);
 });
