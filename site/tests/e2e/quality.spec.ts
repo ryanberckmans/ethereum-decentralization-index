@@ -78,7 +78,8 @@ test.describe('budgets on a 390-pixel phone', () => {
     await page.goto('/en/', {waitUntil: 'networkidle'});
     const input = page.locator('#directory-q');
     await input.fill('u');
-    await page.waitForTimeout(300);
+    await expect(page).toHaveURL(/[?&]q=u(?:&|$)/);
+    await settled(page);
     const elapsed = await page.evaluate(
       () =>
         new Promise<number>(resolve => {
