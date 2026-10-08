@@ -56,8 +56,17 @@
   min-height: 30px;
   padding: 4px 7px;
 }
-.edi-badge:hover {
-  box-shadow: 0 0 20px color-mix(in srgb,var(--edi-grade) 35%,transparent),inset 0 0 18px color-mix(in srgb,var(--edi-grade) 16%,transparent);
+/* A touch screen keeps :hover on whatever was tapped last, so hover looks apply only where a pointer hovers; on a touch
+   screen a badge shows the same look while it is pressed. */
+@media(hover:hover) {
+  .edi-badge:hover {
+    box-shadow: 0 0 20px color-mix(in srgb,var(--edi-grade) 35%,transparent),inset 0 0 18px color-mix(in srgb,var(--edi-grade) 16%,transparent);
+  }
+}
+@media(hover:none) {
+  .edi-badge:active {
+    box-shadow: 0 0 20px color-mix(in srgb,var(--edi-grade) 35%,transparent),inset 0 0 18px color-mix(in srgb,var(--edi-grade) 16%,transparent);
+  }
 }
 .edi-badge:focus-visible,.edi-close:focus-visible,.edi-root a:focus-visible {
   outline: 3px solid var(--edi-accent,#e5ff00);
@@ -388,9 +397,21 @@
   font-size: inherit;
   line-height: 1.4;
 }
-.edi-badge[data-variant=legend]:hover,.edi-badge[data-variant=legend]:focus-visible {
+.edi-badge[data-variant=legend]:focus-visible {
   background: color-mix(in srgb,var(--edi-grade) 9%,var(--edi-bg));
   border-color: color-mix(in srgb,var(--edi-grade) 35%,transparent);
+}
+@media(hover:hover) {
+  .edi-badge[data-variant=legend]:hover {
+    background: color-mix(in srgb,var(--edi-grade) 9%,var(--edi-bg));
+    border-color: color-mix(in srgb,var(--edi-grade) 35%,transparent);
+  }
+}
+@media(hover:none) {
+  .edi-badge[data-variant=legend]:active {
+    background: color-mix(in srgb,var(--edi-grade) 9%,var(--edi-bg));
+    border-color: color-mix(in srgb,var(--edi-grade) 35%,transparent);
+  }
 }
 .edi-label { white-space: nowrap; }
 .edi-legend-description {
