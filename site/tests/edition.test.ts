@@ -34,8 +34,11 @@ describe('EDI is the only assessment authority', () => {
       '2030-01-01',
       '2099-12-31',
     ];
-    for (const object of catalog.objects) {
-      for (const day of days) {
+    // EDI's frozen registry reuses derived reviews by date, with a bounded
+    // cache. Visit every object on a date before moving on: the exact same
+    // object/date assertions run without rebuilding the registry per object.
+    for (const day of days) {
+      for (const object of catalog.objects) {
         const stored = catalog.rawOn(object.id, day);
         const edi = registryAssessment(object.id, day);
         const timing = reviewTiming(registry.entities.find(entity => entity.id === object.id)!, day);
